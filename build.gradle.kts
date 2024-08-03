@@ -1,5 +1,7 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
+apply { from("gradle/projectDependencyGraph.gradle") }
+
 buildscript {
     repositories {
         google()
