@@ -15,7 +15,6 @@ class AndroidKotlinPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(plugins) {
             apply("kotlin-android")
-            apply("kotlin-kapt")
         }
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
