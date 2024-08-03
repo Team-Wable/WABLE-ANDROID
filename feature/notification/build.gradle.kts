@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(project(":core:designsystem:xml"))
     implementation(project(":core:model"))
     implementation(project(":core:data"))
 

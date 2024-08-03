@@ -5,3 +5,8 @@ plugins {
 android {
     namespace = "com.teamwable.data"
 }
+
+dependencies {
+    implementation(project(":core:network"))
+    implementation(project(":core:model"))
+}
