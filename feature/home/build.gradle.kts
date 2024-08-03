@@ -2,17 +2,15 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
-    alias(libs.plugins.kotlin.android)
 }
 android {
-    namespace = "com.teamwable.main"
+    namespace = "com.teamwable.home"
 }
 
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:model"))
     implementation(project(":core:data"))
-    implementation(project(":feature:home"))
 
     // AndroidX
     implementation(libs.androidx.constraintlayout)
