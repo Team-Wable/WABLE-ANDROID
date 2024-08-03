@@ -26,13 +26,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:main"))
+
     // AndroidX
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.fragment.ktx)
-    implementation(libs.splash.screen)
-
-    // Third Party
-    implementation(libs.coil.core)
 }

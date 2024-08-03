@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Wable"
 include(":app")
+include(":feature:main")
