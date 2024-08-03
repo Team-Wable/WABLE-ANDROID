@@ -24,3 +24,4 @@ rootProject.name = "Wable"
 include(":app")
 include(":feature:main")
 include(":core:ui")
+include(":core:designsystem:xml")

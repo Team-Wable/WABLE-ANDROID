@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
+    implementation(project(":core:designsystem:xml"))
 
     // AndroidX
     implementation(libs.androidx.constraintlayout)
