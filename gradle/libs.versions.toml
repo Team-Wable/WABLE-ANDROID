@@ -118,7 +118,7 @@ amplitude-ads = { module = "com.google.android.gms:play-services-ads-identifier"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
@@ -129,5 +129,5 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 
 [bundles]
 lifecycle = ["lifecycle", "lifecycle-viewmodel", "lifecycle-livedata"]
-retrofit = ["retrofit", "retrofit-kotlin-serialization-converter", "okhttp-bom", "okhttp", "okhttp-logging-interceptor"]
+retrofit = ["retrofit", "retrofit-kotlin-serialization-converter", "okhttp", "okhttp-logging-interceptor"]
 androidx-android-test = ["androidx-junit", "androidx-espresso-core"]
