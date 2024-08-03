@@ -16,12 +16,22 @@ internal fun Project.configureAndroidCommonPlugin() {
     apply<AndroidKotlinPlugin>()
     apply<KotlinSerializationPlugin>()
     apply<RetrofitPlugin>()
+    apply<AndroidHiltPlugin>()
     with(plugins) {
         apply("kotlin-parcelize")
     }
-    apply<AndroidHiltPlugin>()
 
     extensions.getByType<BaseExtension>().apply {
+        buildTypes {
+            getByName("debug") {
+                val wableDevBaseUrl = properties["wable.dev.base.url"] as? String ?: ""
+                buildConfigField("String", "WABLE_BASE_URL", "\"${wableDevBaseUrl}\"")
+            }
+            getByName("release") {
+                val wableRelBaseUrl = properties["wable.rel.base.url"] as? String ?: ""
+                buildConfigField("String", "WABLE_BASE_URL", "\"${wableRelBaseUrl}\"")
+            }
+        }
 
         buildFeatures.apply {
             viewBinding = true
