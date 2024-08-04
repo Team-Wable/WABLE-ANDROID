@@ -1,12 +1,12 @@
 package com.teamwable.data.remote.datasource
 
-import com.teamwable.data.BuildConfig.TEST_TOKEN
 import com.teamwable.data.remote.dto.response.ResponseDummyDto
 import com.teamwable.data.util.EndPoints.API
 import com.teamwable.data.util.EndPoints.CONTENTS
 import com.teamwable.data.util.EndPoints.CURSOR
 import com.teamwable.data.util.EndPoints.V2
 import com.teamwable.network.BaseResponse
+import com.teamwable.network.BuildConfig.TEST_TOKEN
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

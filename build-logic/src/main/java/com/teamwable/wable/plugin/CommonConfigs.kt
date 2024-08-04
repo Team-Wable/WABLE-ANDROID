@@ -6,37 +6,15 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import java.util.Properties
 
 internal fun Project.configureAndroidCommonPlugin() {
-    val properties = Properties().apply {
-        load(rootProject.file("local.properties").inputStream())
-    }
-
     apply<AndroidKotlinPlugin>()
-    apply<KotlinSerializationPlugin>()
-    apply<RetrofitPlugin>()
     apply<AndroidHiltPlugin>()
     with(plugins) {
         apply("kotlin-parcelize")
     }
 
     extensions.getByType<BaseExtension>().apply {
-        buildTypes {
-            getByName("debug") {
-                val wableDevBaseUrl = properties["wable.dev.base.url"] as? String ?: ""
-                buildConfigField("String", "WABLE_BASE_URL", "\"${wableDevBaseUrl}\"")
-
-                //TODO:테스트용 나중에 지우기
-                val testToken = properties["test.token"] as? String ?: ""
-                buildConfigField("String", "TEST_TOKEN", "\"${testToken}\"")
-            }
-            getByName("release") {
-                val wableRelBaseUrl = properties["wable.rel.base.url"] as? String ?: ""
-                buildConfigField("String", "WABLE_BASE_URL", "\"${wableRelBaseUrl}\"")
-            }
-        }
-
         buildFeatures.apply {
             viewBinding = true
             buildConfig = true
