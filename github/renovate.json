@@ -1,0 +1,13 @@
+{
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "prConcurrentLimit": 2,
+      "ignoreTests": true
+    }
+  ]
+}
