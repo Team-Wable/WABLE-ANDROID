@@ -29,10 +29,4 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
     implementation(project(":core:designsystem:xml"))
-
-    // AndroidX
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.fragment.ktx)
 }
