@@ -1,7 +1,5 @@
 package com.teamwable.main
 
-import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import androidx.activity.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,8 +21,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(ActivityMainBinding::i
                 .collect { uiState ->
                     when (uiState) {
                         DummyUiState.Loading -> Timber.d("loading")
-                        is DummyUiState.LoadSuccess -> binding.dummy.text =
-                            uiState.dummy[0].contentText
+                        is DummyUiState.LoadSuccess ->
+                            binding.dummy.text =
+                                uiState.dummy[0].contentText
 
                         is DummyUiState.Error -> Timber.e(uiState.exception)
                     }

@@ -11,8 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DummyViewModel @Inject constructor(
-    private val dummyRepository: DummyRepository
+class DummyViewModel
+@Inject
+constructor(
+    private val dummyRepository: DummyRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<DummyUiState>(DummyUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -31,6 +33,8 @@ class DummyViewModel @Inject constructor(
 
 sealed interface DummyUiState {
     data object Loading : DummyUiState
+
     data class LoadSuccess(val dummy: List<Dummy>) : DummyUiState
+
     data class Error(val exception: Throwable) : DummyUiState
 }

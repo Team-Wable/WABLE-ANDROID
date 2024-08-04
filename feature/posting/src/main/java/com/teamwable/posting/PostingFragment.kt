@@ -7,6 +7,5 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingBinding::inflate) {
     override fun initView() {
-
     }
 }

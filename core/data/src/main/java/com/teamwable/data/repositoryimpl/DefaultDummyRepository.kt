@@ -8,8 +8,10 @@ import com.teamwable.model.Dummy
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class DefaultDummyRepository @Inject constructor(
-    private val dummyService: DummyService
+class DefaultDummyRepository
+@Inject
+constructor(
+    private val dummyService: DummyService,
 ) : DummyRepository {
     override suspend fun getDummy(): Result<List<Dummy>> {
         return runCatching {

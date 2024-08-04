@@ -19,11 +19,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Singleton
     @Provides
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
@@ -48,11 +47,12 @@ object NetworkModule {
     @Provides
     @WableRetrofit
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val build = Retrofit.Builder()
-            .baseUrl(WABLE_BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .build()
+        val build =
+            Retrofit.Builder()
+                .baseUrl(WABLE_BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+                .build()
         return build
     }
 }

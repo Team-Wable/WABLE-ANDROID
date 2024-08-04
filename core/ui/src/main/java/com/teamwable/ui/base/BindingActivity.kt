@@ -11,7 +11,7 @@ import androidx.viewbinding.ViewBinding
 import com.teamwable.ui.extensions.hideKeyboard
 
 abstract class BindingActivity<T : ViewBinding>(
-    private val bindingInflater: (LayoutInflater) -> T
+    private val bindingInflater: (LayoutInflater) -> T,
 ) : AppCompatActivity() {
     protected lateinit var binding: T
 

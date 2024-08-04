@@ -3,7 +3,7 @@ package com.teamwable.network
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-//TODO:BaseResponse 수정(명세서 나온 뒤)
+// TODO:BaseResponse 수정(명세서 나온 뒤)
 @Serializable
 data class BaseResponse<T>(
     @SerialName("status")

@@ -1,7 +1,5 @@
 package com.teamwable.ui.extensions
 
-import android.annotation.SuppressLint
-import android.view.MotionEvent
 import android.view.View
 
 fun View.setOnDuplicateBlockClick(click: (View) -> Unit) {

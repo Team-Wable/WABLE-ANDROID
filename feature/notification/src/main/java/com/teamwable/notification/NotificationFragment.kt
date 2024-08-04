@@ -8,6 +8,5 @@ import dagger.hilt.android.AndroidEntryPoint
 class NotificationFragment :
     BindingFragment<FragmentNotificationBinding>(FragmentNotificationBinding::inflate) {
     override fun initView() {
-
     }
 }
