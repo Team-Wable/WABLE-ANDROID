@@ -28,6 +28,7 @@ material = "1.12.0"
 in-app-update = "2.1.0"
 google-services = "4.4.2"
 google-play-services = "18.5.0"
+firebase = "33.1.2"
 
 # test
 junit = "4.13.2"
@@ -88,6 +89,8 @@ google-services = { module = "com.google.gms:google-services", version.ref = "go
 google-play-services = { group = "com.google.android.gms", name = "play-services-base", version.ref = "google-play-services" }
 app-update = { module = "com.google.android.play:app-update", version.ref = "in-app-update" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
