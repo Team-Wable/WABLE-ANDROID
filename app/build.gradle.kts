@@ -2,6 +2,7 @@
 plugins {
     id("com.teamwable.wable.application")
     id("com.teamwable.wable.test")
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -29,4 +30,8 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
     implementation(project(":core:designsystem:xml"))
+
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
