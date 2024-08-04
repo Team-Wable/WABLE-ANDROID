@@ -2,6 +2,7 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
+    alias(libs.plugins.ktlint)
 }
 android {
     namespace = "com.teamwable.news"
@@ -24,4 +25,13 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.material)
     implementation(libs.androidx.appcompat)
+}
+
+ktlint {
+    version = "0.49.1"
+    android.set(true)
+    debug.set(true)
+    coloredOutput.set(true)
+    verbose.set(true)
+    outputToConsole.set(true)
 }
