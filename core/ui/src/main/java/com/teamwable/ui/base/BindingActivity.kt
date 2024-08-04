@@ -1,5 +1,7 @@
 package com.teamwable.ui.base
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,11 +15,13 @@ abstract class BindingActivity<T : ViewBinding>(
 ) : AppCompatActivity() {
     protected lateinit var binding: T
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = bindingInflater(layoutInflater)
         setContentView(binding.root)
         initView()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     protected abstract fun initView()
