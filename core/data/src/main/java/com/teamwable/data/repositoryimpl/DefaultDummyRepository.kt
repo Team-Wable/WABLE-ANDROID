@@ -8,7 +8,7 @@ import com.teamwable.model.Dummy
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class DefaultDummyRepository
+internal class DefaultDummyRepository
 @Inject
 constructor(
     private val dummyService: DummyService,
