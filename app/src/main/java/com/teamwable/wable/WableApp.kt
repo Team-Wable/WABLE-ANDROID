@@ -12,6 +12,7 @@ class WableApp : Application() {
     }
 
     private fun setTimber() {
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG)
+            Timber.plant(Timber.DebugTree())
     }
 }
