@@ -15,16 +15,13 @@ dependencies {
     implementation(project(":core:data"))
 
     // AndroidX
-    implementation(libs.androidx.constraintlayout)
+    implementation(libs.fragment.ktx)
+    // TODO:이동 없으면 지워도 됨
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.fragment.ktx)
-    implementation(libs.splash.screen)
 
     // Third Party
-    implementation(libs.coil.core)
-    implementation(libs.material)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.glide)
 }
 
 ktlint {
