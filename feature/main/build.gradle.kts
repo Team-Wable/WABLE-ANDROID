@@ -2,7 +2,6 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint)
 }
 android {
