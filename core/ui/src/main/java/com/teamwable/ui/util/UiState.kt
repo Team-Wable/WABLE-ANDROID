@@ -1,4 +1,4 @@
-package com.teamwable.data.util
+package com.teamwable.ui.util
 
 
 sealed interface UiState<out T> {
