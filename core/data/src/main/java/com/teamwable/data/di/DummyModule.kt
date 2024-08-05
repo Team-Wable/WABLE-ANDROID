@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DummyModule {
+internal object DummyModule {
     @Singleton
     @Provides
     fun provideDummyService(

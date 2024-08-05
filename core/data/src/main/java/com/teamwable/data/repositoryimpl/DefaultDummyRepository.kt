@@ -6,7 +6,7 @@ import com.teamwable.data.repository.DummyRepository
 import com.teamwable.model.Dummy
 import javax.inject.Inject
 
-class DefaultDummyRepository
+internal class DefaultDummyRepository
 @Inject
 constructor(
     private val dummyService: DummyService,
