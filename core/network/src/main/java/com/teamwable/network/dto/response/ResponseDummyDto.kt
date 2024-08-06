@@ -1,4 +1,4 @@
-package com.teamwable.data.remote.dto.response
+package com.teamwable.network.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

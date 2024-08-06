@@ -1,4 +1,4 @@
-package com.teamwable.network
+package com.teamwable.network.di
 
 import javax.inject.Qualifier
 

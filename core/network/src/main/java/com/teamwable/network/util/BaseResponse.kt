@@ -1,4 +1,4 @@
-package com.teamwable.network
+package com.teamwable.network.util
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
