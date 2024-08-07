@@ -7,6 +7,7 @@ group = "com.teamwable.wable.buildlogic"
 dependencies {
     compileOnly(libs.agp)
     compileOnly(libs.kotlin.gradleplugin)
+    compileOnly(libs.compose.compiler.gradle.plugin)
 }
 
 gradlePlugin {
@@ -42,6 +43,10 @@ gradlePlugin {
         create("android-data") {
             id = "com.teamwable.wable.data"
             implementationClass = "com.teamwable.wable.plugin.AndroidDataPlugin"
+        }
+        create("android-compose") {
+            id = "com.teamwable.wable.compose"
+            implementationClass = "com.teamwable.wable.plugin.AndroidComposePlugin"
         }
     }
 }
