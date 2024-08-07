@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-class AndroidDataPlugin : Plugin<Project> {
+class AndroidNetworkPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         plugins.apply("com.android.library")
         apply<AndroidKotlinPlugin>()

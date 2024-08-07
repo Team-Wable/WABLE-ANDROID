@@ -1,7 +1,9 @@
-package com.teamwable.network
+package com.teamwable.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.teamwable.network.BuildConfig.WABLE_BASE_URL
+import com.teamwable.network.util.isJsonArray
+import com.teamwable.network.util.isJsonObject
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +20,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(

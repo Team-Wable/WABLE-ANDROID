@@ -1,13 +1,13 @@
-package com.teamwable.data.remote.datasource
+package com.teamwable.network.datasource
 
-import com.teamwable.data.remote.dto.response.ResponseDummyDto
-import com.teamwable.network.BaseResponse
 import com.teamwable.network.BuildConfig.TEST_TOKEN
+import com.teamwable.network.dto.response.ResponseDummyDto
+import com.teamwable.network.util.BaseResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-internal interface DummyService {
+interface DummyService {
     @Headers("Authorization: Bearer $TEST_TOKEN")
     @GET("api/v2/contents")
     suspend fun getDummy(

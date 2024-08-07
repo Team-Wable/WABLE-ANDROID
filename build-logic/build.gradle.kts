@@ -39,9 +39,9 @@ gradlePlugin {
             id = "com.teamwable.wable.retrofit"
             implementationClass = "com.teamwable.wable.plugin.RetrofitPlugin"
         }
-        create("android-data") {
-            id = "com.teamwable.wable.data"
-            implementationClass = "com.teamwable.wable.plugin.AndroidDataPlugin"
+        create("android-network") {
+            id = "com.teamwable.wable.network"
+            implementationClass = "com.teamwable.wable.plugin.AndroidNetworkPlugin"
         }
     }
 }

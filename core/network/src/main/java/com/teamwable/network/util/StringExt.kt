@@ -1,4 +1,4 @@
-package com.teamwable.network
+package com.teamwable.network.util
 
 fun String?.isJsonObject(): Boolean = this?.startsWith("{") == true && this.endsWith("}")
 
