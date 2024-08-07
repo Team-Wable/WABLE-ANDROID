@@ -53,6 +53,16 @@ amplitude = "1.+"
 amplitude-ads = "18.1.0"
 activity = "1.9.1"
 
+## Compose
+# https://developer.android.com/develop/ui/compose/bom/bom-mapping
+androidxComposeBom = "2024.05.00"
+# https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+androidxComposeCompiler = "1.5.14"
+# https://developer.android.com/jetpack/androidx/releases/navigation
+androidxComposeNavigation = "2.8.0-beta06"
+# https://developer.android.com/jetpack/androidx/releases/compose-material3
+androidxComposeMaterial3 = "1.2.1"
+
 [libraries]
 # kotlin
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -120,6 +130,18 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
 amplitude-ads = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "amplitude-ads" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
+## Compose
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
+androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }
+compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
