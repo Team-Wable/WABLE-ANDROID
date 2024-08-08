@@ -29,7 +29,7 @@ android {
 dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
-    implementation(project(":core:designsystem:xml"))
+    implementation(project(":core:designsystem"))
 
     //firebase
     implementation(platform(libs.firebase.bom))

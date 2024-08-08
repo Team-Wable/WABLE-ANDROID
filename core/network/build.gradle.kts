@@ -2,7 +2,7 @@ import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.teamwable.wable.data")
+    id("com.teamwable.wable.network")
 }
 
 val properties = Properties().apply {
