@@ -1,5 +1,6 @@
 plugins {
     id("com.teamwable.wable.compose")
+    id("com.teamwable.wable.serialization")
 }
 
 android {
