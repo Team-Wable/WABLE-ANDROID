@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.chanu.designsystem_compose"
+    namespace = "com.teamwable.designsystem_compose"
 }
 
 dependencies {

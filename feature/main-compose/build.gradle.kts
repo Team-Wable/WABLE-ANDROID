@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.chanu.main_compose"
+    namespace = "com.teamwable.main_compose"
 }
 
 dependencies {
