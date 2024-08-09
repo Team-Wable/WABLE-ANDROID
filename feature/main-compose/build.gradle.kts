@@ -1,5 +1,5 @@
 plugins {
-    id("com.teamwable.wable.compose")
+    id("com.teamwable.wable.compose.feature")
     alias(libs.plugins.ktlint)
 }
 
@@ -8,4 +8,5 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:auth"))
 }
