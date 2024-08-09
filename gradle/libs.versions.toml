@@ -10,6 +10,7 @@ kotlin = "2.0.0"
 kotlinx-serialization-json = "1.6.1"
 kotlinx-serialization-converter = "1.0.0"
 kotlinx-coroutines = "1.7.3"
+kotlinxCollectionsImmutable = "0.3.4"
 
 # android
 coreKtx = "1.13.1"
@@ -64,8 +65,8 @@ androidxComposeNavigation = "2.8.0-beta06"
 androidxComposeMaterial3 = "1.2.1"
 # # https://developer.android.com/jetpack/androidx/releases/test
 androidxTestExt = "1.1.5"
-# https://developer.android.com/jetpack/androidx/releases/lifecycle
-androidxLifecycle = "2.7.0"
+hiltNavigationComposeVersion = "1.2.0"
+jetbrainsKotlinJvm = "1.9.0"
 
 [libraries]
 # kotlin
@@ -75,6 +76,7 @@ kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlin-coroutines-google-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 
 # android
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -147,9 +149,10 @@ androidx-compose-navigation = { group = "androidx.navigation", name = "navigatio
 androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
-androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -161,6 +164,7 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 lifecycle = ["lifecycle", "lifecycle-viewmodel", "lifecycle-livedata"]
