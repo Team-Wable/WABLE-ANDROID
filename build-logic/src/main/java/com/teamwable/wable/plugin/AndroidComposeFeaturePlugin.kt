@@ -21,6 +21,13 @@ class AndroidComposeFeaturePlugin : Plugin<Project> {
             "implementation"(libs.findLibrary("androidx.compose.navigation").get())
             "implementation"(libs.findLibrary("kotlinx.collections.immutable").get())
             "testImplementation"(libs.findLibrary("androidx.compose.navigation.test").get())
+
+            // Adding module dependencies
+            "implementation"(project(":core:navigation"))
+            "implementation"(project(":core:model"))
+            "implementation"(project(":core:data"))
+            "implementation"(project(":core:designsystem-compose"))
+            "implementation"(project(":core:designsystem"))
         }
     }
 }
