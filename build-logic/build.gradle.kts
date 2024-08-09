@@ -48,5 +48,9 @@ gradlePlugin {
             id = "com.teamwable.wable.compose"
             implementationClass = "com.teamwable.wable.plugin.AndroidComposePlugin"
         }
+        create("android-compose-feature") {
+            id = "com.teamwable.wable.compose.feature"
+            implementationClass = "com.teamwable.wable.plugin.AndroidComposeFeaturePlugin"
+        }
     }
 }
