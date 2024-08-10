@@ -18,7 +18,7 @@ internal class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Route.FIRST
+    val startDestination = Route.Login
 
     fun navigateToLogin(navOptions: NavOptions) {
         navController.navigateLogin(navOptions)
@@ -29,13 +29,19 @@ internal class MainNavigator(
     }
 
     fun popBackStackIfNotHome() {
-        if (!isSameCurrentDestination<Route.FIRST>()) {
+        if (!isSameCurrentDestination<Route.Login>()) {
             popBackStack()
         }
     }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
         return navController.currentDestination?.hasRoute<T>() == true
+    }
+
+    @Composable
+    fun MainNavigator.shouldShowTopBar(): Boolean = when (currentDestination?.route) {
+        "Splash", "Login" -> false
+        else -> true
     }
 }
 
