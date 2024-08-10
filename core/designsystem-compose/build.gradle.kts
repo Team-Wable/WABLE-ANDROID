@@ -5,7 +5,7 @@ plugins {
 android {
     namespace = "com.teamwable.designsystem_compose"
 }
-
 dependencies {
-    implementation(project(":core:designsystem"))
+    implementation(project(":core:common"))
 }
+

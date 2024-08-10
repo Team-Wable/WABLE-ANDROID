@@ -24,7 +24,7 @@ rootProject.name = "Wable"
 include(":app")
 include(":feature:main")
 include(":core:ui")
-include(":core:designsystem")
+include(":core:common")
 include(":core:data")
 include(":core:network")
 include(":core:model")

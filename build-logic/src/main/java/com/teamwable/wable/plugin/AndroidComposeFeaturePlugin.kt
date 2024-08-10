@@ -28,7 +28,7 @@ class AndroidComposeFeaturePlugin : Plugin<Project> {
             "implementation"(project(":core:model"))
             "implementation"(project(":core:data"))
             "implementation"(project(":core:designsystem-compose"))
-            "implementation"(project(":core:designsystem"))
+            "implementation"(project(":core:common"))
         }
     }
 }

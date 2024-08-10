@@ -30,7 +30,7 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":feature:main-compose"))
     implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
+    implementation(project(":core:common"))
 
     //firebase
     implementation(platform(libs.firebase.bom))
