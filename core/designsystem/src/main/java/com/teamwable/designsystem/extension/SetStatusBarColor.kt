@@ -1,4 +1,4 @@
-package com.teamwable.designsystem_compose.extension
+package com.teamwable.designsystem.extension
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

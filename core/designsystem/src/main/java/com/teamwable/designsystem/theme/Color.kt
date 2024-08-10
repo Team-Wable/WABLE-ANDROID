@@ -1,4 +1,4 @@
-package com.teamwable.designsystem_compose.theme
+package com.teamwable.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

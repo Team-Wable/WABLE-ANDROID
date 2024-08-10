@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.teamwable.common.intentprovider.IntentProvider
-import com.teamwable.designsystem_compose.theme.WableTheme
+import com.teamwable.designsystem.theme.WableTheme
 
 @Composable
 fun LoginRoute(

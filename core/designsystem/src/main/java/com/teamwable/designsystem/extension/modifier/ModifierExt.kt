@@ -1,4 +1,4 @@
-package com.teamwable.designsystem_compose.extension.modifier
+package com.teamwable.designsystem.extension.modifier
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

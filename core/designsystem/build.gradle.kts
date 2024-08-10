@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teamwable.designsystem_compose"
+    namespace = "com.teamwable.designsystem"
 }
 dependencies {
 }
