@@ -1,0 +1,96 @@
+name: Wable Release Test
+
+on:
+  pull_request:
+    branches: [ main ]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: .
+
+jobs:
+  build:
+    name: Release Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Add Network Base Url
+        env:
+          WABLE_DEV_BASE_URL: ${{ secrets.WABLE_DEV_BASE_URL }}
+          WABLE_REL_BASE_URL: ${{ secrets.WABLE_REL_BASE_URL }}
+        run: |
+          echo wable.dev.base.url=$WABLE_DEV_BASE_URL >> ./local.properties
+          echo wable.rel.base.url=$WABLE_REL_BASE_URL >> ./local.properties
+
+      - name: Access Google Services JSON
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $GOOGLE_SERVICES_JSON | base64 -di > ./app/google-services.json
+
+      - name: Access Keystore
+        env:
+          DEBUG_KEY_STORE: ${{ secrets.DEBUG_KEY_STORE }}
+          RELEASE_JKS: ${{ secrets.RELEASE_JKS }}
+          RELEASE_KEY_STORE_PROPERTIES: ${{ secrets.RELEASE_KEY_STORE_PROPERTIES }}
+        run: |
+          echo $RELEASE_JKS | base64 -di > ./app/keystore/release.jks
+          echo $RELEASE_KEY_STORE_PROPERTIES | base64 -di > ./keystore.properties
+          echo $DEBUG_KEY_STORE | base64 -di > ./app/keystore/debug.keystore
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload debug Build to APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/
+          if-no-files-found: error
+
+      - name: On Success, Notify in Slack
+        if: ${{ success() }}
+        uses: MeilCli/slack-upload-file@v3
+        with:
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel_id: ${{ secrets.SLACK_GENERAL_CHANNEL_ID }}
+          file_path: 'app/build/outputs/apk/debug/app-debug.apk'
+          file_name: 'WABLE-ANDROID.apk'
+          file_type: 'apk'
+          initial_comment: '💟 Release Test가 완료되었습니다 💟'
+
+      - name: On Failed, Notify in Slack
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_TITLE: '🚫 Release PR check Failed 🚫'
+          SLACK_COLOR: '#FF0000'
+          MSG_MINIMAL: true
+          SLACK_USERNAME: Wable Android
+          SLACK_MESSAGE: '️🚫⚠️ Release PR 에러  ️⚠️🚫'
