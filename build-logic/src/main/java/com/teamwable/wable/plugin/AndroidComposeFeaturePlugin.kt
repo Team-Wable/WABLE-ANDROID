@@ -11,6 +11,7 @@ class AndroidComposeFeaturePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply<AndroidComposePlugin>()
         apply<AndroidHiltPlugin>()
+        apply<KotlinSerializationPlugin>()
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
         dependencies {
