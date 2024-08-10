@@ -3,5 +3,5 @@ plugins {
     id("com.teamwable.wable.feature")
 }
 android {
-    namespace = "com.teamwable.designsystem"
+    namespace = "com.teamwable.common"
 }
