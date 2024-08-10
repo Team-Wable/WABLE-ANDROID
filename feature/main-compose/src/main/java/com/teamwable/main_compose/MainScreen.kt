@@ -13,10 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.loginNavGraph
+import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -24,8 +26,11 @@ import java.net.UnknownHostException
 @Composable
 internal fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
+    intentProvider: IntentProvider,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
+    val localContext = LocalContext.current
+    val intent = intentProvider.getIntent()
 
     val coroutineScope = rememberCoroutineScope()
     val localContextResource = LocalContext.current.resources
@@ -65,20 +70,14 @@ internal fun MainScreen(
                                 navOptions = navOptions,
                             )
                         },
-                        navigateToHome = {
-                            val navOptions = navOptions {
-                                popUpTo(navigator.navController.graph.findStartDestination().id) {
-                                    inclusive = true
-                                }
-                                launchSingleTop = true
-                            }
-//                            navigator.navigateToLogin(navOptions)
-                        },
+                        navigateToHome = { startActivity(localContext, intent, null) },
+                        intentProvider = intentProvider,
                     )
                     loginNavGraph(
                         navigateToOnBoarding = {},
-                        navigateToHome = {},
+                        navigateToHome = { startActivity(localContext, intent, null) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
+                        intentProvider = intentProvider,
                     )
                 }
             }
