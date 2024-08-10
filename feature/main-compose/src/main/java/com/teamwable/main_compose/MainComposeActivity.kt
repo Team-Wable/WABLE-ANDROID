@@ -7,7 +7,7 @@ import com.teamwable.designsystem_compose.theme.WableTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ComposeMainActivity : ComponentActivity() {
+class MainComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
