@@ -11,4 +11,13 @@ sealed interface Route {
 
     @Serializable
     data class THIRD(val id: String) : Route
+
+    @Serializable
+    data object Splash : Route
+
+    @Serializable
+    data object Login : Route
+
+    @Serializable
+    data object Home : Route
 }
