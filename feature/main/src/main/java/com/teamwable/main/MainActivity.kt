@@ -7,12 +7,11 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.teamwable.main.databinding.ActivityMainBinding
+import com.teamwable.ui.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -29,20 +28,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        viewModel.loadDummy()
-        lifecycleScope.launch {
-            viewModel.uiState
-                .flowWithLifecycle(lifecycle)
-                .collect { uiState ->
-                    when (uiState) {
-                        DummyUiState.Loading -> Timber.d("loading")
-                        is DummyUiState.LoadSuccess ->
-                            binding.dummy.text =
-                                uiState.dummy[0].contentText
+        setBottomNavigation()
+    }
 
-                        is DummyUiState.Error -> Timber.e(uiState.exception)
-                    }
+    private fun setBottomNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.container_main) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bnvMain.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.navigation_posting -> {
+                    binding.groupMainBnv.visible(false)
                 }
+
+                else -> {
+                    binding.groupMainBnv.visible(true)
+                }
+            }
         }
     }
 
