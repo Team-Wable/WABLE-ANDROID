@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.teamwable.ui"
 }
+
+dependencies {
+    implementation(project(":core:common"))
+}
