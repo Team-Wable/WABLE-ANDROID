@@ -28,6 +28,6 @@
 
         <activity
             android:name="com.teamwable.main.MainActivity"
-            android:exported="true"></activity>
+            android:exported="false" />
     </application>
 </manifest>
