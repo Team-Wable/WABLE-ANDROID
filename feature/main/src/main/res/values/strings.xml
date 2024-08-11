@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="label_bnv_home">홈</string>
+    <string name="label_bnv_news">소식</string>
+    <string name="label_bnv_notification">알림</string>
+    <string name="label_bnv_profile">마이</string>
+</resources>

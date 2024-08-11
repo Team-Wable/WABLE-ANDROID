@@ -4,13 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/dummy"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/divider_main_bnv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/graph_main" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_main_bnv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="main"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="divider_main_bnv, bnv_main" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_main_bnv"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:dividerColor="@color/gray_200"
+        app:layout_constraintBottom_toTopOf="@id/bnv_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_main"
+        android:layout_width="0dp"
+        android:layout_height="84dp"
+        app:backgroundTint="@color/white"
+        app:itemActiveIndicatorStyle="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/menu_main_navigation" />
 </androidx.constraintlayout.widget.ConstraintLayout>
