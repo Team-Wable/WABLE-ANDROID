@@ -1,8 +1,8 @@
-name: Wable PR Builder
+name: Wable Release Test
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ main ]
 
 defaults:
   run:
@@ -11,7 +11,7 @@ defaults:
 
 jobs:
   build:
-    name: PR Checker
+    name: Release Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,9 +26,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
 
       - name: Add Network Base Url
         env:
@@ -63,27 +60,37 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle
-        run: ./gradlew build -PcompileSdkVersion=34 --stacktrace
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload debug Build to APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/
+          if-no-files-found: error
 
       - name: On Success, Notify in Slack
         if: ${{ success() }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_TITLE: '✅ PR check Success ✅'
-          SLACK_COLOR: '#36a64f'
-          MSG_MINIMAL: true
-          SLACK_USERNAME: Wable Android
-          SLACK_MESSAGE: '🎉💟 PR 완료 💟🎉'
+        uses: MeilCli/slack-upload-file@v3
+        with:
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel_id: ${{ secrets.SLACK_GENERAL_CHANNEL_ID }}
+          file_path: 'app/build/outputs/apk/debug/app-debug.apk'
+          file_name: 'WABLE-ANDROID.apk'
+          file_type: 'apk'
+          initial_comment: '💟 Release Test가 완료되었습니다 💟'
 
       - name: On Failed, Notify in Slack
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_TITLE: '🚫 PR check Failed 🚫'
+          SLACK_TITLE: '🚫 Release PR check Failed 🚫'
           SLACK_COLOR: '#FF0000'
           MSG_MINIMAL: true
           SLACK_USERNAME: Wable Android
-          SLACK_MESSAGE: '️🚫⚠️ PR 에러  ️⚠️🚫'
+          SLACK_MESSAGE: '️🚫⚠️ Release PR 에러  ️⚠️🚫'
