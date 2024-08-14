@@ -30,4 +30,5 @@
         android:name="com.teamwable.posting.PostingFragment"
         android:label="PostingFragment"
         tools:layout="@layout/fragment_posting" />
+    <include app:graph="@navigation/graph_profile"/>
 </navigation>
