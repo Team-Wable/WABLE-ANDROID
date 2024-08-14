@@ -2,21 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/graph_profile">
+    android:id="@+id/graph_profile"
+    app:startDestination="@id/navigation_profile">
     <fragment
-        android:id="@+id/navigation_profile_hamburger"
-        android:name="com.teamwable.profile.ProfileHamburgerBottomSheet"
-        android:label="ProfileHamburgerBottomSheet"
-        tools:layout="@layout/bottomsheet_profile_hamburger">
+        android:id="@+id/navigation_profile"
+        android:name="com.teamwable.profile.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
         <action
-            android:id="@+id/action_navigation_profile_hamburger_to_navigation_profile_information"
+            android:id="@+id/action_profile_to_profile_information"
             app:destination="@id/navigation_profile_information" />
         <action
-            android:id="@+id/action_navigation_profile_hamburger_to_navigation_push_notification"
+            android:id="@+id/action_profile_to_push_notification"
             app:destination="@id/navigation_push_notification" />
-        <action
-            android:id="@+id/action_navigation_profile_hamburger_to_navigation_logout"
-            app:destination="@id/navigation_logout" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile_information"
@@ -49,11 +47,6 @@
         android:id="@+id/navigation_profile_delete"
         android:name="com.teamwable.profile.ProfileDeleteDialogFragment"
         android:label="ProfileDeleteDialog"
-        tools:layout="@layout/fragment_delete_dialog" />
-    <fragment
-        android:id="@+id/navigation_logout"
-        android:name="com.teamwable.profile.LogoutDialogFragment"
-        android:label="LogoutDialog"
         tools:layout="@layout/fragment_delete_dialog" />
     <fragment
         android:id="@+id/navigation_push_notification"

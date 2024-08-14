@@ -17,13 +17,13 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
 
     private fun initAccountInformationBtnClickListener() {
         binding.tvHamburgerAccountInformation.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_profile_hamburger_to_navigation_profile_information)
+            findNavController().navigate(R.id.action_profile_to_profile_information)
         }
     }
 
     private fun initNotificationSettingBtnClickListener() {
         binding.tvHamburgerNotificationSetting.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_profile_hamburger_to_navigation_push_notification)
+            findNavController().navigate(R.id.action_profile_to_push_notification)
         }
     }
 
