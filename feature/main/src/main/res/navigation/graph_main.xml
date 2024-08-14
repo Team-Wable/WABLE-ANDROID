@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_main"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.teamwable.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.teamwable.news.NewsFragment"
+        android:label="NewsFragment"
+        tools:layout="@layout/fragment_news" />
+    <fragment
+        android:id="@+id/navigation_notification"
+        android:name="com.teamwable.notification.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.teamwable.profile.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/navigation_posting"
+        android:name="com.teamwable.posting.PostingFragment"
+        android:label="PostingFragment"
+        tools:layout="@layout/fragment_posting" />
+</navigation>
