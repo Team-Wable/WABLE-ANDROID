@@ -56,10 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleBottomNavigationVisibility(destination: NavDestination) {
-        when (destination.id) {
-            R.id.navigation_posting -> binding.groupMainBnv.visible(false)
-            else -> binding.groupMainBnv.visible(true)
-        }
+        binding.groupMainBnv.visible(destination.id != R.id.navigation_posting)
     }
 
     private fun setBadgeOnNotification(isVisible: Boolean) {
