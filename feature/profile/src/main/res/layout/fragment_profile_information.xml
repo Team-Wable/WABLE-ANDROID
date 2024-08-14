@@ -143,6 +143,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="79dp"
+            android:clickable="true"
+            android:focusable="true"
             android:text="자세히 보기"
             android:textAppearance="@style/TextAppearance.Wable.Body2"
             android:textColor="@color/black" />
