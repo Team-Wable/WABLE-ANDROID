@@ -1,6 +1,8 @@
 package com.teamwable.main
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -14,7 +16,6 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private val viewModel: DummyViewModel by viewModels()
 
@@ -42,6 +43,12 @@ class MainActivity : AppCompatActivity() {
                         is DummyUiState.Error -> Timber.e(uiState.exception)
                     }
                 }
+        }
+    }
+
+    companion object {
+        fun createIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
     }
 }

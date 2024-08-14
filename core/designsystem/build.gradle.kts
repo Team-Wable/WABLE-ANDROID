@@ -1,7 +1,10 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.teamwable.wable.feature")
+    id("com.teamwable.wable.compose")
 }
+
 android {
     namespace = "com.teamwable.designsystem"
 }
+dependencies {
+}
+

@@ -183,3 +183,5 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+# dependency graph
+project.dot

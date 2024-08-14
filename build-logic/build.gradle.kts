@@ -7,6 +7,7 @@ group = "com.teamwable.wable.buildlogic"
 dependencies {
     compileOnly(libs.agp)
     compileOnly(libs.kotlin.gradleplugin)
+    compileOnly(libs.compose.compiler.gradle.plugin)
 }
 
 gradlePlugin {
@@ -43,5 +44,25 @@ gradlePlugin {
             id = "com.teamwable.wable.network"
             implementationClass = "com.teamwable.wable.plugin.AndroidNetworkPlugin"
         }
+        create("android-compose") {
+            id = "com.teamwable.wable.compose"
+            implementationClass = "com.teamwable.wable.plugin.AndroidComposePlugin"
+        }
+        create("android-compose-feature") {
+            id = "com.teamwable.wable.compose.feature"
+            implementationClass = "com.teamwable.wable.plugin.AndroidComposeFeaturePlugin"
+        }
     }
+}
+
+tasks.named("compileTestKotlin") {
+    dependsOn("clean")
+}
+
+tasks.named("processTestResources") {
+    dependsOn("compileTestKotlin")
+}
+
+tasks.named("testClasses") {
+    dependsOn("processTestResources")
 }
