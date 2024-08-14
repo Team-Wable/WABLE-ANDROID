@@ -7,11 +7,18 @@ import com.teamwable.ui.base.BindingFragment
 class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBinding>(FragmentProfileInformationBinding::inflate) {
     override fun initView() {
         setAppbarText()
+        initBackBtnClickListener()
         initDeleteBtnClickListener()
     }
 
     private fun setAppbarText() {
         binding.viewProfileInformationAppbar.tvProfileAppbarTitle.text = "계정 정보"
+    }
+
+    private fun initBackBtnClickListener() {
+        binding.viewProfileInformationAppbar.btnProfileAppbarBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initDeleteBtnClickListener() {
