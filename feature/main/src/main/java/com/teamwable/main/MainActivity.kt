@@ -34,39 +34,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun setBottomNavigation() {
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.container_main) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         val navController = navHostFragment.navController
 
         //TODO : 나중에 BADGE 보이게 하는 로직으로 이동
-        setBadgeOnNotification(navController, true)
+        setBadgeOnNotification(true)
 
-        with(binding) {
-            bnvMain.itemIconTintList = null
-            bnvMain.setupWithNavController(navController)
+        binding.bnvMain.apply {
+            itemIconTintList = null
+            setupWithNavController(navController)
         }
+
         initBottomNavigationChangedListener(navController)
     }
 
     private fun initBottomNavigationChangedListener(navController: NavController) {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            handleBottomNavigationVisibility(navController, destination)
-            if (destination.id == R.id.navigation_notification) setBadgeOnNotification(navController, false)
+            handleBottomNavigationVisibility(destination)
+            if (destination.id == R.id.navigation_notification) setBadgeOnNotification(false)
         }
     }
 
-    private fun handleBottomNavigationVisibility(navController: NavController, destination: NavDestination) {
+    private fun handleBottomNavigationVisibility(destination: NavDestination) {
         when (destination.id) {
-            R.id.navigation_posting -> {
-                binding.groupMainBnv.visible(false)
-            }
-
-            else -> {
-                binding.groupMainBnv.visible(true)
-            }
+            R.id.navigation_posting -> binding.groupMainBnv.visible(false)
+            else -> binding.groupMainBnv.visible(true)
         }
     }
 
-    private fun setBadgeOnNotification(navController: NavController, isVisible: Boolean) {
+    private fun setBadgeOnNotification(isVisible: Boolean) {
         binding.bnvMain.getOrCreateBadge(R.id.navigation_notification).apply {
             this.isVisible = isVisible
             horizontalOffset = 1
