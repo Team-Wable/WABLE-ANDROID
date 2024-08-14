@@ -13,6 +13,7 @@ buildscript {
         classpath(libs.kotlin.gradleplugin)
         classpath(libs.hilt.plugin)
         classpath(libs.agp)
+        classpath(libs.androidx.navigation.safe.args)
     }
 }
 
