@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_white_fill_top_16_rect">
+
+    <View
+        android:id="@+id/view_profile_hamburger_bar"
+        android:layout_width="42dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:background="@drawable/shape_gray500_fill_4_rect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_hamburger_account_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="계정 정보"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/view_profile_hamburger_bar" />
+
+    <TextView
+        android:id="@+id/tv_hamburger_notification_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="알림 설정"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_hamburger_account_information" />
+
+    <TextView
+        android:id="@+id/tv_hamburger_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="피드백 남기기"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_hamburger_notification_setting" />
+
+    <TextView
+        android:id="@+id/tv_hamburger_customer_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="고객센터"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_hamburger_feedback" />
+
+    <TextView
+        android:id="@+id/tv_hamburger_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="로그아웃"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hamburger_customer_service" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
