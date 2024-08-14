@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_profile">
+    <fragment
+        android:id="@+id/navigation_profile_hamburger"
+        android:name="com.teamwable.profile.ProfileHamburgerBottomSheet"
+        android:label="ProfileHamburgerBottomSheet"
+        tools:layout="@layout/bottomsheet_profile_hamburger">
+        <action
+            android:id="@+id/action_navigation_profile_hamburger_to_navigation_profile_information"
+            app:destination="@id/navigation_profile_information" />
+        <action
+            android:id="@+id/action_navigation_profile_hamburger_to_navigation_push_notification"
+            app:destination="@id/navigation_push_notification" />
+        <action
+            android:id="@+id/action_navigation_profile_hamburger_to_navigation_logout"
+            app:destination="@id/navigation_logout" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_information"
+        android:name="com.teamwable.profile.ProfileInformationFragment"
+        android:label="ProfileInformationFragment"
+        tools:layout="@layout/fragment_profile_information">
+        <action
+            android:id="@+id/action_navigation_profile_information_to_navigation_profile_delete_reason"
+            app:destination="@id/navigation_profile_delete_reason" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_delete_reason"
+        android:name="com.teamwable.profile.ProfileDeleteReasonFragment"
+        android:label="ProfileDeleteReasonFragment"
+        tools:layout="@layout/fragment_profile_delete_reason">
+        <action
+            android:id="@+id/action_navigation_profile_delete_reason_to_navigation_profile_delete_confirm"
+            app:destination="@id/navigation_profile_delete_confirm" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_delete_confirm"
+        android:name="com.teamwable.profile.ProfileDeleteConfirmFragment"
+        android:label="ProfileDeleteConfirmFragment"
+        tools:layout="@layout/fragment_profile_delete_confirm">
+        <action
+            android:id="@+id/action_navigation_profile_delete_confirm_to_navigation_profile_delete"
+            app:destination="@id/navigation_profile_delete" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_delete"
+        android:name="com.teamwable.profile.ProfileDeleteDialogFragment"
+        android:label="ProfileDeleteDialog"
+        tools:layout="@layout/fragment_delete_dialog" />
+    <fragment
+        android:id="@+id/navigation_logout"
+        android:name="com.teamwable.profile.LogoutDialogFragment"
+        android:label="LogoutDialog"
+        tools:layout="@layout/fragment_delete_dialog" />
+    <fragment
+        android:id="@+id/navigation_push_notification"
+        android:name="com.teamwable.profile.PushNotificationFragment"
+        android:label="PushNotificationFragment"
+        tools:layout="@layout/fragment_push_notification" />
+</navigation>
