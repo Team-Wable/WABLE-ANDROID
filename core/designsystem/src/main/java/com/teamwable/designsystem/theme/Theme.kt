@@ -1,6 +1,8 @@
 package com.teamwable.designsystem.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -59,7 +61,18 @@ fun WableTheme(
     val typography = wableTypography()
     SetStatusBarColor(color = colors.white)
     SetLightNavigationBar()
-    ProvideSoptColorsAndTypography(colors, typography) {
-        MaterialTheme(content = content)
+    ProvideWableColorsAndTypography(colors, typography) {
+        MaterialTheme(
+            content = content, colorScheme = lightColorScheme(colors),
+        )
     }
 }
+
+@Composable
+private fun lightColorScheme(colors: WableColors): ColorScheme =
+    lightColorScheme(
+        primary = colors.purple50.copy(alpha = 0.99f),
+        background = colors.white,
+        surface = colors.gray100,
+        error = colors.error,
+    )
