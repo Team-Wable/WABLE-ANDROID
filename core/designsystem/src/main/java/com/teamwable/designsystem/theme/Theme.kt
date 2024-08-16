@@ -18,7 +18,7 @@ private val LocalWableTypography = staticCompositionLocalOf<WableTypography> {
 }
 
 /*
-* SoptTheme
+* WableTheme
 *
 * Color에 접근하고 싶을때 WableTheme.colors.primary 이런식으로 접근하면 됩니다.
 * Typo를 변경하고 싶다면 WableTheme.typography.h1 이런식으로 접근하면 됩니다.
@@ -37,7 +37,7 @@ object WableTheme {
 }
 
 @Composable
-fun ProvideSoptColorsAndTypography(colors: WableColors, typography: WableTypography, content: @Composable () -> Unit) {
+fun ProvideWableColorsAndTypography(colors: WableColors, typography: WableTypography, content: @Composable () -> Unit) {
     val provideColors = remember { colors.copy() }
     provideColors.update(colors)
 
