@@ -1,6 +1,5 @@
 package com.teamwable.auth
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,12 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.auth.model.LoginSideEffect
-import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.theme.WableTheme
 
 @Composable
@@ -37,7 +34,6 @@ fun LoginRoute(
     navigateToOnBoarding: () -> Unit,
     navigateToHome: () -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
-    intentProvider: IntentProvider,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -50,7 +46,7 @@ fun LoginRoute(
         viewModel.loginSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is LoginSideEffect.NavigateToMain -> navigateToMain(intentProvider, context)
+                    is LoginSideEffect.NavigateToMain -> navigateToHome()
                     else -> Unit
                 }
             }
@@ -61,14 +57,6 @@ fun LoginRoute(
             viewModel.saveIsAutoLogin(true)
         },
     )
-}
-
-private fun navigateToMain(
-    intentProvider: IntentProvider,
-    context: Context,
-) {
-    val intent = intentProvider.getIntent()
-    startActivity(context, intent, null)
 }
 
 @Composable
