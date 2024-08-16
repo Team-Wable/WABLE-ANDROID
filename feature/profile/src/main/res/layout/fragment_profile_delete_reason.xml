@@ -222,10 +222,11 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_profile_delete_reason_next"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/padding_horizontal"
         android:layout_marginBottom="@dimen/margin_bottom"
-        android:background="@drawable/sel_profile_delete_btn"
+        android:background="@drawable/shape_fill_12_rect"
+        android:backgroundTint="@color/sel_bottom_btn_color"
         android:enabled="false"
         android:gravity="center"
         android:paddingTop="15dp"
@@ -234,6 +235,7 @@
         android:textAppearance="@style/TextAppearance.Wable.Head2"
         android:textColor="@color/gray_600"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="328:56"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
