@@ -47,7 +47,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/padding_dialog_bottom"
         android:backgroundTint="@color/purple_50"
-        android:text="삭제하기"
+        android:text="@string/btn_delete_dialog_delete"
         android:textAppearance="@style/TextAppearance.Wable.Body1"
         android:textColor="@color/white"
         app:cornerRadius="12dp"
