@@ -3,4 +3,17 @@
 
     <!--    로그인 화면-->
     <string name="login_kakao_btn_text">카카오 로그인 하기</string>
+
+    <!-- team tag -->
+    <string name="label_team_t1">T1</string>
+    <string name="label_team_gen">GEN</string>
+    <string name="label_team_bro">BRO</string>
+    <string name="label_team_drx">DRX</string>
+    <string name="label_team_dk">DK</string>
+    <string name="label_team_kt">KT</string>
+    <string name="label_team_fox">FOX</string>
+    <string name="label_team_ns">NS</string>
+    <string name="label_team_kdf">KDF</string>
+    <string name="label_team_hle">HE</string>
+    <string name="label_team_lck">LCK</string>
 </resources>
