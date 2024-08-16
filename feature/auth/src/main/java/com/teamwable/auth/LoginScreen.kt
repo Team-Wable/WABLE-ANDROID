@@ -1,5 +1,6 @@
 package com.teamwable.auth
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,24 +24,51 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.auth.model.LoginSideEffect
 import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.theme.WableTheme
 
 @Composable
 fun LoginRoute(
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToOnBoarding: () -> Unit,
     navigateToHome: () -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
     intentProvider: IntentProvider,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.observeAutoLogin()
+    }
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.loginSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is LoginSideEffect.NavigateToMain -> navigateToMain(intentProvider, context)
+                    else -> Unit
+                }
+            }
+    }
 
     LoginScreen(
         onLoginBtnClick = {
-            val intent = intentProvider.getIntent()
-            startActivity(context, intent, null)
+            viewModel.saveIsAutoLogin(true)
         },
     )
+}
+
+private fun navigateToMain(
+    intentProvider: IntentProvider,
+    context: Context,
+) {
+    val intent = intentProvider.getIntent()
+    startActivity(context, intent, null)
 }
 
 @Composable
