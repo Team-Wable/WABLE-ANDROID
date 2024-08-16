@@ -56,7 +56,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleBottomNavigationVisibility(destination: NavDestination) {
-        binding.groupMainBnv.visible(destination.id != com.teamwable.posting.R.id.navigation_posting)
+        if (destination.id in listOf(
+                com.teamwable.home.R.id.navigation_home,
+                com.teamwable.news.R.id.navigation_news,
+                com.teamwable.notification.R.id.navigation_notification,
+                com.teamwable.profile.R.id.navigation_profile,
+            )
+        ) {
+            binding.groupMainBnv.visible(true)
+        } else {
+            binding.groupMainBnv.visible(false)
+        }
     }
 
     private fun setBadgeOnNotification(isVisible: Boolean) {
