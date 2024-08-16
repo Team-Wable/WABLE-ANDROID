@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_fill_top_16_rect"
+    android:backgroundTint="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_profile_hamburger_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:src="@drawable/ic_share_bottomsheet_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_profile_hamburger_account_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_hamburger_account_information"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_hamburger_bar" />
+
+    <TextView
+        android:id="@+id/tv_profile_hamburger_notification_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_hamburger_notification_setting"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_hamburger_account_information" />
+
+    <TextView
+        android:id="@+id/tv_profile_hamburger_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_hamburger_feedback"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_hamburger_notification_setting" />
+
+    <TextView
+        android:id="@+id/tv_profile_hamburger_customer_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_hamburger_customer_service"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_hamburger_feedback" />
+
+    <TextView
+        android:id="@+id/tv_profile_hamburger_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_hamburger_logout"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_hamburger_customer_service" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

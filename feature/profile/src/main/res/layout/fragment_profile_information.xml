@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/view_profile_information_appbar"
+        layout="@layout/view_profile_appbar" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_profile_information_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_profile_information_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="159dp" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_social_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:text="@string/tv_profile_information_social_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/view_profile_information_appbar" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_social_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_social_title"
+        tools:text="카카오톡 소셜 로그인" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_version_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_version_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_social_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_version_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_version_title"
+        tools:text="1.0.01" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_id_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_id_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_version_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_id_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_id_title"
+        tools:text="adfadf98sdfm" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_registration_date_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_registration_date_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_id_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_registration_date_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_registration_date_title"
+        tools:text="2024-07-23" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_terms_of_service_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_terms_of_service_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_registration_date_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_terms_of_service_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/tv_profile_information_terms_of_service_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_terms_of_service_title" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray_900"
+        app:layout_constraintEnd_toEndOf="@id/tv_profile_information_terms_of_service_content"
+        app:layout_constraintStart_toStartOf="@id/tv_profile_information_terms_of_service_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_terms_of_service_content" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingVertical="15dp"
+        android:text="@string/tv_profile_information_delete"
+        android:textAppearance="@style/TextAppearance.Wable.Body4"
+        android:textColor="@color/error"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
