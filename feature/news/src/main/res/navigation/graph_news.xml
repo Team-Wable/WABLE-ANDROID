@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_news"
+    app:startDestination="@id/navigation_news">
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.teamwable.news.NewsFragment"
+        android:label="NewsFragment"
+        tools:layout="@layout/fragment_news" />
+</navigation>

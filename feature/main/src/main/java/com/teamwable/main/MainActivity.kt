@@ -51,16 +51,26 @@ class MainActivity : AppCompatActivity() {
     private fun initBottomNavigationChangedListener(navController: NavController) {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             handleBottomNavigationVisibility(destination)
-            if (destination.id == R.id.navigation_notification) setBadgeOnNotification(false)
+            if (destination.id == com.teamwable.notification.R.id.navigation_notification) setBadgeOnNotification(false)
         }
     }
 
     private fun handleBottomNavigationVisibility(destination: NavDestination) {
-        binding.groupMainBnv.visible(destination.id != R.id.navigation_posting)
+        if (destination.id in listOf(
+                com.teamwable.home.R.id.navigation_home,
+                com.teamwable.news.R.id.navigation_news,
+                com.teamwable.notification.R.id.navigation_notification,
+                com.teamwable.profile.R.id.navigation_profile,
+            )
+        ) {
+            binding.groupMainBnv.visible(true)
+        } else {
+            binding.groupMainBnv.visible(false)
+        }
     }
 
     private fun setBadgeOnNotification(isVisible: Boolean) {
-        binding.bnvMain.getOrCreateBadge(R.id.navigation_notification).apply {
+        binding.bnvMain.getOrCreateBadge(R.id.graph_notification).apply {
             this.isVisible = isVisible
             horizontalOffset = 1
             if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
