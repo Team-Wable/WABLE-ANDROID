@@ -38,16 +38,7 @@
         android:id="@+id/navigation_profile_delete_confirm"
         android:name="com.teamwable.profile.ProfileDeleteConfirmFragment"
         android:label="ProfileDeleteConfirmFragment"
-        tools:layout="@layout/fragment_profile_delete_confirm">
-        <action
-            android:id="@+id/action_navigation_profile_delete_confirm_to_navigation_profile_delete"
-            app:destination="@id/navigation_profile_delete" />
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_profile_delete"
-        android:name="com.teamwable.profile.ProfileDeleteDialogFragment"
-        android:label="ProfileDeleteDialog"
-        tools:layout="@layout/fragment_delete_dialog" />
+        tools:layout="@layout/fragment_profile_delete_confirm"/>
     <fragment
         android:id="@+id/navigation_push_notification"
         android:name="com.teamwable.profile.PushNotificationFragment"
