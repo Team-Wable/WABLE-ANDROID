@@ -3,6 +3,7 @@ package com.teamwable.profile
 import com.teamwable.profile.databinding.FragmentDeleteDialogBinding
 import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.extensions.dialogFragmentResize
+import com.teamwable.ui.extensions.stringOf
 
 class LogoutDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(R.layout.fragment_delete_dialog, FragmentDeleteDialogBinding::inflate) {
     override fun initView() {
@@ -13,8 +14,8 @@ class LogoutDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(
 
     private fun initText() {
         with(binding) {
-            tvDeleteDialogTitle.text = getString(R.string.tv_logout_dialog_title)
-            btnDeleteDialogDelete.text = getString(R.string.btn_logout_dialog_delete)
+            tvDeleteDialogTitle.text = stringOf(R.string.tv_logout_dialog_title)
+            btnDeleteDialogDelete.text = stringOf(R.string.btn_logout_dialog_delete)
         }
     }
 

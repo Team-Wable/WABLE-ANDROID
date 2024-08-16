@@ -3,6 +3,7 @@ package com.teamwable.profile
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.stringOf
 
 class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBinding>(FragmentProfileInformationBinding::inflate) {
     override fun initView() {
@@ -22,7 +23,7 @@ class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBin
     }
 
     private fun setAppbarText() {
-        binding.viewProfileInformationAppbar.tvProfileAppbarTitle.text = getString(R.string.appbar_profile_information_title)
+        binding.viewProfileInformationAppbar.tvProfileAppbarTitle.text = stringOf(R.string.appbar_profile_information_title)
     }
 
     private fun initBackBtnClickListener() {
