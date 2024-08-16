@@ -9,147 +9,138 @@
         android:id="@+id/view_profile_information_appbar"
         layout="@layout/view_profile_appbar" />
 
-    <LinearLayout
-        android:id="@+id/ll_profile_information_social"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_profile_information_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:paddingVertical="13dp"
-        app:layout_constraintTop_toBottomOf="@id/view_profile_information_appbar">
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_bottom" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="소셜 로그인"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_profile_information_social_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/black"
-            tools:text="카카오톡 소셜 로그인" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_profile_information_version"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_profile_information_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:paddingVertical="13dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_profile_information_social">
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="159dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="버전 정보"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_profile_information_version_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="76dp"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/black"
-            tools:text="1.0.01" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_profile_information_id"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_profile_information_social_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:paddingVertical="13dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_profile_information_version">
+        android:layout_marginTop="21dp"
+        android:text="@string/tv_profile_information_social_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/view_profile_information_appbar" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="아이디"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_profile_information_id_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="93dp"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/black"
-            tools:text="adfadf98sdfm" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_profile_information_registration_date"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_profile_information_social_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:paddingVertical="13dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_profile_information_id">
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_social_title"
+        tools:text="카카오톡 소셜 로그인" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="가입일"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/gray_600" />
-
-        <TextView
-            android:id="@+id/tv_profile_information_registration_date_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="93dp"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/black"
-            tools:text="2024-07-23" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_profile_information_terms_of_service"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_profile_information_version_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:paddingVertical="13dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_profile_information_registration_date">
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_version_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_social_title" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="이용약관"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/gray_600" />
+    <TextView
+        android:id="@+id/tv_profile_information_version_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_version_title"
+        tools:text="1.0.01" />
 
-        <TextView
-            android:id="@+id/tv_profile_information_terms_of_service_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="79dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="자세히 보기"
-            android:textAppearance="@style/TextAppearance.Wable.Body2"
-            android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/tv_profile_information_id_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_id_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_version_title" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_profile_information_id_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_id_title"
+        tools:text="adfadf98sdfm" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_registration_date_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_registration_date_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_id_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_registration_date_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_registration_date_title"
+        tools:text="2024-07-23" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_terms_of_service_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:text="@string/tv_profile_information_terms_of_service_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_registration_date_title" />
+
+    <TextView
+        android:id="@+id/tv_profile_information_terms_of_service_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/tv_profile_information_terms_of_service_content"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_information_content"
+        app:layout_constraintTop_toTopOf="@id/tv_profile_information_terms_of_service_title" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray_900"
+        app:layout_constraintEnd_toEndOf="@id/tv_profile_information_terms_of_service_content"
+        app:layout_constraintStart_toStartOf="@id/tv_profile_information_terms_of_service_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_information_terms_of_service_content" />
 
     <TextView
         android:id="@+id/tv_profile_information_delete"
@@ -160,7 +151,7 @@
         android:focusable="true"
         android:gravity="center"
         android:paddingVertical="15dp"
-        android:text="계정 삭제하기"
+        android:text="@string/tv_profile_information_delete"
         android:textAppearance="@style/TextAppearance.Wable.Body4"
         android:textColor="@color/error"
         app:layout_constraintBottom_toBottomOf="parent" />
