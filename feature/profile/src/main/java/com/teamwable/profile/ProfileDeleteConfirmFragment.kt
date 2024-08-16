@@ -28,7 +28,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
     }
 
     private fun setAppbarText() {
-        binding.viewProfileDeleteConfirmAppbar.tvProfileAppbarTitle.text = "계정 삭제"
+        binding.viewProfileDeleteConfirmAppbar.tvProfileAppbarTitle.text = getString(R.string.appbar_profile_delete_title)
     }
 
     private fun initBackBtnClickListener() {

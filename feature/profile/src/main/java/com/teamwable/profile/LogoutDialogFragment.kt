@@ -13,8 +13,8 @@ class LogoutDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(
 
     private fun initText() {
         with(binding) {
-            tvDeleteDialogTitle.text = "로그아웃하시겠어요?"
-            btnDeleteDialogDelete.text = "로그아웃하기"
+            tvDeleteDialogTitle.text = getString(R.string.tv_logout_dialog_title)
+            btnDeleteDialogDelete.text = getString(R.string.btn_logout_dialog_delete)
         }
     }
 

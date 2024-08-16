@@ -3,6 +3,7 @@ package com.teamwable.profile
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.FragmentProfileDeleteReasonBinding
 import com.teamwable.ui.base.BindingFragment
+import timber.log.Timber
 
 class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonBinding>(FragmentProfileDeleteReasonBinding::inflate) {
     private val checkBoxList by lazy {
@@ -23,29 +24,33 @@ class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonB
         setAppbarText()
         initBackBtnClickListener()
         initCheckBoxClickListener()
+        updateButtonState()
+    }
+
+    private fun updateButtonState() {
+        val anyChecked = checkBoxList.any { it.isChecked }
+        binding.btnProfileDeleteReasonNext.apply {
+            isEnabled = anyChecked
+            if (isEnabled) {
+                setTextColor(context.getColor(com.teamwable.ui.R.color.white))
+                setOnClickListener {
+                    navigateUpToProfileDeleteConfirmFragment()
+                }
+            } else setTextColor(context.getColor(com.teamwable.ui.R.color.gray_600))
+        }
     }
 
     private fun initCheckBoxClickListener() {
         checkBoxList.forEach { checkBox ->
             checkBox.setOnCheckedChangeListener { _, _ ->
-                val anyChecked = checkBoxList.any { it.isChecked }
-                binding.btnProfileDeleteReasonNext.apply {
-                    isEnabled = anyChecked
-                    if (isEnabled) {
-                        setTextColor(context.getColor(com.teamwable.ui.R.color.white))
-                        setOnClickListener {
-                            navigateUpToProfileDeleteConfirmFragment()
-                        }
-                    } else {
-                        setTextColor(context.getColor(com.teamwable.ui.R.color.gray_600))
-                    }
-                }
+                Timber.tag("dd").d("바뀜")
+                updateButtonState()
             }
         }
     }
 
     private fun setAppbarText() {
-        binding.viewProfileDeleteReasonAppbar.tvProfileAppbarTitle.text = "계정 삭제"
+        binding.viewProfileDeleteReasonAppbar.tvProfileAppbarTitle.text = getString(R.string.appbar_profile_delete_title)
     }
 
     private fun initBackBtnClickListener() {

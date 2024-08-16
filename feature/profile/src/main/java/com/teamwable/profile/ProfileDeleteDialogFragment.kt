@@ -13,7 +13,7 @@ class ProfileDeleteDialogFragment : BindingDialogFragment<FragmentDeleteDialogBi
 
     private fun initText() {
         with(binding) {
-            tvDeleteDialogTitle.text = "계정을 삭제하시겠어요?"
+            tvDeleteDialogTitle.text = getString(R.string.tv_profile_delete_dialog_title)
         }
     }
 

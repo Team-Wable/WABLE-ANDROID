@@ -11,7 +11,7 @@ class PushNotificationFragment : BindingFragment<FragmentPushNotificationBinding
     }
 
     private fun setAppbarText() {
-        binding.viewPushNotificationAppbar.tvProfileAppbarTitle.text = "알림 설정"
+        binding.viewPushNotificationAppbar.tvProfileAppbarTitle.text = getString(R.string.appbar_push_notification_title)
     }
 
     private fun initBackBtnClickListener() {
