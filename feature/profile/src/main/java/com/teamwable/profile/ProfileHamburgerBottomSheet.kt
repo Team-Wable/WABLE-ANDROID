@@ -16,13 +16,13 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     }
 
     private fun initAccountInformationBtnClickListener() {
-        binding.tvHamburgerAccountInformation.setOnClickListener {
+        binding.tvProfileHamburgerAccountInformation.setOnClickListener {
             findNavController().navigate(R.id.action_profile_to_profile_information)
         }
     }
 
     private fun initNotificationSettingBtnClickListener() {
-        binding.tvHamburgerNotificationSetting.setOnClickListener {
+        binding.tvProfileHamburgerNotificationSetting.setOnClickListener {
             findNavController().navigate(R.id.action_profile_to_push_notification)
         }
     }
@@ -36,7 +36,7 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     }
 
     private fun initLogoutBtnClickListener() {
-        binding.tvHamburgerLogout.setOnClickListener {
+        binding.tvProfileHamburgerLogout.setOnClickListener {
             LogoutDialogFragment().show(childFragmentManager, LOGOUT_DIALOG)
         }
     }
