@@ -3,7 +3,6 @@ package com.teamwable.profile
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.FragmentProfileDeleteReasonBinding
 import com.teamwable.ui.base.BindingFragment
-import timber.log.Timber
 
 class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonBinding>(FragmentProfileDeleteReasonBinding::inflate) {
     private val checkBoxList by lazy {
@@ -27,6 +26,11 @@ class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonB
         updateButtonState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateButtonState()
+    }
+
     private fun updateButtonState() {
         val anyChecked = checkBoxList.any { it.isChecked }
         binding.btnProfileDeleteReasonNext.apply {
@@ -43,7 +47,6 @@ class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonB
     private fun initCheckBoxClickListener() {
         checkBoxList.forEach { checkBox ->
             checkBox.setOnCheckedChangeListener { _, _ ->
-                Timber.tag("dd").d("바뀜")
                 updateButtonState()
             }
         }
