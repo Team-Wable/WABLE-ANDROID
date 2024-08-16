@@ -9,4 +9,5 @@ android {
 }
 
 dependencies {
+    implementation(libs.bundles.datastore)
 }
