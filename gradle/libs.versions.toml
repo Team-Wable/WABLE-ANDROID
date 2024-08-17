@@ -23,6 +23,7 @@ paging = "3.3.1"
 constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
+androidx-datastore = "1.1.1"
 swipe-refresh-layout = "1.1.0"
 
 # material + google
@@ -154,6 +155,10 @@ androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "li
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
 
+# datastore
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-datastore" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-datastore" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -169,3 +174,4 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 lifecycle = ["lifecycle", "lifecycle-viewmodel", "lifecycle-livedata"]
 retrofit = ["retrofit", "retrofit-kotlin-serialization-converter", "okhttp", "okhttp-logging-interceptor"]
 androidx-android-test = ["androidx-junit", "androidx-espresso-core"]
+datastore = ["androidx-datastore-core", "androidx-datastore-preferences"]

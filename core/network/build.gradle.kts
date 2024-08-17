@@ -27,9 +27,9 @@ android {
     buildFeatures.apply {
         buildConfig = true
     }
-
 }
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:datastore"))
 }
