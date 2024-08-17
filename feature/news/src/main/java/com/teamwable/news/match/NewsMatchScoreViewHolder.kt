@@ -2,6 +2,7 @@ package com.teamwable.news.match
 
 import android.content.res.ColorStateList
 import android.os.Build
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.NewsMatchScoreModel
@@ -38,15 +39,35 @@ class NewsMatchScoreViewHolder(
             }
 
             tvNewsMatchScoreTime.text = formatDateTime(data.gameDate)
+
+            setTeamProfile(ivNewsMatchScoreFirstSymbol, data.aTeamName)
             tvNewsMatchScoreFirstName.text = data.aTeamName
             tvNewsMatchScoreFirstScore.text = data.aTeamScore.toString()
+            setTeamProfile(ivNewsMatchScoreSecondSymbol, data.bTeamName)
             tvNewsMatchScoreSecondName.text = data.bTeamName
             tvNewsMatchScoreSecondScore.text = data.bTeamScore.toString()
         }
     }
 
+    private fun setTeamProfile(imageView: ImageView, teamName: String) {
+        val resourceId = when (teamName) {
+            "T1" -> com.teamwable.common.R.drawable.ic_news_team_profile_t1
+            "GEN" -> com.teamwable.common.R.drawable.ic_news_team_profile_gen
+            "BRO" -> com.teamwable.common.R.drawable.ic_news_team_profile_bro
+            "DRX" -> com.teamwable.common.R.drawable.ic_news_team_profile_drx
+            "DK" -> com.teamwable.common.R.drawable.ic_news_team_profile_dk
+            "KT" -> com.teamwable.common.R.drawable.ic_news_team_profile_kt
+            "FOX" -> com.teamwable.common.R.drawable.ic_news_team_profile_fox
+            "NS" -> com.teamwable.common.R.drawable.ic_news_team_profile_ns
+            "KDF" -> com.teamwable.common.R.drawable.ic_news_team_profile_kdf
+            "HLE" -> com.teamwable.common.R.drawable.ic_news_team_profile_hle
+            else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
+        }
+        imageView.setImageResource(resourceId)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun formatDateTime(inputDateTime: String): String {
+    private fun formatDateTime(inputDateTime: String): String {
         val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         val outputFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
