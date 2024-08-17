@@ -26,4 +26,7 @@
     <string name="tv_news_match_score_state_ongoing">진행중</string>
     <string name="tv_news_match_score_state_planned">예정</string>
 
+    <!-- item_news_math_score & item_news_rank -->
+    <string name="tv_news_tbd">TBD</string>
+
 </resources>
