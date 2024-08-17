@@ -8,7 +8,9 @@ import androidx.navigation.NavOptions
 import com.teamwable.ui.R
 
 sealed class DeepLinkDestination(val addressRes: Int) {
-    data object Home : DeepLinkDestination(R.string.deeplink_url_two_button_dialog)
+    data object TwoButtonDialog : DeepLinkDestination(R.string.deeplink_url_two_button_dialog)
+
+    data object BottomSheet : DeepLinkDestination(R.string.deeplink_url_bottomsheet)
 }
 
 private fun DeepLinkDestination.getDeepLink(context: Context, args: Map<String, Any>?): String {

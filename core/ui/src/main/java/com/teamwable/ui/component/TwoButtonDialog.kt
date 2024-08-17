@@ -70,6 +70,6 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
         }
 
         private fun navigateToDialog(context: Context, navController: NavController, dialogType: DialogType) =
-            navController.deepLinkNavigateTo(context, DeepLinkDestination.Home, mapOf(DIALOG_TYPE to dialogType.name))
+            navController.deepLinkNavigateTo(context, DeepLinkDestination.TwoButtonDialog, mapOf(DIALOG_TYPE to dialogType.name))
     }
 }

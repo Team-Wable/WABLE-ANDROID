@@ -16,4 +16,15 @@
             app:argType="string" />
         <deepLink app:uri="@string/deeplink_url_two_button_dialog" />
     </dialog>
+    <dialog
+        android:id="@+id/bottomSheet"
+        android:name="com.teamwable.ui.component.BottomSheet"
+        android:label="BottomSheet"
+        tools:layout="@layout/bottomsheet">
+        <argument
+            android:name="${BOTTOM_SHEET_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_bottomsheet" />
+    </dialog>
 </navigation>
