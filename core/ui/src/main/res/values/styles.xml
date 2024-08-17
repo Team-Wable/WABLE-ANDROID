@@ -10,19 +10,22 @@
     </style>
 
     <style name="Wable.Button.L" parent="Wable.Button">
-        <item name="android:paddingVertical">14dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Wable.Head2</item>
         <item name="cornerRadius">12dp</item>
     </style>
 
     <style name="Wable.Button.M.S" parent="Wable.Button">
-        <item name="android:paddingVertical">11dp</item>
+        <item name="android:paddingTop">11dp</item>
+        <item name="android:paddingBottom">11dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Wable.Body1</item>
         <item name="cornerRadius">12dp</item>
     </style>
 
     <style name="Wable.Button.XS" parent="Wable.Button">
-        <item name="android:paddingVertical">13dp</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">13dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Wable.Body3</item>
         <item name="cornerRadius">8dp</item>
     </style>
