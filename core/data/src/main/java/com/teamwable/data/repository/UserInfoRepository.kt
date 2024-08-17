@@ -15,8 +15,6 @@ interface UserInfoRepository {
 
     fun getMemberProfileUrl(): Flow<String>
 
-    fun getIsNewUser(): Flow<Boolean>
-
     fun getIsPushAlarmAllowed(): Flow<Boolean>
 
     suspend fun saveAccessToken(accessToken: String)
@@ -30,8 +28,6 @@ interface UserInfoRepository {
     suspend fun saveMemberId(memberId: Int)
 
     suspend fun saveMemberProfileUrl(memberUrl: String)
-
-    suspend fun saveIsNewUser(isNewUser: Boolean)
 
     suspend fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean)
 

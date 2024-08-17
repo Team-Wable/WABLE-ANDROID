@@ -26,9 +26,6 @@ internal class DefaultUserInfoRepository @Inject constructor(
     override fun getMemberProfileUrl(): Flow<String> =
         wablePreferencesDataSource.memberProfileUrl
 
-    override fun getIsNewUser(): Flow<Boolean> =
-        wablePreferencesDataSource.isNewUser
-
     override fun getIsPushAlarmAllowed(): Flow<Boolean> =
         wablePreferencesDataSource.isPushAlarmAllowed
 
@@ -54,10 +51,6 @@ internal class DefaultUserInfoRepository @Inject constructor(
 
     override suspend fun saveMemberProfileUrl(memberUrl: String) {
         wablePreferencesDataSource.updateMemberProfileUrl(memberUrl)
-    }
-
-    override suspend fun saveIsNewUser(isNewUser: Boolean) {
-        wablePreferencesDataSource.updateIsNewUser(isNewUser)
     }
 
     override suspend fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {

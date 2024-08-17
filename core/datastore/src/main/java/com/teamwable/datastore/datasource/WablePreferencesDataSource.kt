@@ -9,7 +9,6 @@ interface WablePreferencesDataSource {
     val nickname: Flow<String>
     val memberId: Flow<Int>
     val memberProfileUrl: Flow<String>
-    val isNewUser: Flow<Boolean>
     val isPushAlarmAllowed: Flow<Boolean>
 
     suspend fun updateAccessToken(accessToken: String)
@@ -23,8 +22,6 @@ interface WablePreferencesDataSource {
     suspend fun updateMemberId(memberId: Int)
 
     suspend fun updateMemberProfileUrl(memberUrl: String)
-
-    suspend fun updateIsNewUser(isNewUser: Boolean)
 
     suspend fun updateIsPushAlarmAllowed(isPushAlarmAllowed: Boolean)
 

@@ -24,7 +24,6 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         val AutoLogin = booleanPreferencesKey("autoLogin")
         val MemberId = intPreferencesKey("memberId")
         val MemberProfileUrl = stringPreferencesKey("memberProfileUrl")
-        val IsNewUser = booleanPreferencesKey("isNewUser")
         val IsPushAlarmAllowed = booleanPreferencesKey("isPushAlarmAllowed")
     }
 
@@ -62,12 +61,6 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         .catch { handleError(it) }
         .map { preferences ->
             preferences[PreferencesKeys.MemberProfileUrl].orEmpty()
-        }
-
-    override var isNewUser: Flow<Boolean> = dataStore.data
-        .catch { handleError(it) }
-        .map { preferences ->
-            preferences[PreferencesKeys.IsNewUser] ?: false
         }
 
     override var isPushAlarmAllowed: Flow<Boolean> = dataStore.data
@@ -109,12 +102,6 @@ class DefaultWablePreferenceDatasource @Inject constructor(
     override suspend fun updateMemberProfileUrl(memberUrl: String) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.MemberProfileUrl] = memberUrl
-        }
-    }
-
-    override suspend fun updateIsNewUser(isNewUser: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.IsNewUser] = isNewUser
         }
     }
 
