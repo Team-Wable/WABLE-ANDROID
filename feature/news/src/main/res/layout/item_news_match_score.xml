@@ -56,7 +56,7 @@
             android:id="@+id/iv_news_match_score_first_symbol"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:src="@drawable/img_news_match_team_profile"
+            android:src="@drawable/ic_news_match_team_profile"
             app:layout_constraintBottom_toBottomOf="@id/cl_news_match_score"
             app:layout_constraintStart_toStartOf="@id/cl_news_match_score"
             app:layout_constraintTop_toTopOf="@id/cl_news_match_score" />
@@ -125,7 +125,7 @@
             android:id="@+id/iv_news_match_score_second_symbol"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:src="@drawable/img_news_match_team_profile"
+            android:src="@drawable/ic_news_match_team_profile"
             app:layout_constraintBottom_toBottomOf="@id/cl_news_match_score"
             app:layout_constraintEnd_toEndOf="@id/cl_news_match_score"
             app:layout_constraintTop_toTopOf="@id/cl_news_match_score" />

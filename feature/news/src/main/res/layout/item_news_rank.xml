@@ -37,7 +37,7 @@
                     android:id="@+id/iv_news_rank"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/img_news_match_team_profile" />
+                    android:src="@drawable/ic_news_match_team_profile" />
 
                 <TextView
                     android:id="@+id/tv_news_rank_team_name"
