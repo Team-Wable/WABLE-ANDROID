@@ -2,16 +2,16 @@ package com.teamwable.network.util
 
 import android.content.ContentResolver
 import android.net.Uri
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
-fun createImagePart(contentResolver: ContentResolver, uriString: String?): MultipartBody.Part? {
-    return when (uriString) {
-        null -> null
-        else -> {
-            val uri = Uri.parse(uriString)
-            val imageRequestBody = ContentUriRequestBody(contentResolver, uri)
+suspend fun ContentResolver.createImagePart(uriString: String?): MultipartBody.Part? {
+    if (uriString.isNullOrEmpty()) return null
+    val uri = runCatching { Uri.parse(uriString) }.getOrElse { return null }
 
-            imageRequestBody.toMultiPartData("image")
-        }
+    return withContext(Dispatchers.IO) {
+        val imageRequestBody = ContentUriRequestBody(this@createImagePart, uri)
+        imageRequestBody.toMultiPartData("image")
     }
 }
