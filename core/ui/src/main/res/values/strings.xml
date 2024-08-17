@@ -18,4 +18,9 @@
     <string name="label_dialog_cancel_posting__yes">나가기</string>
     <string name="label_dialog_share_no">취소</string>
     <string name="label_dialog_blank" />
+
+    <!-- feed -->
+    <string name="content_description_feed_image">피드 이미지입니다.</string>
+    <string name="label_feed_ghost_level">투명도 %d%%</string>
+    <string name="label_feed_upload_time">· %s분 전</string>
 </resources>
