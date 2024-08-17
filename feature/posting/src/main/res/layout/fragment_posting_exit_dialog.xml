@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/shape_gray200_line_16_rect"
+    android:minHeight="182dp">
+
+    <TextView
+        android:id="@+id/tv_posting_exit_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_dialog_top"
+        android:gravity="center"
+        android:text="@string/tv_posting_exit_dialog_title"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_posting_exit_dialog_cancel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/padding_dialog_bottom"
+        android:layout_marginTop="@dimen/padding_dialog_top"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="@dimen/padding_dialog_bottom"
+        android:backgroundTint="@color/gray_200"
+        android:text="@string/btn_posting_exit_dialog_cancel"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/gray_600"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="128:48"
+        app:layout_constraintEnd_toStartOf="@id/btn_posting_exit_dialog_exit"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_posting_exit_dialog_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_posting_exit_dialog_exit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/padding_dialog_bottom"
+        android:backgroundTint="@color/purple_50"
+        android:text="@string/btn_posting_exit_dialog_exit"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/white"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_posting_exit_dialog_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/btn_posting_exit_dialog_cancel"
+        app:layout_constraintTop_toTopOf="@id/btn_posting_exit_dialog_cancel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
