@@ -9,4 +9,5 @@
     <include app:graph="@navigation/graph_notification" />
     <include app:graph="@navigation/graph_profile" />
     <include app:graph="@navigation/graph_posting" />
+    <include app:graph="@navigation/graph_ui" />
 </navigation>
