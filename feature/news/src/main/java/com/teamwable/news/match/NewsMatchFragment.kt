@@ -13,19 +13,26 @@ class NewsMatchFragment : BindingFragment<FragmentNewsMatchBinding>(FragmentNews
 
     override fun initView() {
         setSeasonText()
+        initNewsMatchAdapter()
     }
 
     private fun setSeasonText() {
         binding.viewNewsMatchSeason.tvNewsSeasonTitle.text = "2024 Wable LCK"
     }
 
-    private fun initAdapter() {
+    private fun initNewsMatchAdapter() {
         if (viewModel.mockNewsMatchList.isEmpty()) {
             binding.llNewsMatchEmpty.visible(true)
             binding.viewNewsMatchSeason.tvNewsSeasonTitle.visible(false)
         } else {
             binding.llNewsMatchEmpty.visible(false)
             binding.viewNewsMatchSeason.tvNewsSeasonTitle.visible(true)
+
+            binding.rvNewsMatchContent.adapter =
+                NewsMatchAdapter().apply {
+                    submitList(viewModel.mockNewsMatchList)
+                }
+            binding.rvNewsMatchContent.addItemDecoration(NewsMatchItemDecorator(requireContext()))
         }
     }
 }
