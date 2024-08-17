@@ -13,5 +13,6 @@ class NewsMatchItemDecorator(val context: Context) : RecyclerView.ItemDecoration
         val itemCount = parent.adapter?.itemCount ?: 0
 
         if (position != itemCount - 1) outRect.bottom = context.pxToDp(32)
+        else outRect.bottom = context.pxToDp(48)
     }
 }
