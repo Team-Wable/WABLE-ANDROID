@@ -74,7 +74,6 @@ internal fun MainScreen(
                         navigateToOnBoarding = {},
                         navigateToHome = { startActivity(localContext, intent, null) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
-                        intentProvider = intentProvider,
                     )
                 }
             }
