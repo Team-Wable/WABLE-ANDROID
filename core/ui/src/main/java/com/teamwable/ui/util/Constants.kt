@@ -8,4 +8,5 @@ object BottomSheetTag {
 object DialogTag {
     const val PROFILE_DELETE_DIALOG = "ProfileDeleteDialog"
     const val LOGOUT_DIALOG = "LogoutDialog"
+    const val POSTING_EXIT_DIALOG = "PostingExitDialog"
 }
