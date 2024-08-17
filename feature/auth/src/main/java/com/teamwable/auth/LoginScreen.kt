@@ -71,7 +71,7 @@ fun LoginScreen(
                     modifier = Modifier.align(Alignment.CenterStart),
                 )
                 Text(
-                    text = stringResource(id = com.teamwable.common.R.string.login_kakao_btn_text),
+                    text = stringResource(R.string.login_kakao_btn_text),
 //                    style = KkumulTheme.typography.body03,
 //                    color = Gray8,
                     textAlign = TextAlign.Center,
