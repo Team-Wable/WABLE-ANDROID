@@ -23,4 +23,9 @@
     <string name="content_description_feed_image">피드 이미지입니다.</string>
     <string name="label_feed_ghost_level">투명도 %d%%</string>
     <string name="label_feed_upload_time">· %s분 전</string>
+
+    <!-- snack bar -->
+    <string name="label_snack_bar_comment_ing">답글 남기는 중</string>
+    <string name="label_snack_bar_comment_complete">답글을 남겼어요</string>
+    <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
 </resources>
