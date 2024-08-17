@@ -23,6 +23,7 @@ paging = "3.3.1"
 constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
+swipe-refresh-layout = "1.1.0"
 
 # material + google
 material = "1.12.0"
@@ -91,6 +92,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-navigation-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigationFragmentKtx" }
 lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 
 # dagger-hilt
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
