@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fragment_news -->
+    <string name="tv_news_appbar_title">소식</string>
+    <string name="tv_news_tab_match">경기</string>
+
+    <!-- fragment_news_match -->
+    <string name="tv_news_match_empty">아직 진행 예정인 경기가 없어요.</string>
+
+    <!-- fragment_news & fragment_news_rank -->
+    <string name="tv_news_tab_rank">순위</string>
+
+    <!-- fragment_news_rank -->
+    <string name="tv_news_rank_table_team_name">팀</string>
+    <string name="tv_news_rank_table_win">승</string>
+    <string name="tv_news_rank_table_loss">패</string>
+    <string name="tv_news_rank_table_win_percentage">승률</string>
+    <string name="tv_news_rank_table_point_difference">득점차</string>
+    <string name="btn_news_rank_opinion">더 알고싶은 정보가 있다면? 의견 남기러 가기</string>
+
+    <!-- item_news_match -->
+    <string name="tv_news_match_today">TODAY</string>
+
+    <!-- item_news_math_score -->
+    <string name="tv_news_match_score_state_finished">종료</string>
+    <string name="tv_news_match_score_state_ongoing">진행중</string>
+    <string name="tv_news_match_score_state_planned">예정</string>
+
+</resources>
