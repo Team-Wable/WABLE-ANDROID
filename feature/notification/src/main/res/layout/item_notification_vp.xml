@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingVertical="6dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="@dimen/padding_horizontal">
+
+    <ImageView
+        android:id="@+id/iv_notification_vp_profile"
+        android:layout_width="44dp"
+        android:layout_height="0dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_profile_profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_notification_vp_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textAppearance="@style/TextAppearance.Wable.Body4"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_notification_vp_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="%(other_user)님이 %(user)님의 글을 좋아합니다.\n: {안녕하세요반가워요나반가워요나...}" />
+
+    <TextView
+        android:id="@+id/tv_notification_vp_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.Wable.Caption2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_notification_vp_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_notification_vp_content"
+        tools:text="23분전" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
