@@ -1,8 +1,9 @@
 package com.teamwable.profile
 
-import android.view.View
 import com.teamwable.profile.databinding.FragmentProfileBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,8 +20,8 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun initAppbarBtnVisibility() {
         with(binding.viewProfileAppbar) {
-            btnProfileAppbarBack.visibility = View.GONE
-            btnProfileAppbarHamburger.visibility = View.VISIBLE
+            btnProfileAppbarBack.visible(false)
+            btnProfileAppbarHamburger.visible(true)
         }
     }
 
@@ -28,9 +29,5 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
         binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
             ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
         }
-    }
-
-    companion object {
-        const val PROFILE_HAMBURGER_BOTTOM_SHEET = "ProfileHamburgerBottomSheet"
     }
 }

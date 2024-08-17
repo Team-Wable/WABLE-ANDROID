@@ -1,51 +1,57 @@
 package com.teamwable.profile
 
+import android.widget.CheckBox
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.FragmentProfileDeleteReasonBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.colorOf
 
 class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonBinding>(FragmentProfileDeleteReasonBinding::inflate) {
-    private val checkBoxList by lazy {
-        with(binding) {
-            listOf(
-                cbProfileDeleteReasonCheck1,
-                cbProfileDeleteReasonCheck2,
-                cbProfileDeleteReasonCheck3,
-                cbProfileDeleteReasonCheck4,
-                cbProfileDeleteReasonCheck5,
-                cbProfileDeleteReasonCheck6,
-                cbProfileDeleteReasonCheck7
-            )
-        }
-    }
+    private lateinit var checkBoxList: List<CheckBox>
 
     override fun initView() {
         setAppbarText()
         initBackBtnClickListener()
+        initCheckBoxList()
         initCheckBoxClickListener()
+        updateButtonState()
+    }
+
+    private fun initCheckBoxList() = with(binding) {
+        checkBoxList = listOf(
+            cbProfileDeleteReasonCheck1,
+            cbProfileDeleteReasonCheck2,
+            cbProfileDeleteReasonCheck3,
+            cbProfileDeleteReasonCheck4,
+            cbProfileDeleteReasonCheck5,
+            cbProfileDeleteReasonCheck6,
+            cbProfileDeleteReasonCheck7,
+        )
+    }
+
+    private fun updateButtonState() {
+        val anyChecked = checkBoxList.any { it.isChecked }
+        binding.btnProfileDeleteReasonNext.apply {
+            isEnabled = anyChecked
+            if (isEnabled) {
+                setTextColor(colorOf(com.teamwable.ui.R.color.white))
+                setOnClickListener {
+                    navigateUpToProfileDeleteConfirmFragment()
+                }
+            } else setTextColor(colorOf(com.teamwable.ui.R.color.gray_600))
+        }
     }
 
     private fun initCheckBoxClickListener() {
         checkBoxList.forEach { checkBox ->
             checkBox.setOnCheckedChangeListener { _, _ ->
-                val anyChecked = checkBoxList.any { it.isChecked }
-                binding.btnProfileDeleteReasonNext.apply {
-                    isEnabled = anyChecked
-                    if (isEnabled) {
-                        setTextColor(context.getColor(com.teamwable.ui.R.color.white))
-                        setOnClickListener {
-                            navigateUpToProfileDeleteConfirmFragment()
-                        }
-                    } else {
-                        setTextColor(context.getColor(com.teamwable.ui.R.color.gray_600))
-                    }
-                }
+                updateButtonState()
             }
         }
     }
 
     private fun setAppbarText() {
-        binding.viewProfileDeleteReasonAppbar.tvProfileAppbarTitle.text = "계정 삭제"
+        binding.viewProfileDeleteReasonAppbar.tvProfileAppbarTitle.text = getString(R.string.appbar_profile_delete_title)
     }
 
     private fun initBackBtnClickListener() {
