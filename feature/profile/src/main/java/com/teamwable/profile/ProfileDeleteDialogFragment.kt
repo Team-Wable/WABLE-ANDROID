@@ -4,7 +4,7 @@ import com.teamwable.profile.databinding.FragmentDeleteDialogBinding
 import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.extensions.dialogFragmentResize
 
-class ProfileDeleteDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(R.layout.fragment_delete_dialog, FragmentDeleteDialogBinding::inflate) {
+class ProfileDeleteDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(FragmentDeleteDialogBinding::inflate) {
     override fun initView() {
         initText()
         initCancelBtnClickListener()
