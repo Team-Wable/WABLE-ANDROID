@@ -22,7 +22,6 @@
             android:textAppearance="@style/TextAppearance.Wable.Caption3"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="33:19"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:backgroundTint="@color/error"
