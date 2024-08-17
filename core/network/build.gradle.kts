@@ -31,5 +31,6 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:datastore"))
     implementation(libs.androidx.exifinterface)
 }
