@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.databinding.FragmentNewsRankBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.colorOf
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +45,7 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
         val spannableString = SpannableString(binding.btnNewsRankOpinion.text)
 
         spannableString.setSpan(
-            context?.getColor(com.teamwable.ui.R.color.sky_50)?.let { ForegroundColorSpan(it) },
+            ForegroundColorSpan(colorOf(com.teamwable.ui.R.color.sky_50)),
             16, spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
