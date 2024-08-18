@@ -1,5 +1,6 @@
 package com.teamwable.news.match
 
+import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,17 +10,19 @@ import com.teamwable.model.NewsMatchScoreModel
 import com.teamwable.news.databinding.ItemNewsMatchScoreBinding
 import com.teamwable.ui.extensions.ItemDiffCallback
 
-class NewsMatchScoreAdapter : ListAdapter<NewsMatchScoreModel, NewsMatchScoreViewHolder>(
+class NewsMatchScoreAdapter(context: Context) : ListAdapter<NewsMatchScoreModel, NewsMatchScoreViewHolder>(
     NewsMatchScoreAdapterDiffCallback,
 ) {
+    private val inflater by lazy { LayoutInflater.from(context) }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsMatchScoreViewHolder {
-        val binding = ItemNewsMatchScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemNewsMatchScoreBinding.inflate(inflater, parent, false)
         return NewsMatchScoreViewHolder(binding)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NewsMatchScoreViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        holder.bind(getItem(position))
     }
 
     companion object {
