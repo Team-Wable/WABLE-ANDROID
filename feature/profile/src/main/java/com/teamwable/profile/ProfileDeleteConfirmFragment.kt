@@ -3,14 +3,17 @@ package com.teamwable.profile
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.FragmentProfileDeleteConfirmBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.util.DialogTag.PROFILE_DELETE_DIALOG
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.util.Arg.DIALOG_RESULT
 
 class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfirmBinding>(FragmentProfileDeleteConfirmBinding::inflate) {
     override fun initView() {
         setAppbarText()
         initBackBtnClickListener()
+        initDialogDeleteBtnClickListener()
         initCheckBoxClickListener()
     }
 
@@ -41,6 +44,12 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
     }
 
     private fun showToProfileDeleteDialogFragment() {
-        ProfileDeleteDialogFragment().show(childFragmentManager, PROFILE_DELETE_DIALOG)
+        TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.DELETE_ACCOUNT)
+    }
+
+    private fun initDialogDeleteBtnClickListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
+            // Todo : 나중에 추가해야 함
+        }
     }
 }

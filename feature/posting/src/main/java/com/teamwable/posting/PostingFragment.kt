@@ -19,11 +19,13 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
-import com.teamwable.ui.util.DialogTag.POSTING_EXIT_DIALOG
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -64,6 +66,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         showKeyboard()
 
         initBackBtnClickListener()
+        initDialogExitBtnClickListener()
         initEditTextBtn()
 
         initPhotoBtnClickListener()
@@ -149,7 +152,13 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initBackBtnClickListener() {
         binding.ivPostingAppbarBack.setOnClickListener {
-            PostingExitDialogFragment().show(childFragmentManager, POSTING_EXIT_DIALOG)
+            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+        }
+    }
+
+    private fun initDialogExitBtnClickListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
+            findNavController().popBackStack()
         }
     }
 
