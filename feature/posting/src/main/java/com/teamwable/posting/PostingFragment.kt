@@ -3,6 +3,7 @@ package com.teamwable.posting
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.view.inputmethod.InputMethodManager
@@ -19,18 +20,20 @@ import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.util.DialogTag.POSTING_EXIT_DIALOG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @AndroidEntryPoint
 class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingBinding::inflate) {
     private val viewModel by viewModels<PostingViewModel>()
 
+    private var isTitleNull = true
+    private var isContentNull = true
     private var totalContentLength = 0
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
@@ -42,7 +45,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                     try {
                         selectImage()
                     } catch (e: Exception) {
-                        toast("에러 : ${e.message}")
+                        Timber.tag("posting_fragment").e("에러 : ${e.message}")
                     }
                 }
 
@@ -151,18 +154,24 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initEditTextBtn() {
         binding.run {
+            etPostingTitle.doAfterTextChanged {
+                isTitleNull = etPostingTitle.text.isNullOrBlank()
+                handleUploadProgressAndBtn(isTitleNull, isContentNull, totalContentLength)
+            }
             etPostingContent.doAfterTextChanged {
+                isContentNull = etPostingContent.text.isNullOrBlank()
                 totalContentLength = etPostingContent.text.length
-                handleUploadProgressAndBtn(totalContentLength)
+                handleUploadProgressAndBtn(isTitleNull, isContentNull, totalContentLength)
             }
         }
     }
 
-    private fun handleUploadProgressAndBtn(totalContentLength: Int) {
+    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, isContentNull: Boolean, totalContentLength: Int) {
         when {
-            (totalContentLength in POSTING_MIN..POSTING_MAX) -> {
+            (!isTitleNull && !isContentNull && totalContentLength <= POSTING_MAX) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
+                    com.teamwable.ui.R.color.purple_50,
                     com.teamwable.ui.R.color.white,
                 ) {
                     initUploadingActivateBtnClickListener()
@@ -172,6 +181,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             totalContentLength >= POSTING_MAX + 1 -> {
                 updateProgress(
                     com.teamwable.ui.R.color.error,
+                    com.teamwable.ui.R.color.gray_200,
                     com.teamwable.ui.R.color.gray_600,
                 ) {}
             }
@@ -179,6 +189,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             else -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
+                    com.teamwable.ui.R.color.gray_200,
                     com.teamwable.ui.R.color.gray_600,
                 ) {}
             }
@@ -194,20 +205,21 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun updateProgress(
         countTextColorResId: Int,
+        backgroundTintResId: Int,
         textColorResId: Int,
         clickListener: () -> Unit,
     ) {
         binding.tvPostingProgress.setTextColor(colorOf(countTextColorResId))
-        setUploadingBtnColor(textColorResId)
+        setUploadingBtnColor(backgroundTintResId, textColorResId)
         clickListener.invoke()
     }
 
     private fun setUploadingBtnColor(
+        backgroundTintResId: Int,
         textColorResId: Int,
-    ) {
-        binding.btnPostingUpload.setTextColor(
-            colorOf(textColorResId),
-        )
+    ) = with(binding) {
+        btnPostingUpload.backgroundTintList = ColorStateList.valueOf(colorOf(backgroundTintResId))
+        btnPostingUpload.setTextColor(colorOf(textColorResId))
     }
 
     private fun updateTextCount(totalCommentLength: Int) {
@@ -220,7 +232,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     companion object {
-        const val POSTING_MIN = 1
         const val POSTING_MAX = 499
     }
 }
