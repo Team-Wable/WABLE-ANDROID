@@ -13,22 +13,36 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.NotificationActionModel
-import com.teamwable.notification.CalculateTime
 import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.stringOf
+import com.teamwable.ui.util.CalculateTime
 import timber.log.Timber
 
 class NotificationActionViewHolder(
     private val binding: ItemNotificationVpBinding,
     private val click: (NotificationActionModel, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+    private var item: NotificationActionModel? = null
+    private val dummyUserName = "차은우"
+
+    init {
+        binding.root.setOnClickListener {
+            item?.let { click(it, adapterPosition) }
+        }
+
+        binding.ivNotificationVpProfile.setOnClickListener {
+            // Todo : 나중에 추가해야 함
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun bind(data: NotificationActionModel) {
         with(binding) {
+            item = data
+
             val spannableText = when (data.notificationTriggerType) {
                 "contentLiked" -> {
-                    initProfileBtnClickListener(data)
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         R.string.tv_notification_action_content_liked,
@@ -37,7 +51,6 @@ class NotificationActionViewHolder(
                 }
 
                 "comment" -> {
-                    initProfileBtnClickListener(data)
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         R.string.tv_notification_action_feed_comment,
@@ -46,7 +59,6 @@ class NotificationActionViewHolder(
                 }
 
                 "commentLiked" -> {
-                    initProfileBtnClickListener(data)
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         R.string.tv_notification_action_comment_liked,
@@ -57,6 +69,7 @@ class NotificationActionViewHolder(
                 "actingContinue" -> getSpannableStyle(
                     data.memberNickname,
                     R.string.tv_notification_action_acting_continue,
+                    ACTING_CONTINUE_LEN,
                     data = data
                 )
 
@@ -81,7 +94,6 @@ class NotificationActionViewHolder(
                 "userBan" -> getSpannableStyle(
                     data.memberNickname,
                     R.string.tv_notification_action_user_ban,
-                    36,
                     data = data
                 )
 
@@ -98,17 +110,7 @@ class NotificationActionViewHolder(
             }
 
             tvNotificationVpContent.text = spannableText
-            tvNotificationVpTime.text = CalculateTime(root.context).getCalculateTime(data.time)
-
-            root.setOnClickListener {
-                click(data, adapterPosition)
-            }
-        }
-    }
-
-    private fun initProfileBtnClickListener(data: NotificationActionModel) {
-        binding.ivNotificationVpProfile.setOnClickListener {
-            // Todo : 나중에 추가해야 함
+            tvNotificationVpTime.text = CalculateTime().getCalculateTime(root.context, data.time)
         }
     }
 
@@ -180,12 +182,20 @@ class NotificationActionViewHolder(
         name: String,
         resId: Int
     ): String {
-        val text = if (data.notificationTriggerType in listOf("contentLiked", "comment", "commentLiked", "popularWriter", "contentGhost", "commentGhost")) {
-            "$name${binding.root.context.getString(resId)}\n: ${getPopularContent(data.notificationText)}"
+        val resourceString = if (data.notificationTriggerType in listOf("contentLiked", "commentLiked")) {
+            binding.root.context.getString(
+                resId,
+                dummyUserName
+            )
         } else {
-            "$name${binding.root.context.getString(resId)}"
+            binding.root.context.getString(resId)
         }
-        return text
+
+        return if (data.notificationTriggerType in listOf("contentLiked", "comment", "commentLiked", "popularWriter", "contentGhost", "commentGhost")) {
+            "$name$resourceString\n: ${getPopularContent(data.notificationText)}"
+        } else {
+            "$name$resourceString"
+        }
     }
 
     private fun getPopularContent(notificationText: String): String {
@@ -198,5 +208,6 @@ class NotificationActionViewHolder(
 
     companion object {
         const val MAX_LEN = 15
+        const val ACTING_CONTINUE_LEN = 21
     }
 }
