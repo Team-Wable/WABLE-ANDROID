@@ -24,6 +24,8 @@ constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
 androidx-datastore = "1.1.1"
+swipe-refresh-layout = "1.1.0"
+exifinterface = "1.3.7"
 
 # material + google
 material = "1.12.0"
@@ -66,7 +68,6 @@ androidxComposeMaterial3 = "1.2.1"
 # # https://developer.android.com/jetpack/androidx/releases/test
 androidxTestExt = "1.1.5"
 hiltNavigationComposeVersion = "1.2.0"
-jetbrainsKotlinJvm = "1.9.0"
 
 [libraries]
 # kotlin
@@ -92,6 +93,8 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-navigation-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigationFragmentKtx" }
 lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
+androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
 
 # dagger-hilt
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
@@ -166,7 +169,6 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 lifecycle = ["lifecycle", "lifecycle-viewmodel", "lifecycle-livedata"]
