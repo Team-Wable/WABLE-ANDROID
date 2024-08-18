@@ -52,39 +52,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/et_posting_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_bottom"
-        android:layout_marginTop="22dp"
-        android:background="@null"
-        android:hint="@string/hint_posting_title"
-        android:textAppearance="@style/TextAppearance.Wable.Head1"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_700"
-        app:layout_constraintTop_toBottomOf="@id/divider_posting_appbar" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:fillViewport="true"
         android:paddingHorizontal="@dimen/margin_bottom"
         app:layout_constraintBottom_toTopOf="@id/divider_posting_upload_bar"
-        app:layout_constraintTop_toBottomOf="@id/et_posting_title">
+        app:layout_constraintTop_toBottomOf="@id/appbar_posting_appbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/et_posting_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:background="@null"
+                android:hint="@string/hint_posting_title"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.Wable.Head1"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_700"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_posting_photo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="12dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@id/et_posting_content"
                 app:layout_constraintDimensionRatio="312:200"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_posting_title"
                 app:layout_constraintVertical_bias="0"
                 app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerRadius8"
                 tools:src="@color/purple_50" />
@@ -101,31 +101,31 @@
                 app:layout_constraintEnd_toEndOf="@id/iv_posting_photo"
                 app:layout_constraintTop_toTopOf="@id/iv_posting_photo" />
 
-            <Space
-                android:id="@+id/space_posting_image_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/iv_posting_photo" />
-
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_posting_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="iv_posting_photo, iv_posting_photo_delete, space_posting_image_bottom" />
+                android:visibility="gone"
+                app:constraint_referenced_ids="iv_posting_photo, iv_posting_photo_delete" />
 
             <EditText
                 android:id="@+id/et_posting_content"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:autoLink="web"
                 android:background="@null"
+                android:focusable="true"
+                android:gravity="top|start"
                 android:hint="@string/hint_posting_content"
+                android:importantForAutofill="no"
+                android:inputType="textVisiblePassword|textMultiLine|textNoSuggestions"
                 android:maxLength="500"
                 android:textColor="@color/gray_800"
                 android:textColorHint="@color/gray_500"
                 android:textColorLink="@color/gray_800"
-                app:layout_constraintTop_toBottomOf="@id/space_posting_image_bottom" />
+                app:layout_constraintTop_toBottomOf="@id/iv_posting_photo"
+                tools:text="@string/dummy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="7dp"
             android:background="@drawable/shape_fill_20_rect"
-            android:backgroundTint="@color/sel_bottom_btn_color"
+            android:backgroundTint="@color/gray_200"
             android:enabled="false"
             android:minWidth="0dp"
             android:minHeight="0dp"
