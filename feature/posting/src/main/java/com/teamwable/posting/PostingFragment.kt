@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
@@ -174,6 +175,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                     com.teamwable.ui.R.color.purple_50,
                     com.teamwable.ui.R.color.white,
                 ) {
+                    binding.btnPostingUpload.isEnabled = true
                     initUploadingActivateBtnClickListener()
                 }
             }
@@ -183,7 +185,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                     com.teamwable.ui.R.color.error,
                     com.teamwable.ui.R.color.gray_200,
                     com.teamwable.ui.R.color.gray_600,
-                ) {}
+                ) {
+                    binding.btnPostingUpload.isEnabled = false
+                }
             }
 
             else -> {
@@ -191,7 +195,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.gray_200,
                     com.teamwable.ui.R.color.gray_600,
-                ) {}
+                ) {
+                    binding.btnPostingUpload.isEnabled = false
+                }
             }
         }
         return updateTextCount(totalContentLength)
@@ -199,7 +205,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initUploadingActivateBtnClickListener() {
         binding.btnPostingUpload.setOnClickListener {
-            // Todo : 나중에 추가해야 함
+            findNavController().popBackStack()
         }
     }
 
