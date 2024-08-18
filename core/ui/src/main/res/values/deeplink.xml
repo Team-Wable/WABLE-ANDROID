@@ -2,4 +2,5 @@
 <resources>
     <string name="deeplink_url_two_button_dialog">wable://common:ui/dialog/{dialog_type}</string>
     <string name="deeplink_url_bottomsheet">wable://common:ui/bottomsheet/{bottom_sheet_type}</string>
+    <string name="deeplink_url_posting">wable://feature:posting/posting</string>
 </resources>
