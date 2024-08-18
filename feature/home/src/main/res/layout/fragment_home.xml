@@ -4,17 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_home_navigate_posting"
+
+    <!-- framelayout 쓴 이유 : fab에 background drawable 추가 안됨;; -->
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:contentDescription="@string/content_description_home_navigate_posting"
-        android:padding="14dp"
-        android:src="@drawable/ic_home_posting"
+        android:background="@drawable/gradient_home_posting_fab"
+        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@null" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_home_navigate_posting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/content_description_home_navigate_posting"
+            android:padding="14dp"
+            android:src="@drawable/ic_home_posting"
+            app:backgroundTint="@android:color/transparent"
+            app:elevation="0dp"
+            app:pressedTranslationZ="0dp"
+            app:tint="@null" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
