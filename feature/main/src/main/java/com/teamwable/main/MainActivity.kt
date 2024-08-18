@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        //TODO : 나중에 BADGE 보이게 하는 로직으로 이동
+        // TODO : 나중에 BADGE 보이게 하는 로직으로 이동
         setBadgeOnNotification(true)
 
         binding.bnvMain.apply {
@@ -55,18 +55,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // TODO : list안에 bottomnavi 없는 것들을 추가해주세요
     private fun handleBottomNavigationVisibility(destination: NavDestination) {
-        if (destination.id in listOf(
-                com.teamwable.home.R.id.navigation_home,
-                com.teamwable.news.R.id.navigation_news,
-                com.teamwable.notification.R.id.navigation_notification,
-                com.teamwable.profile.R.id.navigation_profile,
-            )
-        ) {
-            binding.groupMainBnv.visible(true)
-        } else {
-            binding.groupMainBnv.visible(false)
-        }
+        binding.groupMainBnv.visible(
+            destination.id !in
+                listOf(
+                    com.teamwable.posting.R.id.navigation_posting,
+                    com.teamwable.profile.R.id.navigation_profile_delete_confirm,
+                    com.teamwable.profile.R.id.navigation_profile_delete_reason,
+                    com.teamwable.profile.R.id.navigation_profile_information,
+                ),
+        )
     }
 
     private fun setBadgeOnNotification(isVisible: Boolean) {

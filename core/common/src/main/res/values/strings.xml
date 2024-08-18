@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Wable</string>
+
+    <!-- team tag -->
+    <string name="label_team_t1">T1</string>
+    <string name="label_team_gen">GEN</string>
+    <string name="label_team_bro">BRO</string>
+    <string name="label_team_drx">DRX</string>
+    <string name="label_team_dk">DK</string>
+    <string name="label_team_kt">KT</string>
+    <string name="label_team_fox">FOX</string>
+    <string name="label_team_ns">NS</string>
+    <string name="label_team_kdf">KDF</string>
+    <string name="label_team_hle">HE</string>
+    <string name="label_team_lck">LCK</string>
+
+    <string name="dummy">testtesttesttesttesttesttesttesttesttesttesttesttesttest</string>
 </resources>
