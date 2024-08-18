@@ -1,5 +1,6 @@
 package com.teamwable.notification.information
 
+import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,18 +11,21 @@ import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.ItemDiffCallback
 
 class NotificationInformationAdapter(
+    context: Context,
     private val click: (NotificationInformationModel, Int) -> Unit
 ) : ListAdapter<NotificationInformationModel, NotificationInformationViewHolder>(
     NotificationInformationAdapterDiffCallback,
 ) {
+    private val inflater by lazy { LayoutInflater.from(context) }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationInformationViewHolder {
-        val binding = ItemNotificationVpBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemNotificationVpBinding.inflate(inflater, parent, false)
         return NotificationInformationViewHolder(binding, click)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NotificationInformationViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        holder.bind(getItem(position))
     }
 
     companion object {
