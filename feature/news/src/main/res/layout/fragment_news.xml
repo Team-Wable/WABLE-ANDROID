@@ -33,49 +33,42 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_news"
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_news_tab"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="-1dp"
+        app:dividerColor="@color/gray_300"
+        app:layout_constraintTop_toBottomOf="@id/tl_news" />
+
+    <com.google.android.material.tabs.TabLayout
+        app:layout_constraintTop_toBottomOf="@id/appbar_news"
+        android:id="@+id/tl_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/appbar_news">
+        android:background="@android:color/transparent"
+        app:tabIndicator="@drawable/shape_fill_2_rect"
+        app:tabIndicatorColor="@color/purple_50"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="2dp"
+        app:tabSelectedTextAppearance="@style/TextAppearance.Wable.Body1"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextAppearance="@style/TextAppearance.Wable.Body2"
+        app:tabTextColor="@color/gray_600">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_news_tab"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="-1dp"
-            app:dividerColor="@color/gray_300"
-            app:layout_constraintTop_toBottomOf="@id/tl_news" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_news"
-            android:layout_width="match_parent"
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabIndicator="@drawable/shape_fill_2_rect"
-            app:tabIndicatorColor="@color/purple_50"
-            app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="2dp"
-            app:tabSelectedTextAppearance="@style/TextAppearance.Wable.Body1"
-            app:tabSelectedTextColor="@color/black"
-            app:tabTextAppearance="@style/TextAppearance.Wable.Body2"
-            app:tabTextColor="@color/gray_600">
+            tools:text="테스트" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="테스트" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-    </FrameLayout>
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_news"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fl_news" />
+        app:layout_constraintTop_toBottomOf="@id/divider_news_tab" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
