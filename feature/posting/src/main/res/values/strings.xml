@@ -9,9 +9,4 @@
     <string name="btn_posting_upload">게시</string>
     <string name="tv_posting_progress_count">(%1$d/500)</string>
 
-    <!-- fragment_posting_exit_dialog -->
-    <string name="tv_posting_exit_dialog_title">작성중인 글에서 나가실건가요?\n작성하셨던 내용은 삭제돼요</string>
-    <string name="btn_posting_exit_dialog_cancel">취소</string>
-    <string name="btn_posting_exit_dialog_exit">나가기</string>
-
 </resources>
