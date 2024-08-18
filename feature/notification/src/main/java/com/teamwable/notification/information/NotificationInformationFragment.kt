@@ -24,7 +24,7 @@ class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBi
             binding.llNotificationVpEmpty.visible(false)
 
             binding.rvNotificationContent.adapter =
-                NotificationInformationAdapter(click = { notificationInformationData, position ->
+                NotificationInformationAdapter(requireContext(), click = { notificationInformationData, position ->
                     when (notificationInformationData.infoNotificationType) {
                         "GAMEDONE" -> toast("GAMEDONE")
                         "GAMESTART" -> toast("GAMESTART")

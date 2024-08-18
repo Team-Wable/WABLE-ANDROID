@@ -35,7 +35,7 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
 
     private fun initNewsRankAdapter() {
         binding.rvNewsRank.adapter =
-            NewsRankAdapter().apply {
+            NewsRankAdapter(requireContext()).apply {
                 submitList(viewModel.mockNewsRankList)
             }
         binding.rvNewsRank.addItemDecoration(NewsRankItemDecorator(requireContext()))

@@ -24,7 +24,7 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
             binding.llNotificationVpEmpty.visible(false)
 
             binding.rvNotificationContent.adapter =
-                NotificationActionAdapter(click = { notificationActionData, position ->
+                NotificationActionAdapter(requireContext(), click = { notificationActionData, position ->
                     when (notificationActionData.notificationTriggerType) {
                         "contentLiked" -> toast("contentLiked")
                         "comment" -> toast("comment")
