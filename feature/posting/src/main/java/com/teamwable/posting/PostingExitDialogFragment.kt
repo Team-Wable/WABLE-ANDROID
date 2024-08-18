@@ -5,7 +5,7 @@ import com.teamwable.posting.databinding.FragmentPostingExitDialogBinding
 import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.extensions.dialogFragmentResize
 
-class PostingExitDialogFragment : BindingDialogFragment<FragmentPostingExitDialogBinding>(R.layout.fragment_posting_exit_dialog, FragmentPostingExitDialogBinding::inflate) {
+class PostingExitDialogFragment : BindingDialogFragment<FragmentPostingExitDialogBinding>(FragmentPostingExitDialogBinding::inflate) {
     override fun initView() {
         initCancelBtnClickListener()
         initExitBtnClickListener()
