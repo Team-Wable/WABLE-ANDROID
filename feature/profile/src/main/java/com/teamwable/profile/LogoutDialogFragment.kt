@@ -5,7 +5,7 @@ import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.extensions.dialogFragmentResize
 import com.teamwable.ui.extensions.stringOf
 
-class LogoutDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(R.layout.fragment_delete_dialog, FragmentDeleteDialogBinding::inflate) {
+class LogoutDialogFragment : BindingDialogFragment<FragmentDeleteDialogBinding>(FragmentDeleteDialogBinding::inflate) {
     override fun initView() {
         initText()
         initCancelBtnClickListener()

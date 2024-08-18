@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_ui"
+    app:startDestination="@id/twoButtonDialog">
+
+    <dialog
+        android:id="@+id/twoButtonDialog"
+        android:name="com.teamwable.ui.component.TwoButtonDialog"
+        android:label="TwoButtonDialog"
+        tools:layout="@layout/dialog_two_button">
+        <argument
+            android:name="${DIALOG_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_two_button_dialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/bottomSheet"
+        android:name="com.teamwable.ui.component.BottomSheet"
+        android:label="BottomSheet"
+        tools:layout="@layout/bottomsheet">
+        <argument
+            android:name="${BOTTOM_SHEET_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_bottomsheet" />
+    </dialog>
+</navigation>

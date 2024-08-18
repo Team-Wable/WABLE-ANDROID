@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 
 abstract class BindingDialogFragment<T : ViewBinding>(
-    @LayoutRes val layoutRes: Int,
-    private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> T,
+    private val bindingInflater: (LayoutInflater) -> T,
 ) : DialogFragment() {
     private var _binding: T? = null
     protected val binding get() = requireNotNull(_binding) { "ViewBinding is not initialized" }
@@ -31,7 +29,7 @@ abstract class BindingDialogFragment<T : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = bindingInflater(inflater, container, false)
+        _binding = bindingInflater(layoutInflater)
         return binding.root
     }
 

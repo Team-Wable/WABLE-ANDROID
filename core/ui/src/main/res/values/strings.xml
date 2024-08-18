@@ -8,4 +8,32 @@
     <string name="tv_calculate_time_week">주 전</string>
     <string name="tv_calculate_time_month">달 전</string>
     <string name="tv_calculate_time_year">년 전</string>
+
+    <!-- dialog -->
+    <string name="label_dialog_report_title">신고하시겠어요?</string>
+    <string name="label_dialog_report_description">해당 유저 혹은 게시글을 신고하시려면 신고하기 버튼을 눌러주세요.</string>
+    <string name="label_dialog_report_yes">신고하기</string>
+    <string name="label_dialog_delete_feed_title">게시글을 삭제하시겠어요?</string>
+    <string name="label_dialog_delete_feed_description">게시글이 영구히 삭제됩니다.</string>
+    <string name="label_dialog_delete_yes">삭제하기</string>
+    <string name="label_dialog_delete_account_title">계정을 삭제하시겠어요?</string>
+    <string name="label_dialog_logout_title">로그아웃하시겠어요?</string>
+    <string name="label_dialog_logout_yes">로그아웃하기</string>
+    <string name="label_dialog_transparency_title">와블의 온화한 문화를 해치는\n누군가를 발견하신 건가요?</string>
+    <string name="label_dialog_transparency_yes">네 맞아요</string>
+    <string name="label_dialog_transparency_no">고민할게요</string>
+    <string name="label_dialog_cancel_posting_title">작성중인 글에서 나가실건가요?\n작성하셨던 내용은 삭제돼요</string>
+    <string name="label_dialog_cancel_posting__yes">나가기</string>
+    <string name="label_dialog_share_no">취소</string>
+    <string name="label_dialog_blank" />
+
+    <!-- feed -->
+    <string name="content_description_feed_image">피드 이미지입니다.</string>
+    <string name="label_feed_ghost_level">투명도 %d%%</string>
+    <string name="label_feed_upload_time">· %s분 전</string>
+
+    <!-- snack bar -->
+    <string name="label_snack_bar_comment_ing">답글 남기는 중</string>
+    <string name="label_snack_bar_comment_complete">답글을 남겼어요</string>
+    <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
 </resources>
