@@ -10,8 +10,7 @@ import com.teamwable.news.R
 import com.teamwable.news.databinding.ItemNewsMatchScoreBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.stringOf
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.teamwable.ui.util.CalculateTime
 
 class NewsMatchScoreViewHolder(
     private val binding: ItemNewsMatchScoreBinding
@@ -38,7 +37,7 @@ class NewsMatchScoreViewHolder(
                 }
             }
 
-            tvNewsMatchScoreTime.text = formatDateTime(data.gameDate)
+            tvNewsMatchScoreTime.text = CalculateTime().formatTime(data.gameDate)
 
             setTeamProfile(ivNewsMatchScoreFirstSymbol, data.aTeamName)
             tvNewsMatchScoreFirstName.text = data.aTeamName
@@ -64,13 +63,5 @@ class NewsMatchScoreViewHolder(
             else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
         }
         imageView.setImageResource(resourceId)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun formatDateTime(inputDateTime: String): String {
-        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-        val outputFormatter = DateTimeFormatter.ofPattern("HH:mm")
-
-        return LocalDateTime.parse(inputDateTime, inputFormatter).format(outputFormatter)
     }
 }
