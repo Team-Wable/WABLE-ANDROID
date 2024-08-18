@@ -13,5 +13,6 @@ class NotificationItemDecorator(val context: Context) : RecyclerView.ItemDecorat
         val itemCount = parent.adapter?.itemCount ?: 0
 
         if (position == 0) outRect.top = context.pxToDp(10)
+        else if (position == itemCount - 1) outRect.bottom = context.pxToDp(32)
     }
 }
