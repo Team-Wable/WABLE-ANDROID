@@ -1,7 +1,6 @@
 package com.teamwable.network.util
 
-import com.teamwable.model.network.ApiError
-import com.teamwable.model.network.NetWorkConnectError
+import com.teamwable.model.network.Error
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.net.UnknownHostException
@@ -25,8 +24,8 @@ private fun parseErrorMessage(errorBody: String): String {
 fun <T> Throwable.handleThrowable(): Result<T> {
     return Result.failure(
         when (this) {
-            is HttpException -> ApiError(this.getErrorMessage())
-            is UnknownHostException -> NetWorkConnectError("인터넷에 연결해 주세요")
+            is HttpException -> Error.ApiError(this.getErrorMessage())
+            is UnknownHostException -> Error.NetWorkConnectError("인터넷에 연결해 주세요")
             else -> this
         },
     )
