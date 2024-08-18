@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- calculate_time -->
+    <string name="tv_calculate_time_now">지금</string>
+    <string name="tv_calculate_time_minute">분 전</string>
+    <string name="tv_calculate_time_hour">시간 전</string>
+    <string name="tv_calculate_time_day">일 전</string>
+    <string name="tv_calculate_time_week">주 전</string>
+    <string name="tv_calculate_time_month">달 전</string>
+    <string name="tv_calculate_time_year">년 전</string>
+</resources>
