@@ -29,7 +29,7 @@ class NewsMatchFragment : BindingFragment<FragmentNewsMatchBinding>(FragmentNews
             binding.viewNewsMatchSeason.tvNewsSeasonTitle.visible(true)
 
             binding.rvNewsMatchContent.adapter =
-                NewsMatchAdapter().apply {
+                NewsMatchAdapter(requireContext()).apply {
                     submitList(viewModel.mockNewsMatchList)
                 }
             binding.rvNewsMatchContent.addItemDecoration(NewsMatchItemDecorator(requireContext()))
