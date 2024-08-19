@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_gray200_line_16_rect"
+    android:paddingTop="@dimen/padding_dialog_top"
+    android:paddingBottom="@dimen/padding_dialog_bottom">
+
+    <TextView
+        android:id="@+id/tv_dialog_two_button_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Wable.Head1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="title" />
+
+    <TextView
+        android:id="@+id/tv_dialog_two_button_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_700"
+        app:layout_constraintEnd_toEndOf="@id/tv_dialog_two_button_title"
+        app:layout_constraintStart_toStartOf="@id/tv_dialog_two_button_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_two_button_title"
+        tools:text="description" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_dialog_two_button_no"
+        style="@style/Wable.Button.M.S"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/gray_200"
+        android:textColor="@color/gray_600"
+        app:layout_constraintDimensionRatio="2.6"
+        app:layout_constraintEnd_toStartOf="@id/btn_dialog_two_button_yes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_two_button_description"
+        tools:text="no" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_dialog_two_button_yes"
+        style="@style/Wable.Button.M.S"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="18dp"
+        android:backgroundTint="@color/purple_50"
+        android:textColor="@color/white"
+        app:layout_constraintDimensionRatio="2.6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_dialog_two_button_no"
+        app:layout_constraintTop_toTopOf="@id/btn_dialog_two_button_no"
+        tools:text="yes" />
+</androidx.constraintlayout.widget.ConstraintLayout>

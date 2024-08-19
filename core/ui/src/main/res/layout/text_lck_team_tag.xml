@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_team_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_white_fill_4_rect"
+        android:drawableEnd="@drawable/ic_home_tag_team_fire"
+        android:paddingHorizontal="6dp"
+        android:textAppearance="@style/TextAppearance.Wable.Caption4"
+        tools:text="team name" />
+</FrameLayout>

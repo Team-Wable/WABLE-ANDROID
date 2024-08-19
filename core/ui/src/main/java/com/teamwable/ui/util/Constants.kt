@@ -9,3 +9,10 @@ object DialogTag {
     const val PROFILE_DELETE_DIALOG = "ProfileDeleteDialog"
     const val LOGOUT_DIALOG = "LogoutDialog"
 }
+
+object Arg {
+    const val DIALOG_TYPE = "dialog_type"
+    const val DIALOG_RESULT = "dialog_result"
+    const val BOTTOM_SHEET_TYPE = "bottom_sheet_type"
+    const val BOTTOM_SHEET_RESULT = "bottom_sheet_result"
+}
