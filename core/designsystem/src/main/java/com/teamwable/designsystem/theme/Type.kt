@@ -9,6 +9,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.teamwable.designsystem.R
@@ -94,84 +96,102 @@ class WableTypography internal constructor(
     }
 }
 
+fun wableTextStyle(
+    fontFamily: FontFamily,
+    fontWeight: FontWeight,
+    fontSize: TextUnit,
+    letterSpacing: TextUnit,
+    lineHeight: TextUnit,
+): TextStyle = TextStyle(
+    fontFamily = fontFamily,
+    fontWeight = fontWeight,
+    fontSize = fontSize,
+    lineHeight = lineHeight,
+    letterSpacing = letterSpacing,
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None,
+    ),
+)
+
 @Composable
 fun wableTypography(): WableTypography {
     return WableTypography(
-        head00 = TextStyle(
+        head00 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 24.sp,
-            lineHeight = 24.sp * 1.6,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        head01 = TextStyle(
+        head01 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
-            lineHeight = 32.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        head02 = TextStyle(
+        head02 = wableTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.SemiBold,
             fontSize = 22.sp,
-            lineHeight = 29.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        body01 = TextStyle(
+        body01 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
-            lineHeight = 26.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        body02 = TextStyle(
+        body02 = wableTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
-            lineHeight = 26.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        body03 = TextStyle(
+        body03 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
-            lineHeight = 22.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        body04 = TextStyle(
+        body04 = wableTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
-            lineHeight = 22.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        caption01 = TextStyle(
+        caption01 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 13.sp,
-            lineHeight = 21.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        caption02 = TextStyle(
+        caption02 = wableTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 13.sp,
-            lineHeight = 21.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        caption03 = TextStyle(
+        caption03 = wableTextStyle(
             fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
-            lineHeight = 19.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
-        caption04 = TextStyle(
+        caption04 = wableTextStyle(
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
-            lineHeight = 19.sp,
+            lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
     )
