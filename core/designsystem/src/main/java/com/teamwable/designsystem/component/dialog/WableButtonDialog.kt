@@ -20,12 +20,12 @@ import androidx.compose.ui.window.Dialog
 import com.teamwable.designsystem.R
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.DialogType
 
 @Composable
 fun ImageDoubleButtonDialog(
-    title: String,
-    description: String,
-    buttonText: String,
+    dialogType: DialogType,
+    userName: String = "",
     onClick: () -> Unit,
 ) {
     Dialog(onDismissRequest = onClick) {
@@ -43,7 +43,7 @@ fun ImageDoubleButtonDialog(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = title,
+                    text = stringResource(id = dialogType.title),
                     style = WableTheme.typography.head01,
                     color = WableTheme.colors.black,
                     textAlign = TextAlign.Center,
@@ -51,8 +51,17 @@ fun ImageDoubleButtonDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                val descriptionText = when (dialogType) {
+                    DialogType.WELLCOME -> {
+                        val rawDescription = stringResource(id = R.string.dialog_wellcome_description)
+                        String.format(rawDescription, userName)
+                    }
+
+                    else -> stringResource(id = dialogType.description)
+                }
+
                 Text(
-                    text = description,
+                    text = descriptionText,
                     style = WableTheme.typography.body02,
                     color = WableTheme.colors.gray700,
                     textAlign = TextAlign.Center,
@@ -61,7 +70,7 @@ fun ImageDoubleButtonDialog(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 WableButton(
-                    text = buttonText,
+                    text = stringResource(id = dialogType.buttonText),
                     onClick = onClick,
                     enabled = true,
                     textStyle = WableTheme.typography.body01,
@@ -77,10 +86,8 @@ fun ImageDoubleButtonDialog(
 fun ImageDoubleButtonDialogPreview() {
     WableTheme {
         ImageDoubleButtonDialog(
-            title = stringResource(R.string.dialog_login_title),
-            description = stringResource(R.string.dialog_login_description) +
-                "더 건강하고 즐거운 커뮤니티를 만들어 나가는데 함께 노력해주실거죠?",
-            buttonText = stringResource(R.string.dialog_login_btn_text),
+            dialogType = DialogType.LOGIN,
+            userName = "홍길동",
             onClick = {},
         )
     }
