@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.network.Feed
+import com.teamwable.model.Feed
 import com.teamwable.ui.R
 import com.teamwable.ui.databinding.ItemFeedBinding
 import com.teamwable.ui.extensions.load
@@ -17,7 +17,7 @@ class FeedViewHolder private constructor(
     private lateinit var item: Feed
 
     init {
-        setupClickListener(itemView, binding.tvFeedContent, binding.btnFeedComment) { feedClickListener.onItemClick(item.feedId) }
+        setupClickListener(itemView, binding.tvFeedContent, binding.btnFeedComment) { feedClickListener.onItemClick(item) }
         setupClickListener(binding.btnFeedGhost) { feedClickListener.onGhostBtnClick(item.postAuthorId) }
         setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(item.feedId) }
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }

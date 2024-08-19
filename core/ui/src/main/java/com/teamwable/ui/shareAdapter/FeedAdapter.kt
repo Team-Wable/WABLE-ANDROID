@@ -2,7 +2,7 @@ package com.teamwable.ui.shareAdapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwable.model.network.Feed
+import com.teamwable.model.Feed
 import com.teamwable.ui.extensions.ItemDiffCallback
 
 class FeedAdapter(private val feedClickListener: FeedClickListener) : ListAdapter<Feed, FeedViewHolder>(feedDiffCallback) {
