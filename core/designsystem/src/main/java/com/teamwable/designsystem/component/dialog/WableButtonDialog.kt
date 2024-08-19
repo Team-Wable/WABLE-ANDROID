@@ -23,7 +23,7 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
 @Composable
-fun ImageDoubleButtonDialog(
+fun WableButtonDialog(
     dialogType: DialogType,
     userName: String = "",
     onClick: () -> Unit,
@@ -83,9 +83,9 @@ fun ImageDoubleButtonDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun ImageDoubleButtonDialogPreview() {
+fun WableButtonDialogPreview() {
     WableTheme {
-        ImageDoubleButtonDialog(
+        WableButtonDialog(
             dialogType = DialogType.LOGIN,
             userName = "홍길동",
             onClick = {},
