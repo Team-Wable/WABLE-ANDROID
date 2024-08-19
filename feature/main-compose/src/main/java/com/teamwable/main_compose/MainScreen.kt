@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
+import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -44,7 +45,13 @@ internal fun MainScreen(
     }
 
     Scaffold(
-        topBar = { /* todo 공통 top bar 정의*/ },
+        topBar = {
+            WableAppBar(
+                visibility = navigator.shouldShowTopBar(),
+                canNavigateBack = navigator.isBackStackNotEmpty(),
+                navigateUp = { navigator.navigateUp() },
+            )
+        },
         content = { innerPadding ->
             Box(
                 modifier = Modifier
