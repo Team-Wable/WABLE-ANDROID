@@ -18,6 +18,7 @@ dependencies {
     // TODO:이동 없으면 지워도 됨
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.recyclerview)
 
     // Third Party
     implementation(libs.glide)
