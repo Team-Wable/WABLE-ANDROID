@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--    최초 로그인-->
     <string name="dialog_login_title">앗 잠깐!</string>
-    <string name="dialog_login_description">와블은 온화하면서도 유쾌한 LCK 팬들이 모여 함께 즐기는 공간이에요. \n</string>
+    <string name="dialog_login_description">와블은 온화하면서도 유쾌한 LCK 팬들이 모여 함께 즐기는 공간이에요.\n더 건강하고 즐거운 커뮤니티를 만들어 나가는데 함께 노력해주실거죠?</string>
     <string name="dialog_login_btn_text">확인</string>
+    <!--    환영 로그인-->
+    <string name="dialog_wellcome_title">와블과 함께 해 주셔서 감사합니다!</string>
+    <string name="dialog_wellcome_description">%1$s님,\n와블의 일원이 되신 것을 환영해요!\nLCK 함께 보며 같이 즐겨요 :)</string>
+    <string name="dialog_wellcome_btn_text">와블 즐기러 가기</string>
 </resources>
