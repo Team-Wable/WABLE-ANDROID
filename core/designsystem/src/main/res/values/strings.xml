@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_login_title">앗 잠깐!</string>
+    <string name="dialog_login_description">와블은 온화하면서도 유쾌한 LCK 팬들이 모여 함께 즐기는 공간이에요. \n</string>
+    <string name="dialog_login_btn_text">확인</string>
+</resources>
