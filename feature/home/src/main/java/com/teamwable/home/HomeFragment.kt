@@ -2,7 +2,7 @@ package com.teamwable.home
 
 import androidx.navigation.fragment.findNavController
 import com.teamwable.home.databinding.FragmentHomeBinding
-import com.teamwable.model.network.Feed
+import com.teamwable.model.Feed
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
@@ -22,8 +22,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     }
 
     private fun onClickFeedItem() = object : FeedClickListener {
-        override fun onItemClick(id: Long) {
+        override fun onItemClick(feed: Feed) {
             toast("item")
+            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed))
         }
 
         override fun onGhostBtnClick(postAuthorId: Long) {
@@ -45,6 +46,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
             toast("kebab")
         }
+
+        override fun onCommentBtnClick(feedId: Long) {}
     }
 
     private fun setAdapter() {

@@ -1,7 +1,9 @@
 package com.teamwable.ui.shareAdapter
 
+import com.teamwable.model.Feed
+
 interface FeedClickListener {
-    fun onItemClick(id: Long)
+    fun onItemClick(feed: Feed)
 
     fun onGhostBtnClick(postAuthorId: Long)
 
@@ -12,4 +14,6 @@ interface FeedClickListener {
     fun onFeedImageClick(image: String)
 
     fun onKebabBtnClick(feedId: Long, postAuthorId: Long)
+
+    fun onCommentBtnClick(feedId: Long)
 }
