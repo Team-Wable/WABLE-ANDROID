@@ -28,20 +28,26 @@ internal class MainNavigator(
         navController.popBackStack()
     }
 
-    fun popBackStackIfNotHome() {
+    fun popBackStackIfNotLogin() {
         if (!isSameCurrentDestination<Route.Login>()) {
             popBackStack()
         }
     }
 
-    private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
-        return navController.currentDestination?.hasRoute<T>() == true
+    fun isBackStackNotEmpty(): Boolean = navController.previousBackStackEntry != null
+
+    fun navigateUp() {
+        navController.navigateUp()
     }
 
     @Composable
-    fun MainNavigator.shouldShowTopBar(): Boolean = when (currentDestination?.route) {
-        "Splash", "Login" -> false
-        else -> true
+    fun shouldShowTopBar(): Boolean {
+        val currentRoute = currentDestination?.route ?: return false
+        return !(currentRoute.contains("Login") || currentRoute.contains("Splash"))
+    }
+
+    private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
+        return navController.currentDestination?.hasRoute<T>() == true
     }
 }
 
