@@ -20,7 +20,6 @@
             android:layout_height="@dimen/padding_top"
             android:paddingStart="16dp"
             android:paddingTop="4dp"
-            app:contentInsetLeft="0dp"
             app:navigationIcon="@drawable/ic_share_logo" />
 
         <com.airbnb.lottie.LottieAnimationView
