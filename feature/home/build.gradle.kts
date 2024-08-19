@@ -21,4 +21,5 @@ dependencies {
 
     // Third Party
     implementation(libs.glide)
+    implementation(libs.lottie)
 }
