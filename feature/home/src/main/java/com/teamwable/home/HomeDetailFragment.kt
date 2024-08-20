@@ -1,5 +1,9 @@
 package com.teamwable.home
 
+import android.content.res.ColorStateList
+import android.os.Handler
+import android.os.Looper
+import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
@@ -7,25 +11,116 @@ import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.Snackbar
+import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
+    val mock = mutableListOf<Comment>()
+
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private val args: HomeDetailFragmentArgs by navArgs()
+
+    private var isCommentNull = true
+    private var totalCommentLength = 0
+
+    private val dummyNickname = "배차은우"
 
     override fun initView() {
         setFeedAdapter()
         setCommentAdapter()
         concatAdapter()
         initBackBtnClickListener()
+
+        initEditTextHint()
+        initEditTextBtn()
+    }
+
+    private fun initEditTextHint() {
+        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, dummyNickname)
+    }
+
+    private fun initEditTextBtn() {
+        binding.run {
+            etHomeDetailCommentInput.doAfterTextChanged {
+                isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
+                totalCommentLength = etHomeDetailCommentInput.text.length
+                handleUploadBtn(isCommentNull, totalCommentLength)
+            }
+        }
+    }
+
+    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int) {
+        when {
+            (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
+                setUploadingBtnSrc(
+                    null,
+                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active
+                ) {
+                    binding.ibHomeDetailCommentInputUpload.isEnabled = true
+                    initUploadingActivateBtnClickListener()
+                }
+            }
+
+            else -> {
+                setUploadingBtnSrc(
+                    ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.gray_100)),
+                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_inactive
+                ) {
+                    binding.ibHomeDetailCommentInputUpload.isEnabled = false
+                }
+            }
+        }
+    }
+
+    private fun setUploadingBtnSrc(
+        backgroundTintResId: ColorStateList?,
+        btnResId: Int,
+        clickListener: () -> Unit,
+    ) = with(binding) {
+        etHomeDetailCommentInput.backgroundTintList = backgroundTintResId
+        ibHomeDetailCommentInputUpload.setImageResource(btnResId)
+        clickListener.invoke()
+    }
+
+    private fun initUploadingActivateBtnClickListener() {
+        binding.ibHomeDetailCommentInputUpload.setOnClickListener {
+            findNavController().popBackStack()
+
+            Snackbar(requireView(), SnackbarType.COMMENT_ING).apply {
+                show()
+
+                mock.add(
+                    Comment(
+                        postAuthorId = 1,
+                        postAuthorProfile = "",
+                        postAuthorNickname = "배차은우",
+                        commentId = 0,
+                        content = binding.etHomeDetailCommentInput.text.toString(),
+                        uploadTime = "3",
+                        isPostAuthorGhost = false,
+                        postAuthorGhost = 100,
+                        isLiked = false,
+                        likedNumber = "-10000",
+                        postAuthorTeamTag = "FOX",
+                    )
+                )
+                commentAdapter.submitList(mock.toList())
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    updateToCommentComplete()
+                }, 2000)
+            }
+        }
     }
 
     // TODO : test용 toast 지우기
@@ -89,7 +184,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     // TODO : mock data 지우기
     private fun submitCommentList() {
-        val mock = mutableListOf<Comment>()
         repeat(5) {
             mock.add(
                 Comment(
@@ -126,5 +220,9 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.toolbarHomeDetail.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    companion object {
+        const val POSTING_MAX = 499
     }
 }
