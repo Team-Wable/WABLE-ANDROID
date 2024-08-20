@@ -3,6 +3,9 @@ package com.teamwable.wable
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
+import com.teamwable.wable.BuildConfig.KAKAO_APP_KEY
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -18,6 +21,7 @@ class WableApp : Application() {
         super.onCreate()
         setTimber()
         setDarkMode()
+        setKaKaoSdk()
     }
 
     private fun setTimber() {
@@ -27,5 +31,11 @@ class WableApp : Application() {
 
     private fun setDarkMode() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    private fun setKaKaoSdk() {
+        KakaoSdk.init(this, KAKAO_APP_KEY)
+        var keyHash = Utility.getKeyHash(this)
+        Timber.tag("Kakao").d("KeyHash: $keyHash")
     }
 }
