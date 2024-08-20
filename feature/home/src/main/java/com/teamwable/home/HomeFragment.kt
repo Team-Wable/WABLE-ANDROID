@@ -21,6 +21,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         initNavigatePostingFabClickListener()
     }
 
+    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
             toast("item")
@@ -54,12 +55,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         binding.rvHome.apply {
             adapter = feedAdapter
             if (itemDecorationCount == 0) {
-                setDivider(com.teamwable.ui.R.drawable.recyclerview_item_divider)
+                setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
             }
         }
         submitList()
     }
 
+    // TODO : mock data 지우기
     private fun submitList() {
         val mock = mutableListOf<Feed>()
         repeat(5) {
@@ -78,7 +80,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     isLiked = false,
                     likedNumber = "100",
                     commentNumber = "200",
-                    image = "",
+                    image = "https://github.com/user-attachments/assets/66fdd6f1-c0c5-4438-81f4-bea09b09acd1",
                     postAuthorTeamTag = "T1",
                 ),
             )
