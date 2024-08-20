@@ -1,18 +1,15 @@
-package com.teamwable.model.network
+package com.teamwable.model
 
-data class Feed(
+data class Comment(
+    val commentId: Long,
     val postAuthorId: Long,
     val postAuthorProfile: String,
     val postAuthorNickname: String,
-    val feedId: Long,
-    val title: String,
-    val content: String,
-    val uploadTime: String,
     val isPostAuthorGhost: Boolean,
     val postAuthorGhost: Int,
     val isLiked: Boolean,
     val likedNumber: String,
-    val commentNumber: String,
-    val image: String,
+    val content: String,
+    val uploadTime: String,
     val postAuthorTeamTag: String,
 )
