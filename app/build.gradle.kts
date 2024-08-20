@@ -58,4 +58,6 @@ dependencies {
     //firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    // kakao
+    implementation(libs.kakao.login)
 }
