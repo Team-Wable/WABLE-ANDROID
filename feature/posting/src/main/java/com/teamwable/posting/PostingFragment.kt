@@ -1,7 +1,6 @@
 package com.teamwable.posting
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -138,15 +137,12 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         }
     }
 
-    @SuppressLint("ServiceCast")
     private fun showKeyboard() {
+        binding.etPostingContent.requestFocus()
+
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(
-            binding.etPostingContent,
-            InputMethodManager.SHOW_IMPLICIT,
-        )
-        binding.etPostingContent.requestFocus()
+        inputMethodManager.showSoftInput(binding.etPostingContent, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun initBackBtnClickListener() {
