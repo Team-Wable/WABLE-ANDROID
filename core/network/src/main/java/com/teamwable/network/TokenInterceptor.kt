@@ -77,8 +77,8 @@ class TokenInterceptor @Inject constructor(
 
     private fun Request.newAuthBuilder() = newBuilder()
         .addHeader(
-            AUTHORIZATION,
-            runBlocking {
+            name = AUTHORIZATION,
+            value = runBlocking {
                 defaultKumulPreferenceDatasource.accessToken.first()
             },
         ).build()
