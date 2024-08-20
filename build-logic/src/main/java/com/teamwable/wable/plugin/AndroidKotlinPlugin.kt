@@ -15,6 +15,7 @@ class AndroidKotlinPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(plugins) {
             apply("kotlin-android")
+            apply("kotlin-parcelize")
         }
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

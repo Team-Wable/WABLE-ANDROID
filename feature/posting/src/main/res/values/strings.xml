@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- fragment_posting -->
+    <string name="appbar_posting_title">새로운 글</string>
+    <string name="hint_posting_title">어떤 생각을 하고 있나요?</string>
+    <string name="hint_posting_content">본문은 생략이 가능해요</string>
+    <string name="tv_posting_progress_base">0/500</string>
+    <string name="btn_posting_upload">게시</string>
+    <string name="tv_posting_progress_count">(%1$d/500)</string>
+
+</resources>

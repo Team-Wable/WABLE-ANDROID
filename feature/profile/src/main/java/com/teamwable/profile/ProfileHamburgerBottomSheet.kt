@@ -5,7 +5,9 @@ import android.net.Uri
 import androidx.navigation.fragment.findNavController
 import com.teamwable.profile.databinding.BottomsheetProfileHamburgerBinding
 import com.teamwable.ui.base.BindingBottomSheetFragment
-import com.teamwable.ui.util.DialogTag.LOGOUT_DIALOG
+import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.util.Arg.DIALOG_RESULT
 
 class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfileHamburgerBinding>(BottomsheetProfileHamburgerBinding::inflate) {
     override fun initView() {
@@ -14,6 +16,7 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
         initFeedbackBtnClickListener()
         initCustomerServiceBtnClickListener()
         initLogoutBtnClickListener()
+        initDialogDeleteBtnClickListener()
     }
 
     private fun initAccountInformationBtnClickListener() {
@@ -38,7 +41,13 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
 
     private fun initLogoutBtnClickListener() {
         binding.tvProfileHamburgerLogout.setOnClickListener {
-            LogoutDialogFragment().show(childFragmentManager, LOGOUT_DIALOG)
+            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.LOGOUT)
+        }
+    }
+
+    private fun initDialogDeleteBtnClickListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
+            // Todo : 나중에 추가해야 함
         }
     }
 

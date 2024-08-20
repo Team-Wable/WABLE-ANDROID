@@ -11,9 +11,6 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
 internal fun Project.configureAndroidCommonPlugin() {
     apply<AndroidKotlinPlugin>()
     apply<AndroidHiltPlugin>()
-    with(plugins) {
-        apply("kotlin-parcelize")
-    }
 
     extensions.getByType<BaseExtension>().apply {
         buildFeatures.apply {
