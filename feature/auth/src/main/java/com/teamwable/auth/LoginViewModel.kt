@@ -35,9 +35,6 @@ class LoginViewModel @Inject constructor(
     private val _showDialog = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> get() = _showDialog
 
-    private val _kakaoLoginState: MutableStateFlow<KakaoLoginState> =
-        MutableStateFlow(KakaoLoginState())
-
     fun observeAutoLogin() {
         viewModelScope.launch {
             userInfoRepository.getAutoLogin().collectLatest { isAutoLogin ->
@@ -77,8 +74,6 @@ class LoginViewModel @Inject constructor(
 
     private fun kakaoLoginFailure(error: Throwable) {
         viewModelScope.launch {
-            _kakaoLoginState.value =
-                _kakaoLoginState.value.copy(state = UiState.Failure("fail"))
             when {
                 error is ClientError && error.reason == ClientErrorCause.Cancelled ->
                     _loginSideEffect.emit(LoginSideEffect.ShowSnackBar("카카오 로그인이 취소되었습니다"))
