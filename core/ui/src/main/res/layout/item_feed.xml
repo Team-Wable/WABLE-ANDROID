@@ -48,13 +48,13 @@
         tools:text="@string/dummy" />
 
     <com.teamwable.ui.component.LckTeamTagTextView
+        android:id="@+id/tv_team_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_feed_nickname"
         app:layout_constraintStart_toEndOf="@id/tv_feed_nickname"
-        app:layout_constraintTop_toTopOf="@id/tv_feed_nickname"
-        app:team_name="@string/label_team_lck" />
+        app:layout_constraintTop_toTopOf="@id/tv_feed_nickname" />
 
     <TextView
         android:id="@+id/tv_feed_ghost_level"
@@ -163,24 +163,24 @@
         android:layout_height="0dp"
         android:layout_marginEnd="4dp"
         app:icon="@drawable/ic_home_comment_btn"
-        app:layout_constraintBottom_toBottomOf="@id/btn_feed_heart"
+        app:layout_constraintBottom_toBottomOf="@id/btn_feed_like"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@id/tv_feed_comment_count"
-        app:layout_constraintTop_toTopOf="@id/btn_feed_heart" />
+        app:layout_constraintTop_toTopOf="@id/btn_feed_like" />
 
     <TextView
-        android:id="@+id/tv_feed_heart_count"
+        android:id="@+id/tv_feed_like_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:textAppearance="@style/TextAppearance.Wable.Caption1"
-        app:layout_constraintBottom_toBottomOf="@id/btn_feed_heart"
+        app:layout_constraintBottom_toBottomOf="@id/btn_feed_like"
         app:layout_constraintEnd_toStartOf="@id/btn_feed_comment"
-        app:layout_constraintTop_toTopOf="@id/btn_feed_heart"
+        app:layout_constraintTop_toTopOf="@id/btn_feed_like"
         tools:text="00" />
 
     <CheckBox
-        android:id="@+id/btn_feed_heart"
+        android:id="@+id/btn_feed_like"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginVertical="4dp"
@@ -189,6 +189,6 @@
         android:button="@null"
         app:layout_constraintBottom_toBottomOf="@id/btn_feed_ghost"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toStartOf="@id/tv_feed_heart_count"
+        app:layout_constraintEnd_toStartOf="@id/tv_feed_like_count"
         app:layout_constraintTop_toTopOf="@id/btn_feed_ghost" />
 </androidx.constraintlayout.widget.ConstraintLayout>

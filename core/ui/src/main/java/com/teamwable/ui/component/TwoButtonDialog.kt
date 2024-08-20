@@ -42,6 +42,7 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
         tvDialogTwoButtonDescription.apply {
             if (stringOf(type.description).isBlank()) visible(false) else text = stringOf(type.description)
         }
+        tvDialogTwoButtonTitle.setTextAppearance(type.titleTypo)
         btnDialogTwoButtonYes.text = stringOf(type.yesLabel)
         btnDialogTwoButtonNo.text = stringOf(type.noLabel)
     }

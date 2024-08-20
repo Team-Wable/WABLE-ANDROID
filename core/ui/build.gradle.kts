@@ -7,6 +7,7 @@ android {
 }
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":core:model"))
 
     // AndroidX
     implementation(libs.androidx.navigation.fragment.ktx)

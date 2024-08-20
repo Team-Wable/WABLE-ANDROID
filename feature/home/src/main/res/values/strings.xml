@@ -3,4 +3,7 @@
 
     <!-- home -->
     <string name="content_description_home_navigate_posting">포스팅으로 가는 버튼입니다.</string>
+
+    <!-- home detail -->
+    <string name="label_home_detail_toolbar_back">게시글</string>
 </resources>

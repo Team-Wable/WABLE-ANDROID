@@ -1,12 +1,10 @@
 package com.teamwable.ui.component
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.teamwable.ui.R
 import com.teamwable.ui.databinding.TextLckTeamTagBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.stringOf
@@ -17,23 +15,20 @@ class LckTeamTagTextView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private val binding: TextLckTeamTagBinding
 
+    var teamName: String? = null
+        set(value) {
+            field = value
+            updateTeamTagStyle()
+        }
+
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = TextLckTeamTagBinding.inflate(inflater, this, true)
-
-        if (attrs != null) getAttrs(attrs)
     }
 
-    @SuppressLint("CustomViewStyleable")
-    private fun getAttrs(attrs: AttributeSet) {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.LckTeamTag)
-
-        val teamName = typedArray.getString(R.styleable.LckTeamTag_team_name)
-
-        if (teamName.isNullOrBlank()) applyTeamTagStyle(TeamTag.LCK)
-        else applyTeamTagStyle(TeamTag.toTeamTag(context, teamName))
-
-        typedArray.recycle()
+    private fun updateTeamTagStyle() {
+        val tag = if (teamName.isNullOrBlank()) TeamTag.LCK else TeamTag.toTeamTag(context, teamName!!)
+        applyTeamTagStyle(tag)
     }
 
     private fun applyTeamTagStyle(teamTag: TeamTag) {
