@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,7 +47,7 @@ fun LoginRoute(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
@@ -69,8 +69,7 @@ fun LoginRoute(
         WableButtonDialog(
             dialogType = DialogType.LOGIN,
             onClick = {
-                viewModel.saveIsAutoLogin(true)
-                navigateToHome()
+                viewModel.startKaKaoLogin(context)
             },
             onDismissRequest = { viewModel.showLoginDialog(false) },
         )
