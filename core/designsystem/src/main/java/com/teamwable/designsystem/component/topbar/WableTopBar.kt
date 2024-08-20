@@ -38,7 +38,7 @@ fun WableAppBar(
                     modifier = Modifier.fillMaxHeight(),
                 ) {
                     Icon(
-                        painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_back_btn), // 여기서 drawable 아이콘 사용
+                        painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_back_btn),
                         contentDescription = "",
                     )
                 }
@@ -51,7 +51,7 @@ fun WableAppBar(
                     modifier = Modifier.fillMaxHeight(),
                 ) {
                     Icon(
-                        painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_cancel_btn), // 여기서 drawable 아이콘 사용
+                        painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_cancel_btn),
                         contentDescription = "Close",
                     )
                 }

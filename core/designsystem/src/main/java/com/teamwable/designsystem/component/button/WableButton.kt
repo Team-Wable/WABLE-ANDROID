@@ -53,7 +53,7 @@ fun WableButton(
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 fun WableButtonPreview() {
-    WableTheme { // 테마 적용
+    WableTheme {
         Column {
             WableButton(text = "ㅎㅇㅎㅇ", onClick = {}, enabled = true)
             WableButton(text = "zzzzzzzzzzzz", onClick = {}, enabled = false)
