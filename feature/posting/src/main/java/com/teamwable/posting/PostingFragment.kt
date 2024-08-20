@@ -36,7 +36,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     private val viewModel by viewModels<PostingViewModel>()
 
     private var isTitleNull = true
-    private var isContentNull = true
     private var totalContentLength = 0
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
@@ -166,19 +165,18 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         binding.run {
             etPostingTitle.doAfterTextChanged {
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
-                handleUploadProgressAndBtn(isTitleNull, isContentNull, totalContentLength)
+                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
             }
             etPostingContent.doAfterTextChanged {
-                isContentNull = etPostingContent.text.isNullOrBlank()
                 totalContentLength = etPostingContent.text.length
-                handleUploadProgressAndBtn(isTitleNull, isContentNull, totalContentLength)
+                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
             }
         }
     }
 
-    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, isContentNull: Boolean, totalContentLength: Int) {
+    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalContentLength: Int) {
         when {
-            (!isTitleNull && !isContentNull && totalContentLength <= POSTING_MAX) -> {
+            (!isTitleNull && totalContentLength <= POSTING_MAX) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.purple_50,
