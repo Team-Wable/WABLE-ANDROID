@@ -16,8 +16,4 @@ internal class DefaultAuthRepository @Inject constructor(
     }.onFailure {
         return it.handleThrowable()
     }
-
-    override suspend fun postReissue(headerAccess: String, headerRefresh: String): Result<String> = runCatching {
-        authService.getReissueToken(headerAccess, headerRefresh).data.accessToken
-    }
 }
