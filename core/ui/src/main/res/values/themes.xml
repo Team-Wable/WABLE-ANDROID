@@ -8,12 +8,4 @@
 
     <style name="Theme.Wable" parent="Base.Theme.Wable" />
 
-    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerRadius8" parent="">
-        <item name="cornerSize">8dp</item>
-    </style>
-
 </resources>
