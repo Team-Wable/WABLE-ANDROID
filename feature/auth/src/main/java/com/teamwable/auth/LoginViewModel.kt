@@ -7,11 +7,9 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.teamwable.auth.model.KakaoLoginState
 import com.teamwable.auth.model.LoginSideEffect
 import com.teamwable.data.repository.AuthRepository
 import com.teamwable.data.repository.UserInfoRepository
-import com.teamwable.designsystem.uistate.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,5 +88,53 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private fun postLogin(token: String) {
+        viewModelScope.launch {
+            authRepository.postLogin(KAKAO, BEARER + token)
+                .onSuccess { response ->
+                    saveAccessToken(response.accessToken)
+                    saveRefreshToken(response.refreshToken)
+                    saveNickname(response.nickName)
+                    saveMemberId(response.memberId)
+                    saveIsAutoLogin(true)
+                }.onFailure {
+                    _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(it.message.toString()))
+                }
+        }
+    }
 
+    private fun saveAccessToken(token: String) { // 홈에서 서버 통신 안되면 여길 suspend로 바꿔주세요
+        viewModelScope.launch {
+            userInfoRepository.saveAccessToken(BEARER + token)
+        }
+    }
+
+    private fun saveRefreshToken(token: String) {
+        viewModelScope.launch {
+            userInfoRepository.saveRefreshToken(BEARER + token)
+        }
+    }
+
+    private fun saveNickname(input: String) {
+        viewModelScope.launch {
+            userInfoRepository.saveNickname(input)
+        }
+    }
+
+    private fun saveMemberId(input: Int) {
+        viewModelScope.launch {
+            userInfoRepository.saveMemberId(input)
+        }
+    }
+
+    private fun saveIsAutoLogin(input: Boolean) {
+        viewModelScope.launch {
+            userInfoRepository.saveAutoLogin(input)
+        }
+    }
+
+    companion object {
+        private const val BEARER = "Bearer "
+        private const val KAKAO = "KAKAO"
+    }
 }
