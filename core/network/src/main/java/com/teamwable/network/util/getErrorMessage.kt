@@ -1,7 +1,7 @@
 package com.teamwable.network.util
 
 import com.teamwable.model.network.Error
-import kotlinx.serialization.json.Json
+import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.UnknownHostException
 
@@ -14,8 +14,7 @@ private fun HttpException.getErrorMessage(): String {
 
 private fun parseErrorMessage(errorBody: String): String {
     return try {
-        val errorResponse = Json.decodeFromString<BaseResponse<Unit>>(errorBody)
-        errorResponse.message
+        JSONObject(errorBody).getString("message")
     } catch (e: Exception) {
         UNKNOWN_ERROR_MESSAGE
     }
