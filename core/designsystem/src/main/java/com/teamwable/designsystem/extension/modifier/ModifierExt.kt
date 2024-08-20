@@ -17,11 +17,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 inline fun Modifier.noRippleClickable(
-    crossinline onClick: () -> Unit = {}
+    crossinline onClick: () -> Unit = {},
 ): Modifier = composed {
     this.clickable(
         indication = null,
-        interactionSource = remember { MutableInteractionSource() }
+        interactionSource = remember { MutableInteractionSource() },
     ) {
         onClick()
     }
@@ -30,7 +30,7 @@ inline fun Modifier.noRippleClickable(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Modifier.noRippleDebounceClickable(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ): Modifier = composed {
     var clickable by remember { mutableStateOf(true) }
 

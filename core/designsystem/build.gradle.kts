@@ -6,5 +6,6 @@ android {
     namespace = "com.teamwable.designsystem"
 }
 dependencies {
+    implementation(project(":core:common"))
 }
 
