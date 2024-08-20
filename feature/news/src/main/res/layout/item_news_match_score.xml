@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@id/cl_news_match_score"
             app:layout_constraintStart_toStartOf="@id/cl_news_match_score"
             app:layout_constraintTop_toTopOf="@id/cl_news_match_score"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+            app:shapeAppearance="@style/WableCircleImage" />
 
         <TextView
             android:id="@+id/tv_news_match_score_first_name"
@@ -129,7 +129,7 @@
             app:layout_constraintBottom_toBottomOf="@id/cl_news_match_score"
             app:layout_constraintEnd_toEndOf="@id/cl_news_match_score"
             app:layout_constraintTop_toTopOf="@id/cl_news_match_score"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+            app:shapeAppearance="@style/WableCircleImage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

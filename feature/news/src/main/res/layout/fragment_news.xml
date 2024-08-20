@@ -33,6 +33,18 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_news_tab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar_news"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/tab_lottie" />
+
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_news_tab"
         android:layout_width="match_parent"
@@ -43,11 +55,11 @@
         app:layout_constraintTop_toBottomOf="@id/tl_news" />
 
     <com.google.android.material.tabs.TabLayout
-        app:layout_constraintTop_toBottomOf="@id/appbar_news"
         android:id="@+id/tl_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/lottie_news_tab"
         app:tabIndicator="@drawable/shape_fill_2_rect"
         app:tabIndicatorColor="@color/purple_50"
         app:tabIndicatorFullWidth="false"

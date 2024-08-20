@@ -7,16 +7,6 @@
     <string name="tv_profile_hamburger_customer_service">고객센터</string>
     <string name="tv_profile_hamburger_logout">로그아웃</string>
 
-    <!-- fragment_delete_dialog -->
-    <string name="btn_delete_dialog_delete">삭제하기</string>
-
-    <!-- fragment_logout_dialog -->
-    <string name="tv_logout_dialog_title">로그아웃하시겠어요?</string>
-    <string name="btn_logout_dialog_delete">로그아웃하기</string>
-
-    <!-- fragment_profile_delete_dialog -->
-    <string name="tv_profile_delete_dialog_title">계정을 삭제하시겠어요?</string>
-
     <!-- fragment_profile_delete_confirm -->
     <string name="tv_profile_delete_confirm_title">계정을 삭제하기 전,\n아래 내용을 꼭 확인해 주세요</string>
     <string name="tv_profile_delete_confirm_dot">•</string>

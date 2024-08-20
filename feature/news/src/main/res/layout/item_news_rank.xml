@@ -39,7 +39,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_news_match_team_profile"
-                    app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                    app:shapeAppearance="@style/WableCircleImage" />
 
                 <TextView
                     android:id="@+id/tv_news_rank_team_name"

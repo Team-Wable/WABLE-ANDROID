@@ -5,11 +5,6 @@ object BottomSheetTag {
     const val PROFILE_HAMBURGER_BOTTOM_SHEET = "ProfileHamburgerBottomSheet"
 }
 
-object DialogTag {
-    const val PROFILE_DELETE_DIALOG = "ProfileDeleteDialog"
-    const val LOGOUT_DIALOG = "LogoutDialog"
-}
-
 object Arg {
     const val DIALOG_TYPE = "dialog_type"
     const val DIALOG_RESULT = "dialog_result"
