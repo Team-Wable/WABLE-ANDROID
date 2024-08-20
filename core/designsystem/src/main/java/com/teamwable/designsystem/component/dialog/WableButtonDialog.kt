@@ -27,8 +27,9 @@ fun WableButtonDialog(
     dialogType: DialogType,
     userName: String = "",
     onClick: () -> Unit,
+    onDismissRequest: () -> Unit = {},
 ) {
-    Dialog(onDismissRequest = onClick) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
