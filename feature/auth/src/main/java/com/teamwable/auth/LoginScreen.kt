@@ -14,9 +14,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,9 +25,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.auth.model.LoginSideEffect
+import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.DialogType
 
 @Composable
 fun LoginRoute(
@@ -36,7 +40,9 @@ fun LoginRoute(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.observeAutoLogin()
@@ -52,9 +58,20 @@ fun LoginRoute(
             }
     }
 
+    if (showDialog) {
+        WableButtonDialog(
+            dialogType = DialogType.LOGIN,
+            onClick = {
+                viewModel.saveIsAutoLogin(true)
+                navigateToHome()
+            },
+            onDismissRequest = { viewModel.showLoginDialog(false) },
+        )
+    }
+
     LoginScreen(
         onLoginBtnClick = {
-            viewModel.saveIsAutoLogin(true)
+            viewModel.showLoginDialog(true)
         },
     )
 }
