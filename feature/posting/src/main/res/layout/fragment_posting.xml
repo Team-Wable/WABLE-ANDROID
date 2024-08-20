@@ -86,7 +86,7 @@
                 app:layout_constraintDimensionRatio="312:200"
                 app:layout_constraintTop_toBottomOf="@id/et_posting_title"
                 app:layout_constraintVertical_bias="0"
-                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerRadius8"
+                app:shapeAppearance="@style/WableRoundedImage8"
                 tools:src="@color/purple_50" />
 
             <ImageView
@@ -96,7 +96,6 @@
                 android:layout_marginTop="@dimen/padding_horizontal"
                 android:layout_marginEnd="@dimen/padding_horizontal"
                 android:clickable="true"
-                android:focusable="true"
                 android:src="@drawable/ic_home_img_delete_btn"
                 app:layout_constraintEnd_toEndOf="@id/iv_posting_photo"
                 app:layout_constraintTop_toTopOf="@id/iv_posting_photo" />
@@ -116,6 +115,7 @@
                 android:autoLink="web"
                 android:background="@null"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:gravity="top|start"
                 android:hint="@string/hint_posting_content"
                 android:importantForAutofill="no"
