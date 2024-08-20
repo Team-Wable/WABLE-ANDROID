@@ -5,3 +5,11 @@ import javax.inject.Qualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class WableRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AccessToken
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WithoutTokenInterceptor
