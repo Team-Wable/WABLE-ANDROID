@@ -21,6 +21,7 @@ val Info = Color(0xFF127CF4)
 val Warning = Color(0xFFEE9209)
 val Error = Color(0xFFF01F1F)
 val SystemNavigationBar = Color(0xFFF5F5F5)
+val SystemLoginSystemAppBar = Color(0xFFEBE2FD)
 
 // Gray Scale
 val Black = Color(0xFF0E0E0E)
