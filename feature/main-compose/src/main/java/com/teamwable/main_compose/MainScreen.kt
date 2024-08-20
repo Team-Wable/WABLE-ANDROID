@@ -60,7 +60,7 @@ internal fun MainScreen(
                 NavHost(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
-                    modifier = Modifier.padding(innerPadding), // todo 추후 공통 앱바 사용시 수정
+                    modifier = Modifier.padding(innerPadding),
                 ) {
                     splashNavGraph(
                         navigateToLogIn = {
