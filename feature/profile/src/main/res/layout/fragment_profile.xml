@@ -3,203 +3,212 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/view_profile_appbar"
         layout="@layout/view_profile_appbar" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_profile_img"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/view_profile_appbar"
-        app:shapeAppearanceOverlay="@style/WableCircleImage"
-        tools:src="@drawable/img_empty" />
-
-    <ImageView
-        android:id="@+id/tv_profile_level_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="2dp"
-        android:contentDescription="@string/content_description_profile_level_tag"
-        android:src="@drawable/ic_profile_tag_level_1"
-        app:layout_constraintBottom_toTopOf="@id/tv_profile_nickname"
-        app:layout_constraintStart_toEndOf="@id/iv_profile_img"
-        app:layout_constraintTop_toTopOf="@id/iv_profile_img"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/tv_profile_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:maxLength="10"
-        android:textAppearance="@style/TextAppearance.Wable.Head2"
-        app:layout_constraintBottom_toBottomOf="@id/iv_profile_img"
-        app:layout_constraintStart_toStartOf="@id/tv_profile_level_tag"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_level_tag"
-        tools:text="@string/dummy" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_profile_edit"
-        style="@style/Wable.Icon.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        app:icon="@drawable/ic_profile_edit_btn"
-        app:iconSize="48dp"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/view_profile_appbar" />
-
-    <ImageView
-        android:id="@+id/iv_profile_info_triangle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="9dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_profile_intro_triangle"
-        app:layout_constraintBottom_toTopOf="@id/tv_profile_info"
-        app:layout_constraintStart_toStartOf="@id/tv_profile_info"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_img" />
-
-    <TextView
-        android:id="@+id/tv_profile_info"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_gray200_line_8_rect"
-        android:backgroundTint="@color/gray_100"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="12dp"
-        android:text="@string/label_profile_info"
-        android:textAppearance="@style/TextAppearance.Wable.Body4"
-        android:textColor="@color/gray_700"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_info_triangle" />
-
-    <TextView
-        android:id="@+id/tv_profile_ghost_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/label_profile_ghost"
-        android:textAppearance="@style/TextAppearance.Wable.Caption1"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_info" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_profile_ghost"
-        app:layout_constraintBottom_toBottomOf="@id/tv_profile_ghost_percentage"
-        app:layout_constraintEnd_toStartOf="@id/tv_profile_ghost_percentage"
-        app:layout_constraintTop_toTopOf="@id/tv_profile_ghost_percentage" />
-
-    <TextView
-        android:id="@+id/tv_profile_ghost_percentage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:text="@string/label_ghost_percentage"
-        android:textAppearance="@style/TextAppearance.Wable.Body3"
-        app:layout_constraintBottom_toTopOf="@id/progress_profile_ghost"
-        app:layout_constraintEnd_toEndOf="@id/progress_profile_ghost" />
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress_profile_ghost"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:progress="85"
-        app:indicatorColor="@color/purple_50"
-        app:indicatorTrackGapSize="0dp"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_ghost_label"
-        app:trackColor="@color/gray_200"
-        app:trackCornerRadius="8dp"
-        app:trackStopIndicatorSize="0dp"
-        app:trackThickness="10dp" />
-
-    <TextView
-        android:id="@+id/tv_profile_badge_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="@string/label_profile_badge"
-        android:textAppearance="@style/TextAppearance.Wable.Caption1"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/progress_profile_ghost" />
-
-    <ImageView
-        android:id="@+id/iv_profile_badge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:contentDescription="@string/content_description_profile_badge"
-        android:src="@drawable/ic_profile_badge"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_badge_label" />
-
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_profile_tab"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="-1dp"
-        app:dividerColor="@color/gray_300"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_profile" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_profile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:backgroundTint="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_badge"
-        app:tabIndicator="@drawable/shape_fill_2_rect"
-        app:tabIndicatorColor="@color/purple_50"
-        app:tabIndicatorHeight="2dp"
-        app:tabRippleColor="@color/white"
-        app:tabSelectedTextAppearance="@style/TextAppearance.Wable.Body1"
-        app:tabSelectedTextColor="@color/black"
-        app:tabTextAppearance="@style/TextAppearance.Wable.Body2"
-        app:tabTextColor="@color/gray_600" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_profile"
-        android:layout_width="0dp"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_profile_tab" />
+        app:layout_constraintTop_toBottomOf="@id/view_profile_appbar">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_scrollFlags="scroll">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/padding_horizontal"
+                    android:paddingBottom="14dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_profile_img"
+                        android:layout_width="80dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="16dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/WableCircleImage"
+                        tools:src="@drawable/img_empty" />
+
+                    <ImageView
+                        android:id="@+id/tv_profile_level_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="2dp"
+                        android:contentDescription="@string/content_description_profile_level_tag"
+                        android:src="@drawable/ic_profile_tag_level_1"
+                        app:layout_constraintBottom_toTopOf="@id/tv_profile_nickname"
+                        app:layout_constraintStart_toEndOf="@id/iv_profile_img"
+                        app:layout_constraintTop_toTopOf="@id/iv_profile_img"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:maxLength="10"
+                        android:textAppearance="@style/TextAppearance.Wable.Head2"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_profile_img"
+                        app:layout_constraintStart_toStartOf="@id/tv_profile_level_tag"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_level_tag"
+                        tools:text="@string/dummy" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_profile_edit"
+                        style="@style/Wable.Icon.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="33dp"
+                        app:icon="@drawable/ic_profile_edit_btn"
+                        app:iconSize="48dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_info_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="9dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_profile_intro_triangle"
+                        app:layout_constraintBottom_toTopOf="@id/tv_profile_info"
+                        app:layout_constraintStart_toStartOf="@id/tv_profile_info"
+                        app:layout_constraintTop_toBottomOf="@id/iv_profile_img" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_info"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_gray200_line_8_rect"
+                        android:backgroundTint="@color/gray_100"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="12dp"
+                        android:textAppearance="@style/TextAppearance.Wable.Body4"
+                        android:textColor="@color/gray_700"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/iv_profile_info_triangle"
+                        tools:text="@string/label_profile_info" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_ghost_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/label_profile_ghost"
+                        android:textAppearance="@style/TextAppearance.Wable.Caption1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_info" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_profile_ghost"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_profile_ghost_percentage"
+                        app:layout_constraintEnd_toStartOf="@id/tv_profile_ghost_percentage"
+                        app:layout_constraintTop_toTopOf="@id/tv_profile_ghost_percentage" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_ghost_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:textAppearance="@style/TextAppearance.Wable.Body3"
+                        app:layout_constraintBottom_toTopOf="@id/progress_profile_ghost"
+                        app:layout_constraintEnd_toEndOf="@id/progress_profile_ghost"
+                        tools:text="@string/label_ghost_percentage" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/progress_profile_ghost"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:progress="100"
+                        app:indicatorColor="@color/purple_50"
+                        app:indicatorTrackGapSize="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_ghost_label"
+                        app:trackColor="@color/gray_200"
+                        app:trackCornerRadius="8dp"
+                        app:trackStopIndicatorSize="0dp"
+                        app:trackThickness="10dp" />
+
+                    <TextView
+                        android:id="@+id/tv_profile_badge_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/label_profile_badge"
+                        android:textAppearance="@style/TextAppearance.Wable.Caption1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/progress_profile_ghost" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:contentDescription="@string/content_description_profile_badge"
+                        android:src="@drawable/ic_profile_badge"
+                        app:layout_constraintStart_toStartOf="@id/tv_profile_badge_label"
+                        app:layout_constraintTop_toBottomOf="@id/tv_profile_badge_label" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_profile_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="-1dp"
+                    app:dividerColor="@color/gray_300"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tl_profile" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_profile"
+                    style="@style/Wable.Tab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
