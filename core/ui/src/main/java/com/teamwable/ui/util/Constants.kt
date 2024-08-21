@@ -11,3 +11,8 @@ object Arg {
     const val BOTTOM_SHEET_TYPE = "bottom_sheet_type"
     const val BOTTOM_SHEET_RESULT = "bottom_sheet_result"
 }
+
+object BundleKey {
+    const val USER_ID = "userId"
+    const val USER_NICKNAME = "nickname"
+}
