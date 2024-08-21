@@ -146,7 +146,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:progress="100"
+                        android:progress="0"
                         app:indicatorColor="@color/purple_50"
                         app:indicatorTrackGapSize="0dp"
                         app:layout_constraintEnd_toEndOf="parent"

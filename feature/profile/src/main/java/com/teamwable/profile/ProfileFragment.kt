@@ -1,5 +1,6 @@
 package com.teamwable.profile
 
+import android.animation.ObjectAnimator
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
@@ -50,13 +51,19 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun setGhostProgress(percentage: Int) = with(binding.progressProfileGhost) {
-        progress = abs(100 + percentage)
+        animateProgress(abs(100 + percentage))
         if (percentage < -50) setGhostProgressColor(com.teamwable.ui.R.color.sky_50) else setGhostProgressColor(com.teamwable.ui.R.color.purple_50)
     }
 
     private fun setGhostProgressColor(@ColorRes color: Int) = with(binding) {
         progressProfileGhost.setIndicatorColor(colorOf(color))
         ivProfileGhostIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), color)
+    }
+
+    private fun animateProgress(targetProgress: Int) {
+        val animator = ObjectAnimator.ofInt(binding.progressProfileGhost, "progress", 0, targetProgress)
+        animator.duration = 1000
+        animator.start()
     }
 
     private fun setProfilePagerAdapter() {
