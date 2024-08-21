@@ -19,7 +19,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TokenInterceptor @Inject constructor(
-    private val defaultKumulPreferenceDatasource: DefaultWablePreferenceDatasource,
+    private val defaultWablePreferenceDatasource: DefaultWablePreferenceDatasource,
     private val context: Application,
     private val authService: AuthService,
 ) : Interceptor {
@@ -45,15 +45,15 @@ class TokenInterceptor @Inject constructor(
 
     private suspend fun refreshTokenIfNeeded(): Boolean {
         mutex.withLock {
-            val accessToken = defaultKumulPreferenceDatasource.accessToken.first()
-            val refreshToken = defaultKumulPreferenceDatasource.refreshToken.first()
+            val accessToken = defaultWablePreferenceDatasource.accessToken.first()
+            val refreshToken = defaultWablePreferenceDatasource.refreshToken.first()
             val tokenResult = runBlocking(Dispatchers.IO) {
                 authService.getReissueToken(accessToken, refreshToken)
             }
 
             return when {
                 tokenResult.success -> {
-                    defaultKumulPreferenceDatasource.updateAccessToken(
+                    defaultWablePreferenceDatasource.updateAccessToken(
                         BEARER + tokenResult.data.accessToken,
                     )
                     true
@@ -66,7 +66,7 @@ class TokenInterceptor @Inject constructor(
 
     private fun handleFailedTokenReissue() = with(context) {
         CoroutineScope(Dispatchers.Main).launch {
-            defaultKumulPreferenceDatasource.clear()
+            defaultWablePreferenceDatasource.clear()
             startActivity(
                 Intent.makeRestartActivityTask(
                     packageManager.getLaunchIntentForPackage(packageName)?.component,
@@ -79,7 +79,7 @@ class TokenInterceptor @Inject constructor(
         .addHeader(
             name = AUTHORIZATION,
             value = runBlocking {
-                defaultKumulPreferenceDatasource.accessToken.first()
+                defaultWablePreferenceDatasource.accessToken.first()
             },
         ).build()
 
