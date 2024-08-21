@@ -1,5 +1,7 @@
 package com.teamwable.main_compose
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,8 +17,10 @@ class MainComposeActivity : ComponentActivity() {
     @Inject
     lateinit var intentProvider: IntentProvider
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             WableTheme {
                 val navigator: MainNavigator = rememberMainNavigator()

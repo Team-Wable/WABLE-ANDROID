@@ -25,8 +25,7 @@
         tools:targetApi="31">
         <activity
             android:name="com.teamwable.main_compose.MainComposeActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
