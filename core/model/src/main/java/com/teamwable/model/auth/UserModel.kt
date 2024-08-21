@@ -7,7 +7,7 @@ data class UserModel(
     val refreshToken: String,
     val memberProfileUrl: String,
     val isNewUser: Boolean,
-    val isPushAlarmAllowed: Any?,
+    val isPushAlarmAllowed: Boolean?,
     val memberFanTeam: String,
     val memberLckYears: Int,
     val memberLevel: Int,
