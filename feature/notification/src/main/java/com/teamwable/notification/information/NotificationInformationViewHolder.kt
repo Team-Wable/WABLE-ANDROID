@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.NotificationInformationModel
 import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
+import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.util.CalculateTime
 
@@ -26,6 +27,7 @@ class NotificationInformationViewHolder(
         item = data
 
         with(binding) {
+            ivNotificationVpProfile.load(data.imageUrl)
             tvNotificationVpContent.apply {
                 when (data.infoNotificationType) {
                     "GAMEDONE" -> text = context.stringOf(R.string.tv_notification_information_game_done)
@@ -33,7 +35,6 @@ class NotificationInformationViewHolder(
                     "WEEKDONE" -> text = context.stringOf(R.string.tv_notification_information_week_done)
                 }
             }
-
             tvNotificationVpTime.text = CalculateTime().getCalculateTime(root.context, data.time)
         }
     }
