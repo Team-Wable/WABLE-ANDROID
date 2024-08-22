@@ -3,6 +3,8 @@ package com.teamwable.profile
 import android.animation.ObjectAnimator
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.profile.databinding.FragmentProfileBinding
@@ -10,13 +12,18 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.stringOf
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
+    private val viewModel: ProfileViewModel by viewModels()
+
     override fun initView() {
         initAppbarBtnVisibility()
         setAppbarText()
@@ -50,7 +57,19 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
         setGhostProgress(mock.ghost)
     }
 
-    private fun setGhostProgress(percentage: Int) = with(binding.progressProfileGhost) {
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle)
+                .collect { uiState ->
+                    when (uiState) {
+                        is ProfileUiState.FetchUserId -> Unit
+                        else -> Unit
+                    }
+                }
+        }
+    }
+
+    private fun setGhostProgress(percentage: Int) {
         animateProgress(abs(100 + percentage))
         if (percentage < -50) setGhostProgressColor(com.teamwable.ui.R.color.sky_50) else setGhostProgressColor(com.teamwable.ui.R.color.purple_50)
     }
@@ -67,7 +86,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
     }
 
     private fun setProfilePagerAdapter() {
-        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, mock.id, mock.nickName)
+        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, mock.id, mock.nickName, ProfileUserType.AUTH)
         TabLayoutMediator(
             binding.tlProfile, binding.vpProfile,
         ) { tab, position ->
@@ -78,7 +97,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
     // TODO : mock data 지우기
     companion object {
         val mock = Profile(
-            id = 0,
+            id = 7,
             nickName = "배 차은우",
             profileImg = "https://github.com/user-attachments/assets/66fdd6f1-c0c5-4438-81f4-bea09b09acd1",
             intro = "",

@@ -15,4 +15,5 @@ object Arg {
 object BundleKey {
     const val USER_ID = "userId"
     const val USER_NICKNAME = "nickname"
+    const val USER_TYPE = "userType"
 }
