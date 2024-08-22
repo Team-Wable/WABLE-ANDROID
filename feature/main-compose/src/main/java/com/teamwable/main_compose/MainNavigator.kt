@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
 import com.teamwable.navigation.Route
+import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
+import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
 
 internal class MainNavigator(
     val navController: NavHostController,
@@ -23,6 +25,14 @@ internal class MainNavigator(
 
     fun navigateToLogin(navOptions: NavOptions) {
         navController.navigateLogin(navOptions)
+    }
+
+    fun navigateToFirstLckWatch() {
+        navController.navigateToFirstLckWatch()
+    }
+
+    fun navigateToSelectLckTeam() {
+        navController.navigateToSelectLckTeam()
     }
 
     private fun popBackStack() {
