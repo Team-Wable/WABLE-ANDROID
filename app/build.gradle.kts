@@ -12,6 +12,14 @@ val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
+val properties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
+fun String.removeQuotes(): String {
+    return this.replace("\"", "")
+}
+
 android {
     namespace = "com.teamwable.wable"
     compileSdk = 34
@@ -20,6 +28,11 @@ android {
         applicationId = "com.teamwable.wable"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.appVersion.get()
+
+        val kakaoAppKey = properties["kakao.app.key"].toString().removeQuotes()
+
+        buildConfigField("String", "KAKAO_APP_KEY", "\"$kakaoAppKey\"")
+        manifestPlaceholders["kakaoAppkey"] = kakaoAppKey
     }
 
     signingConfigs {
@@ -55,7 +68,9 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
 
-    //firebase
+    // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    // kakao
+    implementation(libs.kakao.login)
 }
