@@ -60,6 +60,7 @@ fun LoginRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is LoginSideEffect.NavigateToMain -> navigateToHome()
+                    is LoginSideEffect.NavigateToFirstLckWatch -> navigateToFirstLckWatch()
                     else -> Unit
                 }
             }

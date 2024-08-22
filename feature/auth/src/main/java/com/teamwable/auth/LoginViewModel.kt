@@ -96,7 +96,7 @@ class LoginViewModel @Inject constructor(
                     saveRefreshToken(response.refreshToken)
                     saveNickname(response.nickName)
                     saveMemberId(response.memberId)
-                    saveIsAutoLogin(true)
+                    checkIsNewUser(response.isNewUser)
                 }.onFailure {
                     _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(it.message.toString()))
                 }
@@ -124,6 +124,13 @@ class LoginViewModel @Inject constructor(
     private fun saveMemberId(input: Int) {
         viewModelScope.launch {
             userInfoRepository.saveMemberId(input)
+        }
+    }
+
+    private fun checkIsNewUser(newUser: Boolean) {
+        viewModelScope.launch {
+            if (newUser) saveIsAutoLogin(true)
+            else _loginSideEffect.emit(LoginSideEffect.NavigateToFirstLckWatch)
         }
     }
 
