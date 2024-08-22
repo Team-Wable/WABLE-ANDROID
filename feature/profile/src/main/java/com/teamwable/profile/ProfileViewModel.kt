@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.teamwable.data.repository.FeedRepository
+import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
+import com.teamwable.model.Profile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,25 +15,43 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val userInfoRepository: UserInfoRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    fun updateFeeds(userId: Long): Flow<PagingData<Feed>> = feedRepository.getProfileFeeds(userId).map {
-        Timber.e(it.toString())
-        it
+    fun updateFeeds(userId: Long): Flow<PagingData<Feed>> = feedRepository.getProfileFeeds(userId)
+
+    fun fetchAuthId(userId: Long) {
+        viewModelScope.launch {
+            userInfoRepository.getMemberId()
+                .map { it.toLong() }
+                .collectLatest { fetchUserType(userId, it) }
+        }
     }
 
-    fun fetchUserId(memberId: Long?) {
+    private fun fetchUserType(userId: Long, authId: Long) {
+        val userType = if (userId == -1L || userId == authId) {
+            ProfileUserType.AUTH
+        } else {
+            ProfileUserType.MEMBER
+        }
+
+        fetchProfileInfo(if (userType == ProfileUserType.AUTH) authId else userId)
+        _uiState.value = ProfileUiState.UserTypeDetermined(userType)
+    }
+
+    private fun fetchProfileInfo(userId: Long) {
         viewModelScope.launch {
-            userInfoRepository.getMemberId().collectLatest { _uiState.value = ProfileUiState.FetchUserId(it) }
+            profileRepository.getProfileInfo(userId)
+                .onSuccess { _uiState.value = ProfileUiState.Success(it) }
+                .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }
 }
@@ -39,5 +59,9 @@ class ProfileViewModel @Inject constructor(
 sealed interface ProfileUiState {
     data object Loading : ProfileUiState
 
-    class FetchUserId(val userId: Int) : ProfileUiState
+    data class Success(val profile: Profile) : ProfileUiState
+
+    data class UserTypeDetermined(val userType: ProfileUserType) : ProfileUiState
+
+    data class Error(val errorMessage: String) : ProfileUiState
 }

@@ -1,6 +1,7 @@
 package com.teamwable.profile
 
 import android.animation.ObjectAnimator
+import android.os.Bundle
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
+import com.teamwable.ui.util.BundleKey
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -23,38 +25,17 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     private val viewModel: ProfileViewModel by viewModels()
+    private var memberId: Long = -1
+    private var userType = ProfileUserType.AUTH
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        memberId = arguments?.getLong(BundleKey.USER_ID) ?: -1
+    }
 
     override fun initView() {
-        initAppbarBtnVisibility()
-        setAppbarText()
-        initAppbarHamburgerClickListener()
-        setLayout()
-        setProfilePagerAdapter()
-    }
-
-    private fun setAppbarText() {
-        binding.viewProfileAppbar.tvProfileAppbarTitle.text = "배 차은우"
-    }
-
-    private fun initAppbarBtnVisibility() {
-        with(binding.viewProfileAppbar) {
-            btnProfileAppbarBack.visible(false)
-            btnProfileAppbarHamburger.visible(true)
-        }
-    }
-
-    private fun initAppbarHamburgerClickListener() {
-        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
-            ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
-        }
-    }
-
-    private fun setLayout() = with(binding) {
-        ivProfileImg.load(mock.profileImg)
-        tvProfileNickname.text = mock.nickName
-        tvProfileInfo.text = getString(R.string.label_profile_info, mock.teamTag, mock.lckYears)
-        tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, mock.ghost)
-        setGhostProgress(mock.ghost)
+        viewModel.fetchAuthId(memberId)
+        collect()
     }
 
     private fun collect() {
@@ -62,10 +43,41 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
             viewModel.uiState.flowWithLifecycle(viewLifeCycle)
                 .collect { uiState ->
                     when (uiState) {
-                        is ProfileUiState.FetchUserId -> Unit
+                        is ProfileUiState.UserTypeDetermined -> userType = uiState.userType
+                        is ProfileUiState.Success -> {
+                            setLayout(uiState.profile)
+                            setProfilePagerAdapter(uiState.profile)
+                        }
+
                         else -> Unit
                     }
                 }
+        }
+    }
+
+    private fun setLayout(data: Profile) = with(binding) {
+        initAppbarBtnVisibility()
+        initAppbarHamburgerClickListener()
+        viewProfileAppbar.tvProfileAppbarTitle.text = data.nickName
+        ivProfileImg.load(data.profileImg)
+        tvProfileNickname.text = data.nickName
+        tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag, data.lckYears)
+        tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, data.ghost)
+        setGhostProgress(data.ghost)
+    }
+
+    private fun initAppbarBtnVisibility() {
+        with(binding.viewProfileAppbar) {
+            val isAuthUser = userType == ProfileUserType.AUTH
+
+            btnProfileAppbarBack.visible(!isAuthUser)
+            btnProfileAppbarHamburger.visible(isAuthUser)
+        }
+    }
+
+    private fun initAppbarHamburgerClickListener() {
+        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
+            ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
         }
     }
 
@@ -85,26 +97,12 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
         animator.start()
     }
 
-    private fun setProfilePagerAdapter() {
-        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, mock.id, mock.nickName, ProfileUserType.AUTH)
+    private fun setProfilePagerAdapter(data: Profile) {
+        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, data.id, data.nickName, userType)
         TabLayoutMediator(
             binding.tlProfile, binding.vpProfile,
         ) { tab, position ->
             tab.text = stringOf(ProfileTabType.entries[position].label)
         }.attach()
-    }
-
-    // TODO : mock data 지우기
-    companion object {
-        val mock = Profile(
-            id = 7,
-            nickName = "배 차은우",
-            profileImg = "https://github.com/user-attachments/assets/66fdd6f1-c0c5-4438-81f4-bea09b09acd1",
-            intro = "",
-            ghost = -10,
-            teamTag = "T1",
-            lckYears = 2022,
-            level = 1,
-        )
     }
 }
