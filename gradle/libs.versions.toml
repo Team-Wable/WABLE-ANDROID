@@ -65,7 +65,7 @@ androidxComposeCompiler = "1.5.14"
 # https://developer.android.com/jetpack/androidx/releases/navigation
 androidxComposeNavigation = "2.8.0-beta06"
 # https://developer.android.com/jetpack/androidx/releases/compose-material3
-androidxComposeMaterial3 = "1.2.1"
+androidxComposeMaterial3 = "1.3.0-rc01"
 # # https://developer.android.com/jetpack/androidx/releases/test
 androidxTestExt = "1.1.5"
 hiltNavigationComposeVersion = "1.2.0"
