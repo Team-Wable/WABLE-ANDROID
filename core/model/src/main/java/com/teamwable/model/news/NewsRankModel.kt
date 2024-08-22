@@ -1,4 +1,4 @@
-package com.teamwable.model
+package com.teamwable.model.news
 
 data class NewsRankModel(
     val teamRank: Int,

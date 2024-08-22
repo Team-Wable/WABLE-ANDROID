@@ -2,7 +2,7 @@ package com.teamwable.news.rank
 
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NewsRankModel
+import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.databinding.ItemNewsRankBinding
 
 class NewsRankViewHolder(

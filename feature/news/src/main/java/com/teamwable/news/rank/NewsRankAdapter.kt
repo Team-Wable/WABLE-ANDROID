@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwable.model.NewsRankModel
+import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.databinding.ItemNewsRankBinding
 import com.teamwable.ui.extensions.ItemDiffCallback
 
