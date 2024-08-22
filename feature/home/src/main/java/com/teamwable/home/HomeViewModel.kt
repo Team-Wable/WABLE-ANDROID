@@ -12,5 +12,5 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
 ) : ViewModel() {
-    fun updateFeeds(): Flow<PagingData<Feed>> = feedRepository.getFeeds(20)
+    fun updateFeeds(): Flow<PagingData<Feed>> = feedRepository.getHomeFeeds(20)
 }

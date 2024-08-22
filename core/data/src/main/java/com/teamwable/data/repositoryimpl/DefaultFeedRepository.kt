@@ -16,7 +16,7 @@ import javax.inject.Inject
 class DefaultFeedRepository @Inject constructor(
     private val apiService: FeedService,
 ) : FeedRepository {
-    override fun getFeeds(pageSize: Int): Flow<PagingData<Feed>> {
+    override fun getHomeFeeds(pageSize: Int): Flow<PagingData<Feed>> {
         return Pager(PagingConfig(pageSize, prefetchDistance = 0)) {
             FeedPagingSource(apiService)
         }.flow.map { pagingData ->

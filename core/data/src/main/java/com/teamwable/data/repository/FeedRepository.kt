@@ -5,5 +5,5 @@ import com.teamwable.model.Feed
 import kotlinx.coroutines.flow.Flow
 
 interface FeedRepository {
-    fun getFeeds(pageSize: Int): Flow<PagingData<Feed>>
+    fun getHomeFeeds(pageSize: Int): Flow<PagingData<Feed>>
 }
