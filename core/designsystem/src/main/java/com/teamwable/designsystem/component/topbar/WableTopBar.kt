@@ -26,10 +26,9 @@ fun WableAppBar(
 
     TopAppBar(
         title = {},
-        colors =
-            TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = WableTheme.colors.purple10,
-            ),
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = WableTheme.colors.white,
+        ),
         modifier = modifier.height(56.dp),
         navigationIcon = {
             if (canNavigateBack) {
