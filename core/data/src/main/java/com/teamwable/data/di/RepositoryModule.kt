@@ -2,9 +2,11 @@ package com.teamwable.data.di
 
 import com.teamwable.data.repository.AuthRepository
 import com.teamwable.data.repository.DummyRepository
+import com.teamwable.data.repository.NewsRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repositoryimpl.DefaultAuthRepository
 import com.teamwable.data.repositoryimpl.DefaultDummyRepository
+import com.teamwable.data.repositoryimpl.DefaultNewsRepository
 import com.teamwable.data.repositoryimpl.DefaultUserInfoRepository
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.datastore.datasource.WablePreferencesDataSource
@@ -38,4 +40,8 @@ internal abstract class RepositoryModule {
     abstract fun bindsAuthRepository(
         repositoryImpl: DefaultAuthRepository,
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsNewsRepository(repositoryImpl: DefaultNewsRepository): NewsRepository
 }
