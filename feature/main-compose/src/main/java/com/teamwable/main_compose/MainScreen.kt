@@ -78,7 +78,7 @@ internal fun MainScreen(
                         intentProvider = intentProvider,
                     )
                     loginNavGraph(
-                        navigateToOnBoarding = {},
+                        navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
                         navigateToHome = { startActivity(localContext, intent, null) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )

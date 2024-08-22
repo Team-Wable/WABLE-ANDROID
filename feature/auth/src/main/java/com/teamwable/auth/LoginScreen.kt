@@ -42,7 +42,7 @@ import com.teamwable.designsystem.type.DialogType
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToOnBoarding: () -> Unit,
+    navigateToFirstLckWatch: () -> Unit,
     navigateToHome: () -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
