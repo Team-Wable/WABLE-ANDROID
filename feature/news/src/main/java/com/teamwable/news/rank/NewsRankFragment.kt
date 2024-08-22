@@ -4,27 +4,43 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import com.teamwable.common.uistate.UiState
+import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.databinding.FragmentNewsRankBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRankBinding::inflate) {
     private val viewModel: NewsViewModel by viewModels()
 
     override fun initView() {
-        setSeasonText()
+        viewModel.getRank()
         setOpinionText()
 
-        initNewsRankAdapter()
+        setupGameTypeObserve()
+        setupRankObserve()
 
         initOpinionBtnClickListener()
     }
 
-    private fun setSeasonText() {
-        binding.viewNewsRankSeason.tvNewsSeasonTitle.text = "2024 Wable LCK"
+    private fun setupGameTypeObserve() {
+        viewModel.gameTypeUiState.flowWithLifecycle(lifecycle).onEach {
+            when (it) {
+                is UiState.Success -> setSeasonText(it.data)
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun setSeasonText(gameType: String) {
+        binding.viewNewsRankSeason.tvNewsSeasonTitle.text = gameType
     }
 
     private fun initOpinionBtnClickListener() {
@@ -33,12 +49,21 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
         }
     }
 
-    private fun initNewsRankAdapter() {
-        binding.rvNewsRank.adapter =
-            NewsRankAdapter(requireContext()).apply {
-                submitList(viewModel.mockNewsRankList)
+    private fun setupRankObserve() {
+        viewModel.rankUiState.flowWithLifecycle(lifecycle).onEach {
+            when (it) {
+                is UiState.Success -> initNewsRankAdapter(it.data)
+                else -> Unit
             }
-        binding.rvNewsRank.addItemDecoration(NewsRankItemDecorator(requireContext()))
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun initNewsRankAdapter(rankData: List<NewsRankModel>) = with(binding) {
+        rvNewsRank.adapter =
+            NewsRankAdapter(requireContext()).apply {
+                submitList(rankData)
+            }
+        rvNewsRank.addItemDecoration(NewsRankItemDecorator(requireContext()))
     }
 
     private fun setOpinionText() {
