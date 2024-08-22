@@ -19,6 +19,8 @@ import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
+import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
+import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -50,6 +52,7 @@ internal fun MainScreen(
                 visibility = navigator.shouldShowTopBar(),
                 canNavigateBack = navigator.isBackStackNotEmpty(),
                 navigateUp = { navigator.navigateUp() },
+                resetToLogin = { navigator.resetToLogin() },
             )
         },
         content = { innerPadding ->
@@ -80,6 +83,14 @@ internal fun MainScreen(
                     loginNavGraph(
                         navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
                         navigateToHome = { startActivity(localContext, intent, null) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    firstLckWatchNavGraph(
+                        navigateToSelectLckTeam = { navigator.navigateToSelectLckTeam() },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    selectLckTeamNavGraph(
+                        navigateToSelectLckTeam = {},
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }
