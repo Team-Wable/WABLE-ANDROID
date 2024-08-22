@@ -55,12 +55,12 @@ internal fun MainScreen(
         content = { innerPadding ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(innerPadding),
             ) {
                 NavHost(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
-                    modifier = Modifier.padding(innerPadding),
                 ) {
                     splashNavGraph(
                         navigateToLogIn = {
