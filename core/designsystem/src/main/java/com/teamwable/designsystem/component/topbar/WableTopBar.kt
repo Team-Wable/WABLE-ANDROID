@@ -20,6 +20,7 @@ fun WableAppBar(
     visibility: Boolean = false,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit = {},
+    resetToLogin: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     if (!visibility) return
@@ -46,7 +47,7 @@ fun WableAppBar(
         actions = {
             if (canNavigateBack) {
                 IconButton(
-                    onClick = navigateUp,
+                    onClick = resetToLogin,
                     modifier = Modifier.fillMaxHeight(),
                 ) {
                     Icon(

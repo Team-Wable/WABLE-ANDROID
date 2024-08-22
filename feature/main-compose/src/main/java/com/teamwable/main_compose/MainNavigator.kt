@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
 import com.teamwable.navigation.Route
 
@@ -32,6 +33,17 @@ internal class MainNavigator(
         if (!isSameCurrentDestination<Route.Login>()) {
             popBackStack()
         }
+    }
+
+    fun resetToLogin() {
+        val navOptions = navOptions {
+            popUpTo(startDestination) {
+                saveState = true
+            }
+            launchSingleTop = true
+        }
+
+        navController.navigateLogin(navOptions)
     }
 
     fun isBackStackNotEmpty(): Boolean = navController.previousBackStackEntry != null
