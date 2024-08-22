@@ -1,11 +1,11 @@
 package com.teamwable.ui.shareAdapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
 import com.teamwable.model.Feed
 import com.teamwable.ui.extensions.ItemDiffCallback
 
-class FeedAdapter(private val feedClickListener: FeedClickListener) : ListAdapter<Feed, FeedViewHolder>(feedDiffCallback) {
+class FeedAdapter(private val feedClickListener: FeedClickListener) : PagingDataAdapter<Feed, FeedViewHolder>(feedDiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder = FeedViewHolder.from(parent, feedClickListener)
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) = holder.bind(getItem(position))
