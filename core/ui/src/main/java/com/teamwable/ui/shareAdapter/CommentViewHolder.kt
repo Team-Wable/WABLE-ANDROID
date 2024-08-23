@@ -30,8 +30,8 @@ class CommentViewHolder private constructor(
         }
     }
 
-    fun bind(comment: Comment) {
-        item = comment
+    fun bind(comment: Comment?) {
+        item = comment ?: return
         with(binding) {
             ivCommentProfileImg.load(comment.postAuthorProfile)
             tvCommentNickname.text = comment.postAuthorNickname
