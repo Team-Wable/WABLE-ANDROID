@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.notification.NotificationActionModel
 import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
+import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.util.CalculateTime
 import timber.log.Timber
@@ -39,7 +40,7 @@ class NotificationActionViewHolder(
     @RequiresApi(Build.VERSION_CODES.O)
     fun bind(data: NotificationActionModel?) {
         with(binding) {
-            item = data?: return
+            item = data ?: return
 
             val spannableText = when (data.notificationTriggerType) {
                 "contentLiked" -> {
@@ -109,6 +110,7 @@ class NotificationActionViewHolder(
                 }
             }
 
+            ivNotificationVpProfile.load(data.triggerMemberProfileUrl)
             tvNotificationVpContent.text = spannableText
             tvNotificationVpTime.text = CalculateTime().getCalculateTime(root.context, data.time)
         }
