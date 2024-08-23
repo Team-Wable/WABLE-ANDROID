@@ -1,8 +1,9 @@
-package com.teamwable.profile
+package com.teamwable.profile.hamburger
 
 import android.content.Intent
 import android.net.Uri
 import androidx.navigation.fragment.findNavController
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.BottomsheetProfileHamburgerBinding
 import com.teamwable.ui.base.BindingBottomSheetFragment
 import com.teamwable.ui.component.TwoButtonDialog

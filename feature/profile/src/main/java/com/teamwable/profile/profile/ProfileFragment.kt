@@ -1,4 +1,4 @@
-package com.teamwable.profile
+package com.teamwable.profile.profile
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -8,7 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
+import com.teamwable.profile.ProfileTabType
+import com.teamwable.profile.ProfileUiState
+import com.teamwable.profile.ProfileUserType
+import com.teamwable.profile.ProfileViewModel
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileBinding
+import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.load

@@ -1,4 +1,4 @@
-package com.teamwable.profile
+package com.teamwable.profile.profile
 
 import android.os.Build
 import android.os.Bundle
@@ -6,6 +6,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.Feed
+import com.teamwable.profile.ProfileUserType
+import com.teamwable.profile.ProfileViewModel
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.DeepLinkDestination
