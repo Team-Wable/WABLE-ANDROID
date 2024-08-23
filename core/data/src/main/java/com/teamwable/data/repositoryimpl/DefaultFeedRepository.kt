@@ -9,6 +9,7 @@ import com.teamwable.data.repository.FeedRepository
 import com.teamwable.model.Feed
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.util.GenericPagingSource
+import com.teamwable.network.util.handleThrowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -40,5 +41,11 @@ class DefaultFeedRepository @Inject constructor(
         }.flow.map { pagingData ->
             pagingData.map { it.toFeed() }
         }
+    }
+
+    override suspend fun deleteFeed(feedId: Long): Result<Boolean> = runCatching {
+        apiService.deleteFeed(feedId).success
+    }.onFailure {
+        return it.handleThrowable()
     }
 }

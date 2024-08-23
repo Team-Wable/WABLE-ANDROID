@@ -1,4 +1,4 @@
-package com.teamwable.profile
+package com.teamwable.ui.type
 
 enum class ProfileUserType {
     AUTH(),

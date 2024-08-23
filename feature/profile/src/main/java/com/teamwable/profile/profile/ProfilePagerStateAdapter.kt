@@ -3,7 +3,7 @@ package com.teamwable.profile.profile
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamwable.profile.ProfileTabType
-import com.teamwable.profile.ProfileUserType
+import com.teamwable.ui.type.ProfileUserType
 
 class ProfilePagerStateAdapter(
     fragment: Fragment,
