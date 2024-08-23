@@ -12,6 +12,7 @@ import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("profile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onFeedImageClick(image: String) {

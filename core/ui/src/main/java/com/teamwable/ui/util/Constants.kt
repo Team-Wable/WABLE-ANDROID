@@ -10,6 +10,7 @@ object Arg {
     const val DIALOG_RESULT = "dialog_result"
     const val BOTTOM_SHEET_TYPE = "bottom_sheet_type"
     const val BOTTOM_SHEET_RESULT = "bottom_sheet_result"
+    const val PROFILE_USER_ID = "user_id"
 }
 
 object BundleKey {

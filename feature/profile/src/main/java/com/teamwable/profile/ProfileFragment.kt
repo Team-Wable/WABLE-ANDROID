@@ -16,21 +16,22 @@ import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
-import com.teamwable.ui.util.BundleKey
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     private val viewModel: ProfileViewModel by viewModels()
-    private var memberId: Long = -1
+    private var memberId = -1L
     private var userType = ProfileUserType.AUTH
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        memberId = arguments?.getLong(BundleKey.USER_ID) ?: -1
+        memberId = requireArguments().getLong(Arg.PROFILE_USER_ID)
     }
 
     override fun initView() {

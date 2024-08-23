@@ -9,6 +9,11 @@
         android:name="com.teamwable.profile.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="user_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <deepLink app:uri="@string/deeplink_url_profile" />
         <action
             android:id="@+id/action_profile_to_profile_information"
             app:destination="@id/navigation_profile_information" />
@@ -38,7 +43,7 @@
         android:id="@+id/navigation_profile_delete_confirm"
         android:name="com.teamwable.profile.ProfileDeleteConfirmFragment"
         android:label="ProfileDeleteConfirmFragment"
-        tools:layout="@layout/fragment_profile_delete_confirm"/>
+        tools:layout="@layout/fragment_profile_delete_confirm" />
     <fragment
         android:id="@+id/navigation_push_notification"
         android:name="com.teamwable.profile.PushNotificationFragment"
