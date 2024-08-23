@@ -6,4 +6,5 @@ import com.teamwable.model.profile.MemberDataModel
 interface ProfileRepository {
     suspend fun getProfileInfo(userId: Long): Result<Profile>
     suspend fun getMemberData(): Result<MemberDataModel>
+    suspend fun patchWithdrawal(deletedReason: List<String>): Result<Boolean>
 }

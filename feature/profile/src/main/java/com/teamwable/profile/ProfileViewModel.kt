@@ -3,17 +3,19 @@ package com.teamwable.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.teamwable.data.repository.FeedRepository
 import com.teamwable.common.uistate.UiState
+import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Profile
-import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.model.profile.MemberDataModel
+import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -31,6 +33,9 @@ class ProfileViewModel @Inject constructor(
 
     private val _memberDataUiState = MutableStateFlow<UiState<MemberDataModel>>(UiState.Empty)
     val memberDataUiState = _memberDataUiState.asStateFlow()
+
+    private val _withdrawalUiState = MutableSharedFlow<UiState<Boolean>>()
+    val withdrawalUiState = _withdrawalUiState.asSharedFlow()
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> = feedRepository.getProfileFeeds(userId)
 
@@ -77,6 +82,18 @@ class ProfileViewModel @Inject constructor(
                 .onFailure { _memberDataUiState.value = UiState.Failure(it.message.toString()) }
         }
     }
+
+    fun patchCheck(deletedReason: List<String>) =
+        viewModelScope.launch {
+            _withdrawalUiState.emit(UiState.Loading)
+            profileRepository.patchWithdrawal(deletedReason)
+                .onSuccess { _withdrawalUiState.emit(UiState.Success(it)) }
+                .onFailure { _withdrawalUiState.emit(UiState.Failure(it.message.toString())) }
+        }
+
+    suspend fun clearInfo() = userInfoRepository.clearAll()
+
+    suspend fun checkLogin(check: Boolean) = userInfoRepository.saveAutoLogin(check)
 }
 
 sealed interface ProfileUiState {
