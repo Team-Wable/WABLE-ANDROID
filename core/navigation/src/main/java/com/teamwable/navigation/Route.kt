@@ -13,7 +13,7 @@ sealed interface Route {
     data object FirstLckWatch : Route
 
     @Serializable
-    data object SelectLckTeam : Route
+    data class SelectLckTeam(val userList: List<String>) : Route
 
     @Serializable
     data object Profile : Route
