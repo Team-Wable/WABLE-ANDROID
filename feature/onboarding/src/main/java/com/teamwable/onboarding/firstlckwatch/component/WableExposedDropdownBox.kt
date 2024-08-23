@@ -30,7 +30,7 @@ import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun WableExposedDropdownBox(
-    options: PersistentList<String>,
+    options: PersistentList<Int>,
     expanded: Boolean = false,
     selectedIndex: Int = 0,
     listState: LazyListState,
@@ -50,7 +50,7 @@ fun WableExposedDropdownBox(
                     .noRippleClickable { onExpandedChange(!expanded) },
             ) {
                 Text(
-                    text = options[selectedIndex], // 선택된 연도를 표시
+                    text = options[selectedIndex].toString(), // 선택된 연도를 표시
                     style = WableTheme.typography.body01,
                     color = WableTheme.colors.black,
                     modifier = Modifier
@@ -83,7 +83,7 @@ fun WableExposedDropdownBox(
                 ) {
                     itemsIndexed(options) { index, year ->
                         LckYearDropdownItem(
-                            year = year,
+                            year = year.toString(),
                             onClick = {
                                 onSelectedIndexChange(index)
                                 onExpandedChange(false)
