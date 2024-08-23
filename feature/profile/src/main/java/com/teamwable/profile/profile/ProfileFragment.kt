@@ -6,6 +6,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.profile.ProfileTabType
@@ -63,6 +64,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
 
     private fun setLayout(data: Profile) = with(binding) {
         initAppbarBtnVisibility()
+        initBackBtnClickListener()
         initAppbarHamburgerClickListener()
         viewProfileAppbar.tvProfileAppbarTitle.text = data.nickName
         ivProfileImg.load(data.profileImg)
@@ -78,6 +80,12 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
 
             btnProfileAppbarBack.visible(!isAuthUser)
             btnProfileAppbarHamburger.visible(isAuthUser)
+        }
+    }
+
+    private fun initBackBtnClickListener() {
+        binding.viewProfileAppbar.btnProfileAppbarBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
