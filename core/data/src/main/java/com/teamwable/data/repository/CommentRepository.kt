@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentRepository {
     fun getHomeDetailComments(feedId: Long): Flow<PagingData<Comment>>
+
+    fun getProfileComments(userId: Long): Flow<PagingData<Comment>>
 }

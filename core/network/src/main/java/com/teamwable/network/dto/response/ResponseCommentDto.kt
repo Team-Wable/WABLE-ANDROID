@@ -18,4 +18,5 @@ data class ResponseCommentDto(
     @SerialName("isDeleted") val isDeleted: Boolean? = null,
     @SerialName("commentImageUrl") val commentImageUrl: String? = null,
     @SerialName("memberFanTeam") val memberFanTeam: String,
+    @SerialName("contentId") val contentId: Long? = null,
 )

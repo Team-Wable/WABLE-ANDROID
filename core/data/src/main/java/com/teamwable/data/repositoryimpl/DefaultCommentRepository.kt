@@ -17,13 +17,26 @@ class DefaultCommentRepository @Inject constructor(
     private val apiService: CommentService,
 ) : CommentRepository {
     override fun getHomeDetailComments(feedId: Long): Flow<PagingData<Comment>> {
-        val homeFeedPagingSource = GenericPagingSource(
+        val homeDetailCommentPagingSource = GenericPagingSource(
             apiCall = { cursor -> apiService.getHomeDetailComments(feedId, cursor).data },
             getNextCursor = { comments -> comments.lastOrNull()?.commentId },
         )
 
-        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 0)) {
-            homeFeedPagingSource
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
+            homeDetailCommentPagingSource
+        }.flow.map { pagingData ->
+            pagingData.map { it.toComment() }
+        }
+    }
+
+    override fun getProfileComments(userId: Long): Flow<PagingData<Comment>> {
+        val profileCommentPagingSource = GenericPagingSource(
+            apiCall = { cursor -> apiService.getProfileComments(userId, cursor).data },
+            getNextCursor = { comments -> comments.lastOrNull()?.commentId },
+        )
+
+        return Pager(PagingConfig(pageSize = 10, prefetchDistance = 1)) {
+            profileCommentPagingSource
         }.flow.map { pagingData ->
             pagingData.map { it.toComment() }
         }

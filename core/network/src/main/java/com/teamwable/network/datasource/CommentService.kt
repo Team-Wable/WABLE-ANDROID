@@ -12,4 +12,10 @@ interface CommentService {
         @Path(value = "contentId") contentId: Long,
         @Query(value = "cursor") cursor: Long = -1,
     ): BaseResponse<List<ResponseCommentDto>>
+
+    @GET("api/v2/member/{memberId}/comments")
+    suspend fun getProfileComments(
+        @Path(value = "memberId") contentId: Long,
+        @Query(value = "cursor") cursor: Long = -1,
+    ): BaseResponse<List<ResponseCommentDto>>
 }
