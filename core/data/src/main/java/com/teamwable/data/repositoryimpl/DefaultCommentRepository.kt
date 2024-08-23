@@ -9,6 +9,7 @@ import com.teamwable.data.repository.CommentRepository
 import com.teamwable.model.Comment
 import com.teamwable.network.datasource.CommentService
 import com.teamwable.network.util.GenericPagingSource
+import com.teamwable.network.util.handleThrowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -40,5 +41,11 @@ class DefaultCommentRepository @Inject constructor(
         }.flow.map { pagingData ->
             pagingData.map { it.toComment() }
         }
+    }
+
+    override suspend fun deleteComment(commentId: Long): Result<Boolean> = runCatching {
+        apiService.deleteComment(commentId).success
+    }.onFailure {
+        return it.handleThrowable()
     }
 }
