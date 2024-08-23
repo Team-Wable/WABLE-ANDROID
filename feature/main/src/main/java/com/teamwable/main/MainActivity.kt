@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                     com.teamwable.profile.R.id.navigation_profile_delete_reason,
                     com.teamwable.profile.R.id.navigation_profile_information,
                     com.teamwable.home.R.id.navigation_home_detail,
+                    com.teamwable.profile.R.id.navigation_profile_more,
                 ),
         )
     }
