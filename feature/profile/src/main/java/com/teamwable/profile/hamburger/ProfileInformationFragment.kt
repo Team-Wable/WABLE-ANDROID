@@ -1,10 +1,17 @@
 package com.teamwable.profile.hamburger
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.uistate.UiState
+import com.teamwable.model.profile.MemberDataModel
+import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.stringOf
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,12 +32,12 @@ class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBin
     }
 
     private fun setupMemberDataObserve() {
-        viewModel.memberDataUiState.flowWithLifecycle(lifecycle).onEach {
+        viewModel.memberDataUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
                 is UiState.Success -> setInformationText(it.data)
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun setInformationText(memberData: MemberDataModel) {
