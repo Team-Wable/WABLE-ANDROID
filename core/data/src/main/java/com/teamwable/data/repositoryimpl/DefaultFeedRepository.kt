@@ -23,7 +23,7 @@ class DefaultFeedRepository @Inject constructor(
             getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
         )
 
-        return Pager(PagingConfig(pageSize = 20, prefetchDistance = 0)) {
+        return Pager(PagingConfig(pageSize = 20, prefetchDistance = 1)) {
             homeFeedPagingSource
         }.flow.map { pagingData ->
             pagingData.map { it.toFeed() }
@@ -36,7 +36,7 @@ class DefaultFeedRepository @Inject constructor(
             getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
         )
 
-        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 0)) {
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
             profileFeedPagingSource
         }.flow.map { pagingData ->
             pagingData.map { it.toFeed() }
