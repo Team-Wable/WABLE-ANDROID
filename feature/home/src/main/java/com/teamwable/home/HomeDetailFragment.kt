@@ -1,8 +1,6 @@
 package com.teamwable.home
 
 import android.content.res.ColorStateList
-import android.os.Handler
-import android.os.Looper
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -44,23 +42,29 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     override fun initView() {
         val feed = args.content as? Feed ?: return
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
-        collect()
+        val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
+        collect(commentSnackbar)
         submitFeedList(feed)
         submitCommentList(feed)
         concatAdapter()
         initBackBtnClickListener()
 
         initEditTextHint(feed.postAuthorNickname)
-        initEditTextBtn()
+        initEditTextBtn(feed.feedId, commentSnackbar)
     }
 
-    private fun collect() {
+    private fun collect(commentSnackbar: Snackbar) {
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
                     is HomeDetailUiState.RemoveComment -> {
                         findNavController().popBackStack()
                         commentAdapter.removeComment(uiState.commentId)
+                    }
+
+                    is HomeDetailUiState.AddComment -> {
+                        commentSnackbar.updateToCommentComplete()
+                        commentAdapter.refresh()
                     }
 
                     else -> Unit
@@ -73,17 +77,17 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, nickname)
     }
 
-    private fun initEditTextBtn() {
+    private fun initEditTextBtn(contentId: Long, commentSnackbar: Snackbar) {
         binding.run {
             etHomeDetailCommentInput.doAfterTextChanged {
                 isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
                 totalCommentLength = etHomeDetailCommentInput.text.length
-                handleUploadBtn(isCommentNull, totalCommentLength)
+                handleUploadBtn(isCommentNull, totalCommentLength, contentId, commentSnackbar)
             }
         }
     }
 
-    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int) {
+    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, contentId: Long, commentSnackbar: Snackbar) {
         when {
             (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
                 setUploadingBtnSrc(
@@ -91,7 +95,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = true
-                    initUploadingActivateBtnClickListener()
+                    initUploadingActivateBtnClickListener(contentId, commentSnackbar)
                 }
             }
 
@@ -116,17 +120,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         clickListener.invoke()
     }
 
-    private fun initUploadingActivateBtnClickListener() {
+    private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnClickListener {
-            findNavController().popBackStack()
-
-            Snackbar(requireView(), SnackbarType.COMMENT_ING).apply {
-                show()
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    updateToCommentComplete()
-                }, 2000)
-            }
+            viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
+            commentSnackbar.show()
+            binding.etHomeDetailCommentInput.text.clear()
         }
     }
 

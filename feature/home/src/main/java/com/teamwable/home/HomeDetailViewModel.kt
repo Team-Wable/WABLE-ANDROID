@@ -3,6 +3,7 @@ package com.teamwable.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Comment
@@ -30,7 +31,13 @@ class HomeDetailViewModel @Inject constructor(
         fetchAuthId()
     }
 
-    fun updateComments(feedId: Long): Flow<PagingData<Comment>> = commentRepository.getHomeDetailComments(feedId)
+    private var cachedComments: Flow<PagingData<Comment>>? = null
+
+    fun updateComments(feedId: Long): Flow<PagingData<Comment>> {
+        return cachedComments ?: commentRepository.getHomeDetailComments(feedId)
+            .cachedIn(viewModelScope)
+            .also { cachedComments = it }
+    }
 
     private fun fetchAuthId() {
         viewModelScope.launch {
@@ -59,6 +66,14 @@ class HomeDetailViewModel @Inject constructor(
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
+
+    fun addComment(contentId: Long, commentText: String) {
+        viewModelScope.launch {
+            commentRepository.postComment(contentId, commentText)
+                .onSuccess { _uiState.value = HomeDetailUiState.AddComment }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface HomeDetailUiState {
@@ -67,6 +82,8 @@ sealed interface HomeDetailUiState {
     data class Success(val profile: Profile) : HomeDetailUiState
 
     data class RemoveComment(val commentId: Long) : HomeDetailUiState
+
+    data object AddComment : HomeDetailUiState
 
     data class Error(val errorMessage: String) : HomeDetailUiState
 }
