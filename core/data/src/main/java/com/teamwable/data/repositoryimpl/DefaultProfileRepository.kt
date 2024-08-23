@@ -1,18 +1,26 @@
 package com.teamwable.data.repositoryimpl
 
+import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.repository.ProfileRepository
+import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.network.datasource.ProfileService
 import com.teamwable.network.util.handleThrowable
 import javax.inject.Inject
 
-internal class DefaultProfileRepository @Inject constructor(
-    private val profileService: ProfileService,
+class DefaultProfileRepository @Inject constructor(
+    private val apiService: ProfileService,
 ) : ProfileRepository {
+    override suspend fun getProfileInfo(userId: Long): Result<Profile> = runCatching {
+        apiService.getProfileInfo(userId).data.toProfile()
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
     override suspend fun getMemberData(): Result<MemberDataModel> {
         return runCatching {
-            profileService.getMemberData().data.toMemberDataModel()
+            apiService.getMemberData().data.toMemberDataModel()
         }.onFailure { return it.handleThrowable() }
     }
 }

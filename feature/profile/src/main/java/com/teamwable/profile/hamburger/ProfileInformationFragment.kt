@@ -1,11 +1,7 @@
-package com.teamwable.profile
+package com.teamwable.profile.hamburger
 
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.teamwable.common.uistate.UiState
-import com.teamwable.model.profile.MemberDataModel
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.stringOf

@@ -14,3 +14,13 @@ data class BaseResponse<T>(
     @SerialName("data")
     val data: T,
 )
+
+@Serializable
+data class BaseUnitResponse<T>(
+    @SerialName("status")
+    val status: Int,
+    @SerialName("success")
+    val success: Boolean,
+    @SerialName("message")
+    val message: String,
+)

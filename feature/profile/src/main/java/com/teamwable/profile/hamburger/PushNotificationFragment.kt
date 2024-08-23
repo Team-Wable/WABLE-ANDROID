@@ -1,6 +1,7 @@
-package com.teamwable.profile
+package com.teamwable.profile.hamburger
 
 import androidx.navigation.fragment.findNavController
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentPushNotificationBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.stringOf
