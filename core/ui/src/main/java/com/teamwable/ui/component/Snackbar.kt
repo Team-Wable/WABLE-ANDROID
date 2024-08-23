@@ -19,7 +19,7 @@ import com.teamwable.ui.type.SnackbarType
 
 class Snackbar(private val view: View, private val type: SnackbarType) {
     private val context = view.context
-    private val snackbar = Snackbar.make(view, "", Snackbar.LENGTH_INDEFINITE)
+    private val snackbar = Snackbar.make(view, "", 10000)
     private val snackbarView = snackbar.view as ViewGroup
 
     private val inflater = LayoutInflater.from(context)

@@ -8,11 +8,7 @@ class GenericPagingSource<T : Any>(
     private val getNextCursor: (List<T>) -> Long?,
 ) : PagingSource<Long, T>() {
     override fun getRefreshKey(state: PagingState<Long, T>): Long? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestItemToPosition(anchorPosition)?.let { item ->
-                getNextCursor(listOf(item))
-            }
-        }
+        return null
     }
 
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, T> {

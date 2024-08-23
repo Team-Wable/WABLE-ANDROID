@@ -10,4 +10,6 @@ interface FeedRepository {
     fun getProfileFeeds(userId: Long): Flow<PagingData<Feed>>
 
     suspend fun deleteFeed(feedId: Long): Result<Boolean>
+
+    suspend fun getHomeDetail(feedId: Long): Result<Feed>
 }

@@ -22,6 +22,7 @@ import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.CommentActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,37 +41,48 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private var totalCommentLength = 0
 
     override fun initView() {
-        val feed = args.content as? Feed ?: return
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
+        val feedId = arguments?.getLong(FEED_ID)
+        if (feedId != null && feedId != -1L) viewModel.updateHomeDetail(feedId) else setLayout(args.content ?: return, commentSnackbar)
         collect(commentSnackbar)
-        submitFeedList(feed)
-        submitCommentList(feed)
-        concatAdapter()
         initBackBtnClickListener()
-
-        initEditTextHint(feed.postAuthorNickname)
-        initEditTextBtn(feed.feedId, commentSnackbar)
     }
 
     private fun collect(commentSnackbar: Snackbar) {
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
+                    is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
+
                     is HomeDetailUiState.RemoveComment -> {
                         findNavController().popBackStack()
                         commentAdapter.removeComment(uiState.commentId)
-                    }
-
-                    is HomeDetailUiState.AddComment -> {
-                        commentSnackbar.updateToCommentComplete()
-                        commentAdapter.refresh()
                     }
 
                     else -> Unit
                 }
             }
         }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is HomeDetailSideEffect.ShowSnackBar -> {
+                        commentSnackbar.updateToCommentComplete()
+                        commentAdapter.refresh()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setLayout(feed: Feed, commentSnackbar: Snackbar) {
+        submitFeedList(feed)
+        submitCommentList(feed)
+        concatAdapter()
+        initEditTextHint(feed.postAuthorNickname)
+        initEditTextBtn(feed.feedId, commentSnackbar)
     }
 
     private fun initEditTextHint(nickname: String) {

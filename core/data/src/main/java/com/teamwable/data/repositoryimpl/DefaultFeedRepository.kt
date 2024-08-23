@@ -44,4 +44,10 @@ class DefaultFeedRepository @Inject constructor(
     }.onFailure {
         return it.handleThrowable()
     }
+
+    override suspend fun getHomeDetail(feedId: Long): Result<Feed> = runCatching {
+        apiService.getHomeDetail(feedId).data.toFeed()
+    }.onFailure {
+        return it.handleThrowable()
+    }
 }

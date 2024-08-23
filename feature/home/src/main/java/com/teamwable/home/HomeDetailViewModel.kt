@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.teamwable.data.repository.CommentRepository
+import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Comment
-import com.teamwable.model.Profile
+import com.teamwable.model.Feed
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -22,9 +25,14 @@ import javax.inject.Inject
 class HomeDetailViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val userInfoRepository: UserInfoRepository,
+    private val feedRepository: FeedRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeDetailUiState>(HomeDetailUiState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<HomeDetailSideEffect>()
+    val event = _event.asSharedFlow()
+
     private var authId: Long = -1
 
     init {
@@ -70,7 +78,15 @@ class HomeDetailViewModel @Inject constructor(
     fun addComment(contentId: Long, commentText: String) {
         viewModelScope.launch {
             commentRepository.postComment(contentId, commentText)
-                .onSuccess { _uiState.value = HomeDetailUiState.AddComment }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar) }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateHomeDetail(feedId: Long) {
+        viewModelScope.launch {
+            feedRepository.getHomeDetail(feedId)
+                .onSuccess { _uiState.value = HomeDetailUiState.Success(it.copy(feedId = feedId)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -79,11 +95,13 @@ class HomeDetailViewModel @Inject constructor(
 sealed interface HomeDetailUiState {
     data object Loading : HomeDetailUiState
 
-    data class Success(val profile: Profile) : HomeDetailUiState
+    data class Success(val feed: Feed) : HomeDetailUiState
 
     data class RemoveComment(val commentId: Long) : HomeDetailUiState
 
-    data object AddComment : HomeDetailUiState
-
     data class Error(val errorMessage: String) : HomeDetailUiState
+}
+
+sealed interface HomeDetailSideEffect {
+    data object ShowSnackBar : HomeDetailSideEffect
 }

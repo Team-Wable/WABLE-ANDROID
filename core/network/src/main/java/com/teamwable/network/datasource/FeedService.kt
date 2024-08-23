@@ -24,4 +24,9 @@ interface FeedService {
     suspend fun deleteFeed(
         @Path(value = "contentId") contentId: Long,
     ): BaseUnitResponse<Unit>
+
+    @GET("api/v2/content/{contentId}")
+    suspend fun getHomeDetail(
+        @Path(value = "contentId") contentId: Long,
+    ): BaseResponse<ResponseFeedDto>
 }

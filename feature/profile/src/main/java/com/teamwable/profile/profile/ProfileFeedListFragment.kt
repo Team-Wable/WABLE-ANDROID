@@ -23,6 +23,7 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +79,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            toast("item")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to feed.feedId))
         }
 
         override fun onGhostBtnClick(postAuthorId: Long) {
