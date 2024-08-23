@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
@@ -16,12 +17,14 @@ import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.util.CommentActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
@@ -33,24 +36,41 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private val args: HomeDetailFragmentArgs by navArgs()
     private val viewModel: HomeDetailViewModel by viewModels()
+    private lateinit var commentActionHandler: CommentActionHandler
 
     private var isCommentNull = true
     private var totalCommentLength = 0
 
-    private val dummyNickname = "배차은우"
-
     override fun initView() {
-        submitFeedList()
-        submitCommentList()
+        val feed = args.content as? Feed ?: return
+        commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        collect()
+        submitFeedList(feed)
+        submitCommentList(feed)
         concatAdapter()
         initBackBtnClickListener()
 
-        initEditTextHint()
+        initEditTextHint(feed.postAuthorNickname)
         initEditTextBtn()
     }
 
-    private fun initEditTextHint() {
-        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, dummyNickname)
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is HomeDetailUiState.RemoveComment -> {
+                        findNavController().popBackStack()
+                        commentAdapter.removeComment(uiState.commentId)
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
+    }
+
+    private fun initEditTextHint(nickname: String) {
+        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, nickname)
     }
 
     private fun initEditTextBtn() {
@@ -153,20 +173,24 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("commentkebab")
+            commentActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeComment = { viewModel.removeComment(it) },
+            )
         }
     }
 
-    private fun submitFeedList() {
+    private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
-            flowOf(PagingData.from(listOf(args.content))).collectLatest { pagingData ->
+            flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
                 feedAdapter.submitData(pagingData)
             }
         }
     }
 
-    private fun submitCommentList() {
-        val feed = args.content as? Feed ?: return
+    private fun submitCommentList(feed: Feed) {
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
                 commentAdapter.submitData(pagingData)

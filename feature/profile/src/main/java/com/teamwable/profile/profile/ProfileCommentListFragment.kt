@@ -3,19 +3,24 @@ package com.teamwable.profile.profile
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.teamwable.profile.ProfileUiState
 import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BundleKey
+import com.teamwable.ui.util.CommentActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,6 +32,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     private lateinit var userNickname: String
     private var userId: Long = -1
     private val viewModel: ProfileViewModel by viewModels()
+    private lateinit var commentActionHandler: CommentActionHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +50,24 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     }
 
     override fun initView() {
+        commentActionHandler = CommentActionHandler(requireContext(), findNavController(), requireParentFragment().parentFragmentManager, viewLifecycleOwner)
+        collect()
         setAdapter()
+    }
+
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is ProfileUiState.RemoveComment -> {
+                        findNavController().popBackStack()
+                        commentAdapter.removeComment(uiState.commentId)
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     }
 
     // TODO : test용 toast 지우기
@@ -62,7 +85,12 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("commentkebab")
+            commentActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { userType },
+                removeComment = { viewModel.removeComment(it) },
+            )
         }
     }
 

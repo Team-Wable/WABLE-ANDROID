@@ -68,6 +68,14 @@ class ProfileViewModel @Inject constructor(
                 .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }
+
+    fun removeComment(commentId: Long) {
+        viewModelScope.launch {
+            commentRepository.deleteComment(commentId)
+                .onSuccess { _uiState.value = ProfileUiState.RemoveComment(commentId) }
+                .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface ProfileUiState {
@@ -78,6 +86,8 @@ sealed interface ProfileUiState {
     data class UserTypeDetermined(val userType: ProfileUserType) : ProfileUiState
 
     data class RemoveFeed(val feedId: Long) : ProfileUiState
+
+    data class RemoveComment(val commentId: Long) : ProfileUiState
 
     data class Error(val errorMessage: String) : ProfileUiState
 }
