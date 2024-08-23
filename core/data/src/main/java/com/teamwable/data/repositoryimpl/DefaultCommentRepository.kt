@@ -16,9 +16,9 @@ import javax.inject.Inject
 class DefaultCommentRepository @Inject constructor(
     private val apiService: CommentService,
 ) : CommentRepository {
-    override fun getHomeDetailComments(): Flow<PagingData<Comment>> {
+    override fun getHomeDetailComments(feedId: Long): Flow<PagingData<Comment>> {
         val homeFeedPagingSource = GenericPagingSource(
-            apiCall = { cursor -> apiService.getHomeDetailComments(cursor).data },
+            apiCall = { cursor -> apiService.getHomeDetailComments(feedId, cursor).data },
             getNextCursor = { comments -> comments.lastOrNull()?.commentId },
         )
 
