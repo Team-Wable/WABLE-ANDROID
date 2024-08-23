@@ -13,8 +13,8 @@ data class ResponseRankDto(
     val teamWin: Int = 0,
     @SerialName("teamDefeat")
     val teamDefeat: Int = 0,
-    @SerialName("winnigRate")
-    val winnigRate: Int = 0,
+    @SerialName("winningRate")
+    val winningRate: Int = 0,
     @SerialName("scoreDiff")
     val scoreDiff: Int = 0,
 )

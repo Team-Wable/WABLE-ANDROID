@@ -15,7 +15,7 @@ class NewsRankViewHolder(
             tvNewsRankTeamName.text = data.teamName
             tvNewsRankWin.text = data.teamWin.toString()
             tvNewsRankLoss.text = data.teamDefeat.toString()
-            tvNewsRankWinPercentage.text = "${data.winnigRate}%"
+            tvNewsRankWinPercentage.text = "${data.winningRate}%"
             tvNewsRankPointDifference.text = data.scoreDiff.toString()
         }
     }

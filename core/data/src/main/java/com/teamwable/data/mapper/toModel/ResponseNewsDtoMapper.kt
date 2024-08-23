@@ -29,6 +29,6 @@ internal fun ResponseRankDto.toNewsRankModel(): NewsRankModel =
         teamName = teamName,
         teamWin = teamWin,
         teamDefeat = teamDefeat,
-        winnigRate = winnigRate,
+        winningRate = winningRate,
         scoreDiff = scoreDiff
     )

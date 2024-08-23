@@ -5,6 +5,6 @@ data class NewsRankModel(
     val teamName: String,
     val teamWin: Int,
     val teamDefeat: Int,
-    val winnigRate: Int,
+    val winningRate: Int,
     val scoreDiff: Int,
 )
