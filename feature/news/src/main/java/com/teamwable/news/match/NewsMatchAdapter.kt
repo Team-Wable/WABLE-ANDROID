@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwable.model.NewsMatchModel
+import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.news.databinding.ItemNewsMatchBinding
 import com.teamwable.ui.extensions.ItemDiffCallback
 
