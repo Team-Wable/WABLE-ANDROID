@@ -3,6 +3,7 @@ package com.teamwable.network.di
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.datasource.DummyService
 import com.teamwable.network.datasource.NewsService
+import com.teamwable.network.datasource.NotificationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +31,10 @@ internal object ServiceModule {
     fun provideNewsService(
         @WableRetrofit retrofit: Retrofit,
     ): NewsService = retrofit.create(NewsService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideNotificationService(
+        @WableRetrofit retrofit: Retrofit,
+    ): NotificationService = retrofit.create(NotificationService::class.java)
 }

@@ -5,19 +5,27 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.teamwable.common.uistate.UiState
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,15 +38,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         setBottomNavigation()
+
+        setupNumberObserve()
+    }
+
+    private fun setupNumberObserve() {
+        viewModel.notificationNumberUiState.flowWithLifecycle(lifecycle).onEach {
+            when (it) {
+                is UiState.Success -> {
+                    if (it.data > 0) {
+                        setBadgeOnNotification(true)
+                    } else if (it.data < 0) {
+                        Timber.tag("main").e("알맞지 않은 notification number get : ${it.data}")
+                    }
+                }
+
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
     }
 
     private fun setBottomNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         val navController = navHostFragment.navController
-
-        // TODO : 나중에 BADGE 보이게 하는 로직으로 이동
-        setBadgeOnNotification(true)
 
         binding.bnvMain.apply {
             itemIconTintList = null
