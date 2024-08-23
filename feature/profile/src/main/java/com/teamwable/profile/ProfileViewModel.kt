@@ -32,14 +32,16 @@ class ProfileViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private var cachedFeeds: Flow<PagingData<Feed>>? = null
+    private var cachedComments: Flow<PagingData<Comment>>? = null
+    var cachedProfile: Profile? = null
+
+    private val _currentUserId = MutableStateFlow<Long?>(null)
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> {
         return cachedFeeds ?: feedRepository.getProfileFeeds(userId)
             .cachedIn(viewModelScope)
             .also { cachedFeeds = it }
     }
-
-    private var cachedComments: Flow<PagingData<Comment>>? = null
 
     fun updateComments(userId: Long): Flow<PagingData<Comment>> {
         return cachedComments ?: commentRepository.getProfileComments(userId)
@@ -56,20 +58,24 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun fetchUserType(userId: Long, authId: Long) {
-        val userType = if (userId == -1L || userId == authId) {
-            ProfileUserType.AUTH
-        } else {
-            ProfileUserType.MEMBER
-        }
+        val userType = if (userId == -1L || userId == authId) ProfileUserType.AUTH else ProfileUserType.MEMBER
 
-        fetchProfileInfo(if (userType == ProfileUserType.AUTH) authId else userId)
+        if (_currentUserId.value != userId) {
+            _currentUserId.value = userId
+            fetchProfileInfo(if (userType == ProfileUserType.AUTH) authId else userId)
+        } else {
+            cachedProfile?.let { _uiState.value = ProfileUiState.Success(it) }
+        }
         _uiState.value = ProfileUiState.UserTypeDetermined(userType)
     }
 
     private fun fetchProfileInfo(userId: Long) {
         viewModelScope.launch {
             profileRepository.getProfileInfo(userId)
-                .onSuccess { _uiState.value = ProfileUiState.Success(it) }
+                .onSuccess {
+                    cachedProfile = it
+                    _uiState.value = ProfileUiState.Success(it)
+                }
                 .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }

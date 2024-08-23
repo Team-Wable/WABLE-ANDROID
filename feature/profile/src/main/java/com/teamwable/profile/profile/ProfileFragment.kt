@@ -2,6 +2,7 @@ package com.teamwable.profile.profile
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -40,8 +41,17 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
         memberId = requireArguments().getLong(Arg.PROFILE_USER_ID)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState != null)
+            viewModel.cachedProfile?.let {
+                setLayout(it)
+                setProfilePagerAdapter(it)
+            }
+        else viewModel.fetchAuthId(memberId)
+    }
+
     override fun initView() {
-        viewModel.fetchAuthId(memberId)
         collect()
     }
 
