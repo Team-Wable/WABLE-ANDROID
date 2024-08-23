@@ -16,6 +16,6 @@ data class ResponseCommentDto(
     @SerialName("commentText") val commentText: String,
     @SerialName("time") val time: String,
     @SerialName("isDeleted") val isDeleted: Boolean? = null,
-    @SerialName("contentImageUrl") val contentImageUrl: String? = null,
+    @SerialName("commentImageUrl") val commentImageUrl: String? = null,
     @SerialName("memberFanTeam") val memberFanTeam: String,
 )
