@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    공통-->
+    <string name="btn_next_text">다음으로</string>
+    <!--    언제 부터 lck를 시청하셨나요? 화면-->
+    <string name="first_lck_watch_title">언제부터 LCK를 시청하셨나요?</string>
+    <string name="first_lck_watch_description">꼭 LCK가 아닌 LOL경기여도 좋아요</string>
+    <string name="first_lck_watch_year_text">시청 시작 연도</string>
+</resources>

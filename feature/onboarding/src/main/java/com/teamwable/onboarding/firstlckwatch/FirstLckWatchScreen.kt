@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +28,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.system.SetStatusBarColor
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.onboarding.R
 import com.teamwable.onboarding.firstlckwatch.component.WableExposedDropdownBox
 import com.teamwable.onboarding.firstlckwatch.model.FirstLckWatchSideEffect
 import kotlinx.collections.immutable.toPersistentList
@@ -85,21 +87,21 @@ fun FirstLckWatchScreen(
                 .weight(1f),
         ) {
             Text(
-                text = "언제부터 LCK를 시청하셨나요?",
+                text = stringResource(R.string.first_lck_watch_title),
                 style = WableTheme.typography.head00,
                 color = WableTheme.colors.black,
                 modifier = Modifier.padding(top = 16.dp),
             )
 
             Text(
-                text = "꼭 LCK가 아닌 LOL경기여도 좋아요",
+                text = stringResource(R.string.first_lck_watch_description),
                 style = WableTheme.typography.body02,
                 color = WableTheme.colors.gray600,
                 modifier = Modifier.padding(top = 6.dp),
             )
 
             Text(
-                text = "시청 시작 연도",
+                text = stringResource(R.string.first_lck_watch_year_text),
                 style = WableTheme.typography.caption03,
                 color = WableTheme.colors.purple50,
                 modifier = Modifier.padding(top = 34.dp),
@@ -122,7 +124,7 @@ fun FirstLckWatchScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         WableButton(
-            text = "다음으로",
+            text = stringResource(R.string.btn_next_text),
             onClick = { onNextBtnClick(options[selectedIndex]) },
             enabled = true,
             textStyle = WableTheme.typography.body01,
