@@ -14,7 +14,7 @@ import com.teamwable.navigation.Route
 import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
 import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
 
-internal class MainNavigator(
+class MainNavigator(
     val navController: NavHostController,
 ) {
     private val currentDestination: NavDestination?
@@ -31,8 +31,8 @@ internal class MainNavigator(
         navController.navigateToFirstLckWatch()
     }
 
-    fun navigateToSelectLckTeam() {
-        navController.navigateToSelectLckTeam()
+    fun navigateToSelectLckTeam(userList: List<String>) {
+        navController.navigateToSelectLckTeam(userList)
     }
 
     private fun popBackStack() {

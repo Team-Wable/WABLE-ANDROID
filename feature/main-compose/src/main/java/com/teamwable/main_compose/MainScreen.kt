@@ -86,7 +86,7 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     firstLckWatchNavGraph(
-                        navigateToSelectLckTeam = { navigator.navigateToSelectLckTeam() },
+                        navigateToSelectLckTeam = { userList -> navigator.navigateToSelectLckTeam(userList) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     selectLckTeamNavGraph(

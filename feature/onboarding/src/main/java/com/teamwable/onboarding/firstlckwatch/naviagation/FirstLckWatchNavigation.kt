@@ -11,7 +11,7 @@ fun NavController.navigateToFirstLckWatch() {
 }
 
 fun NavGraphBuilder.firstLckWatchNavGraph(
-    navigateToSelectLckTeam: () -> Unit,
+    navigateToSelectLckTeam: (userList: List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     composable<Route.FirstLckWatch> {
