@@ -1,24 +1,48 @@
 package com.teamwable.profile
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.uistate.UiState
+import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.stringOf
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBinding>(FragmentProfileInformationBinding::inflate) {
+    private val viewModel: ProfileViewModel by viewModels()
+
     override fun initView() {
+        viewModel.getMemberData()
+
         setAppbarText()
-        setInformationText()
+
+        setupMemberDataObserve()
+
         initBackBtnClickListener()
         initDeleteBtnClickListener()
     }
 
-    private fun setInformationText() {
+    private fun setupMemberDataObserve() {
+        viewModel.memberDataUiState.flowWithLifecycle(lifecycle).onEach {
+            when (it) {
+                is UiState.Success -> setInformationText(it.data)
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun setInformationText(memberData: MemberDataModel) {
         with(binding) {
-            tvProfileInformationSocialContent.text = "카카오톡 소셜 로긘"
-            tvProfileInformationVersionContent.text = "0.0.0"
-            tvProfileInformationIdContent.text = "wable"
-            tvProfileInformationRegistrationDateContent.text = "2024-08-15"
+            tvProfileInformationSocialContent.text = memberData.socialPlatform
+            tvProfileInformationVersionContent.text = memberData.versionInformation
+            tvProfileInformationIdContent.text = memberData.showMemberId
+            tvProfileInformationRegistrationDateContent.text = memberData.joinDate
         }
     }
 
