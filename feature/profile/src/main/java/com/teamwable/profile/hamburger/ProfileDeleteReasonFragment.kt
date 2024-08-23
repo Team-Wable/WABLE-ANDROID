@@ -64,6 +64,13 @@ class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonB
     }
 
     private fun navigateUpToProfileDeleteConfirmFragment() {
-        findNavController().navigate(R.id.action_navigation_profile_delete_reason_to_navigation_profile_delete_confirm)
+        val selectedReasons = checkBoxList
+            .filter { it.isChecked }
+            .map { it.text.toString() }
+            .toTypedArray()
+
+        ProfileDeleteReasonFragmentDirections.actionNavigationProfileDeleteReasonToNavigationProfileDeleteConfirm(selectedReasons).also {
+            findNavController().navigate(it)
+        }
     }
 }
