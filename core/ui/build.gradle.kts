@@ -12,6 +12,7 @@ dependencies {
     // AndroidX
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.paging)
 
     // Third Party
     implementation(libs.glide)

@@ -13,6 +13,8 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object BottomSheet : DeepLinkDestination(R.string.deeplink_url_bottomsheet)
 
     data object Posting : DeepLinkDestination(R.string.deeplink_url_posting)
+
+    data object Profile : DeepLinkDestination(R.string.deeplink_url_profile)
 }
 
 private fun DeepLinkDestination.getDeepLink(context: Context, args: Map<String, Any>?): String {

@@ -1,7 +1,8 @@
-package com.teamwable.profile
+package com.teamwable.profile.profile
 
 import android.os.Bundle
 import com.teamwable.model.Comment
+import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDivider
@@ -9,6 +10,7 @@ import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
+import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BundleKey
 
 class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding>(FragmentProfileCommentBinding::inflate) {

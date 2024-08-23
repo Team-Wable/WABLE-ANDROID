@@ -33,9 +33,9 @@ class FeedViewHolder private constructor(
         }
     }
 
-    fun bind(feed: Feed) {
+    fun bind(feed: Feed?) {
+        item = feed ?: return
         val isImageInclude = feed.image.isNotBlank()
-        item = feed
         with(binding) {
             ivFeedProfileImg.load(feed.postAuthorProfile)
             tvFeedNickname.text = feed.postAuthorNickname

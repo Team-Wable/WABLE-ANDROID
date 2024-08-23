@@ -12,4 +12,5 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:model"))
     implementation(project(":core:datastore"))
+    implementation(libs.paging)
 }
