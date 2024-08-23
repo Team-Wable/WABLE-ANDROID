@@ -3,9 +3,13 @@ package com.teamwable.profile
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.teamwable.model.Feed
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.DeepLinkDestination
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -87,6 +91,13 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 feedAdapter.submitData(pagingData)
             }
         }
+
+        viewLifeCycleScope.launch {
+            feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
+                setEmptyView(isEmptyList)
+            }
+        }
     }
 
     private fun setEmptyView(isEmpty: Boolean) = with(binding) {
@@ -94,6 +105,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             ProfileUserType.AUTH -> {
                 tvProfileFeedAuthEmptyLabel.text = getString(R.string.label_profile_feed_auth_empty, userNickname)
                 groupAuthEmpty.visible(isEmpty)
+                initNavigateToPostingBtnClickListener()
             }
 
             ProfileUserType.MEMBER -> {
@@ -102,6 +114,12 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             }
 
             ProfileUserType.EMPTY -> return
+        }
+    }
+
+    private fun initNavigateToPostingBtnClickListener() {
+        binding.btnProfileFeedAuthNavigatePosting.setOnClickListener {
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Posting)
         }
     }
 

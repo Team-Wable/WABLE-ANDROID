@@ -20,7 +20,6 @@ import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.abs
 
 @AndroidEntryPoint
