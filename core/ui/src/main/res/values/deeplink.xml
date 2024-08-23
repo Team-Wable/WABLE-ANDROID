@@ -4,4 +4,5 @@
     <string name="deeplink_url_bottomsheet">wable://common:ui/bottomsheet/{bottom_sheet_type}</string>
     <string name="deeplink_url_posting">wable://feature:posting/posting</string>
     <string name="deeplink_url_profile">wable://feature:profile/profile/{user_id}</string>
+    <string name="deeplink_url_image_dialog">wable://common:ui/img/{img_url}</string>
 </resources>

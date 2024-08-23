@@ -11,6 +11,7 @@ object Arg {
     const val BOTTOM_SHEET_TYPE = "bottom_sheet_type"
     const val BOTTOM_SHEET_RESULT = "bottom_sheet_result"
     const val PROFILE_USER_ID = "user_id"
+    const val FEED_IMAGE_URL = "img_url"
 }
 
 object BundleKey {

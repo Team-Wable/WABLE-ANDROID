@@ -12,6 +12,7 @@ import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
@@ -27,6 +28,7 @@ import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @AndroidEntryPoint
 class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(FragmentProfileFeedBinding::inflate) {
@@ -92,7 +94,8 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
 
         override fun onFeedImageClick(image: String) {
-            toast("image")
+            val encodedUrl = URLEncoder.encode(image, "UTF-8")
+            FeedImageDialog.Companion.show(requireContext(), findNavController(), encodedUrl)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {

@@ -125,6 +125,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:contentDescription="@string/content_description_feed_image"
+        android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1.7"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"

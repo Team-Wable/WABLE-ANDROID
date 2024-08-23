@@ -15,6 +15,8 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object Posting : DeepLinkDestination(R.string.deeplink_url_posting)
 
     data object Profile : DeepLinkDestination(R.string.deeplink_url_profile)
+
+    data object FeedImageDialog : DeepLinkDestination(R.string.deeplink_url_image_dialog)
 }
 
 private fun DeepLinkDestination.getDeepLink(context: Context, args: Map<String, Any>?): String {
