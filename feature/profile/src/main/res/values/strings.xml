@@ -45,4 +45,18 @@
     <string name="tv_push_notification_content_off">off</string>
     <string name="appbar_push_notification_title">알림 설정</string>
 
+    <!-- profile -->
+    <string name="content_description_profile_level_tag">레벨입니다.</string>
+    <string name="label_profile_info">%s을(를) 응원하고 있어요.\n%d년부터 LCK를 보기 시작했어요.</string>
+    <string name="label_profile_ghost">투명도</string>
+    <string name="label_ghost_percentage">%d%%</string>
+    <string name="label_profile_badge">뱃지</string>
+    <string name="content_description_profile_badge">뱃지입니다.</string>
+    <string name="label_profile_feed_auth_empty">%s님, 아직 글을 작성하지 않았네요!\n왠지 텅 빈 게시글이 허전하게 느껴져요.</string>
+    <string name="label_profile_feed_auth_navigate_posting">글 작성하러 가기</string>
+    <string name="label_profile_feed_member_empty">아직 %s님이\n글을 작성하지 않았어요.</string>
+    <string name="label_profile_tab_feed">게시글</string>
+    <string name="label_profile_tab_comment">댓글</string>
+    <string name="label_profile_comment_auth_empty">아직 작성한 댓글이 없어요.</string>
+    <string name="label_profile_comment_member_empty">아직 %s님이\n댓글을 작성하지 않았어요.</string>
 </resources>

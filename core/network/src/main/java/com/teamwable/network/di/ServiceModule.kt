@@ -2,6 +2,7 @@ package com.teamwable.network.di
 
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.datasource.DummyService
+import com.teamwable.network.datasource.NotificationService
 import com.teamwable.network.datasource.ProfileService
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,12 @@ internal object ServiceModule {
     fun provideAuthService(
         @WithoutTokenInterceptor retrofit: Retrofit,
     ): AuthService = retrofit.create(AuthService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideNotificationService(
+        @WableRetrofit retrofit: Retrofit,
+    ): NotificationService = retrofit.create(NotificationService::class.java)
 
     @Singleton
     @Provides
