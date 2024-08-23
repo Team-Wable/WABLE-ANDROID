@@ -12,4 +12,5 @@ data class Comment(
     val content: String,
     val uploadTime: String,
     val postAuthorTeamTag: String,
+    val feedId: Long?,
 )

@@ -16,4 +16,5 @@ internal fun ResponseCommentDto.toComment(): Comment =
         this.commentText,
         this.time,
         this.memberFanTeam,
+        this.contentId,
     )
