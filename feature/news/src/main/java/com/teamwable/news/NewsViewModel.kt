@@ -15,13 +15,13 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsViewModel
 @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
-    private val _gameTypeUiState = MutableStateFlow<UiState<String>>(UiState.Empty)
+    private val _gameTypeUiState = MutableStateFlow<UiState<String>>(UiState.Loading)
     val gameTypeUiState = _gameTypeUiState.asStateFlow()
 
-    private val _scheduleUiState = MutableStateFlow<UiState<List<NewsMatchModel>>>(UiState.Empty)
+    private val _scheduleUiState = MutableStateFlow<UiState<List<NewsMatchModel>>>(UiState.Loading)
     val scheduleUiState = _scheduleUiState.asStateFlow()
 
-    private val _rankUiState = MutableStateFlow<UiState<List<NewsRankModel>>>(UiState.Empty)
+    private val _rankUiState = MutableStateFlow<UiState<List<NewsRankModel>>>(UiState.Loading)
     val rankUiState = _rankUiState.asStateFlow()
 
     init {
@@ -30,7 +30,6 @@ class NewsViewModel
 
     private fun getGameType() {
         viewModelScope.launch {
-            _gameTypeUiState.value = UiState.Loading
             newsRepository.getGameType()
                 .onSuccess { _gameTypeUiState.value = UiState.Success(it) }
                 .onFailure { _gameTypeUiState.value = UiState.Failure(it.message.toString()) }
@@ -39,7 +38,6 @@ class NewsViewModel
 
     fun getSchedule() {
         viewModelScope.launch {
-            _scheduleUiState.value = UiState.Loading
             newsRepository.getSchedule()
                 .onSuccess { _scheduleUiState.value = UiState.Success(it) }
                 .onFailure { _scheduleUiState.value = UiState.Failure(it.message.toString()) }
@@ -48,7 +46,6 @@ class NewsViewModel
 
     fun getRank() {
         viewModelScope.launch {
-            _rankUiState.value = UiState.Loading
             newsRepository.getRank()
                 .onSuccess { _rankUiState.value = UiState.Success(it) }
                 .onFailure { _rankUiState.value = UiState.Failure(it.message.toString()) }
