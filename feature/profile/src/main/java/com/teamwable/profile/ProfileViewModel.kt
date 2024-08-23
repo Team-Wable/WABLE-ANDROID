@@ -3,6 +3,7 @@ package com.teamwable.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
@@ -30,9 +31,21 @@ class ProfileViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    fun updateFeeds(userId: Long): Flow<PagingData<Feed>> = feedRepository.getProfileFeeds(userId)
+    private var cachedFeeds: Flow<PagingData<Feed>>? = null
 
-    fun updateComments(userId: Long): Flow<PagingData<Comment>> = commentRepository.getProfileComments(userId)
+    fun updateFeeds(userId: Long): Flow<PagingData<Feed>> {
+        return cachedFeeds ?: feedRepository.getProfileFeeds(userId)
+            .cachedIn(viewModelScope)
+            .also { cachedFeeds = it }
+    }
+
+    private var cachedComments: Flow<PagingData<Comment>>? = null
+
+    fun updateComments(userId: Long): Flow<PagingData<Comment>> {
+        return cachedComments ?: commentRepository.getProfileComments(userId)
+            .cachedIn(viewModelScope)
+            .also { cachedComments = it }
+    }
 
     fun fetchAuthId(userId: Long) {
         viewModelScope.launch {
