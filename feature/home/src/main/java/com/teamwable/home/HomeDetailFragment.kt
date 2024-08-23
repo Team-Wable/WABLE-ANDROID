@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Comment
@@ -15,12 +16,16 @@ import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
@@ -64,7 +69,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
                 setUploadingBtnSrc(
                     null,
-                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active
+                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = true
                     initUploadingActivateBtnClickListener()
@@ -74,7 +79,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             else -> {
                 setUploadingBtnSrc(
                     ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.gray_100)),
-                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_inactive
+                    com.teamwable.common.R.drawable.ic_home_comment_upload_btn_inactive,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = false
                 }
@@ -112,7 +117,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         isLiked = false,
                         likedNumber = "-10000",
                         postAuthorTeamTag = "FOX",
-                    )
+                    ),
                 )
                 commentAdapter.submitList(mock.toList())
 
@@ -175,7 +180,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun submitFeedList() {
-        feedAdapter.submitList(listOf(args.content))
+        viewLifeCycleScope.launch {
+            flowOf(PagingData.from(listOf(args.content))).collectLatest { pagingData ->
+                feedAdapter.submitData(pagingData)
+            }
+        }
     }
 
     private fun setCommentAdapter() {
