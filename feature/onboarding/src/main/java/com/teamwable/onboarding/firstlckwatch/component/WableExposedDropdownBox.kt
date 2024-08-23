@@ -63,6 +63,29 @@ fun WableExposedDropdownBox(
             }
         }
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        AnimatedVisibility(expanded) {
+            WableCustomCardWithStroke {
+                LazyColumn(
+                    state = listState,
+                    contentPadding = PaddingValues(vertical = 6.dp, horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    itemsIndexed(options) { index, year ->
+                        LckYearDropdownItem(
+                            year = year,
+                            onClick = {
+                                onSelectedIndexChange(index)
+                                onExpandedChange(false)
+                            },
+                            isClicked = selectedIndex == index,
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
