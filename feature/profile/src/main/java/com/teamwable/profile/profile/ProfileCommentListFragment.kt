@@ -1,37 +1,46 @@
 package com.teamwable.profile.profile
 
+import android.os.Build
 import android.os.Bundle
-import com.teamwable.model.Comment
+import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
+import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BundleKey
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding>(FragmentProfileCommentBinding::inflate) {
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private lateinit var userType: ProfileUserType
     private lateinit var userNickname: String
+    private var userId: Long = -1
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userType = setUserType()
         userNickname = arguments?.getString(BundleKey.USER_NICKNAME).orEmpty()
+        userId = arguments?.getLong(BundleKey.USER_ID) ?: -1
     }
 
     private fun setUserType(): ProfileUserType {
-        val userId = arguments?.getLong(BundleKey.USER_ID)
-        val authId: Long = 0 // TODO : authId datastore에서 가져오기
-        return when (userId) {
-            authId -> ProfileUserType.AUTH
-            null -> ProfileUserType.EMPTY
-            else -> ProfileUserType.MEMBER
-        }
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable(BundleKey.USER_TYPE, ProfileUserType::class.java)
+        } else {
+            arguments?.getSerializable(BundleKey.USER_TYPE) as? ProfileUserType
+        } ?: ProfileUserType.EMPTY
     }
 
     override fun initView() {
@@ -66,29 +75,17 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     }
 
     private fun submitList() {
-        val mock = mutableListOf<Comment>()
-        repeat(5) {
-            mock.add(
-                Comment(
-                    postAuthorId = 0,
-                    postAuthorProfile = "",
-                    postAuthorNickname = "페이커최고",
-                    commentId = 0,
-                    content = "어떤 순간에도 너를 찾을 수 있게 반대가 끌리는 천만번째 이유를 내일의 우리는 알지도 몰라 오늘따라 왠지",
-                    uploadTime = "5",
-                    isPostAuthorGhost = false,
-                    postAuthorGhost = 100,
-                    isLiked = false,
-                    likedNumber = "100",
-                    postAuthorTeamTag = "T1",
-                ),
-            )
+        viewLifeCycleScope.launch {
+            viewModel.updateComments(userId).collectLatest { pagingData ->
+                commentAdapter.submitData(pagingData)
+            }
         }
-        if (mock.isEmpty()) {
-            setEmptyView(true)
-        } else {
-            commentAdapter.submitList(mock)
-            setEmptyView(false)
+
+        viewLifeCycleScope.launch {
+            commentAdapter.loadStateFlow.collectLatest { loadStates ->
+                val isEmptyList = loadStates.refresh is LoadState.NotLoading && commentAdapter.itemCount == 0
+                setEmptyView(isEmptyList)
+            }
         }
     }
 
@@ -106,11 +103,12 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     }
 
     companion object {
-        fun newInstance(userId: Long, nickName: String): ProfileCommentListFragment {
+        fun newInstance(userId: Long, nickName: String, type: ProfileUserType): ProfileCommentListFragment {
             return ProfileCommentListFragment().apply {
                 arguments = Bundle().apply {
                     putLong(BundleKey.USER_ID, userId)
                     putString(BundleKey.USER_NICKNAME, nickName)
+                    putSerializable(BundleKey.USER_TYPE, type)
                 }
             }
         }

@@ -3,9 +3,11 @@ package com.teamwable.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
@@ -23,11 +25,14 @@ class ProfileViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val userInfoRepository: UserInfoRepository,
     private val profileRepository: ProfileRepository,
+    private val commentRepository: CommentRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> = feedRepository.getProfileFeeds(userId)
+
+    fun updateComments(userId: Long): Flow<PagingData<Comment>> = commentRepository.getProfileComments(userId)
 
     fun fetchAuthId(userId: Long) {
         viewModelScope.launch {
