@@ -2,12 +2,13 @@ package com.teamwable.news.match
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.teamwable.common.uistate.UiState
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.databinding.FragmentNewsMatchBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -25,12 +26,12 @@ class NewsMatchFragment : BindingFragment<FragmentNewsMatchBinding>(FragmentNews
     }
 
     private fun setupGameTypeObserve() {
-        viewModel.gameTypeUiState.flowWithLifecycle(lifecycle).onEach {
+        viewModel.gameTypeUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
                 is UiState.Success -> setSeasonText(it.data)
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun setSeasonText(gameType: String) {
@@ -38,12 +39,12 @@ class NewsMatchFragment : BindingFragment<FragmentNewsMatchBinding>(FragmentNews
     }
 
     private fun setupScheduleObserve() {
-        viewModel.scheduleUiState.flowWithLifecycle(lifecycle).onEach {
+        viewModel.scheduleUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
                 is UiState.Success -> initNewsMatchAdapter(it.data)
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun initNewsMatchAdapter(scheduleData: List<NewsMatchModel>) = with(binding) {

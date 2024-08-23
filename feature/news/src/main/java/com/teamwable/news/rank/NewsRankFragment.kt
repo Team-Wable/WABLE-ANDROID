@@ -5,13 +5,14 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.teamwable.common.uistate.UiState
 import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.databinding.FragmentNewsRankBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,12 +32,12 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
     }
 
     private fun setupGameTypeObserve() {
-        viewModel.gameTypeUiState.flowWithLifecycle(lifecycle).onEach {
+        viewModel.gameTypeUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
                 is UiState.Success -> setSeasonText(it.data)
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun setSeasonText(gameType: String) {
@@ -50,12 +51,12 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
     }
 
     private fun setupRankObserve() {
-        viewModel.rankUiState.flowWithLifecycle(lifecycle).onEach {
+        viewModel.rankUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
                 is UiState.Success -> initNewsRankAdapter(it.data)
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun initNewsRankAdapter(rankData: List<NewsRankModel>) = with(binding) {
