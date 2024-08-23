@@ -1,10 +1,13 @@
 package com.teamwable.network.datasource
 
+import com.teamwable.network.dto.request.RequestPostCommentDto
 import com.teamwable.network.dto.response.ResponseCommentDto
 import com.teamwable.network.util.BaseResponse
 import com.teamwable.network.util.BaseUnitResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -24,5 +27,11 @@ interface CommentService {
     @DELETE("api/v1/comment/{commentId}")
     suspend fun deleteComment(
         @Path(value = "commentId") commentId: Long,
+    ): BaseUnitResponse<Unit>
+
+    @POST("api/v1/content/{contentId}/comment")
+    suspend fun postComment(
+        @Path(value = "contentId") contentId: Long,
+        @Body request: RequestPostCommentDto,
     ): BaseUnitResponse<Unit>
 }

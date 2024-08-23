@@ -18,26 +18,22 @@ class DefaultFeedRepository @Inject constructor(
     private val apiService: FeedService,
 ) : FeedRepository {
     override fun getHomeFeeds(): Flow<PagingData<Feed>> {
-        val homeFeedPagingSource = GenericPagingSource(
-            apiCall = { cursor -> apiService.getHomeFeeds(cursor).data },
-            getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
-        )
-
         return Pager(PagingConfig(pageSize = 20, prefetchDistance = 1)) {
-            homeFeedPagingSource
+            GenericPagingSource(
+                apiCall = { cursor -> apiService.getHomeFeeds(cursor).data },
+                getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
+            )
         }.flow.map { pagingData ->
             pagingData.map { it.toFeed() }
         }
     }
 
     override fun getProfileFeeds(userId: Long): Flow<PagingData<Feed>> {
-        val profileFeedPagingSource = GenericPagingSource(
-            apiCall = { cursor -> apiService.getProfileFeeds(userId, cursor).data },
-            getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
-        )
-
         return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
-            profileFeedPagingSource
+            GenericPagingSource(
+                apiCall = { cursor -> apiService.getProfileFeeds(userId, cursor).data },
+                getNextCursor = { feeds -> feeds.lastOrNull()?.contentId },
+            )
         }.flow.map { pagingData ->
             pagingData.map { it.toFeed() }
         }
