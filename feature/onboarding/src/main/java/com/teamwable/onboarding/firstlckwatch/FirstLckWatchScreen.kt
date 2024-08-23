@@ -36,23 +36,29 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun FirstLckWatchRoute(
     viewModel: FirstLckWatchViewModel = hiltViewModel(),
-    navigateToSelectLckTeam: () -> Unit,
+    navigateToSelectLckTeam: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val userList: List<String> = List(5) { "" }
+    val mutableUserList = userList.toMutableList()
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam()
+                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam(mutableUserList)
                     else -> Unit
                 }
             }
     }
 
     FirstLckWatchScreen(
-        onNextBtnClick = { viewModel.navigateToSelectTeam() },
+        onNextBtnClick = {
+            viewModel.navigateToSelectTeam()
+            mutableUserList.add(0, it)
+        },
     )
 }
 
@@ -62,7 +68,7 @@ fun FirstLckWatchScreen(
 ) {
     SetStatusBarColor(color = WableTheme.colors.white)
 
-    val options = (2012..2024).map { it.toString() }.toPersistentList()
+    val options = (2012..2024).toPersistentList()
 
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by rememberSaveable { mutableIntStateOf(options.lastIndex) }
@@ -125,7 +131,7 @@ fun FirstLckWatchScreen(
 
         WableButton(
             text = stringResource(R.string.btn_next_text),
-            onClick = { onNextBtnClick(options[selectedIndex]) },
+            onClick = { onNextBtnClick(options[selectedIndex].toString()) },
             enabled = true,
             textStyle = WableTheme.typography.body01,
             modifier = Modifier.padding(bottom = 24.dp),
