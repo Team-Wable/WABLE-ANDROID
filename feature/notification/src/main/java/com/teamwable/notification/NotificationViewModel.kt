@@ -31,11 +31,14 @@ class NotificationViewModel
         NotificationActionModel(0, "배차은우", "배차은우", "", "popularWriter", "2024-08-12 00:00:00", 0, "안녕? 난 배 차은우", false, false, 1, 0),
     )
 
+    val mockNotificationInformationList = listOf(
+        NotificationInformationModel("GAMEDONE", "2024-08-18 00:00:00", ""),
+        NotificationInformationModel("GAMESTART", "2024-08-18 00:00:00", ""),
+        NotificationInformationModel("WEEKDONE", "2024-08-18 00:00:00", ""),
+    )
+
     private val _checkUiState = MutableSharedFlow<UiState<Boolean>>()
     val checkUiState = _checkUiState.asSharedFlow()
-
-    private val _informationUiState = MutableStateFlow<UiState<List<NotificationInformationModel>>>(UiState.Empty)
-    val informationUiState = _informationUiState.asStateFlow()
 
     fun patchCheck() =
         viewModelScope.launch {
@@ -44,13 +47,4 @@ class NotificationViewModel
                 .onSuccess { _checkUiState.emit(UiState.Success(it)) }
                 .onFailure { _checkUiState.emit(UiState.Failure(it.message.toString())) }
         }
-
-    fun getInformation() {
-        viewModelScope.launch {
-            _informationUiState.value = UiState.Loading
-            notificationRepository.getInformation()
-                .onSuccess { _informationUiState.value = UiState.Success(it) }
-                .onFailure { _informationUiState.value = UiState.Failure(it.message.toString()) }
-        }
-    }
 }
