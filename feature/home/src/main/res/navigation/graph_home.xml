@@ -10,25 +10,18 @@
         android:name="com.teamwable.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/navigation_home_detail"
         android:name="com.teamwable.home.HomeDetailFragment"
         android:label="HomeDetailFragment"
         tools:layout="@layout/fragment_home_detail">
         <argument
-            android:name="content"
-            app:nullable="true"
-            android:defaultValue="@null"
-            app:argType="com.teamwable.model.Feed" />
-        <argument
             android:name="feed_id"
-            android:defaultValue="-1L"
             app:argType="long" />
         <deepLink app:uri="@string/deeplink_url_home_detail" />
     </fragment>
-    <argument
-        android:name="content"
-        app:argType="com.teamwable.model.Feed" />
+
     <action
         android:id="@+id/action_home_to_home_detail"
         app:destination="@id/navigation_home_detail" />

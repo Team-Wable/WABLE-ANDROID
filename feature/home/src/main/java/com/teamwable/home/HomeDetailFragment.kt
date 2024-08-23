@@ -44,7 +44,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
         val feedId = arguments?.getLong(FEED_ID)
-        if (feedId != null && feedId != -1L) viewModel.updateHomeDetail(feedId) else setLayout(args.content ?: return, commentSnackbar)
+        if (feedId != null) viewModel.updateHomeDetail(feedId)
         collect(commentSnackbar)
         initBackBtnClickListener()
     }

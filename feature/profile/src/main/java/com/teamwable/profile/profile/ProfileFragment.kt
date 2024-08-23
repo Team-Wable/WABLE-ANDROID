@@ -28,6 +28,7 @@ import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -43,6 +44,7 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.e(savedInstanceState.toString())
         if (savedInstanceState != null)
             viewModel.cachedProfile?.let {
                 setLayout(it)

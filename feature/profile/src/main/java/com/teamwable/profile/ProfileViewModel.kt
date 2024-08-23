@@ -59,14 +59,13 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserType(userId: Long, authId: Long) {
         val userType = if (userId == -1L || userId == authId) ProfileUserType.AUTH else ProfileUserType.MEMBER
-
+        _uiState.value = ProfileUiState.UserTypeDetermined(userType)
         if (_currentUserId.value != userId) {
             _currentUserId.value = userId
             fetchProfileInfo(if (userType == ProfileUserType.AUTH) authId else userId)
         } else {
             cachedProfile?.let { _uiState.value = ProfileUiState.Success(it) }
         }
-        _uiState.value = ProfileUiState.UserTypeDetermined(userType)
     }
 
     private fun fetchProfileInfo(userId: Long) {

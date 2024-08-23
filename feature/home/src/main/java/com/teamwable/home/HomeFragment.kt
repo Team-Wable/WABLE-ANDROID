@@ -54,7 +54,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
             toast("item")
-            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed))
+            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 
         override fun onGhostBtnClick(postAuthorId: Long) {
