@@ -3,10 +3,11 @@ package com.teamwable.profile.profile
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.Feed
-import com.teamwable.profile.ProfileUserType
+import com.teamwable.profile.ProfileUiState
 import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
@@ -15,11 +16,14 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BundleKey
+import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +35,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     private lateinit var userType: ProfileUserType
     private lateinit var userNickname: String
     private var userId: Long = -1
+    private lateinit var feedActionHandler: FeedActionHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +53,24 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     }
 
     override fun initView() {
+        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), requireParentFragment().parentFragmentManager, viewLifecycleOwner)
         setAdapter()
+        collect()
+    }
+
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is ProfileUiState.RemoveFeed -> {
+                        findNavController().popBackStack()
+                        feedAdapter.removeFeed(uiState.feedId)
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     }
 
     // TODO : test용 toast 지우기
@@ -74,7 +96,12 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("kebab")
+            feedActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { userType },
+                removeFeed = { viewModel.removeFeed(it) },
+            )
         }
 
         override fun onCommentBtnClick(feedId: Long) {}

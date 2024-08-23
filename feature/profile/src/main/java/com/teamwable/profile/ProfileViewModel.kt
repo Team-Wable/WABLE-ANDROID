@@ -8,6 +8,7 @@ import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Profile
+import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +55,14 @@ class ProfileViewModel @Inject constructor(
                 .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }
+
+    fun removeFeed(feedId: Long) {
+        viewModelScope.launch {
+            feedRepository.deleteFeed(feedId)
+                .onSuccess { _uiState.value = ProfileUiState.RemoveFeed(feedId) }
+                .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface ProfileUiState {
@@ -62,6 +71,8 @@ sealed interface ProfileUiState {
     data class Success(val profile: Profile) : ProfileUiState
 
     data class UserTypeDetermined(val userType: ProfileUserType) : ProfileUiState
+
+    data class RemoveFeed(val feedId: Long) : ProfileUiState
 
     data class Error(val errorMessage: String) : ProfileUiState
 }
