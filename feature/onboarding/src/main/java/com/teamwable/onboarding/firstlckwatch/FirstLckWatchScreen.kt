@@ -28,6 +28,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.system.SetStatusBarColor
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.MemberInfoType
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.firstlckwatch.component.WableExposedDropdownBox
 import com.teamwable.onboarding.firstlckwatch.model.FirstLckWatchSideEffect
@@ -41,7 +42,8 @@ fun FirstLckWatchRoute(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val userList: List<String> = List(5) { "" }
+    val userListSize = MemberInfoType.entries.size
+    val userList: List<String> = List(userListSize) { "" }
     val mutableUserList = userList.toMutableList()
 
     LaunchedEffect(lifecycleOwner) {
@@ -57,7 +59,7 @@ fun FirstLckWatchRoute(
     FirstLckWatchScreen(
         onNextBtnClick = {
             viewModel.navigateToSelectTeam()
-            mutableUserList.add(0, it)
+            mutableUserList.add(MemberInfoType.MEMBER_LCK_YEAR.ordinal, it)
         },
     )
 }
