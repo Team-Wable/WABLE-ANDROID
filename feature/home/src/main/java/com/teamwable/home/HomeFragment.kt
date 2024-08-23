@@ -9,7 +9,7 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
-import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -89,7 +89,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun setAdapter() {
         binding.rvHome.apply {
             adapter = feedAdapter
-            if (itemDecorationCount == 0) setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
+            if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
     }
