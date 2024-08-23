@@ -12,7 +12,7 @@ import android.text.style.StyleSpan
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NotificationActionModel
+import com.teamwable.model.notification.NotificationActionModel
 import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.stringOf
@@ -37,9 +37,9 @@ class NotificationActionViewHolder(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun bind(data: NotificationActionModel) {
+    fun bind(data: NotificationActionModel?) {
         with(binding) {
-            item = data
+            item = data?: return
 
             val spannableText = when (data.notificationTriggerType) {
                 "contentLiked" -> {

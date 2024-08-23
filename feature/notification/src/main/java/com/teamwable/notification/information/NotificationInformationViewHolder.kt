@@ -3,7 +3,7 @@ package com.teamwable.notification.information
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NotificationInformationModel
+import com.teamwable.model.notification.NotificationInformationModel
 import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.load
@@ -23,8 +23,8 @@ class NotificationInformationViewHolder(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun bind(data: NotificationInformationModel) {
-        item = data
+    fun bind(data: NotificationInformationModel?) {
+        item = data ?: return
 
         with(binding) {
             ivNotificationVpProfile.load(data.imageUrl)
