@@ -37,13 +37,13 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun FirstLckWatchRoute(
     viewModel: FirstLckWatchViewModel = hiltViewModel(),
-    navigateToSelectLckTeam: (List<String>) -> Unit,
+    navigateToSelectLckTeam: (List<String?>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val userListSize = MemberInfoType.entries.size
-    val userList: List<String> = List(userListSize) { "" }
+    val userList: List<String?> = List(userListSize) { "" }
     val mutableUserList = userList.toMutableList()
 
     LaunchedEffect(lifecycleOwner) {
