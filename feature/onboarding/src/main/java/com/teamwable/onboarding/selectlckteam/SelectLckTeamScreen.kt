@@ -47,6 +47,24 @@ fun SelectLckTeamScreen(
     ) {
         Text(text = "SelectLckTeamScreen")
 
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(top = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                itemsIndexed(shuffledTeams) { index, team ->
+                    val isSelected = index == selectedTeamIndex
+                    LckTeamItem(
+                        lckTeamType = team,
+                        enabled = isSelected, // 선택 상태에 따라 색상 변경
+                        onClick = {
+                            selectedTeamIndex = if (isSelected) -1 else index // 클릭 시 선택 토글
+                        },
+                    )
+                }
+            }
+        }
         Spacer(modifier = Modifier.weight(1f))
 
         WableButton(
