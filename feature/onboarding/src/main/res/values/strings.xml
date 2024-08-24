@@ -6,4 +6,8 @@
     <string name="first_lck_watch_title">언제부터 LCK를 시청하셨나요?</string>
     <string name="first_lck_watch_description">꼭 LCK가 아닌 LOL경기여도 좋아요</string>
     <string name="first_lck_watch_year_text">시청 시작 연도</string>
+    <!--    가장 응원하는 팀을 골라주세요-->
+    <string name="select_lck_team_title">가장 응원하는 팀을 골라주세요</string>
+    <string name="select_lck_team_description">선택하신 팀은 프로필에 응원중인 팀으로 소개돼요\n팀 순서는 랜덤으로 표시됩니다</string>
+    <string name="select_lck_team_not_yet">아직 응원하는 팀이 없어요</string>
 </resources>
