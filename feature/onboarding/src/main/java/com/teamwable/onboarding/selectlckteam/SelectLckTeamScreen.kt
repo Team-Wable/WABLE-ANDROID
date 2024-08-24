@@ -40,7 +40,14 @@ fun SelectLckTeamRoute(
 fun SelectLckTeamScreen(
     onNextBtnClick: () -> Unit,
 ) {
-    SetStatusBarColor(color = WableTheme.colors.white)
+    var selectedTeamIndex by remember { mutableIntStateOf(-1) } // 선택된 팀 인덱스 상태
+    val shuffledTeams = remember { LckTeamType.entries.shuffled() }
+    // 선택된 팀의 이름을 미리 준비해둠
+    val selectedTeamName: String = if (selectedTeamIndex != -1) {
+        stringResource(id = shuffledTeams[selectedTeamIndex].teamName)
+    } else {
+        ""
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
