@@ -23,24 +23,29 @@ fun SelectLckTeamRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     var userMutableList by remember { mutableStateOf(args.userList) }
 
-    /*    LaunchedEffect(lifecycleOwner) {
-            viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-                .collect { sideEffect ->
-                    when (sideEffect) {
-                        is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam()
-                        else -> Unit
-                    }
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SelectLckTeamSideEffect.NavigateToProfile -> navigateToProfile(userMutableList)
+                    else -> Unit
                 }
-        }*/
+            }
+    }
 
     SelectLckTeamScreen(
-        onNextBtnClick = { },
+        onNextBtnClick = {
+            userMutableList = userMutableList.toMutableList().apply {
+                set(MemberInfoType.MEMBER_FAN_TEAM.ordinal, it)
+            }
+            viewModel.navigateToProfile()
+        },
     )
 }
 
 @Composable
 fun SelectLckTeamScreen(
-    onNextBtnClick: () -> Unit,
+    onNextBtnClick: (String) -> Unit,
 ) {
     var selectedTeamIndex by remember { mutableIntStateOf(-1) } // 선택된 팀 인덱스 상태
     val shuffledTeams = remember { LckTeamType.entries.shuffled() }
