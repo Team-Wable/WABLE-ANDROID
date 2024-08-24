@@ -31,6 +31,7 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.selectlckteam.SelectLckTeamViewModel
@@ -65,6 +66,8 @@ fun ProfileRoute(
 fun ProfileScreen(
     onNextBtnClick: (String) -> Unit,
 ) {
+    var currentImage by remember { mutableStateOf(ProfileImageType.entries.random()) }
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween, // 상단과 하단을 공간으로 분리
         modifier = Modifier
@@ -96,7 +99,7 @@ fun ProfileScreen(
                     .padding(top = 40.dp, start = 78.dp, end = 78.dp),
             ) {
                 GlideImage(
-                    imageModel = { },
+                    imageModel = { currentImage.image },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
@@ -112,6 +115,9 @@ fun ProfileScreen(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .noRippleClickable {
+                            currentImage = ProfileImageType.entries
+                                .filter { it != currentImage }
+                                .random()
                         },
                 )
                 Image(
