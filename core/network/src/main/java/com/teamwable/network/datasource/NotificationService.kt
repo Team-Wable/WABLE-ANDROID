@@ -20,7 +20,7 @@ interface NotificationService {
         @Query(value = "cursor") notificationId: Long = -1,
     ): BaseResponse<List<ResponseNotificationsDto>>
 
-    @GET("api/v1/notification/info/all")
+    @GET("api/v1/notification/info")
     suspend fun getInformation(
         @Query(value = "cursor") notificationId: Long = -1,
     ): BaseResponse<List<ResponseInformationDto>>

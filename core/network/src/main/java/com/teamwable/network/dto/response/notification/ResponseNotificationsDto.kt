@@ -26,7 +26,7 @@ data class ResponseNotificationsDto(
     @SerialName("isDeleted")
     val isDeleted: Boolean = false,
     @SerialName("notificationId")
-    val notificationId: Int = -1,
+    val notificationId: Long = -1,
     @SerialName("triggerMemberId")
     val triggerMemberId: Int = -1,
 )

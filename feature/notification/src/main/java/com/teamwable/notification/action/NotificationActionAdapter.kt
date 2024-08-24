@@ -1,25 +1,21 @@
 package com.teamwable.notification.action
 
-import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.ListAdapter
-import com.teamwable.model.NotificationActionModel
+import androidx.paging.PagingDataAdapter
+import com.teamwable.model.notification.NotificationActionModel
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.ItemDiffCallback
 
 class NotificationActionAdapter(
-    context: Context,
     private val click: (NotificationActionModel, Int) -> Unit
-) : ListAdapter<NotificationActionModel, NotificationActionViewHolder>(
+) : PagingDataAdapter<NotificationActionModel, NotificationActionViewHolder>(
     NotificationActionAdapterDiffCallback,
 ) {
-    private val inflater by lazy { LayoutInflater.from(context) }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationActionViewHolder {
-        val binding = ItemNotificationVpBinding.inflate(inflater, parent, false)
+        val binding = ItemNotificationVpBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NotificationActionViewHolder(binding, click)
     }
 

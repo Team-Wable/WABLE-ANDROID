@@ -9,16 +9,19 @@ import com.teamwable.notification.R
 import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBinding>(FragmentNotificationVpBinding::inflate) {
     private val viewModel: NotificationViewModel by viewModels()
+    private var notificationAdapter = NotificationInformationAdapter(click = { notificationInformationData, position -> })
 
     override fun initView() {
         initNotificationInformationAdapter()
-
         initSwipeRefreshData()
     }
 
@@ -40,27 +43,40 @@ class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBi
             )
             rvNotificationContent.startAnimation(slideDown)
 
+            // Todo : 데이터 새로고침 추가해야 함
             swipeNotificationVp.isRefreshing = false
         }
     }
 
     private fun initNotificationInformationAdapter() = with(binding) {
-        if (viewModel.mockNotificationInformationList.isEmpty()) {
-            llNotificationVpEmpty.visible(true)
-        } else {
-            llNotificationVpEmpty.visible(false)
+        rvNotificationContent.adapter = notificationAdapter
 
-            rvNotificationContent.adapter =
-                NotificationInformationAdapter(requireContext(), click = { notificationInformationData, position ->
+        viewLifeCycleScope.launch {
+            viewModel.getInformation().collectLatest { pagingData ->
+                NotificationInformationAdapter(click = { notificationInformationData, position ->
                     when (notificationInformationData.infoNotificationType) {
                         "GAMEDONE" -> toast("GAMEDONE")
                         "GAMESTART" -> toast("GAMESTART")
                         "WEEKDONE" -> toast("WEEKDONE")
                     }
                 }).apply {
-                    submitList(viewModel.mockNotificationInformationList)
+                    notificationAdapter.submitData(pagingData)
                 }
-            if (rvNotificationContent.itemDecorationCount == 0) rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
+
+                if (rvNotificationContent.itemDecorationCount == 0) {
+                    rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
+                }
+
+                notificationAdapter.addLoadStateListener { combinedLoadStates ->
+                    if (combinedLoadStates.append.endOfPaginationReached) {
+                        if (notificationAdapter.itemCount < 1) {
+                            llNotificationVpEmpty.visible(true)
+                        } else {
+                            llNotificationVpEmpty.visible(false)
+                        }
+                    }
+                }
+            }
         }
     }
 }
