@@ -3,7 +3,6 @@ package com.teamwable.onboarding.selectlckteam
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -107,9 +106,9 @@ fun SelectLckTeamScreen(
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(top = 18.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(top = 18.dp),
             ) {
                 itemsIndexed(shuffledTeams) { index, team ->
                     val isSelected = index == selectedTeamIndex
@@ -127,7 +126,7 @@ fun SelectLckTeamScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 12.dp)
+                .padding(top = 18.dp, bottom = 12.dp)
                 .noRippleDebounceClickable {
                     onNextBtnClick("")
                 },
