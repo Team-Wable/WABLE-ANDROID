@@ -3,7 +3,6 @@ package com.teamwable.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
@@ -37,13 +36,9 @@ class HomeViewModel @Inject constructor(
         fetchAuthId()
     }
 
-    private var cachedFeeds: Flow<PagingData<Feed>>? = null
+    // private var cachedFeeds: Flow<PagingData<Feed>>? = null
 
-    fun updateFeeds(): Flow<PagingData<Feed>> {
-        return cachedFeeds ?: feedRepository.getHomeFeeds()
-            .cachedIn(viewModelScope)
-            .also { cachedFeeds = it }
-    }
+    fun updateFeeds(): Flow<PagingData<Feed>> = feedRepository.getHomeFeeds()
 
     private fun fetchAuthId() {
         viewModelScope.launch {
