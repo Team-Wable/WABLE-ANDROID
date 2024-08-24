@@ -2,7 +2,6 @@ package com.teamwable.onboarding.firstlckwatch.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,7 @@ import com.teamwable.designsystem.component.card.WableCustomCardWithStroke
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun WableExposedDropdownBox(
@@ -77,8 +77,7 @@ fun WableExposedDropdownBox(
             WableCustomCardWithStroke {
                 LazyColumn(
                     state = listState,
-                    contentPadding = PaddingValues(vertical = 6.dp, horizontal = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 4.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     itemsIndexed(options) { index, year ->
@@ -101,6 +100,10 @@ fun WableExposedDropdownBox(
 @Composable
 fun WableExposedDropdownBoxPreview() {
     WableTheme {
-//        WableExposedDropdownBox(options = listOf("2024", "2025", "2026"), listState = LazyListState())
+        WableExposedDropdownBox(
+            options = persistentListOf(1, 2, 3),
+            listState = LazyListState(),
+            expanded = true,
+        )
     }
 }
