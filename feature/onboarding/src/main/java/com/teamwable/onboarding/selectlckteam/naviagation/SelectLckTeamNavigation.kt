@@ -12,13 +12,13 @@ fun NavController.navigateToSelectLckTeam(userList: List<String>) {
 }
 
 fun NavGraphBuilder.selectLckTeamNavGraph(
-    navigateToSelectLckTeam: () -> Unit,
+    navigateToProfile: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     composable<Route.SelectLckTeam> { backStackEntry ->
         val args = backStackEntry.toRoute<Route.SelectLckTeam>()
         SelectLckTeamRoute(
-            navigateToSelectLckTeam = navigateToSelectLckTeam,
+            navigateToProfile = navigateToProfile,
             onShowErrorSnackBar = onShowErrorSnackBar,
             args = args,
         )

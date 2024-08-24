@@ -12,6 +12,7 @@ import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
+import com.teamwable.onboarding.profile.naviagation.navigateToProfile
 import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
 
 class MainNavigator(
@@ -33,6 +34,10 @@ class MainNavigator(
 
     fun navigateToSelectLckTeam(userList: List<String>) {
         navController.navigateToSelectLckTeam(userList)
+    }
+
+    fun navigateToProfile(userList: List<String>) {
+        navController.navigateToProfile(userList)
     }
 
     private fun popBackStack() {
