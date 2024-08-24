@@ -65,7 +65,25 @@ fun SelectLckTeamScreen(
                 }
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 12.dp)
+                .noRippleDebounceClickable {
+                    onNextBtnClick("")
+                },
+        ) {
+            Text(
+                text = stringResource(R.string.select_lck_team_not_yet),
+                style = WableTheme.typography.body02,
+                color = WableTheme.colors.gray600,
+                modifier = Modifier.padding(
+                    horizontal = 15.dp,
+                    vertical = 11.dp,
+                ),
+            )
+        }
 
         WableButton(
             text = "다음으로",
