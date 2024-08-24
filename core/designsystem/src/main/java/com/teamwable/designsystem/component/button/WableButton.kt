@@ -25,8 +25,7 @@ fun WableButton(
     text: String,
     enabled: Boolean = true,
     textStyle: TextStyle = WableTheme.typography.head02,
-    paddingTop: Dp = 15.dp,
-    paddingBottom: Dp = 12.dp,
+    paddingVertical: Dp = 13.dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -40,7 +39,7 @@ fun WableButton(
             }
             .clip(RoundedCornerShape(dimensionResource(R.dimen.radius_12)))
             .background(if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray200)
-            .padding(top = paddingTop, bottom = paddingBottom),
+            .padding(vertical = paddingVertical),
     ) {
         Text(
             text = text,

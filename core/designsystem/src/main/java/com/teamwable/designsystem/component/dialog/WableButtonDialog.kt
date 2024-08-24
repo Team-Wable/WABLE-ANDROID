@@ -74,6 +74,7 @@ fun WableButtonDialog(
                     text = stringResource(id = dialogType.buttonText),
                     onClick = onClick,
                     enabled = true,
+                    paddingVertical = 11.dp,
                     textStyle = WableTheme.typography.body01,
                 )
                 Spacer(modifier = Modifier.height(18.dp))

@@ -137,7 +137,6 @@ fun FirstLckWatchScreen(
             text = stringResource(R.string.btn_next_text),
             onClick = { onNextBtnClick(options[selectedIndex].toString()) },
             enabled = true,
-            textStyle = WableTheme.typography.body01,
             modifier = Modifier.padding(bottom = 24.dp),
         )
     }

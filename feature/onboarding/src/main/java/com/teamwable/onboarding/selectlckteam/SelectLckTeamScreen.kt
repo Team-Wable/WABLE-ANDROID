@@ -148,7 +148,6 @@ fun SelectLckTeamScreen(
                 if (selectedTeamIndex != -1) onNextBtnClick(selectedTeamName)
             },
             enabled = selectedTeamIndex != -1,
-            textStyle = WableTheme.typography.body01,
             modifier = Modifier.padding(bottom = 24.dp),
         )
     }
