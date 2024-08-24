@@ -2,6 +2,7 @@ package com.teamwable.data.repository
 
 import androidx.paging.PagingData
 import com.teamwable.model.Comment
+import com.teamwable.model.Ghost
 import kotlinx.coroutines.flow.Flow
 
 interface CommentRepository {
@@ -12,4 +13,6 @@ interface CommentRepository {
     suspend fun deleteComment(commentId: Long): Result<Boolean>
 
     suspend fun postComment(contentId: Long, commentText: String): Result<Boolean>
+
+    suspend fun postGhost(request: Ghost): Result<Boolean>
 }

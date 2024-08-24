@@ -1,5 +1,6 @@
 package com.teamwable.network.datasource
 
+import com.teamwable.network.dto.request.RequestGhostDto
 import com.teamwable.network.dto.request.RequestPostCommentDto
 import com.teamwable.network.dto.response.ResponseCommentDto
 import com.teamwable.network.util.BaseResponse
@@ -33,5 +34,10 @@ interface CommentService {
     suspend fun postComment(
         @Path(value = "contentId") contentId: Long,
         @Body request: RequestPostCommentDto,
+    ): BaseUnitResponse<Unit>
+
+    @POST("api/v1/ghost2")
+    suspend fun postGhost(
+        @Body request: RequestGhostDto,
     ): BaseUnitResponse<Unit>
 }

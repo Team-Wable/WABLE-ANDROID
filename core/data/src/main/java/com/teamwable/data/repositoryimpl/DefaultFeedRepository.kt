@@ -4,9 +4,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.teamwable.data.mapper.toData.toPostGhostDto
 import com.teamwable.data.mapper.toModel.toFeed
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.util.GenericPagingSource
 import com.teamwable.network.util.handleThrowable
@@ -47,6 +49,12 @@ class DefaultFeedRepository @Inject constructor(
 
     override suspend fun getHomeDetail(feedId: Long): Result<Feed> = runCatching {
         apiService.getHomeDetail(feedId).data.toFeed()
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun postGhost(request: Ghost): Result<Boolean> = runCatching {
+        apiService.postGhost(request.toPostGhostDto()).success
     }.onFailure {
         return it.handleThrowable()
     }
