@@ -1,5 +1,7 @@
 package com.teamwable.home
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
@@ -8,17 +10,42 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+    private val viewModel: HomeViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
+    private lateinit var feedActionHandler: FeedActionHandler
 
     override fun initView() {
+        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        collect()
         setAdapter()
         initNavigatePostingFabClickListener()
+    }
+
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is HomeUiState.RemoveFeed -> {
+                        findNavController().popBackStack()
+                        feedAdapter.removeFeed(uiState.feedId)
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     }
 
     // TODO : test용 toast 지우기
@@ -37,7 +64,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("profile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onFeedImageClick(image: String) {
@@ -45,7 +72,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("kebab")
+            feedActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeFeed = { viewModel.removeFeed(it) },
+            )
         }
 
         override fun onCommentBtnClick(feedId: Long) {}
@@ -54,59 +86,17 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun setAdapter() {
         binding.rvHome.apply {
             adapter = feedAdapter
-            if (itemDecorationCount == 0) {
-                setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
-            }
+            if (itemDecorationCount == 0) setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
     }
 
-    // TODO : mock data 지우기
     private fun submitList() {
-        val mock = mutableListOf<Feed>()
-        repeat(5) {
-            mock.add(
-                Feed(
-                    postAuthorId = 0,
-                    postAuthorProfile = "",
-                    postAuthorNickname = "페이커최고",
-                    feedId = 0,
-                    title = "내가 S면 넌 나의 N이 되어줘 ",
-                    content = "어떤 순간에도 너를 찾을 수 있게 반대가 끌리는 천만번째 이유를 내일의 우리는 알지도 몰라 오늘따라 왠지 말이 꼬여 성을 빼고 부르는 건 아직 어색해 (지훈아..!) 너와 나 우리 모여보니까 같은 색 더듬이가 자라나 창문 너머의 춤을 따라 \n" +
-                        "https://www.wable.com",
-                    uploadTime = "5",
-                    isPostAuthorGhost = false,
-                    postAuthorGhost = 100,
-                    isLiked = false,
-                    likedNumber = "100",
-                    commentNumber = "200",
-                    image = "https://github.com/user-attachments/assets/66fdd6f1-c0c5-4438-81f4-bea09b09acd1",
-                    postAuthorTeamTag = "T1",
-                ),
-            )
+        viewLifeCycleScope.launch {
+            viewModel.updateFeeds().collectLatest { pagingData ->
+                feedAdapter.submitData(pagingData)
+            }
         }
-        repeat(5) {
-            mock.add(
-                Feed(
-                    postAuthorId = 0,
-                    postAuthorProfile = "",
-                    postAuthorNickname = "hihi",
-                    feedId = 0,
-                    title = "내가 S면 넌 나의 N이 되어줘 ",
-                    content = "어떤 순간에도 너를 찾을 수 있게 반대가 끌리는 천만번째 이유를 내일의 우리는 알지도 몰라 오늘따라 왠지 말이 꼬여 성을 빼고 부르는 건 아직 어색해 (지훈아..!) 너와 나 우리 모여보니까 같은 색 더듬이가 자라나 창문 너머의 춤을 따라 \n" +
-                        "https://www.wable.com",
-                    uploadTime = "5",
-                    isPostAuthorGhost = false,
-                    postAuthorGhost = 100,
-                    isLiked = true,
-                    likedNumber = "100",
-                    commentNumber = "200",
-                    image = "",
-                    postAuthorTeamTag = "GEN",
-                ),
-            )
-        }
-        feedAdapter.submitList(mock)
     }
 
     private fun initNavigatePostingFabClickListener() {

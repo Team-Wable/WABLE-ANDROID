@@ -5,7 +5,7 @@ import android.os.Build
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NewsMatchScoreModel
+import com.teamwable.model.news.NewsMatchScoreModel
 import com.teamwable.news.R
 import com.teamwable.news.databinding.ItemNewsMatchScoreBinding
 import com.teamwable.ui.extensions.colorOf

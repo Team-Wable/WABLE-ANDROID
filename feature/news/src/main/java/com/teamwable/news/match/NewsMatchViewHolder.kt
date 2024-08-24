@@ -3,7 +3,7 @@ package com.teamwable.news.match
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NewsMatchModel
+import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.news.databinding.ItemNewsMatchBinding
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.CalculateTime
