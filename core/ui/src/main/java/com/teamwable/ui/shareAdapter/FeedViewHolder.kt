@@ -1,5 +1,6 @@
 package com.teamwable.ui.shareAdapter
 
+import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.teamwable.ui.databinding.ItemFeedBinding
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.CalculateTime
+import com.teamwable.ui.util.Transparent
 
 class FeedViewHolder private constructor(
     private val binding: ItemFeedBinding,
@@ -22,7 +24,10 @@ class FeedViewHolder private constructor(
 
     init {
         setupClickListener(itemView, binding.tvFeedContent, binding.btnFeedComment) { feedClickListener.onItemClick(item) }
-        setupClickListener(binding.btnFeedGhost) { feedClickListener.onGhostBtnClick(item.postAuthorId, item.feedId) }
+        setupClickListener(binding.btnFeedGhost) {
+            feedClickListener.onGhostBtnClick(item.postAuthorId, item.feedId)
+            setFeedTransparent(item.postAuthorGhost)
+        }
         setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(item.feedId) }
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.ivFeedImg) { feedClickListener.onFeedImageClick(item.image) }
@@ -57,8 +62,18 @@ class FeedViewHolder private constructor(
             tvFeedLikeCount.text = feed.likedNumber
             tvFeedCommentCount.text = feed.commentNumber
             tvTeamTag.teamName = feed.postAuthorTeamTag
-            if (feed.isPostAuthorGhost) btnFeedGhost.isEnabled = false
+            if (feed.isPostAuthorGhost) {
+                btnFeedGhost.isEnabled = false
+                setFeedTransparent(-85)
+            } else {
+                setFeedTransparent(feed.postAuthorGhost)
+            }
         }
+    }
+
+    private fun setFeedTransparent(memberGhostPercent: Int) {
+        val color = Transparent().calculateColorWithOpacity(memberGhostPercent)
+        binding.viewFeedTransparentBg.setBackgroundColor(Color.parseColor(color))
     }
 
     companion object {
