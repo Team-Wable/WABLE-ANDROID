@@ -44,13 +44,13 @@ fun FirstLckWatchRoute(
 
     val userListSize = MemberInfoType.entries.size
     val userList: List<String> = List(userListSize) { "" }
-    val mutableUserList = userList.toMutableList()
+    var userMutableList by remember { mutableStateOf(userList) }
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam(mutableUserList)
+                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam(userMutableList)
                     else -> Unit
                 }
             }
@@ -58,8 +58,10 @@ fun FirstLckWatchRoute(
 
     FirstLckWatchScreen(
         onNextBtnClick = {
+            userMutableList = userMutableList.toMutableList().apply {
+                set(MemberInfoType.MEMBER_LCK_YEAR.ordinal, it)
+            }
             viewModel.navigateToSelectTeam()
-            mutableUserList.add(MemberInfoType.MEMBER_LCK_YEAR.ordinal, it)
         },
     )
 }
