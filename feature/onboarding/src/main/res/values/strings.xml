@@ -10,4 +10,7 @@
     <string name="select_lck_team_title">가장 응원하는 팀을 골라주세요</string>
     <string name="select_lck_team_description">선택하신 팀은 프로필에 응원중인 팀으로 소개돼요\n팀 순서는 랜덤으로 표시됩니다</string>
     <string name="select_lck_team_not_yet">아직 응원하는 팀이 없어요</string>
+    <!--    프로필 수정 화면-->
+    <string name="profile_edit_title">와블에서 활동할\n프로필을 등록해 주세요</string>
+    <string name="profile_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
 </resources>
