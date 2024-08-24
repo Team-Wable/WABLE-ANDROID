@@ -3,9 +3,9 @@ package com.teamwable.designsystem.type
 import androidx.annotation.DrawableRes
 
 enum class ProfileImageType(
-    @DrawableRes val teamProfileImage: Int,
+    @DrawableRes val image: Int,
 ) {
-    PURPLE(teamProfileImage = com.teamwable.common.R.drawable.ic_share_profile_img_purple),
-    BLUE(teamProfileImage = com.teamwable.common.R.drawable.ic_share_profile_img_blue),
-    GREEN(teamProfileImage = com.teamwable.common.R.drawable.ic_share_profile_img_mint),
+    PURPLE(image = com.teamwable.common.R.drawable.ic_share_profile_img_purple),
+    BLUE(image = com.teamwable.common.R.drawable.ic_share_profile_img_blue),
+    GREEN(image = com.teamwable.common.R.drawable.ic_share_profile_img_mint),
 }
