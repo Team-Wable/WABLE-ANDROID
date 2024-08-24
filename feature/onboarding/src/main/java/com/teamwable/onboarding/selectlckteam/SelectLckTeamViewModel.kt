@@ -16,9 +16,9 @@ class SelectLckTeamViewModel @Inject constructor() : ViewModel() {
     val firstLckWatchSideEffect: SharedFlow<SelectLckTeamSideEffect>
         get() = _firstLckWatchSideEffect.asSharedFlow()
 
-    fun navigateToSelectTeam() {
+    fun navigateToProfile() {
         viewModelScope.launch {
-            _firstLckWatchSideEffect.emit(SelectLckTeamSideEffect.NavigateToSelectLckTeam)
+            _firstLckWatchSideEffect.emit(SelectLckTeamSideEffect.NavigateToProfile)
         }
     }
 }
