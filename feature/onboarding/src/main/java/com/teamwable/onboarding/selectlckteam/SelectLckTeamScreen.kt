@@ -93,12 +93,14 @@ fun SelectLckTeamScreen(
         }
 
         WableButton(
-            text = "다음으로",
-            onClick = onNextBtnClick,
-            enabled = true,
+            text = stringResource(R.string.btn_next_text),
+            onClick = {
+                if (selectedTeamIndex != -1) onNextBtnClick(selectedTeamName)
+            },
+            enabled = selectedTeamIndex != -1,
             textStyle = WableTheme.typography.body01,
+            modifier = Modifier.padding(bottom = 24.dp),
         )
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
