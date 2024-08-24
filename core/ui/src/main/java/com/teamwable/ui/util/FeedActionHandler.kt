@@ -32,7 +32,11 @@ class FeedActionHandler(
         handleDialogResult { dialogType ->
             when (dialogType) {
                 DialogType.DELETE_FEED -> removeFeed(feedId)
-                DialogType.REPORT -> Snackbar.make(view, SnackbarType.REPORT).show()
+                DialogType.REPORT -> {
+                    navController.popBackStack()
+                    Snackbar.make(view, SnackbarType.REPORT).show()
+                }
+
                 else -> Unit
             }
         }
