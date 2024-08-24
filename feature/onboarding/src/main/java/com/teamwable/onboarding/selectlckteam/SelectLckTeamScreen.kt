@@ -20,6 +20,7 @@ fun SelectLckTeamRoute(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    var userMutableList by remember { mutableStateOf(args.userList) }
 
     /*    LaunchedEffect(lifecycleOwner) {
             viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
