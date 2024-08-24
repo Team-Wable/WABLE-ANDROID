@@ -132,9 +132,9 @@ fun wableTypography(): WableTypography {
             letterSpacing = (-0.01).em,
         ),
         head02 = wableTextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardSemiBold,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
+            fontSize = 18.sp,
             lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),
