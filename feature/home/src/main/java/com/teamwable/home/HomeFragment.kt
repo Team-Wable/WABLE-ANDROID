@@ -66,7 +66,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            toast("item")
             findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 
@@ -95,6 +94,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 postAuthorId,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
             )
         }
 
@@ -114,6 +114,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             viewModel.updateFeeds().collectLatest { pagingData ->
                 feedAdapter.submitData(pagingData)
             }
+        }
+        setSwipeLayout()
+    }
+
+    private fun setSwipeLayout() {
+        binding.layoutHomeSwipe.setOnRefreshListener {
+            feedAdapter.refresh()
+            binding.layoutHomeSwipe.isRefreshing = false
         }
     }
 

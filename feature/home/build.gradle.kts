@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.recyclerview)
     implementation(libs.paging)
+    implementation(libs.swipe.refresh.layout)
 
     // Third Party
     implementation(libs.glide)

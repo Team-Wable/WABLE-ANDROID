@@ -72,7 +72,10 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         commentAdapter.removeComment(uiState.commentId)
                     }
 
-                    is HomeDetailUiState.RemoveFeed -> findNavController().popBackStack()
+                    is HomeDetailUiState.RemoveFeed -> {
+                        findNavController().popBackStack()
+                        findNavController().popBackStack()
+                    }
 
                     else -> Unit
                 }
@@ -184,6 +187,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 postAuthorId,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
             )
         }
 
@@ -213,6 +217,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 postAuthorId,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeComment = { viewModel.removeComment(it) },
+                binding.root,
             )
         }
     }
@@ -242,6 +247,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             if (itemDecorationCount == 0) {
                 setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
             }
+        }
+        setSwipeLayout()
+    }
+
+    private fun setSwipeLayout() {
+        val feedId = arguments?.getLong(FEED_ID)
+        binding.layoutHomeSwipe.setOnRefreshListener {
+            if (feedId != null) viewModel.updateHomeDetail(feedId)
+            commentAdapter.refresh()
+            binding.layoutHomeSwipe.isRefreshing = false
         }
     }
 

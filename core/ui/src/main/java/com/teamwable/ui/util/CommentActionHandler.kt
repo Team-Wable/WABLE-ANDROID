@@ -1,14 +1,17 @@
 package com.teamwable.ui.util
 
 import android.content.Context
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.teamwable.ui.component.BottomSheet
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.BOTTOM_SHEET_RESULT
 import com.teamwable.ui.util.Arg.BOTTOM_SHEET_TYPE
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
@@ -20,7 +23,7 @@ class CommentActionHandler(
     private val fragmentManager: FragmentManager,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    fun onKebabBtnClick(commentId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeComment: (Long) -> Unit) {
+    fun onKebabBtnClick(commentId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeComment: (Long) -> Unit, view: View) {
         when (fetchUserType(postAuthorId)) {
             ProfileUserType.AUTH -> navigateToBottomSheet(BottomSheetType.DELETE_FEED)
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
@@ -29,7 +32,7 @@ class CommentActionHandler(
         handleDialogResult { dialogType ->
             when (dialogType) {
                 DialogType.DELETE_FEED -> removeComment(commentId)
-                DialogType.REPORT -> Unit
+                DialogType.REPORT -> Snackbar.make(view, SnackbarType.REPORT).show()
                 else -> Unit
             }
         }

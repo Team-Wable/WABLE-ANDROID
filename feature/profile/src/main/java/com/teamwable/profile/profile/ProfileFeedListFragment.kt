@@ -80,7 +80,6 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
             findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to feed.feedId))
@@ -109,6 +108,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 postAuthorId,
                 fetchUserType = { userType },
                 removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
             )
         }
 

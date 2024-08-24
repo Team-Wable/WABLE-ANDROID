@@ -93,6 +93,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
                 postAuthorId,
                 fetchUserType = { userType },
                 removeComment = { viewModel.removeComment(it) },
+                binding.root,
             )
         }
     }
