@@ -16,7 +16,8 @@ import com.teamwable.designsystem.theme.WableTheme
 @Composable
 fun SelectLckTeamRoute(
     viewModel: SelectLckTeamViewModel = hiltViewModel(),
-    navigateToSelectLckTeam: () -> Unit,
+    args: Route.SelectLckTeam,
+    navigateToProfile: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
