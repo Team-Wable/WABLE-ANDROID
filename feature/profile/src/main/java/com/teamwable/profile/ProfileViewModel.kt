@@ -10,6 +10,7 @@ import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Comment
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -94,6 +95,14 @@ class ProfileViewModel @Inject constructor(
                 .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }
+
+    fun updateGhost(request: Ghost) {
+        viewModelScope.launch {
+            feedRepository.postGhost(request)
+                .onSuccess { _uiState.value = ProfileUiState.UpdateGhost }
+                .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface ProfileUiState {
@@ -106,6 +115,8 @@ sealed interface ProfileUiState {
     data class RemoveFeed(val feedId: Long) : ProfileUiState
 
     data class RemoveComment(val commentId: Long) : ProfileUiState
+
+    data object UpdateGhost : ProfileUiState
 
     data class Error(val errorMessage: String) : ProfileUiState
 }

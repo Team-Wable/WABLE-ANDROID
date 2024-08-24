@@ -26,7 +26,23 @@ class FeedActionHandler(
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
             ProfileUserType.EMPTY -> return
         }
-        handleDialogResult(feedId, removeFeed)
+        handleDialogResult { dialogType ->
+            when (dialogType) {
+                DialogType.DELETE_FEED -> removeFeed(feedId)
+                DialogType.REPORT -> Unit
+                else -> Unit
+            }
+        }
+    }
+
+    fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+        navigateToDialog(type)
+        handleDialogResult { dialogType ->
+            when (dialogType) {
+                DialogType.TRANSPARENCY -> updateGhost()
+                else -> Unit
+            }
+        }
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {
@@ -47,12 +63,10 @@ class FeedActionHandler(
         TwoButtonDialog.show(context, navController, type)
     }
 
-    private fun handleDialogResult(feedId: Long, removeFeed: (Long) -> Unit) {
+    private fun handleDialogResult(onResult: (DialogType) -> Unit) {
         fragmentManager.setFragmentResultListener(DIALOG_RESULT, lifecycleOwner) { _, bundle ->
-            when (bundle.getString(DIALOG_TYPE)) {
-                DialogType.DELETE_FEED.name -> removeFeed(feedId)
-                DialogType.REPORT.name -> Unit
-            }
+            val dialogType = DialogType.valueOf(bundle.getString(DIALOG_TYPE) ?: return@setFragmentResultListener)
+            onResult(dialogType)
         }
     }
 }

@@ -5,16 +5,20 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,15 +54,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
             toast("item")
             findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("ghost")
+        override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {

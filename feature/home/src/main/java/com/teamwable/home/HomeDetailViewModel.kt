@@ -9,6 +9,7 @@ import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Comment
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -90,6 +91,22 @@ class HomeDetailViewModel @Inject constructor(
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
+
+    fun removeFeed(feedId: Long) {
+        viewModelScope.launch {
+            feedRepository.deleteFeed(feedId)
+                .onSuccess { _uiState.value = HomeDetailUiState.RemoveFeed }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateGhost(request: Ghost) {
+        viewModelScope.launch {
+            feedRepository.postGhost(request)
+                .onSuccess { _uiState.value = HomeDetailUiState.UpdateGhost }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface HomeDetailUiState {
@@ -98,6 +115,10 @@ sealed interface HomeDetailUiState {
     data class Success(val feed: Feed) : HomeDetailUiState
 
     data class RemoveComment(val commentId: Long) : HomeDetailUiState
+
+    data object UpdateGhost : HomeDetailUiState
+
+    data object RemoveFeed : HomeDetailUiState
 
     data class Error(val errorMessage: String) : HomeDetailUiState
 }

@@ -6,18 +6,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.teamwable.model.Ghost
 import com.teamwable.profile.ProfileUiState
 import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.CommentActionHandler
@@ -70,19 +74,18 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickCommentItem() = object : CommentClickListener {
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("commentghost")
+        override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
+            commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
             toast("commentlike")
         }
 
-        override fun onPostAuthorProfileClick(id: Long) {
-            toast("commentprofile")
-        }
+        override fun onPostAuthorProfileClick(id: Long) {}
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
             commentActionHandler.onKebabBtnClick(

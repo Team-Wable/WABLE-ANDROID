@@ -10,10 +10,15 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.Snackbar
+import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -21,13 +26,18 @@ import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.CommentActionHandler
+import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @AndroidEntryPoint
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
@@ -36,12 +46,14 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private val args: HomeDetailFragmentArgs by navArgs()
     private val viewModel: HomeDetailViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
+    private lateinit var feedActionHandler: FeedActionHandler
 
     private var isCommentNull = true
     private var totalCommentLength = 0
 
     override fun initView() {
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
         val feedId = arguments?.getLong(FEED_ID)
         if (feedId != null) viewModel.updateHomeDetail(feedId)
@@ -59,6 +71,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         findNavController().popBackStack()
                         commentAdapter.removeComment(uiState.commentId)
                     }
+
+                    is HomeDetailUiState.RemoveFeed -> findNavController().popBackStack()
 
                     else -> Unit
                 }
@@ -140,12 +154,13 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {}
 
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("ghost")
+        override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
@@ -153,25 +168,33 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("profile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onFeedImageClick(image: String) {
-            toast("image")
+            val encodedUrl = URLEncoder.encode(image, "UTF-8")
+            FeedImageDialog.Companion.show(requireContext(), findNavController(), encodedUrl)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("kebab")
+            feedActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeFeed = { viewModel.removeFeed(it) },
+            )
         }
 
         override fun onCommentBtnClick(feedId: Long) {
-            // TODO : comment 달기 action
+            binding.etHomeDetailCommentInput.requestFocus()
         }
     }
 
     private fun onClickCommentItem() = object : CommentClickListener {
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("commentghost")
+        override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
+            commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
@@ -179,7 +202,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("commentprofile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {

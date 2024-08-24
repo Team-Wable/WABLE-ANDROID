@@ -36,4 +36,8 @@
     <string name="label_snack_bar_comment_ing">답글 남기는 중</string>
     <string name="label_snack_bar_comment_complete">답글을 남겼어요</string>
     <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
+
+    <!-- ghost -->
+    <string name="label_ghost_comment_type">commentGhost</string>
+    <string name="label_ghost_content_type">contentGhost</string>
 </resources>

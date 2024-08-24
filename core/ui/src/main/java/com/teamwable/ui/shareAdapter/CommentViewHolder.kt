@@ -20,7 +20,7 @@ class CommentViewHolder private constructor(
     private var time: CalculateTime = CalculateTime()
 
     init {
-        setupClickListener(binding.btnCommentGhost) { commentClickListener.onGhostBtnClick(item.postAuthorId) }
+        setupClickListener(binding.btnCommentGhost) { commentClickListener.onGhostBtnClick(item.postAuthorId, item.commentId) }
         setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(item.commentId) }
         setupClickListener(binding.ivCommentProfileImg, binding.tvCommentNickname) { commentClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item.commentId, item.postAuthorId) }

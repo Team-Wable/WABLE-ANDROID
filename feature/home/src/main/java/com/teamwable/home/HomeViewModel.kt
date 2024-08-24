@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,6 +67,14 @@ class HomeViewModel @Inject constructor(
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
+
+    fun updateGhost(request: Ghost) {
+        viewModelScope.launch {
+            feedRepository.postGhost(request)
+                .onSuccess { _uiState.value = HomeUiState.UpdateGhost }
+                .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
+        }
+    }
 }
 
 sealed interface HomeUiState {
@@ -74,6 +83,8 @@ sealed interface HomeUiState {
     data class Success(val profile: Profile) : HomeUiState
 
     data class RemoveFeed(val feedId: Long) : HomeUiState
+
+    data object UpdateGhost : HomeUiState
 
     data class Error(val errorMessage: String) : HomeUiState
 }

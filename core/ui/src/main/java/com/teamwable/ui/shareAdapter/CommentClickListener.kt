@@ -1,7 +1,7 @@
 package com.teamwable.ui.shareAdapter
 
 interface CommentClickListener {
-    fun onGhostBtnClick(postAuthorId: Long)
+    fun onGhostBtnClick(postAuthorId: Long, commentId: Long)
 
     fun onLikeBtnClick(id: Long)
 
