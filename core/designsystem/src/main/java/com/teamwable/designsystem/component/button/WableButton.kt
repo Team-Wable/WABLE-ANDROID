@@ -39,7 +39,7 @@ fun WableButton(
                 else this
             }
             .clip(RoundedCornerShape(dimensionResource(R.dimen.radius_12)))
-            .background(if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray100)
+            .background(if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray200)
             .padding(top = paddingTop, bottom = paddingBottom),
     ) {
         Text(
