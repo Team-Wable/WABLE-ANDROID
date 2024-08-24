@@ -50,9 +50,29 @@ fun SelectLckTeamScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween, // 상단과 하단을 공간으로 분리
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal)),
     ) {
-        Text(text = "SelectLckTeamScreen")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            Text(
+                text = stringResource(R.string.select_lck_team_title),
+                style = WableTheme.typography.head00,
+                color = WableTheme.colors.black,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.select_lck_team_description),
+                style = WableTheme.typography.body02,
+                color = WableTheme.colors.gray600,
+                modifier = Modifier.padding(top = 6.dp),
+            )
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
