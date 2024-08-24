@@ -31,16 +31,22 @@
             app:lottie_rawRes="@raw/tab_lottie" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_home"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/layout_home_swipe"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar_home"
-        tools:listitem="@layout/item_feed" />
+        app:layout_constraintTop_toBottomOf="@id/appbar_home">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_feed" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- framelayout 쓴 이유 : fab에 background drawable 추가 안됨;; -->
     <FrameLayout

@@ -17,13 +17,13 @@ import com.teamwable.ui.util.Arg.BOTTOM_SHEET_TYPE
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import com.teamwable.ui.util.Arg.DIALOG_TYPE
 
-class FeedActionHandler(
+class CommentActionHandler(
     private val context: Context,
     private val navController: NavController,
     private val fragmentManager: FragmentManager,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    fun onKebabBtnClick(feedId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeFeed: (Long) -> Unit, view: View) {
+    fun onKebabBtnClick(commentId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeComment: (Long) -> Unit, view: View) {
         when (fetchUserType(postAuthorId)) {
             ProfileUserType.AUTH -> navigateToBottomSheet(BottomSheetType.DELETE_FEED)
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
@@ -31,7 +31,7 @@ class FeedActionHandler(
         }
         handleDialogResult { dialogType ->
             when (dialogType) {
-                DialogType.DELETE_FEED -> removeFeed(feedId)
+                DialogType.DELETE_FEED -> removeComment(commentId)
                 DialogType.REPORT -> {
                     navController.popBackStack()
                     Snackbar.make(view, SnackbarType.REPORT).show()

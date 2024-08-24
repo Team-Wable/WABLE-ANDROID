@@ -1,70 +1,124 @@
 package com.teamwable.home
 
 import android.content.res.ColorStateList
-import android.os.Handler
-import android.os.Looper
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
-import com.teamwable.model.Comment
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.Snackbar
+import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.util.Arg.FEED_ID
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.CommentActionHandler
+import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @AndroidEntryPoint
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
-    val mock = mutableListOf<Comment>()
-
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private val args: HomeDetailFragmentArgs by navArgs()
+    private val viewModel: HomeDetailViewModel by viewModels()
+    private lateinit var commentActionHandler: CommentActionHandler
+    private lateinit var feedActionHandler: FeedActionHandler
 
     private var isCommentNull = true
     private var totalCommentLength = 0
 
-    private val dummyNickname = "배차은우"
-
     override fun initView() {
-        setFeedAdapter()
-        setCommentAdapter()
-        concatAdapter()
+        commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
+        val feedId = arguments?.getLong(FEED_ID)
+        if (feedId != null) viewModel.updateHomeDetail(feedId)
+        collect(commentSnackbar)
         initBackBtnClickListener()
-
-        initEditTextHint()
-        initEditTextBtn()
     }
 
-    private fun initEditTextHint() {
-        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, dummyNickname)
-    }
+    private fun collect(commentSnackbar: Snackbar) {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
 
-    private fun initEditTextBtn() {
-        binding.run {
-            etHomeDetailCommentInput.doAfterTextChanged {
-                isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
-                totalCommentLength = etHomeDetailCommentInput.text.length
-                handleUploadBtn(isCommentNull, totalCommentLength)
+                    is HomeDetailUiState.RemoveComment -> {
+                        findNavController().popBackStack()
+                        commentAdapter.removeComment(uiState.commentId)
+                    }
+
+                    is HomeDetailUiState.RemoveFeed -> {
+                        findNavController().popBackStack()
+                        findNavController().popBackStack()
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is HomeDetailSideEffect.ShowCommentSnackBar -> {
+                        commentSnackbar.updateToCommentComplete()
+                        commentAdapter.refresh()
+                    }
+
+                    is HomeDetailSideEffect.ShowGhostSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                }
             }
         }
     }
 
-    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int) {
+    private fun setLayout(feed: Feed, commentSnackbar: Snackbar) {
+        submitFeedList(feed)
+        submitCommentList(feed)
+        concatAdapter()
+        initEditTextHint(feed.postAuthorNickname)
+        initEditTextBtn(feed.feedId, commentSnackbar)
+    }
+
+    private fun initEditTextHint(nickname: String) {
+        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, nickname)
+    }
+
+    private fun initEditTextBtn(contentId: Long, commentSnackbar: Snackbar) {
+        binding.run {
+            etHomeDetailCommentInput.doAfterTextChanged {
+                isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
+                totalCommentLength = etHomeDetailCommentInput.text.length
+                handleUploadBtn(isCommentNull, totalCommentLength, contentId, commentSnackbar)
+            }
+        }
+    }
+
+    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, contentId: Long, commentSnackbar: Snackbar) {
         when {
             (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
                 setUploadingBtnSrc(
@@ -72,7 +126,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = true
-                    initUploadingActivateBtnClickListener()
+                    initUploadingActivateBtnClickListener(contentId, commentSnackbar)
                 }
             }
 
@@ -97,43 +151,21 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         clickListener.invoke()
     }
 
-    private fun initUploadingActivateBtnClickListener() {
+    private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnClickListener {
-            findNavController().popBackStack()
-
-            Snackbar(requireView(), SnackbarType.COMMENT_ING).apply {
-                show()
-
-                mock.add(
-                    Comment(
-                        postAuthorId = 1,
-                        postAuthorProfile = "",
-                        postAuthorNickname = "배차은우",
-                        commentId = 0,
-                        content = binding.etHomeDetailCommentInput.text.toString(),
-                        uploadTime = "3",
-                        isPostAuthorGhost = false,
-                        postAuthorGhost = 100,
-                        isLiked = false,
-                        likedNumber = "-10000",
-                        postAuthorTeamTag = "FOX",
-                    ),
-                )
-                commentAdapter.submitList(mock.toList())
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    updateToCommentComplete()
-                }, 2000)
-            }
+            viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
+            commentSnackbar.show()
+            binding.etHomeDetailCommentInput.text.clear()
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {}
 
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("ghost")
+        override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
@@ -141,25 +173,34 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("profile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onFeedImageClick(image: String) {
-            toast("image")
+            val encodedUrl = URLEncoder.encode(image, "UTF-8")
+            FeedImageDialog.Companion.show(requireContext(), findNavController(), encodedUrl)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("kebab")
+            feedActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
+            )
         }
 
         override fun onCommentBtnClick(feedId: Long) {
-            // TODO : comment 달기 action
+            binding.etHomeDetailCommentInput.requestFocus()
         }
     }
 
     private fun onClickCommentItem() = object : CommentClickListener {
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("commentghost")
+        override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
+            commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
@@ -167,50 +208,34 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("commentprofile")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
-            toast("commentkebab")
+            commentActionHandler.onKebabBtnClick(
+                feedId,
+                postAuthorId,
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeComment = { viewModel.removeComment(it) },
+                binding.root,
+            )
         }
     }
 
-    private fun setFeedAdapter() {
-        submitFeedList()
-    }
-
-    private fun submitFeedList() {
+    private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
-            flowOf(PagingData.from(listOf(args.content))).collectLatest { pagingData ->
+            flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
                 feedAdapter.submitData(pagingData)
             }
         }
     }
 
-    private fun setCommentAdapter() {
-        submitCommentList()
-    }
-
-    // TODO : mock data 지우기
-    private fun submitCommentList() {
-        repeat(5) {
-            mock.add(
-                Comment(
-                    postAuthorId = 0,
-                    postAuthorProfile = "",
-                    postAuthorNickname = "페이커최고",
-                    commentId = 0,
-                    content = "어떤 순간에도 너를 찾을 수 있게 반대가 끌리는 천만번째 이유를 내일의 우리는 알지도 몰라 오늘따라 왠지",
-                    uploadTime = "5",
-                    isPostAuthorGhost = false,
-                    postAuthorGhost = 100,
-                    isLiked = false,
-                    likedNumber = "100",
-                    postAuthorTeamTag = "T1",
-                ),
-            )
+    private fun submitCommentList(feed: Feed) {
+        viewLifeCycleScope.launch {
+            viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
+                commentAdapter.submitData(pagingData)
+            }
         }
-        commentAdapter.submitList(mock)
     }
 
     private fun concatAdapter() {
@@ -222,6 +247,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             if (itemDecorationCount == 0) {
                 setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
             }
+        }
+        setSwipeLayout()
+    }
+
+    private fun setSwipeLayout() {
+        val feedId = arguments?.getLong(FEED_ID)
+        binding.layoutHomeSwipe.setOnRefreshListener {
+            if (feedId != null) viewModel.updateHomeDetail(feedId)
+            commentAdapter.refresh()
+            binding.layoutHomeSwipe.isRefreshing = false
         }
     }
 

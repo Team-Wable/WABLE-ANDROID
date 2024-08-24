@@ -27,4 +27,15 @@
             app:argType="string" />
         <deepLink app:uri="@string/deeplink_url_bottomsheet" />
     </dialog>
+    <dialog
+        android:id="@+id/feedImageDialog"
+        android:name="com.teamwable.ui.component.FeedImageDialog"
+        android:label="FeedImageDialog"
+        tools:layout="@layout/dialog_feed_image">
+        <argument
+            android:name="${FEED_IMAGE_URL}"
+            android:defaultValue=""
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_image_dialog" />
+    </dialog>
 </navigation>

@@ -16,6 +16,6 @@ class ProfilePagerStateAdapter(
     override fun createFragment(position: Int): Fragment =
         when (ProfileTabType.entries[position]) {
             ProfileTabType.FEED -> ProfileFeedListFragment.newInstance(userID, nickName, type)
-            ProfileTabType.COMMENT -> ProfileCommentListFragment.newInstance(userID, nickName)
+            ProfileTabType.COMMENT -> ProfileCommentListFragment.newInstance(userID, nickName, type)
         }
 }

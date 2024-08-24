@@ -8,7 +8,7 @@ internal fun ResponseFeedDto.toFeed(): Feed =
         this.memberId,
         this.memberProfileUrl,
         this.memberNickname,
-        this.contentId,
+        this.contentId ?: -1,
         this.contentTitle,
         this.contentText,
         this.time,

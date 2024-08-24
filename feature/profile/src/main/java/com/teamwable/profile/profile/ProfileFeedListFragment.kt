@@ -7,26 +7,33 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.profile.ProfileUiState
 import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @AndroidEntryPoint
 class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(FragmentProfileFeedBinding::inflate) {
@@ -73,26 +80,26 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            toast("item")
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to feed.feedId))
         }
 
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("ghost")
+        override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
             toast("like")
         }
 
-        override fun onPostAuthorProfileClick(id: Long) {
-            toast("profile")
-        }
+        override fun onPostAuthorProfileClick(id: Long) {}
 
         override fun onFeedImageClick(image: String) {
-            toast("image")
+            val encodedUrl = URLEncoder.encode(image, "UTF-8")
+            FeedImageDialog.Companion.show(requireContext(), findNavController(), encodedUrl)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
@@ -101,6 +108,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 postAuthorId,
                 fetchUserType = { userType },
                 removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
             )
         }
 

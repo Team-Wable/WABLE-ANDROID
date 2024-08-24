@@ -1,24 +1,33 @@
 package com.teamwable.ui.shareAdapter
 
+import android.graphics.Color
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.Feed
 import com.teamwable.ui.R
 import com.teamwable.ui.databinding.ItemFeedBinding
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.CalculateTime
+import com.teamwable.ui.util.Transparent
 
 class FeedViewHolder private constructor(
     private val binding: ItemFeedBinding,
     feedClickListener: FeedClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private lateinit var item: Feed
+    private var time: CalculateTime = CalculateTime()
 
     init {
         setupClickListener(itemView, binding.tvFeedContent, binding.btnFeedComment) { feedClickListener.onItemClick(item) }
-        setupClickListener(binding.btnFeedGhost) { feedClickListener.onGhostBtnClick(item.postAuthorId) }
+        setupClickListener(binding.btnFeedGhost) {
+            feedClickListener.onGhostBtnClick(item.postAuthorId, item.feedId)
+            setFeedTransparent(item.postAuthorGhost)
+        }
         setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(item.feedId) }
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.ivFeedImg) { feedClickListener.onFeedImageClick(item.image) }
@@ -33,6 +42,7 @@ class FeedViewHolder private constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(feed: Feed?) {
         item = feed ?: return
         val isImageInclude = feed.image.isNotBlank()
@@ -40,7 +50,8 @@ class FeedViewHolder private constructor(
             ivFeedProfileImg.load(feed.postAuthorProfile)
             tvFeedNickname.text = feed.postAuthorNickname
             tvFeedGhostLevel.text = itemView.context.getString(R.string.label_feed_ghost_level, feed.postAuthorGhost)
-            tvFeedUploadTime.text = itemView.context.getString(R.string.label_feed_upload_time, feed.uploadTime)
+            // TODO : 나중에 미리 가공된 데이터 받기
+            tvFeedUploadTime.text = itemView.context.getString(R.string.label_feed_upload_time, time.getCalculateTime(itemView.context, feed.uploadTime))
             tvFeedTitle.text = feed.title
             tvFeedContent.text = feed.content
             ivFeedImg.apply {
@@ -51,7 +62,18 @@ class FeedViewHolder private constructor(
             tvFeedLikeCount.text = feed.likedNumber
             tvFeedCommentCount.text = feed.commentNumber
             tvTeamTag.teamName = feed.postAuthorTeamTag
+            if (feed.isPostAuthorGhost) {
+                btnFeedGhost.isEnabled = false
+                setFeedTransparent(-85)
+            } else {
+                setFeedTransparent(feed.postAuthorGhost)
+            }
         }
+    }
+
+    private fun setFeedTransparent(memberGhostPercent: Int) {
+        val color = Transparent().calculateColorWithOpacity(memberGhostPercent)
+        binding.viewFeedTransparentBg.setBackgroundColor(Color.parseColor(color))
     }
 
     companion object {
