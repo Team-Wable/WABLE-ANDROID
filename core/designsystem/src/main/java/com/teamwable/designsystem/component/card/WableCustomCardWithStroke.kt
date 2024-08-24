@@ -15,6 +15,7 @@ fun WableCustomCardWithStroke(
     connerRadius: Dp = 8.dp,
     strokeWidth: Dp = 1.dp,
     strokeColor: Color = WableTheme.colors.gray300,
+    enabled: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Card(
@@ -22,7 +23,10 @@ fun WableCustomCardWithStroke(
         colors = CardDefaults.cardColors(
             containerColor = WableTheme.colors.white,
         ),
-        border = BorderStroke(width = strokeWidth, color = strokeColor),
+        border = BorderStroke(
+            width = strokeWidth,
+            color = if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray300,
+        ),
     ) {
         content()
     }
