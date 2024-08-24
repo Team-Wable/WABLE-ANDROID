@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,13 +71,24 @@ fun SelectLckTeamRoute(
 fun SelectLckTeamScreen(
     onNextBtnClick: (String) -> Unit,
 ) {
-    var selectedTeamIndex by remember { mutableIntStateOf(-1) } // 선택된 팀 인덱스 상태
+    // 선택된 팀을 팀 객체로 관리
+    var selectedTeam by rememberSaveable { mutableStateOf<LckTeamType?>(null) }
     val shuffledTeams = remember { LckTeamType.entries.shuffled() }
-    // 선택된 팀의 이름을 미리 준비해둠
-    val selectedTeamName: String = if (selectedTeamIndex != -1) {
-        stringResource(id = shuffledTeams[selectedTeamIndex].teamName)
-    } else {
-        ""
+    val gridState = rememberLazyGridState()
+
+    // 선택된 팀의 이름을 준비
+    val selectedTeamName: String = selectedTeam?.let { team ->
+        stringResource(id = team.teamName)
+    }.orEmpty()
+
+    // 선택된 항목으로 스크롤
+    LaunchedEffect(key1 = selectedTeam) {
+        selectedTeam?.let { team ->
+            val index = shuffledTeams.indexOf(team)
+            if (index != -1) {
+                gridState.scrollToItem(index)
+            }
+        }
     }
 
     Column(
@@ -111,12 +123,13 @@ fun SelectLckTeamScreen(
                 modifier = Modifier.padding(top = 18.dp),
             ) {
                 itemsIndexed(shuffledTeams) { index, team ->
-                    val isSelected = index == selectedTeamIndex
+                    // 팀이 선택된 상태인지 확인
+                    val isSelected = team == selectedTeam
                     LckTeamItem(
                         lckTeamType = team,
-                        enabled = isSelected, // 선택 상태에 따라 색상 변경
+                        enabled = isSelected,
                         onClick = {
-                            selectedTeamIndex = if (isSelected) -1 else index // 클릭 시 선택 토글
+                            selectedTeam = if (isSelected) null else team // 팀을 선택하거나 선택 해제
                         },
                     )
                 }
@@ -128,6 +141,7 @@ fun SelectLckTeamScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 18.dp, bottom = 12.dp)
                 .noRippleDebounceClickable {
+                    selectedTeam = null
                     onNextBtnClick("")
                 },
         ) {
@@ -145,9 +159,9 @@ fun SelectLckTeamScreen(
         WableButton(
             text = stringResource(R.string.btn_next_text),
             onClick = {
-                if (selectedTeamIndex != -1) onNextBtnClick(selectedTeamName)
+                if (selectedTeam != null) onNextBtnClick(selectedTeamName)
             },
-            enabled = selectedTeamIndex != -1,
+            enabled = selectedTeam != null,
             modifier = Modifier.padding(bottom = 24.dp),
         )
     }
