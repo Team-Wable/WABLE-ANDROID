@@ -20,6 +20,7 @@ import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
 import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
+import com.teamwable.onboarding.profile.naviagation.profileNavGraph
 import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -90,7 +91,11 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     selectLckTeamNavGraph(
-                        navigateToSelectLckTeam = {},
+                        navigateToProfile = { userList -> navigator.navigateToProfile(userList) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    profileNavGraph(
+                        navigateToProfile = { userList -> navigator.navigateToProfile(userList) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }

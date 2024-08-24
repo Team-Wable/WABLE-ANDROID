@@ -12,7 +12,7 @@ fun NavController.navigateToProfile(userList: List<String>) {
 }
 
 fun NavGraphBuilder.profileNavGraph(
-    navigateToProfile: (List<String?>) -> Unit,
+    navigateToProfile: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     composable<Route.Profile> { backStackEntry ->
