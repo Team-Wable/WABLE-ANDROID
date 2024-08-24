@@ -8,4 +8,8 @@
     <string name="dialog_wellcome_title">와블과 함께 해 주셔서 감사합니다!</string>
     <string name="dialog_wellcome_description">%1$s님,\n와블의 일원이 되신 것을 환영해요!\nLCK 함께 보며 같이 즐겨요 :)</string>
     <string name="dialog_wellcome_btn_text">와블 즐기러 가기</string>
+    <string name="permission_app_setting_dialog_title">권한이 필요해요</string>
+    <string name="permission_app_setting_dialog_description">이 앱은 파일 및 미디어 접근 권한이 필요해요. 앱 세팅으로 이동해서 권한을 부여 할 수 있어요.</string>
+    <string name="permission_app_setting_dialog_moving">이동하기</string>
+    <string name="permission_app_setting_dialog_cancel">취소하기</string>
 </resources>
