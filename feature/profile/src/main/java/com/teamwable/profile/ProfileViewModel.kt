@@ -15,7 +15,9 @@ import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -31,6 +33,9 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private val _event = MutableSharedFlow<ProfileSideEffect>()
+    val event = _event.asSharedFlow()
 
     private var cachedFeeds: Flow<PagingData<Feed>>? = null
     private var cachedComments: Flow<PagingData<Comment>>? = null
@@ -99,7 +104,7 @@ class ProfileViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _uiState.value = ProfileUiState.UpdateGhost }
+                .onSuccess { _event.emit(ProfileSideEffect.ShowSnackBar) }
                 .onFailure { _uiState.value = ProfileUiState.Error(it.message.toString()) }
         }
     }
@@ -116,7 +121,9 @@ sealed interface ProfileUiState {
 
     data class RemoveComment(val commentId: Long) : ProfileUiState
 
-    data object UpdateGhost : ProfileUiState
-
     data class Error(val errorMessage: String) : ProfileUiState
+}
+
+sealed interface ProfileSideEffect {
+    data object ShowSnackBar : ProfileSideEffect
 }

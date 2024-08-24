@@ -12,7 +12,9 @@ import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -27,6 +29,9 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
     private var authId: Long = -1
+
+    private val _event = MutableSharedFlow<HomeSideEffect>()
+    val event = _event.asSharedFlow()
 
     init {
         fetchAuthId()
@@ -71,7 +76,7 @@ class HomeViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _uiState.value = HomeUiState.UpdateGhost }
+                .onSuccess { _event.emit(HomeSideEffect.ShowSnackBar) }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
@@ -84,7 +89,9 @@ sealed interface HomeUiState {
 
     data class RemoveFeed(val feedId: Long) : HomeUiState
 
-    data object UpdateGhost : HomeUiState
-
     data class Error(val errorMessage: String) : HomeUiState
+}
+
+sealed interface HomeSideEffect {
+    data object ShowSnackBar : HomeSideEffect
 }

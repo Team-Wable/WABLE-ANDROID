@@ -82,10 +82,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         viewLifeCycleScope.launch {
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
-                    is HomeDetailSideEffect.ShowSnackBar -> {
+                    is HomeDetailSideEffect.ShowCommentSnackBar -> {
                         commentSnackbar.updateToCommentComplete()
                         commentAdapter.refresh()
                     }
+
+                    is HomeDetailSideEffect.ShowGhostSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
                 }
             }
         }

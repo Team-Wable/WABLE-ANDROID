@@ -8,6 +8,7 @@ import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.FeedImageDialog
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
@@ -19,6 +20,7 @@ import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +51,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     }
 
                     else -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
                 }
             }
         }

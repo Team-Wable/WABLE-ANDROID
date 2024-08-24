@@ -57,6 +57,7 @@ class FeedViewHolder private constructor(
             tvFeedLikeCount.text = feed.likedNumber
             tvFeedCommentCount.text = feed.commentNumber
             tvTeamTag.teamName = feed.postAuthorTeamTag
+            if (feed.isPostAuthorGhost) btnFeedGhost.isEnabled = false
         }
     }
 

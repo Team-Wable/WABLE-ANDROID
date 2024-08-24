@@ -79,7 +79,7 @@ class HomeDetailViewModel @Inject constructor(
     fun addComment(contentId: Long, commentText: String) {
         viewModelScope.launch {
             commentRepository.postComment(contentId, commentText)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -103,7 +103,7 @@ class HomeDetailViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _uiState.value = HomeDetailUiState.UpdateGhost }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowGhostSnackBar) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -116,13 +116,13 @@ sealed interface HomeDetailUiState {
 
     data class RemoveComment(val commentId: Long) : HomeDetailUiState
 
-    data object UpdateGhost : HomeDetailUiState
-
     data object RemoveFeed : HomeDetailUiState
 
     data class Error(val errorMessage: String) : HomeDetailUiState
 }
 
 sealed interface HomeDetailSideEffect {
-    data object ShowSnackBar : HomeDetailSideEffect
+    data object ShowCommentSnackBar : HomeDetailSideEffect
+
+    data object ShowGhostSnackBar : HomeDetailSideEffect
 }

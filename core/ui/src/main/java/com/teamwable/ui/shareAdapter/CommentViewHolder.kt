@@ -46,6 +46,7 @@ class CommentViewHolder private constructor(
             btnCommentLike.isChecked = comment.isLiked
             tvCommentLikeCount.text = comment.likedNumber
             tvTeamTag.teamName = comment.postAuthorTeamTag
+            if (comment.isPostAuthorGhost) btnCommentGhost.isEnabled = false
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
+import com.teamwable.profile.ProfileSideEffect
 import com.teamwable.profile.ProfileTabType
 import com.teamwable.profile.ProfileUiState
 import com.teamwable.profile.ProfileViewModel
@@ -17,6 +18,7 @@ import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileBinding
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.stringOf
@@ -24,6 +26,7 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,6 +74,14 @@ class ProfileFragment : BindingFragment<FragmentProfileBinding>(FragmentProfileB
                         else -> Unit
                     }
                 }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                }
+            }
         }
     }
 
