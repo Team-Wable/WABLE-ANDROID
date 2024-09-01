@@ -3,6 +3,7 @@ package com.teamwable.network.di
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.datasource.CommentService
 import com.teamwable.network.datasource.DummyService
+import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.datasource.NotificationService
 import com.teamwable.network.datasource.ProfileService
@@ -27,6 +28,12 @@ internal object ServiceModule {
     fun provideAuthService(
         @WithoutTokenInterceptor retrofit: Retrofit,
     ): AuthService = retrofit.create(AuthService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideNewsService(
+        @WableRetrofit retrofit: Retrofit,
+    ): NewsService = retrofit.create(NewsService::class.java)
 
     @Singleton
     @Provides

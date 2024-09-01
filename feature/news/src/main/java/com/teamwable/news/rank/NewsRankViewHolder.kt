@@ -2,7 +2,7 @@ package com.teamwable.news.rank
 
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.NewsRankModel
+import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.databinding.ItemNewsRankBinding
 
 class NewsRankViewHolder(
@@ -15,7 +15,7 @@ class NewsRankViewHolder(
             tvNewsRankTeamName.text = data.teamName
             tvNewsRankWin.text = data.teamWin.toString()
             tvNewsRankLoss.text = data.teamDefeat.toString()
-            tvNewsRankWinPercentage.text = "${data.winnigRate}%"
+            tvNewsRankWinPercentage.text = "${data.winningRate}%"
             tvNewsRankPointDifference.text = data.scoreDiff.toString()
         }
     }
