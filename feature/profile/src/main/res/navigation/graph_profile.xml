@@ -3,16 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_profile"
-    app:startDestination="@id/navigation_profile">
+    app:startDestination="@id/navigation_profile_auth">
     <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.teamwable.profile.profile.ProfileFragment"
+        android:id="@+id/navigation_profile_auth"
+        android:name="com.teamwable.profile.profile.ProfileAuthFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
-        <argument
-            android:name="user_id"
-            android:defaultValue="-1L"
-            app:argType="long" />
         <action
             android:id="@+id/action_profile_to_profile_information"
             app:destination="@id/navigation_profile_information" />
@@ -21,9 +17,9 @@
             app:destination="@id/navigation_push_notification" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_profile_more"
-        android:name="com.teamwable.profile.profile.ProfileFragment"
-        android:label="ProfileFragment"
+        android:id="@+id/navigation_profile_member"
+        android:name="com.teamwable.profile.profile.ProfileMemberFragment"
+        android:label="ProfileMemberFragment"
         tools:layout="@layout/fragment_profile">
         <argument
             android:name="user_id"

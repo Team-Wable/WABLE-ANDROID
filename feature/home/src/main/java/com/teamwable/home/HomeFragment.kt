@@ -20,9 +20,11 @@ import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -48,9 +50,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     else -> Unit
                 }
             }
-        }
 
-        viewLifeCycleScope.launch {
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
@@ -61,7 +61,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     }
 
     private fun onClickFeedItem() = object : FeedClickListener {
-        override fun onItemClick(feed: Feed, int: Int) {
+        override fun onItemClick(feed: Feed) {
             findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 
@@ -76,7 +76,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            handleProfileNavigation(id)
         }
 
         override fun onFeedImageClick(image: String) {
@@ -95,6 +95,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onCommentBtnClick(feedId: Long) {}
+    }
+
+    private fun handleProfileNavigation(id: Long) {
+        when (viewModel.fetchUserType(id)) {
+            ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
+            ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            ProfileUserType.EMPTY -> return
+        }
     }
 
     private fun setAdapter() {

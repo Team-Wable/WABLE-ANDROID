@@ -17,13 +17,14 @@ import com.teamwable.common.uistate.UiState
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                     com.teamwable.profile.R.id.navigation_profile_delete_reason,
                     com.teamwable.profile.R.id.navigation_profile_information,
                     com.teamwable.home.R.id.navigation_home_detail,
-                    com.teamwable.profile.R.id.navigation_profile_more,
+                    com.teamwable.profile.R.id.navigation_profile_member,
                 ),
         )
     }
@@ -99,6 +100,10 @@ class MainActivity : AppCompatActivity() {
             horizontalOffset = 1
             if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
         }
+    }
+
+    override fun navigateToProfileAuthFragment() {
+        binding.bnvMain.selectedItemId = R.id.graph_profile
     }
 
     companion object {
