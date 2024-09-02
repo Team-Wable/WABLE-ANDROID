@@ -41,7 +41,7 @@ import timber.log.Timber
 fun ProfileRoute(
     viewModel: SelectLckTeamViewModel = hiltViewModel(),
     args: Route.Profile,
-    navigateToProfile: (List<String>) -> Unit,
+    navigateToAgreeTerms: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

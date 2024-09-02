@@ -98,7 +98,7 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     profileNavGraph(
-                        navigateToProfile = { userList -> navigator.navigateToProfile(userList) },
+                        navigateToAgreeTerms = { userList -> navigator.navigateToProfile(userList) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }

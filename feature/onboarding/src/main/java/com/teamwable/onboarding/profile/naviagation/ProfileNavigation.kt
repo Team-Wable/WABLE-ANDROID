@@ -12,13 +12,13 @@ fun NavController.navigateToProfile(userList: List<String>) {
 }
 
 fun NavGraphBuilder.profileNavGraph(
-    navigateToProfile: (List<String>) -> Unit,
+    navigateToAgreeTerms: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     composable<Route.Profile> { backStackEntry ->
         val args = backStackEntry.toRoute<Route.Profile>()
         ProfileRoute(
-            navigateToProfile = navigateToProfile,
+            navigateToAgreeTerms = navigateToAgreeTerms,
             onShowErrorSnackBar = onShowErrorSnackBar,
             args = args,
         )
