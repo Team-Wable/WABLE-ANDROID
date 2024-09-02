@@ -45,11 +45,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
-                    is HomeUiState.RemoveFeed -> {
-                        findNavController().popBackStack()
-                        feedAdapter.removeFeed(uiState.feedId)
-                    }
-
                     else -> Unit
                 }
             }
@@ -59,13 +54,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
                 }
             }
         }
     }
 
     private fun onClickFeedItem() = object : FeedClickListener {
-        override fun onItemClick(feed: Feed) {
+        override fun onItemClick(feed: Feed, int: Int) {
             findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 

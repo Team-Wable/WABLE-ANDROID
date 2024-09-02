@@ -3,6 +3,8 @@ package com.teamwable.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,24 +30,32 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
-    private var authId: Long = -1
 
     private val _event = MutableSharedFlow<HomeSideEffect>()
     val event = _event.asSharedFlow()
 
+    private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val feedsFlow = feedRepository.getHomeFeeds().cachedIn(viewModelScope)
+
+    private var authId = -1L
+
     init {
         fetchAuthId()
     }
-
-    // private var cachedFeeds: Flow<PagingData<Feed>>? = null
-
-    fun updateFeeds(): Flow<PagingData<Feed>> = feedRepository.getHomeFeeds()
 
     private fun fetchAuthId() {
         viewModelScope.launch {
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
                 .collectLatest { authId = it }
+        }
+    }
+
+    fun updateFeeds(): Flow<PagingData<Feed>> {
+        return combine(feedsFlow, removedFeedsFlow) { feedsFlow, deletedIdsFlow ->
+            feedsFlow.filter { data ->
+                deletedIdsFlow.contains(data.feedId).not()
+            }
         }
     }
 
@@ -63,7 +74,10 @@ class HomeViewModel @Inject constructor(
     fun removeFeed(feedId: Long) {
         viewModelScope.launch {
             feedRepository.deleteFeed(feedId)
-                .onSuccess { _uiState.value = HomeUiState.RemoveFeed(feedId) }
+                .onSuccess {
+                    removedFeedsFlow.value = removedFeedsFlow.value.toMutableSet().apply { add(feedId) }
+                    _event.emit(HomeSideEffect.DismissBottomSheet)
+                }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
@@ -82,11 +96,11 @@ sealed interface HomeUiState {
 
     data class Success(val profile: Profile) : HomeUiState
 
-    data class RemoveFeed(val feedId: Long) : HomeUiState
-
     data class Error(val errorMessage: String) : HomeUiState
 }
 
 sealed interface HomeSideEffect {
     data object ShowSnackBar : HomeSideEffect
+
+    data object DismissBottomSheet : HomeSideEffect
 }
