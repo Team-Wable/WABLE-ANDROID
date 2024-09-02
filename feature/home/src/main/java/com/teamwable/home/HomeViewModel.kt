@@ -52,9 +52,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFeeds(): Flow<PagingData<Feed>> {
-        return combine(feedsFlow, removedFeedsFlow) { feedsFlow, deletedIdsFlow ->
+        return combine(feedsFlow, removedFeedsFlow) { feedsFlow, removedFeedIds ->
             feedsFlow.filter { data ->
-                deletedIdsFlow.contains(data.feedId).not()
+                removedFeedIds.contains(data.feedId).not()
             }
         }
     }
