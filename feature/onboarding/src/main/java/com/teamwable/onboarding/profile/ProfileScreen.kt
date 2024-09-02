@@ -44,12 +44,14 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
-import com.teamwable.onboarding.selectlckteam.SelectLckTeamViewModel
-import timber.log.Timber
+import com.teamwable.onboarding.permission.launchImagePicker
+import com.teamwable.onboarding.permission.rememberGalleryLauncher
+import com.teamwable.onboarding.permission.rememberPhotoPickerLauncher
+import com.teamwable.onboarding.profile.model.ProfileSideEffect
 
 @Composable
 fun ProfileRoute(
-    viewModel: SelectLckTeamViewModel = hiltViewModel(),
+    viewModel: ProfileViewModel = hiltViewModel(),
     args: Route.Profile,
     navigateToAgreeTerms: (List<String>) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
@@ -105,7 +107,6 @@ fun ProfileRoute(
             }
     }
 
-    ProfileScreen(onNextBtnClick = {})
     if (openDialog) {
         PermissionAppSettingsDialog(
             onClick = {
@@ -116,14 +117,26 @@ fun ProfileRoute(
         )
     }
 
+    ProfileScreen(
+        onNextBtnClick = {},
+        onProfilePlusBtnClick = { viewModel.requestImagePicker() },
+        selectedImageUri = selectedImageUri,
+        currentImage = currentImage,
+        onRandomImageChange = { newImage ->
+            currentImage = newImage
+            viewModel.onImageSelected(null)
+        },
+    )
 }
 
 @Composable
 fun ProfileScreen(
+    onProfilePlusBtnClick: () -> Unit = {},
+    selectedImageUri: String? = null,
+    currentImage: ProfileImageType, // 현재 이미지를 받는 파라미터 추가
+    onRandomImageChange: (ProfileImageType) -> Unit = {},
     onNextBtnClick: (String) -> Unit,
 ) {
-    var currentImage by remember { mutableStateOf(ProfileImageType.entries.random()) }
-
     Column(
         verticalArrangement = Arrangement.SpaceBetween, // 상단과 하단을 공간으로 분리
         modifier = Modifier
@@ -155,7 +168,7 @@ fun ProfileScreen(
                     .padding(top = 40.dp, start = 78.dp, end = 78.dp),
             ) {
                 GlideImage(
-                    imageModel = { currentImage.image },
+                    imageModel = { selectedImageUri ?: currentImage.image },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
                         alignment = Alignment.Center,
@@ -171,9 +184,10 @@ fun ProfileScreen(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .noRippleClickable {
-                            currentImage = ProfileImageType.entries
+                            val newImage = ProfileImageType.entries
                                 .filter { it != currentImage }
                                 .random()
+                            onRandomImageChange(newImage)
                         },
                 )
                 Image(
@@ -181,7 +195,9 @@ fun ProfileScreen(
                     contentDescription = "Plus Profile Image",
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .noRippleClickable { },
+                        .noRippleClickable {
+                            onProfilePlusBtnClick()
+                        },
                 )
             }
         }
@@ -201,6 +217,9 @@ fun GreetingPreview() {
     WableTheme {
         ProfileScreen(
             onNextBtnClick = {},
+            onProfilePlusBtnClick = {},
+            selectedImageUri = null,
+            currentImage = ProfileImageType.entries.random(),
         )
     }
 }
