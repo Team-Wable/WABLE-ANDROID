@@ -30,7 +30,6 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
 
     override fun initView() {
         reasons = args.reasons.toList()
-        Timber.tag("dd").d(reasons[0])
 
         setAppbarText()
         initBackBtnClickListener()
@@ -48,6 +47,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
                     viewModel.clearInfo()
                     navigateToLoginScreen()
                 }
+
                 is UiState.Failure -> navigateToErrorScreen()
                 else -> Unit
             }
@@ -58,7 +58,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
         // Todo : 구현해야 함
     }
 
-    private fun  navigateToLoginScreen() {
+    private fun navigateToLoginScreen() {
         // Todo : 구현해야 함
     }
 
