@@ -81,7 +81,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileFeedSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ProfileFeedSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is ProfileFeedSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, SnackbarType.GHOST).show() }
                 }
             }
         }
@@ -115,7 +115,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 postAuthorId,
                 fetchUserType = { userType },
                 removeFeed = { viewModel.removeFeed(it) },
-                binding.root,
+                parentFragment?.view ?: return,
             )
         }
 

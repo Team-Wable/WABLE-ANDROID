@@ -76,7 +76,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileCommentSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ProfileCommentSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is ProfileCommentSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, SnackbarType.GHOST).show() }
                 }
             }
         }
@@ -101,7 +101,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
                 postAuthorId,
                 fetchUserType = { userType },
                 removeComment = { viewModel.removeComment(it) },
-                binding.root,
+                parentFragment?.view ?: return,
             )
         }
 
