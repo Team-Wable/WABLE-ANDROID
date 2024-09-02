@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel
 @Inject constructor(private val notificationRepository: NotificationRepository) : ViewModel() {
-    private val _notificationNumberUiState = MutableStateFlow<UiState<Int>>(UiState.Empty)
+    private val _notificationNumberUiState = MutableStateFlow<UiState<Int>>(UiState.Loading)
     val notificationNumberUiState = _notificationNumberUiState.asStateFlow()
 
     init {
@@ -22,7 +22,6 @@ class MainViewModel
 
     private fun getNotificationNumber() {
         viewModelScope.launch {
-            _notificationNumberUiState.value = UiState.Loading
             notificationRepository.getNumber()
                 .onSuccess { _notificationNumberUiState.value = UiState.Success(it) }
                 .onFailure { _notificationNumberUiState.value = UiState.Failure(it.message.toString()) }
