@@ -6,8 +6,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
-import com.teamwable.profile.ProfileAuthUiState
-import com.teamwable.profile.ProfileAuthViewModel
 import com.teamwable.profile.ProfileTabType
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.ui.extensions.stringOf
@@ -52,12 +50,6 @@ class ProfileAuthFragment : BindingProfileFragment() {
 
                     else -> Unit
                 }
-            }
-
-            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
-//                when (sideEffect) {
-//                    is ProfileSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
-//                }
             }
         }
     }

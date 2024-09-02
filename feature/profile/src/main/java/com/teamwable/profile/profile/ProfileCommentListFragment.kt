@@ -7,11 +7,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.Ghost
-import com.teamwable.profile.ProfileUiState
-import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.Snackbar
+import com.teamwable.ui.extensions.DeepLinkDestination
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
@@ -23,6 +24,8 @@ import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.CommentActionHandler
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +34,11 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding>(FragmentProfileCommentBinding::inflate) {
+    private val viewModel: ProfileCommentListViewModel by viewModels()
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private lateinit var userType: ProfileUserType
     private lateinit var userNickname: String
     private var userId: Long = -1
-    private val viewModel: ProfileViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +52,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable(BundleKey.USER_TYPE, ProfileUserType::class.java)
         } else {
+            @Suppress("DEPRECATION")
             arguments?.getSerializable(BundleKey.USER_TYPE) as? ProfileUserType
         } ?: ProfileUserType.EMPTY
     }
@@ -63,12 +67,16 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
-                    is ProfileUiState.RemoveComment -> {
-                        findNavController().popBackStack()
-                        commentAdapter.removeComment(uiState.commentId)
-                    }
-
                     else -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileCommentSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    is ProfileCommentSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
                 }
             }
         }
@@ -95,6 +103,10 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
                 removeComment = { viewModel.removeComment(it) },
                 binding.root,
             )
+        }
+
+        override fun onItemClick(feedId: Long) {
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to feedId))
         }
     }
 

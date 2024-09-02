@@ -1,4 +1,4 @@
-package com.teamwable.profile
+package com.teamwable.profile.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,26 +40,12 @@ class ProfileAuthViewModel @Inject constructor(
         }
     }
 
-//    fun updateComments(userId: Long): Flow<PagingData<Comment>> {
-//        return cachedComments ?: commentRepository.getProfileComments(userId)
-//            .cachedIn(viewModelScope)
-//            .also { cachedComments = it }
-//    }
-
     private fun fetchProfileInfo(userId: Long) {
         viewModelScope.launch {
             profileRepository.getProfileInfo(userId)
                 .onSuccess {
                     _uiState.value = ProfileAuthUiState.Success(it)
                 }
-                .onFailure { _uiState.value = ProfileAuthUiState.Error(it.message.toString()) }
-        }
-    }
-
-    fun removeComment(commentId: Long) {
-        viewModelScope.launch {
-            commentRepository.deleteComment(commentId)
-                .onSuccess { _uiState.value = ProfileAuthUiState.RemoveComment(commentId) }
                 .onFailure { _uiState.value = ProfileAuthUiState.Error(it.message.toString()) }
         }
     }

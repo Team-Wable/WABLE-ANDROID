@@ -223,6 +223,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 binding.root,
             )
         }
+
+        override fun onItemClick(feedId: Long) {}
     }
 
     private fun handleProfileNavigation(id: Long) {

@@ -22,6 +22,7 @@ class CommentViewHolder private constructor(
     private var time: CalculateTime = CalculateTime()
 
     init {
+        setupClickListener(itemView, binding.tvCommentContent) { commentClickListener.onItemClick(item.feedId ?: return@setupClickListener) }
         setupClickListener(binding.btnCommentGhost) {
             commentClickListener.onGhostBtnClick(item.postAuthorId, item.commentId)
             setCommentTransparent(item.postAuthorGhost)

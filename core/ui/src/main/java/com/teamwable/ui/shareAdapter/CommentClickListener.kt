@@ -8,4 +8,6 @@ interface CommentClickListener {
     fun onPostAuthorProfileClick(id: Long)
 
     fun onKebabBtnClick(feedId: Long, postAuthorId: Long)
+
+    fun onItemClick(feedId: Long)
 }

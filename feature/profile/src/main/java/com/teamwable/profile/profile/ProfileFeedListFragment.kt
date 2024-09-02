@@ -8,12 +8,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
-import com.teamwable.profile.ProfileUiState
-import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.FeedImageDialog
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDivider
@@ -27,6 +26,7 @@ import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
@@ -37,7 +37,7 @@ import java.net.URLEncoder
 
 @AndroidEntryPoint
 class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(FragmentProfileFeedBinding::inflate) {
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileFeedListViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private lateinit var userType: ProfileUserType
     private lateinit var userNickname: String
@@ -55,6 +55,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable(BundleKey.USER_TYPE, ProfileUserType::class.java)
         } else {
+            @Suppress("DEPRECATION")
             arguments?.getSerializable(BundleKey.USER_TYPE) as? ProfileUserType
         } ?: ProfileUserType.EMPTY
     }
@@ -69,12 +70,16 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
-                    is ProfileUiState.RemoveFeed -> {
-                        findNavController().popBackStack()
-                        feedAdapter.removeFeed(uiState.feedId)
-                    }
-
                     else -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileFeedSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    is ProfileFeedSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
                 }
             }
         }
