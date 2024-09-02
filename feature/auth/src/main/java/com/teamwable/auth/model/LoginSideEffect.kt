@@ -5,5 +5,5 @@ sealed interface LoginSideEffect {
 
     data object NavigateToFirstLckWatch : LoginSideEffect
 
-    data class ShowSnackBar(val message: String) : LoginSideEffect
+    data class ShowSnackBar(val message: Throwable) : LoginSideEffect
 }

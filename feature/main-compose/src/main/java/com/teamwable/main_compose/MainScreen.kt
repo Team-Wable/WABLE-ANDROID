@@ -19,6 +19,7 @@ import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
+import com.teamwable.model.network.Error
 import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
 import com.teamwable.onboarding.profile.naviagation.profileNavGraph
 import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
@@ -41,6 +42,8 @@ internal fun MainScreen(
             snackBarHostState.showSnackbar(
                 when (throwable) {
                     is UnknownHostException -> localContextResource.getString(R.string.error_message_network)
+                    is Error.ApiError -> throwable.message.toString()
+                    is Error.TimeOutError -> throwable.message.toString()
                     else -> localContextResource.getString(R.string.error_message_unknown)
                 },
             )

@@ -61,7 +61,7 @@ fun LoginRoute(
                 when (sideEffect) {
                     is LoginSideEffect.NavigateToMain -> navigateToHome()
                     is LoginSideEffect.NavigateToFirstLckWatch -> navigateToFirstLckWatch()
-                    else -> Unit
+                    is LoginSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
             }
     }
