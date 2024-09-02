@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
@@ -30,13 +31,16 @@ class ProfileFeedListViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> {
         val feedsFlow = feedRepository.getProfileFeeds(userId).cachedIn(viewModelScope)
-        return combine(feedsFlow, removedFeedsFlow) { feedsFlow, removedFeedIds ->
-            feedsFlow.filter { data ->
-                removedFeedIds.contains(data.feedId).not()
-            }
+        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds ->
+            feedsFlow
+                .filter { removedFeedIds.contains(it.feedId).not() }
+                .map { data ->
+                    if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                }
         }
     }
 
@@ -54,7 +58,10 @@ class ProfileFeedListViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _event.emit(ProfileFeedSideEffect.ShowSnackBar) }
+                .onSuccess {
+                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    _event.emit(ProfileFeedSideEffect.ShowSnackBar)
+                }
                 .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
         }
     }

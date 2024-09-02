@@ -3,6 +3,7 @@ package com.teamwable.home
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
@@ -24,6 +25,7 @@ import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -118,7 +120,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateFeeds().collectLatest { pagingData ->
-                feedAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                feedAdapter.submitData(transformedPagingData)
             }
         }
         setSwipeLayout()

@@ -13,7 +13,7 @@ internal fun ResponseFeedDto.toFeed(): Feed =
         this.contentText,
         this.time,
         this.isGhost,
-        this.memberGhost,
+        this.memberGhost.toString(),
         this.isLiked,
         this.likedNumber.toString(),
         this.commentNumber.toString(),

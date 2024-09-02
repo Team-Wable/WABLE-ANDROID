@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.map
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.profile.R
@@ -30,6 +31,7 @@ import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.FeedTransformer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -131,7 +133,8 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateFeeds(userId).collectLatest { pagingData ->
-                feedAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                feedAdapter.submitData(transformedPagingData)
             }
         }
 

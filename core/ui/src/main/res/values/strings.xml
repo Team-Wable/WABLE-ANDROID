@@ -29,7 +29,7 @@
 
     <!-- feed -->
     <string name="content_description_feed_image">피드 이미지입니다.</string>
-    <string name="label_feed_ghost_level">투명도 %d%%</string>
+    <string name="label_feed_ghost_level">투명도 %s%%</string>
     <string name="label_feed_upload_time">· %s</string>
 
     <!-- snack bar -->
@@ -41,4 +41,5 @@
     <!-- ghost -->
     <string name="label_ghost_comment_type">commentGhost</string>
     <string name="label_ghost_content_type">contentGhost</string>
+    <string name="label_ghost_complete">투명도 적용 완료</string>
 </resources>

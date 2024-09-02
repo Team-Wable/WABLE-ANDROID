@@ -7,6 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Feed
@@ -35,6 +36,7 @@ import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -167,7 +169,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
             feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+                viewModel.updateFeedGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
             }
         }
 
@@ -202,7 +204,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun onClickCommentItem() = object : CommentClickListener {
         override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
             commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+                viewModel.updateCommentGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
             }
         }
 
@@ -238,7 +240,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
             flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
-                feedAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                feedAdapter.submitData(transformedPagingData)
             }
         }
     }

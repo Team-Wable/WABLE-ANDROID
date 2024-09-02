@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
@@ -35,6 +36,7 @@ class HomeViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val feedsFlow = feedRepository.getHomeFeeds().cachedIn(viewModelScope)
 
     private var authId = -1L
@@ -52,10 +54,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFeeds(): Flow<PagingData<Feed>> {
-        return combine(feedsFlow, removedFeedsFlow) { feedsFlow, removedFeedIds ->
-            feedsFlow.filter { data ->
-                removedFeedIds.contains(data.feedId).not()
-            }
+        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds ->
+            feedsFlow
+                .filter { removedFeedIds.contains(it.feedId).not() }
+                .map { data ->
+                    if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                }
         }
     }
 
@@ -85,7 +89,10 @@ class HomeViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeSideEffect.ShowSnackBar) }
+                .onSuccess {
+                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    _event.emit(HomeSideEffect.ShowSnackBar)
+                }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }

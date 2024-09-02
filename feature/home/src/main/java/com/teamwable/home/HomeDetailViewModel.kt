@@ -90,9 +90,17 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateGhost(request: Ghost) {
+    fun updateFeedGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowGhostSnackBar) }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateCommentGhost(request: Ghost) {
+        viewModelScope.launch {
+            commentRepository.postGhost(request)
                 .onSuccess { _event.emit(HomeDetailSideEffect.ShowGhostSnackBar) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
