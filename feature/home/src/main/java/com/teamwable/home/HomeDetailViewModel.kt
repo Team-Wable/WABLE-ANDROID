@@ -2,17 +2,13 @@ package com.teamwable.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.UserInfoRepository
-import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -40,14 +36,6 @@ class HomeDetailViewModel @Inject constructor(
         fetchAuthId()
     }
 
-    private var cachedComments: Flow<PagingData<Comment>>? = null
-
-    fun updateComments(feedId: Long): Flow<PagingData<Comment>> {
-        return cachedComments ?: commentRepository.getHomeDetailComments(feedId)
-            .cachedIn(viewModelScope)
-            .also { cachedComments = it }
-    }
-
     private fun fetchAuthId() {
         viewModelScope.launch {
             userInfoRepository.getMemberId()
@@ -55,6 +43,8 @@ class HomeDetailViewModel @Inject constructor(
                 .collectLatest { authId = it }
         }
     }
+
+    fun updateComments(feedId: Long) = commentRepository.getHomeDetailComments(feedId)
 
     fun fetchUserType(userId: Long): ProfileUserType {
         return when {

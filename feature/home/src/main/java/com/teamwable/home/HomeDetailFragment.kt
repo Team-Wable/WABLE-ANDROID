@@ -17,6 +17,7 @@ import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.hideKeyboard
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
@@ -57,8 +58,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
-        val feedId = arguments?.getLong(FEED_ID)
-        if (feedId != null) viewModel.updateHomeDetail(feedId)
+        viewModel.updateHomeDetail(args.feedId)
         collect(commentSnackbar)
         initBackBtnClickListener()
     }
@@ -158,6 +158,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
             commentSnackbar.show()
             binding.etHomeDetailCommentInput.text.clear()
+            requireActivity().hideKeyboard(binding.root)
         }
     }
 
