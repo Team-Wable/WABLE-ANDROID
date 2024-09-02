@@ -11,10 +11,6 @@ class AndroidFeaturePlugin : Plugin<Project> {
         plugins.apply("com.android.library")
         configureAndroidCommonPlugin()
 
-        with(plugins) {
-            apply("androidx.navigation.safeargs")
-        }
-
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
         dependencies {
             "implementation"(libs.findLibrary("androidx.constraintlayout").get())

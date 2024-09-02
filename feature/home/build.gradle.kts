@@ -2,7 +2,6 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
-    id("androidx.navigation.safeargs")
 }
 android {
     namespace = "com.teamwable.home"
