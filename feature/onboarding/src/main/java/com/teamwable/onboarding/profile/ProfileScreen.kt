@@ -4,15 +4,12 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,11 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,11 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
-import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ProfileImageType
@@ -47,6 +38,7 @@ import com.teamwable.onboarding.R
 import com.teamwable.onboarding.permission.launchImagePicker
 import com.teamwable.onboarding.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.permission.rememberPhotoPickerLauncher
+import com.teamwable.onboarding.profile.component.ProfileImagePicker
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 
 @Composable
@@ -162,44 +154,16 @@ fun ProfileScreen(
                 modifier = Modifier.padding(top = 6.dp),
             )
 
-            Box(
+            ProfileImagePicker(
+                selectedImageUri = selectedImageUri,
+                currentImage = currentImage,
+                onRandomImageChange = onRandomImageChange,
+                onProfilePlusBtnClick = onProfilePlusBtnClick,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 40.dp, start = 78.dp, end = 78.dp),
-            ) {
-                GlideImage(
-                    imageModel = { selectedImageUri ?: currentImage.image },
-                    imageOptions = ImageOptions(
-                        contentScale = ContentScale.Crop,
-                        alignment = Alignment.Center,
-                    ),
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .clip(CircleShape),
-                    previewPlaceholder = painterResource(id = com.teamwable.common.R.drawable.ic_share_profile_img_blue),
-                )
-                Image(
-                    painter = painterResource(id = com.teamwable.common.R.drawable.ic_sign_up_profile_change_btn),
-                    contentDescription = "Change Profile Image",
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .noRippleClickable {
-                            val newImage = ProfileImageType.entries
-                                .filter { it != currentImage }
-                                .random()
-                            onRandomImageChange(newImage)
-                        },
-                )
-                Image(
-                    painter = painterResource(id = com.teamwable.common.R.drawable.ic_sign_up_profile_plus_btn),
-                    contentDescription = "Plus Profile Image",
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .noRippleClickable {
-                            onProfilePlusBtnClick()
-                        },
-                )
-            }
+                    .padding(top = 40.dp)
+                    .size(172.dp)
+                    .align(Alignment.CenterHorizontally),
+            )
         }
 
         WableButton(
