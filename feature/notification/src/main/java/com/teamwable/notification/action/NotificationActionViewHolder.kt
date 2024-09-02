@@ -104,6 +104,11 @@ class NotificationActionViewHolder(
                     data = data
                 )
 
+                "popularContent" -> getSpannablePopularText(
+                    binding.root.context.getString(R.string.tv_notification_action_popular_content),
+                    data = data
+                )
+
                 else -> {
                     Timber.tag("notification_action").e("등록되지 않은 노티가 감지되었습니다 : ${data.notificationTriggerType}")
                     SpannableString("")
@@ -125,6 +130,18 @@ class NotificationActionViewHolder(
             ds.isUnderlineText = false
             ds.color = Color.parseColor("#FF49494C")
         }
+    }
+
+    private fun getSpannablePopularText(name: String, data: NotificationActionModel): SpannableStringBuilder {
+        val popularText = name + getPopularContent(data.notificationText)
+        val spannablePopularText = SpannableStringBuilder(popularText)
+        spannablePopularText.setSpan(
+            StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
+            0,
+            name.replace("\n: ", "").length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        return spannablePopularText
     }
 
     private fun getSpannableStyle(
