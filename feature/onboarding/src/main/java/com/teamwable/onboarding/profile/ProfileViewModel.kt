@@ -32,8 +32,4 @@ class ProfileViewModel @Inject constructor() : ViewModel() {
             _selectedImageUri.update { imageUri }
         }
     }
-
-    companion object {
-        private const val MIME_TYPE_IMAGE = "image/*"
-    }
 }
