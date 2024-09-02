@@ -1,5 +1,9 @@
 package com.teamwable.onboarding.profile
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,10 +32,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
+import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
@@ -46,20 +56,66 @@ fun ProfileRoute(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var userMutableList by remember { mutableStateOf(args.userList) }
+    val context = LocalContext.current
 
-    Timber.d("ProfileRoute: $userMutableList")
+    val selectedImageUri by viewModel.selectedImageUri.collectAsStateWithLifecycle() // UI 상태 구독
+    var openDialog by remember { mutableStateOf(false) }
+    var currentImage by remember { mutableStateOf(ProfileImageType.entries.random()) }
 
-    /* LaunchedEffect(lifecycleOwner) {
-         viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-             .collect { sideEffect ->
-                 when (sideEffect) {
-                     is SelectLckTeamSideEffect.NavigateToProfile -> navigateToProfile(userMutableList)
-                     else -> Unit
-                 }
-             }
-     }*/
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+    ) { isGranted ->
+        if (!isGranted) openDialog = true
+    }
+
+    LaunchedEffect(Unit) {
+        when {
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> {
+                permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> {
+                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+
+            else -> Unit
+        }
+    }
+
+    val galleryLauncher = rememberGalleryLauncher { uri ->
+        viewModel.onImageSelected(uri.toString())
+    }
+
+    val photoPickerLauncher = rememberPhotoPickerLauncher { uri ->
+        viewModel.onImageSelected(uri.toString())
+    }
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(userMutableList)
+
+                    is ProfileSideEffect.ShowPermissionDeniedDialog -> openDialog = true
+
+                    is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
+
+                    else -> Unit
+                }
+            }
+    }
 
     ProfileScreen(onNextBtnClick = {})
+    if (openDialog) {
+        PermissionAppSettingsDialog(
+            onClick = {
+                openDialog = false
+                context.navigateToAppSettings()
+            },
+            onDismissRequest = { openDialog = false },
+        )
+    }
+
 }
 
 @Composable
