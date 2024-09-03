@@ -151,11 +151,11 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     private fun showKeyboard() {
-        binding.etPostingContent.requestFocus()
+        binding.etPostingTitle.requestFocus()
 
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(binding.etPostingContent, InputMethodManager.SHOW_IMPLICIT)
+        inputMethodManager.showSoftInput(binding.etPostingTitle, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun initBackBtnClickListener() {
