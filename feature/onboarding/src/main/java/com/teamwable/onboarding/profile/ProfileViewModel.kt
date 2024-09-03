@@ -2,8 +2,9 @@ package com.teamwable.onboarding.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwable.designsystem.type.NicknameType
+import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
+import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,14 +23,8 @@ class ProfileViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<ProfileSideEffect>()
     val sideEffect: SharedFlow<ProfileSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _selectedImageUri = MutableStateFlow<String?>(null)
-    val selectedImageUri: StateFlow<String?> = _selectedImageUri
-
-    private val _nickname = MutableStateFlow("")
-    val nickname: StateFlow<String> = _nickname
-
-    private val _textFieldType = MutableStateFlow(NicknameType.DEFAULT)
-    val textFieldType: StateFlow<NicknameType> = _textFieldType
+    private val _profileState = MutableStateFlow(ProfileState())
+    val profileState: StateFlow<ProfileState> = _profileState
 
     fun navigateToAgreeTerms() {
         viewModelScope.launch {
@@ -45,18 +40,22 @@ class ProfileViewModel @Inject constructor(
 
     fun onImageSelected(imageUri: String?) {
         viewModelScope.launch {
-            _selectedImageUri.update { imageUri }
+            _profileState.update { it.copy(selectedImageUri = imageUri) }
         }
     }
 
     fun onNicknameChanged(newNickname: String) {
-        _nickname.value = newNickname
+        _profileState.update { it.copy(nickname = newNickname) }
         validateNickname(newNickname)
+    }
+
+    fun onRandomImageChange(newImage: ProfileImageType) {
+        _profileState.update { it.copy(currentImage = newImage) }
     }
 
     private fun validateNickname(nickname: String) {
         viewModelScope.launch {
-            _textFieldType.update { nicknameValidationUseCase(nickname) }
+            _profileState.update { it.copy(textFieldType = nicknameValidationUseCase(nickname)) }
         }
     }
 }
