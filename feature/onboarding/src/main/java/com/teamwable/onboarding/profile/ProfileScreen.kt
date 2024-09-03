@@ -44,6 +44,7 @@ import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
+import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.permission.launchImagePicker
 import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
@@ -56,14 +57,11 @@ fun ProfileRoute(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    var userMutableList by remember { mutableStateOf(args.userList) }
     val context = LocalContext.current
+    val profileState by viewModel.profileState.collectAsStateWithLifecycle()
 
-    val selectedImageUri by viewModel.selectedImageUri.collectAsStateWithLifecycle()
+    var userMutableList by remember { mutableStateOf(args.userList) }
     var openDialog by remember { mutableStateOf(false) }
-    var currentImage by remember { mutableStateOf(ProfileImageType.entries.random()) }
-    val nickname by viewModel.nickname.collectAsStateWithLifecycle()
-    val textFieldType by viewModel.textFieldType.collectAsStateWithLifecycle()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -119,8 +117,7 @@ fun ProfileRoute(
     }
 
     ProfileScreen(
-        nickname = nickname,
-        textFieldType = textFieldType,
+        profileState = profileState,
         onNextBtnClick = { nickname, imageUri ->
             userMutableList = userMutableList.toMutableList().apply {
                 set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
@@ -129,10 +126,8 @@ fun ProfileRoute(
             viewModel.navigateToAgreeTerms()
         },
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
-        selectedImageUri = selectedImageUri,
-        currentImage = currentImage,
         onRandomImageChange = { newImage ->
-            currentImage = newImage
+            viewModel.onRandomImageChange(newImage)
             viewModel.onImageSelected(null)
         },
         onNicknameChange = { newNickname ->
@@ -143,11 +138,8 @@ fun ProfileRoute(
 
 @Composable
 fun ProfileScreen(
-    nickname: String,
-    textFieldType: NicknameType,
+    profileState: ProfileState,
     onProfilePlusBtnClick: () -> Unit = {},
-    selectedImageUri: String? = null,
-    currentImage: ProfileImageType,
     onRandomImageChange: (ProfileImageType) -> Unit = {},
     onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
     onNextBtnClick: (String, String) -> Unit,
@@ -185,8 +177,8 @@ fun ProfileScreen(
             )
 
             ProfileImagePicker(
-                selectedImageUri = selectedImageUri,
-                currentImage = currentImage,
+                selectedImageUri = profileState.selectedImageUri,
+                currentImage = profileState.currentImage,
                 onRandomImageChange = onRandomImageChange,
                 onProfilePlusBtnClick = onProfilePlusBtnClick,
                 modifier = Modifier
@@ -197,8 +189,8 @@ fun ProfileScreen(
 
             WableBasicTextField(
                 placeholder = stringResource(R.string.profile_edit_nickname_placeholder),
-                textFieldType = textFieldType,
-                value = nickname,
+                textFieldType = profileState.textFieldType,
+                value = profileState.nickname,
                 onValueChange = onNicknameChange,
                 modifier = Modifier.padding(top = 28.dp),
             ) {
@@ -207,7 +199,7 @@ fun ProfileScreen(
                     onClick = {
                         focusManager.clearFocus()
                     },
-                    enabled = textFieldType == NicknameType.CORRECT,
+                    enabled = profileState.textFieldType == NicknameType.CORRECT,
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }
@@ -215,8 +207,13 @@ fun ProfileScreen(
 
         WableButton(
             text = stringResource(R.string.btn_next_text),
-            onClick = { onNextBtnClick(nickname, selectedImageUri ?: currentImage.name) },
-            enabled = textFieldType == NicknameType.CORRECT,
+            onClick = {
+                onNextBtnClick(
+                    profileState.nickname,
+                    profileState.selectedImageUri ?: profileState.currentImage.name,
+                )
+            },
+            enabled = profileState.textFieldType == NicknameType.CORRECT,
             modifier = Modifier.padding(bottom = 24.dp),
         )
     }
@@ -229,10 +226,7 @@ fun GreetingPreview() {
         ProfileScreen(
             onNextBtnClick = { _, _ -> },
             onProfilePlusBtnClick = {},
-            selectedImageUri = null,
-            currentImage = ProfileImageType.entries.random(),
-            nickname = "김민지",
-            textFieldType = NicknameType.DEFAULT,
+            profileState = ProfileState(),
         )
     }
 }
