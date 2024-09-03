@@ -20,7 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -142,6 +144,8 @@ fun ProfileScreen(
     onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
     onNextBtnClick: (String) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current // FocusManager를 가져옵니다.
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween, // 상단과 하단을 공간으로 분리
         modifier = Modifier
@@ -151,7 +155,12 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus() // 빈 화면을 터치하면 포커스를 해제합니다.
+                    })
+                },
         ) {
             Text(
                 text = stringResource(R.string.profile_edit_title),
