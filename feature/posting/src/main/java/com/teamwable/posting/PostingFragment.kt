@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.teamwable.common.uistate.UiState
 import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
@@ -35,6 +36,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     private val viewModel by viewModels<PostingViewModel>()
 
     private var isTitleNull = true
+    private var totalTitleLength = 0
     private var totalContentLength = 0
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
@@ -70,7 +72,18 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         initPhotoBtnClickListener()
         initGalleryLauncher()
         initPhotoPickerLauncher()
-        observePhotoUri()
+
+        setupObservePosting()
+        setupObservePhotoUri()
+    }
+
+    private fun setupObservePosting() {
+        viewModel.postingUiState.flowWithLifecycle(viewLifeCycle).onEach {
+            when (it) {
+                is UiState.Success -> findNavController().popBackStack()
+                else -> Unit
+            }
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun initPhotoPickerLauncher() {
@@ -115,7 +128,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         }
     }
 
-    private fun observePhotoUri() {
+    private fun setupObservePhotoUri() {
         viewModel.photoUri.flowWithLifecycle(viewLifeCycle).onEach { getUri ->
             getUri?.let { uri ->
                 handleUploadImageClick(Uri.parse(uri))
@@ -161,18 +174,19 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         binding.run {
             etPostingTitle.doAfterTextChanged {
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
-                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
+                totalTitleLength = etPostingTitle.text.length
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
             }
             etPostingContent.doAfterTextChanged {
                 totalContentLength = etPostingContent.text.length
-                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
             }
         }
     }
 
-    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalContentLength: Int) {
+    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalTitleLength: Int, totalContentLength: Int) {
         when {
-            (!isTitleNull && totalContentLength <= POSTING_MAX) -> {
+            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.purple_50,
@@ -183,7 +197,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
 
-            totalContentLength >= POSTING_MAX + 1 -> {
+            (totalTitleLength + totalContentLength) >= POSTING_MAX + 1 -> {
                 updateProgress(
                     com.teamwable.ui.R.color.error,
                     com.teamwable.ui.R.color.gray_200,
@@ -203,12 +217,16 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
         }
-        return updateTextCount(totalContentLength)
+        return updateTextCount(totalTitleLength + totalContentLength)
     }
 
-    private fun initUploadingActivateBtnClickListener() {
-        binding.btnPostingUpload.setOnClickListener {
-            findNavController().popBackStack()
+    private fun initUploadingActivateBtnClickListener() = with(binding) {
+        btnPostingUpload.setOnClickListener {
+            viewModel.posting(
+                etPostingTitle.text.toString(),
+                etPostingContent.text.toString(),
+                viewModel.photoUri.value
+            )
         }
     }
 
