@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,6 +66,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     override fun initView() {
         showKeyboard()
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         initBackBtnClickListener()
         initDialogExitBtnClickListener()
         initEditTextBtn()
@@ -75,6 +77,12 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
         setupObservePosting()
         setupObservePhotoUri()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+        }
     }
 
     private fun setupObservePosting() {
