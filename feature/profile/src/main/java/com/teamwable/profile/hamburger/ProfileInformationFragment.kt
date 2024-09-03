@@ -10,6 +10,7 @@ import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -35,12 +36,8 @@ class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBin
 
     private fun initTermsOfServiceClickListener() {
         binding.tvProfileInformationTermsOfServiceContent.setOnClickListener {
-            navigateToWeb("https://joyous-ghost-8c7.notion.site/c6e26919055a4ff98fd73a8f9b29cb36?pvs=4")
+            openUri("https://joyous-ghost-8c7.notion.site/c6e26919055a4ff98fd73a8f9b29cb36?pvs=4")
         }
-    }
-
-    private fun navigateToWeb(uri: String) {
-        Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
     }
 
     private fun setupMemberDataObserve() {

@@ -8,6 +8,7 @@ import com.teamwable.profile.R
 import com.teamwable.profile.databinding.BottomsheetProfileHamburgerBinding
 import com.teamwable.ui.base.BindingBottomSheetFragment
 import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
@@ -42,13 +43,13 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
 
     private fun initFeedbackBtnClickListener() {
         binding.tvProfileHamburgerFeedback.setOnClickListener {
-            navigateToWeb("https://forms.gle/WWfbHXvGNgXMxgZr5")
+            openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
         }
     }
 
     private fun initCustomerServiceBtnClickListener() {
         binding.tvProfileHamburgerCustomerService.setOnClickListener {
-            navigateToWeb("https://forms.gle/WWfbHXvGNgXMxgZr5")
+            openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
         }
     }
 
@@ -73,9 +74,5 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
                 requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)?.component,
             )
         )
-    }
-
-    private fun navigateToWeb(uri: String) {
-        Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
     }
 }
