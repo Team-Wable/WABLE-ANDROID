@@ -13,4 +13,6 @@
     <!--    프로필 수정 화면-->
     <string name="profile_edit_title">와블에서 활동할\n프로필을 등록해 주세요</string>
     <string name="profile_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
+    <string name="profile_edit_btn_duplicate">중복확인</string>
+    <string name="profile_edit_nickname_placeholder">예) 중꺾마</string>
 </resources>

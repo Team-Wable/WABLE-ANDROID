@@ -189,14 +189,14 @@ fun ProfileScreen(
             )
 
             WableBasicTextField(
-                placeholder = "예) 중꺾마",
+                placeholder = stringResource(R.string.profile_edit_nickname_placeholder),
                 textFieldType = textFieldType,
                 value = nickname,
                 onValueChange = onNicknameChange,
                 modifier = Modifier.padding(top = 28.dp),
             ) {
                 WableSmallButton(
-                    text = "중복확인",
+                    text = stringResource(R.string.profile_edit_btn_duplicate),
                     onClick = {
                         focusManager.clearFocus()
                     },
