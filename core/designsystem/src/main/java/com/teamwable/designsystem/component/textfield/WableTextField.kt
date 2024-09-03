@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.teamwable.designsystem.component.button.WableSmallButton
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.NicknameType
 
@@ -55,6 +57,7 @@ fun WableBasicTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    buttonContent: @Composable (() -> Unit)? = null, // 버튼 콘텐츠를 받는 파라미터 추가
 ) {
     BasicTextField(
         modifier = modifier.fillMaxWidth(),
@@ -77,24 +80,38 @@ fun WableBasicTextField(
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                Box(
-                    modifier = Modifier
-                        .heightIn(minHeight)
-                        .fillMaxWidth()
-                        .clip(shape = shape)
-                        .background(color = WableTheme.colors.gray200)
-                        .padding(vertical = 11.dp, horizontal = 16.dp),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically, // 버튼과 텍스트 필드를 수직으로 정렬
                 ) {
-                    if (value.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            color = WableTheme.colors.gray500,
-                            style = WableTheme.typography.body02,
-                            maxLines = 1,
-                            overflow = TextOverflow.Clip,
-                        )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f) // TextField가 Row의 대부분을 차지하게 설정
+                            .heightIn(minHeight)
+                            .clip(shape = shape)
+                            .background(color = WableTheme.colors.gray200)
+                            .padding(vertical = 11.dp, horizontal = 16.dp),
+                        contentAlignment = if (minHeight > 100.dp) Alignment.TopStart else Alignment.CenterStart, // 긴 형태의 textfiled에 적용.
+                    ) {
+                        if (value.isEmpty()) {
+                            Text(
+                                text = placeholder,
+                                color = WableTheme.colors.gray500,
+                                style = WableTheme.typography.body02,
+                                maxLines = 1,
+                                overflow = TextOverflow.Clip,
+                            )
+                        }
+                        innerText()
                     }
-                    innerText()
+                    // 버튼이 있으면 Row에 배치
+                    if (buttonContent != null) {
+                        Box(
+                            modifier = Modifier,
+                        ) {
+                            buttonContent()
+                        }
+                    }
                 }
                 Box(
                     modifier = Modifier
@@ -139,13 +156,20 @@ fun TextFieldPreview() {
                 textFieldType = NicknameType.DUPLICATE,
                 value = normalValue,
                 onValueChange = { normalValue = it },
+                minHeight = 56.dp,
             )
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
                 textFieldType = NicknameType.INVALID,
                 value = normalValue,
                 onValueChange = { normalValue = it },
-            )
+            ) {
+                WableSmallButton(
+                    text = "중복확인",
+                    onClick = {},
+                    modifier = Modifier.padding(start = 8.dp),
+                )
+            }
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
                 textFieldType = NicknameType.CORRECT,
