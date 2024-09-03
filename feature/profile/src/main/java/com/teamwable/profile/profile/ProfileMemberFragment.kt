@@ -7,7 +7,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
-import com.teamwable.profile.ProfileTabType
+import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
+import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope

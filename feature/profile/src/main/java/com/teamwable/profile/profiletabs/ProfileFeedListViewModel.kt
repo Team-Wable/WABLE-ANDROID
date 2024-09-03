@@ -1,4 +1,4 @@
-package com.teamwable.profile.profile
+package com.teamwable.profile.profiletabs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

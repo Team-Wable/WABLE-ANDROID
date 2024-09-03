@@ -1,8 +1,7 @@
-package com.teamwable.profile.profile
+package com.teamwable.profile.profiletabs
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.teamwable.profile.ProfileTabType
 import com.teamwable.ui.type.ProfileUserType
 
 class ProfilePagerStateAdapter(

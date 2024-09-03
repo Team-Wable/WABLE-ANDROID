@@ -6,8 +6,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
-import com.teamwable.profile.ProfileTabType
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
+import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
+import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
