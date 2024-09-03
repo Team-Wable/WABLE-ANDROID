@@ -12,6 +12,7 @@ import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,11 +41,15 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     }
 
     private fun initFeedbackBtnClickListener() {
-        // navigateToWeb("")
+        binding.tvProfileHamburgerFeedback.setOnClickListener {
+            navigateToWeb("https://forms.gle/WWfbHXvGNgXMxgZr5")
+        }
     }
 
     private fun initCustomerServiceBtnClickListener() {
-        // navigateToWeb("")
+        binding.tvProfileHamburgerCustomerService.setOnClickListener {
+            navigateToWeb("https://forms.gle/WWfbHXvGNgXMxgZr5")
+        }
     }
 
     private fun initLogoutBtnClickListener() {
@@ -55,7 +60,7 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
 
     private fun initDialogDeleteBtnClickListener() {
         parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
-            viewLifeCycleScope.launch {
+            viewLifeCycleScope.launch(Dispatchers.Main) {
                 viewModel.saveIsAutoLogin(false)
                 navigateToSplashScreen()
             }
@@ -65,8 +70,8 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     private fun navigateToSplashScreen() {
         startActivity(
             Intent.makeRestartActivityTask(
-                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)?.component,
-            ),
+                requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)?.component,
+            )
         )
     }
 
