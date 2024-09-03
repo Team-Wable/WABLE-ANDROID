@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.TextFieldStateType
+import com.teamwable.designsystem.type.NicknameType
 
 /**
  * design system small text field / Large text field 2가지 타입 구현 가능
@@ -41,11 +42,10 @@ fun WableBasicTextField(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(6.dp),
     placeholder: String = "",
-    labelText: String = "",
     value: String = "",
     onValueChange: (String) -> Unit = { _ -> },
     isCount: Boolean = false,
-    state: TextFieldStateType = TextFieldStateType.DEFAULT,
+    textFieldType: NicknameType = NicknameType.DEFAULT,
     maxLines: Int = 1,
     minLines: Int = 1,
     maxLength: Int = 10,
@@ -102,9 +102,9 @@ fun WableBasicTextField(
                         .padding(top = 8.dp),
                 ) {
                     Text(
-                        text = labelText,
+                        text = stringResource(id = textFieldType.message),
                         modifier = Modifier.align(Alignment.CenterStart),
-                        color = state.labelTextColor(),
+                        color = textFieldType.color,
                         style = WableTheme.typography.caption02,
                         maxLines = 1,
                     )
@@ -136,22 +136,20 @@ fun TextFieldPreview() {
         ) {
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
-                labelText = "10자리 이내, 문자/숫자로 입력 가능해요",
+                textFieldType = NicknameType.DUPLICATE,
                 value = normalValue,
                 onValueChange = { normalValue = it },
             )
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
-                state = TextFieldStateType.ERROR,
+                textFieldType = NicknameType.INVALID,
                 value = normalValue,
-                labelText = "닉네임에 사용할 수 없는 문자가 포함되어 있어요.",
                 onValueChange = { normalValue = it },
             )
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
-                state = TextFieldStateType.SUCCESS,
+                textFieldType = NicknameType.CORRECT,
                 value = normalValue,
-                labelText = "사용 가능한 닉네임입니다.",
                 onValueChange = { normalValue = it },
             )
 
