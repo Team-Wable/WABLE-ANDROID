@@ -10,9 +10,9 @@ interface CommentRepository {
 
     fun getProfileComments(userId: Long): Flow<PagingData<Comment>>
 
-    suspend fun deleteComment(commentId: Long): Result<Boolean>
+    suspend fun deleteComment(commentId: Long): Result<Unit>
 
-    suspend fun postComment(contentId: Long, commentText: String): Result<Boolean>
+    suspend fun postComment(contentId: Long, commentText: String): Result<Unit>
 
-    suspend fun postGhost(request: Ghost): Result<Boolean>
+    suspend fun postGhost(request: Ghost): Result<Unit>
 }

@@ -42,21 +42,24 @@ class DefaultCommentRepository @Inject constructor(
         }
     }
 
-    override suspend fun deleteComment(commentId: Long): Result<Boolean> = runCatching {
-        apiService.deleteComment(commentId).success
+    override suspend fun deleteComment(commentId: Long): Result<Unit> = runCatching {
+        apiService.deleteComment(commentId)
+        Unit
     }.onFailure {
         return it.handleThrowable()
     }
 
-    override suspend fun postComment(contentId: Long, commentText: String): Result<Boolean> = runCatching {
+    override suspend fun postComment(contentId: Long, commentText: String): Result<Unit> = runCatching {
         val request = Pair(commentText, "comment").toPostCommentDto()
-        apiService.postComment(contentId, request).success
+        apiService.postComment(contentId, request)
+        Unit
     }.onFailure {
         return it.handleThrowable()
     }
 
-    override suspend fun postGhost(request: Ghost): Result<Boolean> = runCatching {
-        apiService.postGhost(request.toPostGhostDto()).success
+    override suspend fun postGhost(request: Ghost): Result<Unit> = runCatching {
+        apiService.postGhost(request.toPostGhostDto())
+        Unit
     }.onFailure {
         return it.handleThrowable()
     }
