@@ -58,3 +58,7 @@ fun Fragment.navigateToAppSettings() {
     intent.data = uri
     startActivity(intent)
 }
+
+fun Fragment.openUri(uri: String) {
+    Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
+}
