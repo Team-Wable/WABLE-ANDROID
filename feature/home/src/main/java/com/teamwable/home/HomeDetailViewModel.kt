@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.FeedRepository
+import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +25,7 @@ class HomeDetailViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val userInfoRepository: UserInfoRepository,
     private val feedRepository: FeedRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeDetailUiState>(HomeDetailUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -69,7 +72,7 @@ class HomeDetailViewModel @Inject constructor(
     fun addComment(contentId: Long, commentText: String) {
         viewModelScope.launch {
             commentRepository.postComment(contentId, commentText)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.COMMENT_ING)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -93,7 +96,7 @@ class HomeDetailViewModel @Inject constructor(
     fun updateFeedGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowGhostSnackBar) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.GHOST)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -101,7 +104,15 @@ class HomeDetailViewModel @Inject constructor(
     fun updateCommentGhost(request: Ghost) {
         viewModelScope.launch {
             commentRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowGhostSnackBar) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun reportUser(nickname: String, relateText: String) {
+        viewModelScope.launch {
+            profileRepository.postReport(nickname, relateText)
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -120,7 +131,7 @@ sealed interface HomeDetailUiState {
 }
 
 sealed interface HomeDetailSideEffect {
-    data object ShowCommentSnackBar : HomeDetailSideEffect
+    data class ShowSnackBar(val type: SnackbarType) : HomeDetailSideEffect
 
-    data object ShowGhostSnackBar : HomeDetailSideEffect
+    data object ShowCommentSnackBar : HomeDetailSideEffect
 }

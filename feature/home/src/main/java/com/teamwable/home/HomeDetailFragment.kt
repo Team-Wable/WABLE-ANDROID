@@ -10,6 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
+import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
@@ -92,7 +93,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         commentAdapter.refresh()
                     }
 
-                    is HomeDetailSideEffect.ShowGhostSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is HomeDetailSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                 }
             }
         }
@@ -183,13 +184,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             feedActionHandler.onImageClick(image)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(feed: Feed) {
             feedActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                feed,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
-                binding.root,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
@@ -213,13 +213,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             handleProfileNavigation(id)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(comment: Comment) {
             commentActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                comment,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeComment = { viewModel.removeComment(it) },
-                binding.root,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 

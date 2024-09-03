@@ -7,6 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
+import com.teamwable.model.Comment
 import com.teamwable.model.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
@@ -25,7 +26,6 @@ import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
-import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.CommentActionHandler
@@ -78,7 +78,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileCommentSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ProfileCommentSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, SnackbarType.GHOST).show() }
+                    is ProfileCommentSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, sideEffect.type).show() }
                 }
             }
         }
@@ -97,13 +97,12 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
         override fun onPostAuthorProfileClick(id: Long) {}
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(comment: Comment) {
             commentActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                comment,
                 fetchUserType = { userType },
                 removeComment = { viewModel.removeComment(it) },
-                parentFragment?.view ?: return,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 

@@ -21,7 +21,6 @@ import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
-import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
@@ -55,7 +54,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         viewLifeCycleScope.launch {
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
-                    is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
                 }
             }
@@ -85,13 +84,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             feedActionHandler.onImageClick(image)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(feed: Feed) {
             feedActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                feed,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
-                binding.root,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
