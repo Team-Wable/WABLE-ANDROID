@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RequestWithdrawalDto(
     @SerialName("deleted_reason")
-    val deleted_reason: List<String>
+    val deletedReason: List<String>
 )
