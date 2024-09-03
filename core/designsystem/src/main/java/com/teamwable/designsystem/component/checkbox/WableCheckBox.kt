@@ -1,4 +1,4 @@
-package com.teamwable.onboarding.agreeterms.component
+package com.teamwable.designsystem.component.checkbox
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -17,6 +17,7 @@ import com.teamwable.designsystem.theme.WableTheme
 fun WableCheckBox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val drawableResId =
         if (checked) com.teamwable.common.R.drawable.ic_sign_up_checkbox_selected_gray900
