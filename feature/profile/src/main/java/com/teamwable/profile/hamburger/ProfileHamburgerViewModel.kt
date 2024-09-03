@@ -26,8 +26,8 @@ class ProfileHamburgerViewModel @Inject constructor(
     private val _withdrawalUiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val withdrawalUiState = _withdrawalUiState.asStateFlow()
 
-    private var _pushNotificationAllowedState = MutableStateFlow(false)
-    val pushNotificationAllowedState = _pushNotificationAllowedState.asStateFlow()
+    private var _pushAlarmAllowedState = MutableStateFlow(false)
+    val pushAlarmAllowedState = _pushAlarmAllowedState.asStateFlow()
 
     fun getMemberData() {
         viewModelScope.launch {
@@ -60,12 +60,12 @@ class ProfileHamburgerViewModel @Inject constructor(
     fun patchUserProfileUri(info: MemberInfoEditModel, url: File? = null) {
         viewModelScope.launch {
             profileRepository.patchProfileUriEdit(info, url)
-                .onSuccess { info.isPushAlarmAllowed?.let { _pushNotificationAllowedState.value = it } }
+                .onSuccess { info.isPushAlarmAllowed?.let { _pushAlarmAllowedState.value = it } }
                 .onFailure { Timber.d("fail", it.message.toString()) }
         }
     }
 
-    fun saveIsPushNotificationAllowed(isPushAlarmAllowed: Boolean) =
+    fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) =
         viewModelScope.launch {
             userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
         }

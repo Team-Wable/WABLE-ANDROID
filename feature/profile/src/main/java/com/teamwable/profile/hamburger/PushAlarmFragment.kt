@@ -12,7 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.profile.R
-import com.teamwable.profile.databinding.FragmentPushNotificationBinding
+import com.teamwable.profile.databinding.FragmentPushAlarmBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.navigateToAppSettings
 import com.teamwable.ui.extensions.stringOf
@@ -24,33 +24,33 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class PushNotificationFragment : BindingFragment<FragmentPushNotificationBinding>(FragmentPushNotificationBinding::inflate) {
+class PushAlarmFragment : BindingFragment<FragmentPushAlarmBinding>(FragmentPushAlarmBinding::inflate) {
     private val viewModel by viewModels<ProfileHamburgerViewModel>()
 
     override fun initView() {
         setAppbarText()
-        setPushNotificationText()
+        setPushAlarmText()
 
         initPushAlarmSettingClickListener()
         initBackBtnClickListener()
 
-        setupUserPushNotificationInfoObserve()
+        setupUserPushAlarmInfoObserve()
     }
 
     override fun onResume() {
         super.onResume()
-        refreshPushNotificationPermission()
+        refreshPushAlarmPermission()
     }
 
-    private fun refreshPushNotificationPermission() {
-        setPushNotificationText()
-        when (checkPushNotificationAllowed()) {
-            true -> handlePushNotificationPermissionGranted()
-            false -> handlePushNotificationPermissionDenied()
+    private fun refreshPushAlarmPermission() {
+        setPushAlarmText()
+        when (checkPushAlarmAllowed()) {
+            true -> handlePushAlarmPermissionGranted()
+            false -> handlePushAlarmPermissionDenied()
         }
     }
 
-    private fun handlePushNotificationPermissionGranted() {
+    private fun handlePushAlarmPermissionGranted() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -69,33 +69,33 @@ class PushNotificationFragment : BindingFragment<FragmentPushNotificationBinding
         )
     }
 
-    private fun handlePushNotificationPermissionDenied() {
+    private fun handlePushAlarmPermissionDenied() {
         viewModel.patchUserProfileUri(MemberInfoEditModel(isPushAlarmAllowed = false))
     }
 
-    private fun setupUserPushNotificationInfoObserve() {
-        viewModel.pushNotificationAllowedState.flowWithLifecycle(viewLifeCycle).onEach {
-            viewModel.saveIsPushNotificationAllowed(it)
+    private fun setupUserPushAlarmInfoObserve() {
+        viewModel.pushAlarmAllowedState.flowWithLifecycle(viewLifeCycle).onEach {
+            viewModel.saveIsPushAlarmAllowed(it)
         }.launchIn(viewLifeCycleScope)
     }
 
     private fun initPushAlarmSettingClickListener() {
-        binding.tvPushNotificationContent.setOnClickListener {
+        binding.tvPushAlarmContent.setOnClickListener {
             navigateToAppSettings()
         }
-        binding.btnPushNotificationMore.setOnClickListener {
+        binding.btnPushAlarmMore.setOnClickListener {
             navigateToAppSettings()
         }
     }
 
 
-    private fun setPushNotificationText() {
-        binding.tvPushNotificationContent.text =
-            if (checkPushNotificationAllowed()) getString(R.string.tv_push_notification_content_on)
-            else getString(R.string.tv_push_notification_content_off)
+    private fun setPushAlarmText() {
+        binding.tvPushAlarmContent.text =
+            if (checkPushAlarmAllowed()) getString(R.string.tv_push_alarm_content_on)
+            else getString(R.string.tv_push_alarm_content_off)
     }
 
-    private fun checkPushNotificationAllowed(): Boolean {
+    private fun checkPushAlarmAllowed(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -107,11 +107,11 @@ class PushNotificationFragment : BindingFragment<FragmentPushNotificationBinding
     }
 
     private fun setAppbarText() {
-        binding.viewPushNotificationAppbar.tvProfileAppbarTitle.text = stringOf(R.string.appbar_push_notification_title)
+        binding.viewPushAlarmAppbar.tvProfileAppbarTitle.text = stringOf(R.string.appbar_push_alarm_title)
     }
 
     private fun initBackBtnClickListener() {
-        binding.viewPushNotificationAppbar.btnProfileAppbarBack.setOnClickListener {
+        binding.viewPushAlarmAppbar.btnProfileAppbarBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
