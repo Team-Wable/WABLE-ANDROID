@@ -39,11 +39,11 @@
     <string name="tv_profile_information_delete">계정 삭제하기</string>
     <string name="appbar_profile_information_title">계정 정보</string>
 
-    <!-- fragment_push_notification -->
-    <string name="tv_push_notification_title">푸시 알림</string>
-    <string name="tv_push_notification_content_on">on</string>
-    <string name="tv_push_notification_content_off">off</string>
-    <string name="appbar_push_notification_title">알림 설정</string>
+    <!-- fragment_push_alarm -->
+    <string name="tv_push_alarm_title">푸시 알림</string>
+    <string name="tv_push_alarm_content_on">on</string>
+    <string name="tv_push_alarm_content_off">off</string>
+    <string name="appbar_push_alarm_title">알림 설정</string>
 
     <!-- profile -->
     <string name="content_description_profile_level_tag">레벨입니다.</string>
