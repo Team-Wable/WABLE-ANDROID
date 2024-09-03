@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.component.button.WableSmallButton
 import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
 import com.teamwable.designsystem.component.textfield.WableBasicTextField
 import com.teamwable.designsystem.extension.system.navigateToAppSettings
@@ -193,7 +194,16 @@ fun ProfileScreen(
                 value = nickname,
                 onValueChange = onNicknameChange,
                 modifier = Modifier.padding(top = 28.dp),
-            )
+            ) {
+                WableSmallButton(
+                    text = "중복확인",
+                    onClick = {
+                        focusManager.clearFocus()
+                    },
+                    enabled = textFieldType == NicknameType.CORRECT,
+                    modifier = Modifier.padding(start = 8.dp),
+                )
+            }
         }
 
         WableButton(
