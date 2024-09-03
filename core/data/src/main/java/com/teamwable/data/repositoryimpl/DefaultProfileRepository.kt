@@ -1,5 +1,6 @@
 package com.teamwable.data.repositoryimpl
 
+import com.teamwable.data.mapper.toData.toReportDto
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.model.Profile
@@ -12,6 +13,14 @@ class DefaultProfileRepository @Inject constructor(
 ) : ProfileRepository {
     override suspend fun getProfileInfo(userId: Long): Result<Profile> = runCatching {
         apiService.getProfileInfo(userId).data.toProfile()
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
+        val request = Pair(nickname, relateText).toReportDto()
+        apiService.postReport(request)
+        Unit
     }.onFailure {
         return it.handleThrowable()
     }
