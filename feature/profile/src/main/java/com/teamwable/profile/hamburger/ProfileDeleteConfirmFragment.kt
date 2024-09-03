@@ -1,11 +1,11 @@
 package com.teamwable.profile.hamburger
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.teamwable.common.uistate.UiState
-import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileDeleteConfirmBinding
 import com.teamwable.ui.base.BindingFragment
@@ -23,7 +23,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfirmBinding>(FragmentProfileDeleteConfirmBinding::inflate) {
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileHamburgerViewModel by viewModels()
 
     private val args: ProfileDeleteConfirmFragmentArgs by navArgs()
     private var reasons = emptyList<String>()
@@ -45,21 +45,25 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
                 is UiState.Success -> {
                     Timber.tag("withdrawal").i("patch 성공 : ${it.data}")
                     viewModel.clearInfo()
-                    navigateToLoginScreen()
+                    navigateToSplashScreen()
                 }
 
-                is UiState.Failure -> navigateToErrorScreen()
+                is UiState.Failure -> navigateToErrorFragment()
                 else -> Unit
             }
         }.launchIn(viewLifeCycleScope)
     }
 
-    private fun navigateToErrorScreen() {
+    private fun navigateToErrorFragment() {
         // Todo : 구현해야 함
     }
 
-    private fun navigateToLoginScreen() {
-        // Todo : 구현해야 함
+    private fun navigateToSplashScreen() {
+        startActivity(
+            Intent.makeRestartActivityTask(
+                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)?.component,
+            ),
+        )
     }
 
     private fun initCheckBoxClickListener() {

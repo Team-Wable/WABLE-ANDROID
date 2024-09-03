@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBinding>(FragmentProfileInformationBinding::inflate) {
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileHamburgerViewModel by viewModels()
 
     override fun initView() {
         viewModel.getMemberData()
