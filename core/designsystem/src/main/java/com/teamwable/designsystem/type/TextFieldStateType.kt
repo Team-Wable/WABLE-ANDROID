@@ -1,10 +1,10 @@
-package com.teamwable.designsystem.component.textfield
+package com.teamwable.designsystem.type
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.teamwable.designsystem.theme.WableTheme
 
-enum class TextFieldState {
+enum class TextFieldStateType {
     DEFAULT,
     ERROR,
     SUCCESS,

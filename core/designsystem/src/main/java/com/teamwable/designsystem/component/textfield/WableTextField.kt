@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.TextFieldStateType
 
 /**
  * design system small text field / Large text field 2가지 타입 구현 가능
@@ -44,7 +45,7 @@ fun WableBasicTextField(
     value: String = "",
     onValueChange: (String) -> Unit = { _ -> },
     isCount: Boolean = false,
-    state: TextFieldState = TextFieldState.DEFAULT,
+    state: TextFieldStateType = TextFieldStateType.DEFAULT,
     maxLines: Int = 1,
     minLines: Int = 1,
     maxLength: Int = 10,
@@ -141,14 +142,14 @@ fun TextFieldPreview() {
             )
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
-                state = TextFieldState.ERROR,
+                state = TextFieldStateType.ERROR,
                 value = normalValue,
                 labelText = "닉네임에 사용할 수 없는 문자가 포함되어 있어요.",
                 onValueChange = { normalValue = it },
             )
             WableBasicTextField(
                 placeholder = "예) 중꺾마",
-                state = TextFieldState.SUCCESS,
+                state = TextFieldStateType.SUCCESS,
                 value = normalValue,
                 labelText = "사용 가능한 닉네임입니다.",
                 onValueChange = { normalValue = it },
