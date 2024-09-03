@@ -1,9 +1,7 @@
 package com.teamwable.designsystem.component.textfield
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,7 +44,6 @@ fun WableBasicTextField(
     value: String = "",
     onValueChange: (String) -> Unit = { _ -> },
     isCount: Boolean = false,
-    isError: Boolean = false,
     state: TextFieldState = TextFieldState.DEFAULT,
     maxLines: Int = 1,
     minLines: Int = 1,
@@ -58,15 +55,6 @@ fun WableBasicTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val isFocused by interactionSource.collectIsFocusedAsState()
-
-    val borderLineColor = when {
-        isError -> WableTheme.colors.error
-        isFocused -> WableTheme.colors.success
-        value.isEmpty() -> Color.Transparent
-        else -> Color.Transparent
-    }
-
     BasicTextField(
         modifier = modifier.fillMaxWidth(),
         value = value,
@@ -94,17 +82,12 @@ fun WableBasicTextField(
                         .fillMaxWidth()
                         .clip(shape = shape)
                         .background(color = WableTheme.colors.gray200)
-                        .border(
-                            width = 1.dp,
-                            color = borderLineColor,
-                            shape = shape,
-                        )
                         .padding(vertical = 11.dp, horizontal = 16.dp),
                 ) {
                     if (value.isEmpty()) {
                         Text(
                             text = placeholder,
-                            color = WableTheme.colors.black,
+                            color = WableTheme.colors.gray500,
                             style = WableTheme.typography.body02,
                             maxLines = 1,
                             overflow = TextOverflow.Clip,
