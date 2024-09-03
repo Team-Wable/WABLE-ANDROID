@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +31,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
+import com.teamwable.designsystem.component.textfield.WableBasicTextField
 import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
@@ -52,9 +55,11 @@ fun ProfileRoute(
     var userMutableList by remember { mutableStateOf(args.userList) }
     val context = LocalContext.current
 
-    val selectedImageUri by viewModel.selectedImageUri.collectAsStateWithLifecycle() // UI 상태 구독
+    val selectedImageUri by viewModel.selectedImageUri.collectAsStateWithLifecycle()
     var openDialog by remember { mutableStateOf(false) }
     var currentImage by remember { mutableStateOf(ProfileImageType.entries.random()) }
+    val nickname by viewModel.nickname.collectAsStateWithLifecycle()
+    val textFieldType by viewModel.textFieldType.collectAsStateWithLifecycle()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -110,6 +115,8 @@ fun ProfileRoute(
     }
 
     ProfileScreen(
+        nickname = nickname,
+        textFieldType = textFieldType,
         onNextBtnClick = {},
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
         selectedImageUri = selectedImageUri,
@@ -118,15 +125,21 @@ fun ProfileRoute(
             currentImage = newImage
             viewModel.onImageSelected(null)
         },
+        onNicknameChange = { newNickname ->
+            viewModel.onNicknameChanged(newNickname)
+        },
     )
 }
 
 @Composable
 fun ProfileScreen(
+    nickname: String,
+    textFieldType: NicknameType,
     onProfilePlusBtnClick: () -> Unit = {},
     selectedImageUri: String? = null,
-    currentImage: ProfileImageType, // 현재 이미지를 받는 파라미터 추가
+    currentImage: ProfileImageType,
     onRandomImageChange: (ProfileImageType) -> Unit = {},
+    onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
     onNextBtnClick: (String) -> Unit,
 ) {
     Column(
@@ -164,12 +177,20 @@ fun ProfileScreen(
                     .size(172.dp)
                     .align(Alignment.CenterHorizontally),
             )
+
+            WableBasicTextField(
+                placeholder = "예) 중꺾마",
+                textFieldType = textFieldType,
+                value = nickname,
+                onValueChange = onNicknameChange,
+                modifier = Modifier.padding(top = 28.dp),
+            )
         }
 
         WableButton(
             text = stringResource(R.string.btn_next_text),
             onClick = {},
-            enabled = false,
+            enabled = textFieldType == NicknameType.CORRECT,
             modifier = Modifier.padding(bottom = 24.dp),
         )
     }
@@ -184,6 +205,8 @@ fun GreetingPreview() {
             onProfilePlusBtnClick = {},
             selectedImageUri = null,
             currentImage = ProfileImageType.entries.random(),
+            nickname = "김민지",
+            textFieldType = NicknameType.DEFAULT,
         )
     }
 }
