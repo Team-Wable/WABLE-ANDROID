@@ -22,25 +22,26 @@ import timber.log.Timber
 
 class NotificationActionViewHolder(
     private val binding: ItemNotificationVpBinding,
-    private val click: (NotificationActionModel, Int) -> Unit,
+    private val onNotificationClick: (NotificationActionModel, Int) -> Unit,
+    private val onProfileClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var item: NotificationActionModel? = null
+    private lateinit var item: NotificationActionModel
     private val dummyUserName = "차은우"
 
     init {
         binding.root.setOnClickListener {
-            item?.let { click(it, adapterPosition) }
+            onNotificationClick(item, adapterPosition)
         }
 
         binding.ivNotificationVpProfile.setOnClickListener {
-            // Todo : 나중에 추가해야 함
+            onProfileClick(item.triggerMemberId)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun bind(data: NotificationActionModel?) {
+    fun bind(data: NotificationActionModel) {
         with(binding) {
-            item = data ?: return
+            item = data
 
             val spannableText = when (data.notificationTriggerType) {
                 "contentLiked" -> {
@@ -123,7 +124,8 @@ class NotificationActionViewHolder(
 
     private fun clickableSpan(data: NotificationActionModel, isNickname: Boolean) = object : ClickableSpan() {
         override fun onClick(view: View) {
-            // Todo : 나중에 추가해야 함
+            if (!data.isDeleted && isNickname) onProfileClick(data.triggerMemberId)
+            else onNotificationClick(data, bindingAdapterPosition)
         }
 
         override fun updateDrawState(ds: TextPaint) {
