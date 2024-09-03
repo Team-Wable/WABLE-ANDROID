@@ -15,4 +15,9 @@
     <string name="profile_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
     <string name="profile_edit_btn_duplicate">중복확인</string>
     <string name="profile_edit_nickname_placeholder">예) 중꺾마</string>
+    <!--    약관동의 화면-->
+    <string name="agree_term_terms_of_service">[필수] 이용약관 동의</string>
+    <string name="agree_term_privacy_policy">[필수] 개인정보 수집 및 이용동의</string>
+    <string name="agree_term_age_confirmation">[필수] 만 14세 이상입니다</string>
+    <string name="agree_term_marketing_consent">마케팅 활용/광고성 정보 수신동의</string>
 </resources>
