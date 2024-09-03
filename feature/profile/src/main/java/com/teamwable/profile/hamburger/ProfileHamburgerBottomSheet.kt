@@ -59,7 +59,7 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     }
 
     private fun initDialogDeleteBtnClickListener() {
-        parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
+        parentFragment?.parentFragmentManager?.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
             viewLifeCycleScope.launch(Dispatchers.Main) {
                 viewModel.saveIsAutoLogin(false)
                 navigateToSplashScreen()
