@@ -14,17 +14,17 @@ class NotificationInformationViewHolder(
     private val binding: ItemNotificationVpBinding,
     private val click: (NotificationInformationModel, Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var item: NotificationInformationModel? = null
+    private lateinit var item: NotificationInformationModel
 
     init {
         binding.root.setOnClickListener {
-            item?.let { click(it, adapterPosition) }
+            click(item, adapterPosition)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun bind(data: NotificationInformationModel?) {
-        item = data ?: return
+    fun bind(data: NotificationInformationModel) {
+        item = data
 
         with(binding) {
             ivNotificationVpProfile.load(data.imageUrl)
