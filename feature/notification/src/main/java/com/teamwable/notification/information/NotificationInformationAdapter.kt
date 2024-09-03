@@ -21,13 +21,13 @@ class NotificationInformationAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NotificationInformationViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 
     companion object {
         private val NotificationInformationAdapterDiffCallback =
             ItemDiffCallback<NotificationInformationModel>(
-                onItemsTheSame = { old, new -> old.time == new.time },
+                onItemsTheSame = { old, new -> old.infoNotificationId == new.infoNotificationId },
                 onContentsTheSame = { old, new -> old == new },
             )
     }
