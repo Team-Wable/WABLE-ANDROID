@@ -33,7 +33,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
-                .collectLatest { fetchUserType(userId, it) }
+                .collectLatest { if (it != -1L) fetchUserType(userId, it) }
         }
     }
 
