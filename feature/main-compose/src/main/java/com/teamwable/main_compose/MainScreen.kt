@@ -20,6 +20,7 @@ import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
 import com.teamwable.model.network.Error
+import com.teamwable.onboarding.agreeterms.naviagation.agreeTermsNavGraph
 import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
 import com.teamwable.onboarding.profile.naviagation.profileNavGraph
 import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
@@ -98,7 +99,11 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     profileNavGraph(
-                        navigateToAgreeTerms = { userList -> navigator.navigateToProfile(userList) },
+                        navigateToAgreeTerms = { userList -> navigator.navigateToAgreeTerms(userList) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    agreeTermsNavGraph(
+                        navigateToHome = { startActivity(localContext, intent, null) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }

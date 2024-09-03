@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
 import com.teamwable.navigation.Route
+import com.teamwable.onboarding.agreeterms.naviagation.navigateToAgreeTerms
 import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
 import com.teamwable.onboarding.profile.naviagation.navigateToProfile
 import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
@@ -38,6 +39,10 @@ class MainNavigator(
 
     fun navigateToProfile(userList: List<String>) {
         navController.navigateToProfile(userList)
+    }
+
+    fun navigateToAgreeTerms(userList: List<String>) {
+        navController.navigateToAgreeTerms(userList)
     }
 
     private fun popBackStack() {

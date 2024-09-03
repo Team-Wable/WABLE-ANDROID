@@ -19,5 +19,5 @@ sealed interface Route {
     data class Profile(val userList: List<String>) : Route
 
     @Serializable
-    data object AgreeTerms : Route
+    data class AgreeTerms(val userList: List<String>) : Route
 }
