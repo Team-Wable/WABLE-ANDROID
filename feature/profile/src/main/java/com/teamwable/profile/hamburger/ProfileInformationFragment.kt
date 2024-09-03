@@ -1,11 +1,12 @@
 package com.teamwable.profile.hamburger
 
+import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.teamwable.common.uistate.UiState
 import com.teamwable.model.profile.MemberDataModel
-import com.teamwable.profile.ProfileViewModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
 import com.teamwable.ui.base.BindingFragment
@@ -29,6 +30,17 @@ class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBin
 
         initBackBtnClickListener()
         initDeleteBtnClickListener()
+        initTermsOfServiceClickListener()
+    }
+
+    private fun initTermsOfServiceClickListener() {
+        binding.tvProfileInformationTermsOfServiceContent.setOnClickListener {
+            navigateToWeb("https://joyous-ghost-8c7.notion.site/c6e26919055a4ff98fd73a8f9b29cb36?pvs=4")
+        }
+    }
+
+    private fun navigateToWeb(uri: String) {
+        Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
     }
 
     private fun setupMemberDataObserve() {
