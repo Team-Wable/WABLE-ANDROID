@@ -8,7 +8,6 @@ import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
-import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
@@ -30,7 +29,6 @@ import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.net.URLEncoder
 
 @AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -84,8 +82,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onFeedImageClick(image: String) {
-            val encodedUrl = URLEncoder.encode(image, "UTF-8")
-            FeedImageDialog.Companion.show(requireContext(), findNavController(), encodedUrl)
+            feedActionHandler.onImageClick(image)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {

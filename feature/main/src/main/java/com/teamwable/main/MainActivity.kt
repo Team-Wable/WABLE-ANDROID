@@ -90,6 +90,8 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.profile.R.id.navigation_profile_information,
                     com.teamwable.home.R.id.navigation_home_detail,
                     com.teamwable.profile.R.id.navigation_profile_member,
+                    com.teamwable.ui.R.id.feedImageDialog,
+                    com.teamwable.ui.R.id.bottomSheet,
                 ),
         )
     }

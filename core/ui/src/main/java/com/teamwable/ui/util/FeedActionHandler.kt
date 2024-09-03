@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.teamwable.ui.component.BottomSheet
+import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.type.BottomSheetType
@@ -16,6 +17,7 @@ import com.teamwable.ui.util.Arg.BOTTOM_SHEET_RESULT
 import com.teamwable.ui.util.Arg.BOTTOM_SHEET_TYPE
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import com.teamwable.ui.util.Arg.DIALOG_TYPE
+import java.net.URLEncoder
 
 class FeedActionHandler(
     private val context: Context,
@@ -50,6 +52,11 @@ class FeedActionHandler(
                 else -> Unit
             }
         }
+    }
+
+    fun onImageClick(image: String) {
+        val encodedUrl = URLEncoder.encode(image, "UTF-8")
+        FeedImageDialog.show(context, navController, encodedUrl)
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {
