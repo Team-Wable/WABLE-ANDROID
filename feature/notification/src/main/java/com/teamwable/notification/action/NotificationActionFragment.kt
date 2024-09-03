@@ -24,7 +24,10 @@ import timber.log.Timber
 @AndroidEntryPoint
 class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding>(FragmentNotificationVpBinding::inflate) {
     private val viewModel: NotificationViewModel by viewModels()
-    private var notificationAdapter = NotificationActionAdapter(click = { notificationActionData, position -> })
+    private var notificationAdapter = NotificationActionAdapter(
+        onNotificationClick = { _, _ -> },
+        onProfileClick = {}
+    )
 
     override fun initView() {
         setupCheckObserve()
@@ -71,19 +74,24 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
 
         viewLifeCycleScope.launch {
             viewModel.getNotifications().collectLatest { pagingData ->
-                notificationAdapter = NotificationActionAdapter(click = { notificationActionData, position ->
-                    when (notificationActionData.notificationTriggerType) {
-                        "contentLiked" -> toast("contentLiked")
-                        "comment" -> toast("comment")
-                        "commentLiked" -> toast("commentLiked")
-                        "actingContinue" -> toast("actingContinue")
-                        "beGhost" -> toast("beGhost")
-                        "contentGhost" -> toast("contentGhost")
-                        "commentGhost" -> toast("commentGhost")
-                        "userBan" -> toast("userBan")
-                        "popularWriter" -> toast("popularWriter")
-                    }
-                }).apply {
+                notificationAdapter = NotificationActionAdapter(
+                    onNotificationClick = { notificationActionData, position ->
+                        when (notificationActionData.notificationTriggerType) {
+                            "contentLiked" -> toast("contentLiked")
+                            "comment" -> toast("comment")
+                            "commentLiked" -> toast("commentLiked")
+                            "actingContinue" -> toast("actingContinue")
+                            "beGhost" -> toast("beGhost")
+                            "contentGhost" -> toast("contentGhost")
+                            "commentGhost" -> toast("commentGhost")
+                            "userBan" -> toast("userBan")
+                            "popularWriter" -> toast("popularWriter")
+                        }
+                    },
+                    onProfileClick = {
+                        // Todo : 마페뷰 이동
+                        toast("profile")
+                    }).apply {
                     notificationAdapter.submitData(pagingData)
                 }
 
