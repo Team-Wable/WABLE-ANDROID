@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.model.Comment
 import com.teamwable.model.Ghost
@@ -30,13 +31,16 @@ class ProfileCommentListViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
+    private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
 
     fun updateComments(userId: Long): Flow<PagingData<Comment>> {
         val commentsFlow = commentRepository.getProfileComments(userId).cachedIn(viewModelScope)
-        return combine(commentsFlow, removedCommentsFlow) { commentsFlow, removedCommentIds ->
-            commentsFlow.filter { data ->
-                removedCommentIds.contains(data.commentId).not()
-            }
+        return combine(commentsFlow, removedCommentsFlow, ghostedFeedsFlow) { commentsFlow, removedCommentIds, ghostedUserIds ->
+            commentsFlow
+                .filter { removedCommentIds.contains(it.commentId).not() }
+                .map { data ->
+                    if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                }
         }
     }
 
@@ -54,7 +58,10 @@ class ProfileCommentListViewModel @Inject constructor(
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             commentRepository.postGhost(request)
-                .onSuccess { _event.emit(ProfileCommentSideEffect.ShowSnackBar) }
+                .onSuccess {
+                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    _event.emit(ProfileCommentSideEffect.ShowSnackBar)
+                }
                 .onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
         }
     }

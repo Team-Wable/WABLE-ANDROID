@@ -6,11 +6,12 @@ data class Comment(
     val postAuthorProfile: String,
     val postAuthorNickname: String,
     val isPostAuthorGhost: Boolean,
-    val postAuthorGhost: Int,
+    val postAuthorGhost: String,
     val isLiked: Boolean,
     val likedNumber: String,
     val content: String,
     val uploadTime: String,
     val postAuthorTeamTag: String,
     val feedId: Long?,
+    val ghostColor: String = GhostColor.DEFAULT_0,
 )

@@ -249,7 +249,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitCommentList(feed: Feed) {
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
-                commentAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                commentAdapter.submitData(transformedPagingData)
             }
         }
     }

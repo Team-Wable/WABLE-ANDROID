@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.map
 import com.teamwable.model.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
@@ -28,6 +29,7 @@ import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.CommentActionHandler
+import com.teamwable.ui.util.FeedTransformer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -121,7 +123,8 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateComments(userId).collectLatest { pagingData ->
-                commentAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                commentAdapter.submitData(transformedPagingData)
             }
         }
 

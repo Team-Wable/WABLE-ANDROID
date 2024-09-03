@@ -10,7 +10,7 @@ internal fun ResponseCommentDto.toComment(): Comment =
         this.memberProfileUrl,
         this.memberNickname,
         this.isGhost,
-        this.memberGhost,
+        this.memberGhost.toString(),
         this.isLiked,
         this.commentLikedNumber.toString(),
         this.commentText,

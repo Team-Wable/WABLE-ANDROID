@@ -1,11 +1,9 @@
 package com.teamwable.ui.shareAdapter
 
 import android.graphics.Color
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.Feed
 import com.teamwable.ui.databinding.ItemFeedBinding
@@ -35,14 +33,13 @@ class FeedViewHolder private constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(feed: Feed?) {
         item = feed ?: return
         val isImageInclude = feed.image.isNotBlank()
         with(binding) {
             ivFeedProfileImg.load(feed.postAuthorProfile)
             tvFeedNickname.text = feed.postAuthorNickname
-            tvFeedGhostLevel.text = feed.postAuthorGhost.toString()
+            tvFeedGhostLevel.text = feed.postAuthorGhost
             tvFeedUploadTime.text = feed.uploadTime
             tvFeedTitle.text = feed.title
             tvFeedContent.text = feed.content
