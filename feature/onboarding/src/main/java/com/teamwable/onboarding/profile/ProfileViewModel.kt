@@ -31,6 +31,12 @@ class ProfileViewModel @Inject constructor(
     private val _textFieldType = MutableStateFlow(NicknameType.DEFAULT)
     val textFieldType: StateFlow<NicknameType> = _textFieldType
 
+    fun navigateToAgreeTerms() {
+        viewModelScope.launch {
+            _sideEffect.emit(ProfileSideEffect.NavigateToAgreeTerms)
+        }
+    }
+
     fun requestImagePicker() {
         viewModelScope.launch {
             _sideEffect.emit(ProfileSideEffect.RequestImagePicker)

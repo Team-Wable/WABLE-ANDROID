@@ -37,6 +37,7 @@ import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
 import com.teamwable.designsystem.component.textfield.WableBasicTextField
 import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.MemberInfoType
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
@@ -120,7 +121,13 @@ fun ProfileRoute(
     ProfileScreen(
         nickname = nickname,
         textFieldType = textFieldType,
-        onNextBtnClick = {},
+        onNextBtnClick = { nickname, imageUri ->
+            userMutableList = userMutableList.toMutableList().apply {
+                set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
+                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri)
+            }
+            viewModel.navigateToAgreeTerms()
+        },
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
         selectedImageUri = selectedImageUri,
         currentImage = currentImage,
@@ -143,7 +150,7 @@ fun ProfileScreen(
     currentImage: ProfileImageType,
     onRandomImageChange: (ProfileImageType) -> Unit = {},
     onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
-    onNextBtnClick: (String) -> Unit,
+    onNextBtnClick: (String, String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current // FocusManager를 가져옵니다.
 
@@ -208,7 +215,7 @@ fun ProfileScreen(
 
         WableButton(
             text = stringResource(R.string.btn_next_text),
-            onClick = {},
+            onClick = { onNextBtnClick(nickname, selectedImageUri ?: currentImage.name) },
             enabled = textFieldType == NicknameType.CORRECT,
             modifier = Modifier.padding(bottom = 24.dp),
         )
@@ -220,7 +227,7 @@ fun ProfileScreen(
 fun GreetingPreview() {
     WableTheme {
         ProfileScreen(
-            onNextBtnClick = {},
+            onNextBtnClick = { _, _ -> },
             onProfilePlusBtnClick = {},
             selectedImageUri = null,
             currentImage = ProfileImageType.entries.random(),
