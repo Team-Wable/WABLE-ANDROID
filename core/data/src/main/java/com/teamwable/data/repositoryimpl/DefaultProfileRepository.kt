@@ -25,9 +25,10 @@ class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
-    override suspend fun patchWithdrawal(deletedReason: List<String>): Result<Boolean> {
+    override suspend fun patchWithdrawal(deletedReason: List<String>): Result<Unit> {
         return runCatching {
-            apiService.patchWithdrawal(RequestWithdrawalDto(deletedReason)).success
+            apiService.patchWithdrawal(RequestWithdrawalDto(deletedReason))
+            Unit
         }.onFailure { return it.handleThrowable() }
     }
 }
