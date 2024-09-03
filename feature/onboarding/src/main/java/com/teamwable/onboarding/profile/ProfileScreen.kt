@@ -42,11 +42,11 @@ import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
-import com.teamwable.onboarding.permission.launchImagePicker
-import com.teamwable.onboarding.permission.rememberGalleryLauncher
-import com.teamwable.onboarding.permission.rememberPhotoPickerLauncher
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
+import com.teamwable.onboarding.profile.permission.launchImagePicker
+import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
+import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 
 @Composable
 fun ProfileRoute(

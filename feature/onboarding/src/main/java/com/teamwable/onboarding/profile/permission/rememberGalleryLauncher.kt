@@ -1,4 +1,4 @@
-package com.teamwable.onboarding.permission
+package com.teamwable.onboarding.profile.permission
 
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher

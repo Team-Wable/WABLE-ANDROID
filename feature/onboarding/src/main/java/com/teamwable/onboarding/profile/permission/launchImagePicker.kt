@@ -1,4 +1,4 @@
-package com.teamwable.onboarding.permission
+package com.teamwable.onboarding.profile.permission
 
 import android.content.Context
 import android.os.Build
