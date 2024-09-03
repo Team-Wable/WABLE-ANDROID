@@ -20,10 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
+import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.DialogType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.agreeterms.model.AgreeTerm
@@ -38,6 +41,7 @@ fun AgreeTermsRoute(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
     Timber.d("args: ${args.userList}")
 
@@ -53,10 +57,18 @@ fun AgreeTermsRoute(
 
     AgreeTermsScreen(
         onNextBtnClick = { marketingConsent ->
+            viewModel.showLoginDialog(true)
             Timber.tag("consent").d(marketingConsent.toString())
-            viewModel.navigateToHome()
         },
     )
+
+    if (showDialog) {
+        WableButtonDialog(
+            dialogType = DialogType.WELLCOME,
+            onClick = { viewModel.navigateToHome() },
+            onDismissRequest = { viewModel.showLoginDialog(false) },
+        )
+    }
 }
 
 @Composable
