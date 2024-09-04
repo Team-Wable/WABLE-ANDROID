@@ -118,10 +118,11 @@ fun ProfileRoute(
 
     ProfileScreen(
         profileState = profileState,
-        onNextBtnClick = { nickname, imageUri ->
+        onNextBtnClick = { nickname, imageUri, defaultImage ->
             userMutableList = userMutableList.toMutableList().apply {
                 set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
-                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri)
+                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri ?: "")
+                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage ?: "")
             }
             viewModel.navigateToAgreeTerms()
         },
@@ -144,7 +145,7 @@ fun ProfileScreen(
     onDuplicateBtnClick: () -> Unit = {},
     onRandomImageChange: (ProfileImageType) -> Unit = {},
     onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
-    onNextBtnClick: (String, String) -> Unit,
+    onNextBtnClick: (String, String?, String?) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current // FocusManager를 가져옵니다.
 
@@ -213,7 +214,8 @@ fun ProfileScreen(
             onClick = {
                 onNextBtnClick(
                     profileState.nickname,
-                    profileState.selectedImageUri ?: profileState.currentImage.name,
+                    profileState.selectedImageUri,
+                    if (profileState.selectedImageUri != null) null else profileState.currentImage.name,
                 )
             },
             enabled = profileState.textFieldType == NicknameType.CORRECT,
@@ -227,7 +229,7 @@ fun ProfileScreen(
 fun GreetingPreview() {
     WableTheme {
         ProfileScreen(
-            onNextBtnClick = { _, _ -> },
+            onNextBtnClick = { _, _, _ -> },
             onProfilePlusBtnClick = {},
             profileState = ProfileState(),
         )
