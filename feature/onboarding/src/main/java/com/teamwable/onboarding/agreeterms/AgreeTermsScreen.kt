@@ -50,7 +50,8 @@ fun AgreeTermsRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is AgreeTermsSideEffect.NavigateToHome -> navigateToHome()
-                    else -> Unit
+                    is AgreeTermsSideEffect.ShowDialog -> viewModel.showLoginDialog(true)
+                    is AgreeTermsSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
             }
     }
