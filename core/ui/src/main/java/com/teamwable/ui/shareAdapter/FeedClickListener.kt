@@ -5,7 +5,7 @@ import com.teamwable.model.Feed
 interface FeedClickListener {
     fun onItemClick(feed: Feed)
 
-    fun onGhostBtnClick(postAuthorId: Long)
+    fun onGhostBtnClick(postAuthorId: Long, feedId: Long)
 
     fun onLikeBtnClick(id: Long)
 

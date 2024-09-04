@@ -1,8 +1,7 @@
-package com.teamwable.profile.profile
+package com.teamwable.profile.profiletabs
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.teamwable.profile.ProfileTabType
 import com.teamwable.ui.type.ProfileUserType
 
 class ProfilePagerStateAdapter(
@@ -16,6 +15,6 @@ class ProfilePagerStateAdapter(
     override fun createFragment(position: Int): Fragment =
         when (ProfileTabType.entries[position]) {
             ProfileTabType.FEED -> ProfileFeedListFragment.newInstance(userID, nickName, type)
-            ProfileTabType.COMMENT -> ProfileCommentListFragment.newInstance(userID, nickName)
+            ProfileTabType.COMMENT -> ProfileCommentListFragment.newInstance(userID, nickName, type)
         }
 }

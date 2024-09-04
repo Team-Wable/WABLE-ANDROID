@@ -5,13 +5,14 @@ import android.graphics.Rect
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 
 /*
 Sets a divider between items in the RecyclerView.
 Adds padding(76) below the divider for the last item.
  */
-fun RecyclerView.setDivider(@DrawableRes drawableRes: Int) {
+fun RecyclerView.setDividerWithPadding(@DrawableRes drawableRes: Int) {
     addItemDecoration(object : RecyclerView.ItemDecoration() {
         private val divider = ContextCompat.getDrawable(context, drawableRes)
 
@@ -37,4 +38,10 @@ fun RecyclerView.setDivider(@DrawableRes drawableRes: Int) {
                 outRect.bottom += view.context.resources.getDimensionPixelOffset(com.teamwable.common.R.dimen.padding_bottom)
         }
     })
+}
+
+fun RecyclerView.setDivider(@DrawableRes drawableRes: Int) {
+    val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+    divider.setDrawable(ContextCompat.getDrawable(context, drawableRes)!!)
+    addItemDecoration(divider)
 }

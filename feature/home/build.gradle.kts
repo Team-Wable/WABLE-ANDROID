@@ -2,7 +2,6 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
-    id("androidx.navigation.safeargs")
 }
 android {
     namespace = "com.teamwable.home"
@@ -21,6 +20,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.recyclerview)
     implementation(libs.paging)
+    implementation(libs.swipe.refresh.layout)
 
     // Third Party
     implementation(libs.glide)
