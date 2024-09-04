@@ -22,6 +22,7 @@ import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -229,7 +230,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     private fun initUploadingActivateBtnClickListener() = with(binding) {
-        btnPostingUpload.setOnClickListener {
+        btnPostingUpload.setOnDuplicateBlockClick {
             viewModel.posting(
                 etPostingTitle.text.toString(),
                 etPostingContent.text.toString(),
