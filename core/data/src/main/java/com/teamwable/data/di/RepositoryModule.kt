@@ -1,6 +1,7 @@
 package com.teamwable.data.di
 
 import com.teamwable.data.repository.AuthRepository
+import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.DummyRepository
 import com.teamwable.data.repository.NewsRepository
 import com.teamwable.data.repository.NotificationRepository
@@ -8,6 +9,7 @@ import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repositoryimpl.DefaultAuthRepository
+import com.teamwable.data.repositoryimpl.DefaultCommentRepository
 import com.teamwable.data.repositoryimpl.DefaultDummyRepository
 import com.teamwable.data.repositoryimpl.DefaultNewsRepository
 import com.teamwable.data.repositoryimpl.DefaultNotificationRepository
@@ -66,4 +68,10 @@ internal abstract class RepositoryModule {
     abstract fun bindsProfileRepository(
         repositoryImpl: DefaultProfileRepository,
     ): ProfileRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsCommentRepository(
+        repositoryImpl: DefaultCommentRepository,
+    ): CommentRepository
 }

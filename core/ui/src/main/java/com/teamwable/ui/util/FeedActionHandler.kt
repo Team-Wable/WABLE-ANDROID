@@ -1,18 +1,23 @@
 package com.teamwable.ui.util
 
 import android.content.Context
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.teamwable.ui.component.BottomSheet
+import com.teamwable.ui.component.FeedImageDialog
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.BOTTOM_SHEET_RESULT
 import com.teamwable.ui.util.Arg.BOTTOM_SHEET_TYPE
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import com.teamwable.ui.util.Arg.DIALOG_TYPE
+import java.net.URLEncoder
 
 class FeedActionHandler(
     private val context: Context,
@@ -20,13 +25,38 @@ class FeedActionHandler(
     private val fragmentManager: FragmentManager,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    fun onKebabBtnClick(feedId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeFeed: (Long) -> Unit) {
+    fun onKebabBtnClick(feedId: Long, postAuthorId: Long, fetchUserType: (Long) -> ProfileUserType, removeFeed: (Long) -> Unit, view: View) {
         when (fetchUserType(postAuthorId)) {
             ProfileUserType.AUTH -> navigateToBottomSheet(BottomSheetType.DELETE_FEED)
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
             ProfileUserType.EMPTY -> return
         }
-        handleDialogResult(feedId, removeFeed)
+        handleDialogResult { dialogType ->
+            when (dialogType) {
+                DialogType.DELETE_FEED -> removeFeed(feedId)
+                DialogType.REPORT -> {
+                    navController.popBackStack()
+                    Snackbar.make(view, SnackbarType.REPORT).show()
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+    fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+        navigateToDialog(type)
+        handleDialogResult { dialogType ->
+            when (dialogType) {
+                DialogType.TRANSPARENCY -> updateGhost()
+                else -> Unit
+            }
+        }
+    }
+
+    fun onImageClick(image: String) {
+        val encodedUrl = URLEncoder.encode(image, "UTF-8")
+        FeedImageDialog.show(context, navController, encodedUrl)
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {
@@ -47,12 +77,10 @@ class FeedActionHandler(
         TwoButtonDialog.show(context, navController, type)
     }
 
-    private fun handleDialogResult(feedId: Long, removeFeed: (Long) -> Unit) {
+    private fun handleDialogResult(onResult: (DialogType) -> Unit) {
         fragmentManager.setFragmentResultListener(DIALOG_RESULT, lifecycleOwner) { _, bundle ->
-            when (bundle.getString(DIALOG_TYPE)) {
-                DialogType.DELETE_FEED.name -> removeFeed(feedId)
-                DialogType.REPORT.name -> Unit
-            }
+            val dialogType = DialogType.valueOf(bundle.getString(DIALOG_TYPE) ?: return@setFragmentResultListener)
+            onResult(dialogType)
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.teamwable.network.di
 
 import com.teamwable.network.datasource.AuthService
+import com.teamwable.network.datasource.CommentService
 import com.teamwable.network.datasource.DummyService
 import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.FeedService
-import com.teamwable.network.datasource.ProfileService
 import com.teamwable.network.datasource.NotificationService
+import com.teamwable.network.datasource.ProfileService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +52,10 @@ internal object ServiceModule {
     fun provideProfileService(
         @WableRetrofit retrofit: Retrofit,
     ): ProfileService = retrofit.create(ProfileService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCommentService(
+        @WableRetrofit retrofit: Retrofit,
+    ): CommentService = retrofit.create(CommentService::class.java)
 }
