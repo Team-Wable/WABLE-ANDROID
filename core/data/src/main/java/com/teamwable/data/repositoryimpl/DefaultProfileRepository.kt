@@ -17,7 +17,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import javax.inject.Inject
 
-class DefaultProfileRepository @Inject constructor(
+internal class DefaultProfileRepository @Inject constructor(
     private val contentResolver: ContentResolver,
     private val apiService: ProfileService,
 ) : ProfileRepository {
@@ -48,6 +48,11 @@ class DefaultProfileRepository @Inject constructor(
             apiService.patchUserProfile(infoRequestBody, filePart).success
         }
     }
+
+    override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runCatching {
+        apiService.getNickNameDoubleCheck(nickname)
+        Unit
+    }.onFailure { return it.handleThrowable() }
 
     private fun createContentRequestBody(info: MemberInfoEditModel): RequestBody {
         val contentJson = JSONObject().apply {
