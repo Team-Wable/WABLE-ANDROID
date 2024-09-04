@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.notification.NotificationInformationModel
-import com.teamwable.notification.R
 import com.teamwable.notification.databinding.ItemNotificationVpBinding
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.stringOf
@@ -31,11 +30,8 @@ class NotificationInformationViewHolder(
         with(binding) {
             ivNotificationVpProfile.load(data.imageUrl)
             tvNotificationVpContent.apply {
-                when (data.infoNotificationType) {
-                    "GAMEDONE" -> text = context.stringOf(R.string.tv_notification_information_game_done)
-                    "GAMESTART" -> text = context.stringOf(R.string.tv_notification_information_game_start)
-                    "WEEKDONE" -> text = context.stringOf(R.string.tv_notification_information_week_done)
-                }
+                val notificationType = NotificationInformationType.valueOf(data.infoNotificationType)
+                text = context.stringOf(notificationType.content)
             }
             tvNotificationVpTime.text = CalculateTime().getCalculateTime(root.context, data.time)
         }

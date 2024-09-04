@@ -23,10 +23,10 @@ class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBi
 
     private fun initNotificationInformationAdapter() = with(binding) {
         notificationAdapter = NotificationInformationAdapter(click = { notificationInformationData, position ->
-            when (notificationInformationData.infoNotificationType) {
-                "GAMEDONE" -> toast("GAMEDONE") // Todo : 소식 경기 탭으로 이동
-                "GAMESTART" -> toast("GAMESTART") // Todo : Unit
-                "WEEKDONE" -> toast("WEEKDONE") // Todo : 소식 경기 탭으로 이동
+            when (NotificationInformationType.valueOf(notificationInformationData.infoNotificationType)) {
+                NotificationInformationType.GAMEDONE -> toast("GAMEDONE") // Todo : 소식 경기 탭으로 이동
+                NotificationInformationType.GAMESTART -> toast("GAMESTART") // Todo : Unit
+                NotificationInformationType.WEEKDONE -> toast("WEEKDONE") // Todo : 소식 경기 탭으로 이동
             }
         })
 
