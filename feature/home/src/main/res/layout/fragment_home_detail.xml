@@ -18,7 +18,6 @@
             android:id="@+id/toolbar_home_detail"
             android:layout_width="match_parent"
             android:layout_height="@dimen/padding_top"
-            android:paddingStart="12dp"
             app:navigationIcon="@drawable/ic_share_back_btn"
             app:title="@string/label_home_detail_toolbar_back"
             app:titleCentered="true"
