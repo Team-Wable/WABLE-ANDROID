@@ -1,6 +1,5 @@
 package com.teamwable.profile.profiletabs
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -15,6 +14,7 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.getSerializableCompat
 import com.teamwable.ui.extensions.setDivider
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
@@ -51,14 +51,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         userId = arguments?.getLong(BundleKey.USER_ID) ?: -1
     }
 
-    private fun setUserType(): ProfileUserType {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable(BundleKey.USER_TYPE, ProfileUserType::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            arguments?.getSerializable(BundleKey.USER_TYPE) as? ProfileUserType
-        } ?: ProfileUserType.EMPTY
-    }
+    private fun setUserType() = arguments?.getSerializableCompat(BundleKey.USER_TYPE, ProfileUserType::class.java) ?: ProfileUserType.EMPTY
 
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), requireParentFragment().parentFragmentManager, viewLifecycleOwner)

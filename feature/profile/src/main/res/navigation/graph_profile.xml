@@ -49,7 +49,12 @@
         android:id="@+id/navigation_profile_delete_confirm"
         android:name="com.teamwable.profile.hamburger.ProfileDeleteConfirmFragment"
         android:label="ProfileDeleteConfirmFragment"
-        tools:layout="@layout/fragment_profile_delete_confirm" />
+        tools:layout="@layout/fragment_profile_delete_confirm">
+        <argument
+            android:name="reasons"
+            app:argType="string[]"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_push_notification"
         android:name="com.teamwable.profile.hamburger.PushNotificationFragment"
