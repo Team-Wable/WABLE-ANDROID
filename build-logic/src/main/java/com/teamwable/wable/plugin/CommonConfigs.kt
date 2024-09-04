@@ -12,6 +12,10 @@ internal fun Project.configureAndroidCommonPlugin() {
     apply<AndroidKotlinPlugin>()
     apply<AndroidHiltPlugin>()
 
+    with(plugins) {
+        apply("androidx.navigation.safeargs")
+    }
+
     extensions.getByType<BaseExtension>().apply {
         buildFeatures.apply {
             viewBinding = true

@@ -5,23 +5,23 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/view_push_notification_appbar"
+        android:id="@+id/view_push_alarm_appbar"
         layout="@layout/view_profile_appbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_profile_information_social"
+        android:id="@+id/cl_push_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/view_push_notification_appbar">
+        app:layout_constraintTop_toBottomOf="@id/view_push_alarm_appbar">
 
         <TextView
-            android:id="@+id/tv_push_notification_title"
+            android:id="@+id/tv_push_alarm_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="@string/tv_push_notification_title"
+            android:text="@string/tv_push_alarm_title"
             android:textAppearance="@style/TextAppearance.Wable.Body2"
             android:textColor="@color/gray_600"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,18 +29,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_push_notification_content"
+            android:id="@+id/tv_push_alarm_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_push_notification_content_on"
+            android:text="@string/tv_push_alarm_content_on"
             android:textAppearance="@style/TextAppearance.Wable.Body1"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_push_notification_more"
+            app:layout_constraintEnd_toStartOf="@id/btn_push_alarm_more"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/btn_push_notification_more"
+            android:id="@+id/btn_push_alarm_more"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="2dp"

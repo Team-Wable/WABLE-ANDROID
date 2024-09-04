@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.swipe.refresh.layout)
+    implementation(libs.paging)
 
     // Third Party
     implementation(libs.coil.core)
