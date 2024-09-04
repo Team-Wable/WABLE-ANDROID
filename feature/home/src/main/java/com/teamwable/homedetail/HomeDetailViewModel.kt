@@ -72,7 +72,7 @@ class HomeDetailViewModel @Inject constructor(
     fun addComment(contentId: Long, commentText: String) {
         viewModelScope.launch {
             commentRepository.postComment(contentId, commentText)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.COMMENT_ING)) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -104,7 +104,7 @@ class HomeDetailViewModel @Inject constructor(
     fun updateCommentGhost(request: Ghost) {
         viewModelScope.launch {
             commentRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
+                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.GHOST)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
