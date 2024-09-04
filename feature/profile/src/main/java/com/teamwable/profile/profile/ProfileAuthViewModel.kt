@@ -29,7 +29,7 @@ class ProfileAuthViewModel @Inject constructor(
         viewModelScope.launch {
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
-                .collectLatest { fetchProfileInfo(it) }
+                .collectLatest { if (it != -1L) fetchProfileInfo(it) }
         }
     }
 
