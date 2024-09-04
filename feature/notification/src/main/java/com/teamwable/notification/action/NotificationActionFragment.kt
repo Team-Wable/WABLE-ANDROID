@@ -7,6 +7,7 @@ import com.teamwable.notification.NotificationItemDecorator
 import com.teamwable.notification.NotificationViewModel
 import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -43,16 +44,16 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
         notificationAdapter = NotificationActionAdapter(
             onNotificationClick = { notificationActionData, position ->
                 when (notificationActionData.notificationTriggerType) {
-                    "contentLiked" -> toast("contentLiked") // Todo : 게시글 상세 이동
-                    "comment" -> toast("comment") // Todo : 게시글 상세 이동
-                    "commentLiked" -> toast("commentLiked") // Todo : 게시글 상세 이동
-                    "actingContinue" -> toast("actingContinue") // Todo : 글쓰기 이동
-                    "beGhost" -> toast("beGhost") // Todo : 게시글 상세 이동
-                    "contentGhost" -> toast("contentGhost") // Todo : 게시글 상세 이동
-                    "commentGhost" -> toast("commentGhost") // Todo : 게시글 상세 이동
-                    "userBan" -> toast("userBan") // Todo : Unit
-                    "popularWriter" -> toast("popularWriter") // Todo : 게시글 상세 이동
-                    "popularContent" -> toast("popularContent") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.CONTENT_LIKED.title) -> toast("contentLiked") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.COMMENT.title) -> toast("comment") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.COMMENT_LIKED.title) -> toast("commentLiked") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.ACTING_CONTINUE.title) -> toast("actingContinue") // Todo : 글쓰기 이동
+                    requireContext().stringOf(NotificationActionType.BE_GHOST.title) -> toast("beGhost") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.CONTENT_GHOST.title) -> toast("contentGhost") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.COMMENT_GHOST.title) -> toast("commentGhost") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.USER_BAN.title) -> toast("userBan") // Todo : Unit
+                    requireContext().stringOf(NotificationActionType.POPULAR_WRITER.title) -> toast("popularWriter") // Todo : 게시글 상세 이동
+                    requireContext().stringOf(NotificationActionType.POPULAR_CONTENT.title) -> toast("popularContent") // Todo : 게시글 상세 이동
                 }
             },
             onProfileClick = {

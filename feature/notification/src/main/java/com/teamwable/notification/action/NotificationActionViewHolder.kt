@@ -41,75 +41,80 @@ class NotificationActionViewHolder(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun bind(data: NotificationActionModel) {
+        item = data
+
         with(binding) {
-            item = data
 
             val spannableText = when (data.notificationTriggerType) {
-                "contentLiked" -> {
+                root.context.stringOf(NotificationActionType.CONTENT_LIKED.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
-                        R.string.tv_notification_action_content_liked,
+                        NotificationActionType.CONTENT_LIKED.content,
                         data = data
                     )
-                }
 
-                "comment" -> {
+                root.context.stringOf(NotificationActionType.COMMENT.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
-                        R.string.tv_notification_action_feed_comment,
+                        NotificationActionType.COMMENT.content,
                         data = data
                     )
-                }
 
-                "commentLiked" -> {
+                root.context.stringOf(NotificationActionType.COMMENT_LIKED.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
-                        R.string.tv_notification_action_comment_liked,
+                        NotificationActionType.COMMENT_LIKED.content,
                         data = data
                     )
-                }
 
-                "actingContinue" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_acting_continue,
-                    ACTING_CONTINUE_LEN,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.ACTING_CONTINUE.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.ACTING_CONTINUE.content,
+                        ACTING_CONTINUE_LEN,
+                        data = data
+                    )
 
-                "beGhost" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_be_ghost,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.BE_GHOST.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.BE_GHOST.content,
+                        data = data
+                    )
 
-                "contentGhost" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_content_ghost,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.CONTENT_GHOST.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.CONTENT_GHOST.content,
+                        data = data
+                    )
 
-                "commentGhost" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_comment_ghost,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.COMMENT_GHOST.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.COMMENT_GHOST.content,
+                        data = data
+                    )
 
-                "userBan" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_user_ban,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.USER_BAN.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.USER_BAN.content,
+                        data = data
+                    )
 
-                "popularWriter" -> getSpannableStyle(
-                    data.memberNickname,
-                    R.string.tv_notification_action_popular_writer,
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.POPULAR_WRITER.title) ->
+                    getSpannableStyle(
+                        data.memberNickname,
+                        NotificationActionType.POPULAR_WRITER.content,
+                        data = data
+                    )
 
-                "popularContent" -> getSpannablePopularText(
-                    binding.root.context.getString(R.string.tv_notification_action_popular_content),
-                    data = data
-                )
+                root.context.stringOf(NotificationActionType.POPULAR_CONTENT.title) ->
+                    getSpannablePopularText(
+                        root.context.getString(NotificationActionType.POPULAR_CONTENT.content),
+                        data = data
+                    )
 
                 else -> {
                     Timber.tag("notification_action").e("등록되지 않은 노티가 감지되었습니다 : ${data.notificationTriggerType}")
@@ -167,7 +172,7 @@ class NotificationActionViewHolder(
         name: String,
         endIndex: Int
     ) {
-        if (data.notificationTriggerType != "popularContent") {
+        if (data.notificationTriggerType != binding.root.context.stringOf(NotificationActionType.POPULAR_CONTENT.title)) {
             spannableText.setSpan(
                 clickableSpan(data, true),
                 0,
@@ -202,7 +207,11 @@ class NotificationActionViewHolder(
         name: String,
         resId: Int
     ): String {
-        val resourceString = if (data.notificationTriggerType in listOf("contentLiked", "commentLiked")) {
+        val resourceString = if (data.notificationTriggerType in listOf(
+                binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title)
+            )
+        ) {
             binding.root.context.getString(
                 resId,
                 data.memberNickname
@@ -211,7 +220,13 @@ class NotificationActionViewHolder(
             binding.root.context.getString(resId)
         }
 
-        return if (data.notificationTriggerType in listOf("contentLiked", "comment", "commentLiked", "popularWriter")) {
+        return if (data.notificationTriggerType in listOf(
+                binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.COMMENT.title),
+                binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.POPULAR_WRITER.title)
+            )
+        ) {
             "$name$resourceString\n: ${getPopularContent(data.notificationText)}"
         } else {
             "$name$resourceString"
