@@ -16,6 +16,7 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -55,7 +56,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
     }
 
     private fun navigateToErrorFragment() {
-        // Todo : 구현해야 함
+        (activity as Navigation).navigateToErrorFragment()
     }
 
     private fun navigateToSplashScreen() {
