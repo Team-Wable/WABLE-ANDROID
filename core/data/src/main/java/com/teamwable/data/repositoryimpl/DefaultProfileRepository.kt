@@ -40,14 +40,13 @@ internal class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
-    override suspend fun patchProfileUriEdit(info: MemberInfoEditModel, file: String?): Result<Unit> {
-        return runCatching {
-            val infoRequestBody = createContentRequestBody(info)
-            val filePart = contentResolver.createImagePart(file)
+    override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runCatching {
+        val infoRequestBody = createContentRequestBody(info)
+        val filePart = contentResolver.createImagePart(imgUrl)
 
-            apiService.patchUserProfile(infoRequestBody, filePart).success
-        }
-    }
+        apiService.patchUserProfile(infoRequestBody, filePart)
+        Unit
+    }.onFailure { return it.handleThrowable() }
 
     override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runCatching {
         apiService.getNickNameDoubleCheck(nickname)

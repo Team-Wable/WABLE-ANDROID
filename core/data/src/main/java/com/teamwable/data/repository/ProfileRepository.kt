@@ -11,7 +11,7 @@ interface ProfileRepository {
 
     suspend fun patchWithdrawal(deletedReason: List<String>): Result<Unit>
 
-    suspend fun patchProfileUriEdit(info: MemberInfoEditModel, file: String?): Result<Unit>
+    suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit>
 
     suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit>
 }
