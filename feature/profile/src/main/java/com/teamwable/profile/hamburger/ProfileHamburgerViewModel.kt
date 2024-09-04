@@ -57,7 +57,7 @@ class ProfileHamburgerViewModel @Inject constructor(
         }
     }
 
-    fun patchUserProfileUri(info: MemberInfoEditModel, url: File? = null) {
+    fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
         viewModelScope.launch {
             profileRepository.patchProfileUriEdit(info, url)
                 .onSuccess { info.isPushAlarmAllowed?.let { _pushAlarmAllowedState.value = it } }
