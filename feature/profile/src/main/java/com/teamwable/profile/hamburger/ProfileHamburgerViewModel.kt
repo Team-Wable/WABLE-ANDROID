@@ -6,10 +6,13 @@ import com.teamwable.common.uistate.UiState
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.profile.MemberDataModel
+import com.teamwable.model.profile.MemberInfoEditModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +25,9 @@ class ProfileHamburgerViewModel @Inject constructor(
 
     private val _withdrawalUiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val withdrawalUiState = _withdrawalUiState.asStateFlow()
+
+    private var _pushAlarmAllowedState = MutableStateFlow(false)
+    val pushAlarmAllowedState = _pushAlarmAllowedState.asStateFlow()
 
     fun getMemberData() {
         viewModelScope.launch {
@@ -50,4 +56,18 @@ class ProfileHamburgerViewModel @Inject constructor(
             userInfoRepository.saveAutoLogin(check)
         }
     }
+
+    fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
+        viewModelScope.launch {
+            profileRepository.patchProfileUriEdit(info, url)
+                .onSuccess { info.isPushAlarmAllowed?.let { _pushAlarmAllowedState.value = it } }
+                .onFailure { Timber.d("fail", it.message.toString()) }
+        }
+    }
+
+    fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) =
+        viewModelScope.launch {
+            userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
+        }
+
 }

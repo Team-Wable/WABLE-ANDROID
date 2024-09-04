@@ -1,5 +1,7 @@
 package com.teamwable.news.rank
 
+import android.content.Intent
+import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -11,6 +13,7 @@ import com.teamwable.news.NewsViewModel
 import com.teamwable.news.databinding.FragmentNewsRankBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +49,7 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
 
     private fun initOpinionBtnClickListener() {
         binding.btnNewsRankOpinion.setOnClickListener {
-            // Todo : 나중에 추가해야 함
+            openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
         }
     }
 

@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_push_notification"
-        android:name="com.teamwable.profile.hamburger.PushNotificationFragment"
+        android:name="com.teamwable.profile.hamburger.PushAlarmFragment"
         android:label="PushNotificationFragment"
-        tools:layout="@layout/fragment_push_notification" />
+        tools:layout="@layout/fragment_push_alarm" />
 </navigation>

@@ -1,5 +1,8 @@
 package com.teamwable.ui.extensions
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorRes
@@ -47,4 +50,8 @@ fun Fragment.statusBarColorOf(
     @ColorRes resId: Int,
 ) {
     requireActivity().statusBarColorOf(resId)
+}
+
+fun Fragment.openUri(uri: String) {
+    Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
 }
