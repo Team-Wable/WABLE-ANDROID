@@ -7,5 +7,5 @@ sealed interface ProfileSideEffect {
 
     data object NavigateToAgreeTerms : ProfileSideEffect
 
-    data class ShowSnackBar(val message: String) : ProfileSideEffect
+    data class ShowSnackBar(val message: Throwable) : ProfileSideEffect
 }
