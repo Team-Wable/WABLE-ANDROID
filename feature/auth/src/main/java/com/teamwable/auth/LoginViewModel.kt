@@ -97,7 +97,6 @@ class LoginViewModel @Inject constructor(
                 .onSuccess { response ->
                     saveAccessToken(response.accessToken)
                     saveRefreshToken(response.refreshToken)
-                    saveNickname(response.nickName)
                     saveMemberId(response.memberId)
                     checkIsNewUser(response.isNewUser)
                 }.onFailure {
@@ -115,12 +114,6 @@ class LoginViewModel @Inject constructor(
     private fun saveRefreshToken(token: String) {
         viewModelScope.launch {
             userInfoRepository.saveRefreshToken(BEARER + token)
-        }
-    }
-
-    private fun saveNickname(input: String) {
-        viewModelScope.launch {
-            userInfoRepository.saveNickname(input)
         }
     }
 
