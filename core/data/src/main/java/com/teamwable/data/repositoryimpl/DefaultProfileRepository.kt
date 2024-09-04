@@ -1,6 +1,7 @@
 package com.teamwable.data.repositoryimpl
 
 import com.teamwable.data.mapper.toData.toReportDto
+import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.model.Profile
