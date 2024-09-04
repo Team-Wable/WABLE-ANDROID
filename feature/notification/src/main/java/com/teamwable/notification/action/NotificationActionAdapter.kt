@@ -16,8 +16,7 @@ class NotificationActionAdapter(
     NotificationActionAdapterDiffCallback,
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationActionViewHolder {
-        val binding = ItemNotificationVpBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NotificationActionViewHolder(binding, onNotificationClick, onProfileClick)
+        return NotificationActionViewHolder.from(parent, onNotificationClick, onProfileClick)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
