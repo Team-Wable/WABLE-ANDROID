@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/img_error_404"
+        app:layout_constraintBottom_toTopOf="@id/tv_error_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_error_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/label_error_title"
+        android:textAppearance="@style/TextAppearance.Wable.Head0"
+        app:layout_constraintBottom_toTopOf="@id/tv_error_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_error" />
+
+    <TextView
+        android:id="@+id/tv_error_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_error_content"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Wable.Head2"
+        app:layout_constraintBottom_toTopOf="@id/btn_error_navigate_to_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_error_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_error_navigate_to_home"
+        style="@style/Wable.Button.M.S"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/gray_900"
+        android:text="@string/label_error_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_error_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>
