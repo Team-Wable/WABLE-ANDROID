@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_home_detail"
-        android:name="com.teamwable.home.HomeDetailFragment"
+        android:name="com.teamwable.homedetail.HomeDetailFragment"
         android:label="HomeDetailFragment"
         tools:layout="@layout/fragment_home_detail">
         <argument
@@ -31,7 +31,7 @@
         app:destination="@id/navigation_home_detail" />
     <fragment
         android:id="@+id/navigation_loading"
-        android:name="com.teamwable.home.LoadingFragment"
+        android:name="com.teamwable.LoadingFragment"
         android:label="LoadingFragment"
         tools:layout="@layout/fragment_loading" />
 </navigation>

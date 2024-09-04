@@ -1,8 +1,9 @@
-package com.teamwable.home
+package com.teamwable
 
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.navigation.fragment.findNavController
+import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentLoadingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.viewLifeCycleScope

@@ -1,4 +1,4 @@
-package com.teamwable.home
+package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
 import androidx.core.widget.doAfterTextChanged
@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
+import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Comment
 import com.teamwable.model.Feed
@@ -47,7 +48,7 @@ import kotlinx.coroutines.launch
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
-    private val args: HomeDetailFragmentArgs by navArgs()
+    private val args: com.teamwable.home.HomeDetailFragmentArgs by navArgs()
     private val viewModel: HomeDetailViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
     private lateinit var feedActionHandler: FeedActionHandler

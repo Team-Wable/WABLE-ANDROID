@@ -1,4 +1,4 @@
-package com.teamwable.home
+package com.teamwable.homedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
