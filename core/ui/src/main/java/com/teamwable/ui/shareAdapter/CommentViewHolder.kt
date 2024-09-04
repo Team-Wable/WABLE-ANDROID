@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.Comment
 import com.teamwable.ui.databinding.ItemCommentBinding
 import com.teamwable.ui.extensions.load
+import com.teamwable.ui.extensions.visible
 
 class CommentViewHolder private constructor(
     private val binding: ItemCommentBinding,
@@ -43,7 +44,9 @@ class CommentViewHolder private constructor(
             tvCommentLikeCount.text = comment.likedNumber
             tvTeamTag.teamName = comment.postAuthorTeamTag
             btnCommentGhost.isEnabled = !comment.isPostAuthorGhost
-            binding.viewCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
+            viewCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
+            btnCommentGhost.visible(!comment.isAuth)
+            spacerComment.visible(!comment.isAuth)
         }
     }
 

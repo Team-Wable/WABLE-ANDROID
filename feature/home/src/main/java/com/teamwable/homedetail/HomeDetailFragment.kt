@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHomeDetailBinding::inflate) {
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
-    private val args: com.teamwable.home.HomeDetailFragmentArgs by navArgs()
+    private val args: HomeDetailFragmentArgs by navArgs()
     private val viewModel: HomeDetailViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
     private lateinit var feedActionHandler: FeedActionHandler
@@ -238,7 +238,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
             flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 feedAdapter.submitData(transformedPagingData)
             }
         }
@@ -247,7 +251,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitCommentList(feed: Feed) {
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
+                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 commentAdapter.submitData(transformedPagingData)
             }
         }

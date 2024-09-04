@@ -123,7 +123,11 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateFeeds(userId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                    val isAuth = userType == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 feedAdapter.submitData(transformedPagingData)
             }
         }

@@ -117,7 +117,11 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateComments(userId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
+                    val isAuth = userType == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 commentAdapter.submitData(transformedPagingData)
             }
         }
