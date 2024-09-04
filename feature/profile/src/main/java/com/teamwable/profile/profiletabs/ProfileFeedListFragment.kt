@@ -30,6 +30,7 @@ import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -69,6 +70,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
+                    is ProfileFeedUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     else -> Unit
                 }
             }

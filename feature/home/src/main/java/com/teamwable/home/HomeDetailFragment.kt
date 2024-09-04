@@ -80,7 +80,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         findNavController().popBackStack()
                     }
 
-                    else -> Unit
+                    is HomeDetailUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is HomeDetailUiState.Loading -> Unit
                 }
             }
         }

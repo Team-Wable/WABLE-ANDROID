@@ -47,7 +47,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
-                    else -> Unit
+                    is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is HomeUiState.Success -> Unit
                 }
             }
         }
