@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -28,6 +29,8 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
+import com.teamwable.ui.util.BundleKey.IS_UPLOADED
+import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -89,7 +92,16 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     private fun setupObservePosting() {
         viewModel.postingUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
-                is UiState.Success -> findNavController().popBackStack()
+                is UiState.Success -> {
+                    parentFragmentManager.setFragmentResult(
+                        POSTING_RESULT,
+                        Bundle().apply {
+                            putBoolean(IS_UPLOADED, true)
+                        },
+                    )
+                    findNavController().popBackStack()
+                }
+
                 else -> Unit
             }
         }.launchIn(viewLifeCycleScope)
@@ -132,7 +144,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             getGalleryLauncher.launch("image/*")
         } else {
             getPhotoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
             )
         }
     }
@@ -234,7 +246,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             viewModel.posting(
                 etPostingTitle.text.toString(),
                 etPostingContent.text.toString(),
-                viewModel.photoUri.value
+                viewModel.photoUri.value,
             )
         }
     }

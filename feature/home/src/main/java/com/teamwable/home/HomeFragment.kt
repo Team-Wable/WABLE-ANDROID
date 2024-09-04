@@ -22,10 +22,13 @@ import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.IS_UPLOADED
+import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,6 +43,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         collect()
         setAdapter()
         initNavigatePostingFabClickListener()
+        fetchFeedUploaded()
     }
 
     private fun collect() {
@@ -130,14 +134,29 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun setSwipeLayout() {
         binding.layoutHomeSwipe.setOnRefreshListener {
-            feedAdapter.refresh()
             binding.layoutHomeSwipe.isRefreshing = false
+            scrollToTop()
+        }
+    }
+
+    private fun scrollToTop() {
+        feedAdapter.refresh()
+        viewLifeCycleScope.launch {
+            delay(800)
+            binding.rvHome.smoothScrollToPosition(0)
         }
     }
 
     private fun initNavigatePostingFabClickListener() {
         binding.fabHomeNavigatePosting.setOnClickListener {
             findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Posting)
+        }
+    }
+
+    private fun fetchFeedUploaded() {
+        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
+            val isUploaded = result.getBoolean(IS_UPLOADED, false)
+            if (isUploaded) scrollToTop()
         }
     }
 }
