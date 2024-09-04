@@ -1,11 +1,8 @@
 package com.teamwable.notification.information
 
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
 import com.teamwable.notification.NotificationItemDecorator
 import com.teamwable.notification.NotificationViewModel
-import com.teamwable.notification.R
 import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.toast
@@ -18,65 +15,55 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBinding>(FragmentNotificationVpBinding::inflate) {
     private val viewModel: NotificationViewModel by viewModels()
-    private var notificationAdapter = NotificationInformationAdapter(click = { notificationInformationData, position -> })
+    private lateinit var notificationAdapter: NotificationInformationAdapter
 
     override fun initView() {
         initNotificationInformationAdapter()
-        initSwipeRefreshData()
-    }
-
-    private fun initSwipeRefreshData() = with(binding) {
-        swipeNotificationVp.setOnRefreshListener {
-            val slideDown = AnimationUtils.loadAnimation(context, R.anim.anim_swipe_refresh_slide_down)
-            val slideUp = AnimationUtils.loadAnimation(context, R.anim.anim_swipe_refresh_slide_up)
-
-            slideDown.setAnimationListener(
-                object : Animation.AnimationListener {
-                    override fun onAnimationStart(animation: Animation) {}
-
-                    override fun onAnimationEnd(animation: Animation) {
-                        rvNotificationContent.startAnimation(slideUp)
-                    }
-
-                    override fun onAnimationRepeat(animation: Animation) {}
-                },
-            )
-            rvNotificationContent.startAnimation(slideDown)
-
-            // Todo : 데이터 새로고침 추가해야 함
-            swipeNotificationVp.isRefreshing = false
-        }
     }
 
     private fun initNotificationInformationAdapter() = with(binding) {
-        rvNotificationContent.adapter = notificationAdapter
+        notificationAdapter = NotificationInformationAdapter(click = { notificationInformationData, position ->
+            when (notificationInformationData.infoNotificationType) {
+                "GAMEDONE" -> toast("GAMEDONE") // Todo : 소식 경기 탭으로 이동
+                "GAMESTART" -> toast("GAMESTART") // Todo : Unit
+                "WEEKDONE" -> toast("WEEKDONE") // Todo : 소식 경기 탭으로 이동
+            }
+        })
 
+        rvNotificationContent.adapter = notificationAdapter
+        if (rvNotificationContent.itemDecorationCount == 0) {
+            rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
+        }
+
+        submitList()
+        setEmptyLayout()
+        setSwipeLayout()
+    }
+
+    private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.getInformation().collectLatest { pagingData ->
-                NotificationInformationAdapter(click = { notificationInformationData, position ->
-                    when (notificationInformationData.infoNotificationType) {
-                        "GAMEDONE" -> toast("GAMEDONE")
-                        "GAMESTART" -> toast("GAMESTART")
-                        "WEEKDONE" -> toast("WEEKDONE")
-                    }
-                }).apply {
-                    notificationAdapter.submitData(pagingData)
-                }
+                notificationAdapter.submitData(pagingData)
+            }
+        }
+    }
 
-                if (rvNotificationContent.itemDecorationCount == 0) {
-                    rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
-                }
-
-                notificationAdapter.addLoadStateListener { combinedLoadStates ->
-                    if (combinedLoadStates.append.endOfPaginationReached) {
-                        if (notificationAdapter.itemCount < 1) {
-                            llNotificationVpEmpty.visible(true)
-                        } else {
-                            llNotificationVpEmpty.visible(false)
-                        }
-                    }
+    private fun setEmptyLayout() = with(binding) {
+        notificationAdapter.addLoadStateListener { combinedLoadStates ->
+            if (combinedLoadStates.append.endOfPaginationReached) {
+                if (notificationAdapter.itemCount < 1) {
+                    llNotificationVpEmpty.visible(true)
+                } else {
+                    llNotificationVpEmpty.visible(false)
                 }
             }
+        }
+    }
+
+    private fun setSwipeLayout() = with(binding) {
+        swipeNotificationVp.setOnRefreshListener {
+            notificationAdapter.refresh()
+            swipeNotificationVp.isRefreshing = false
         }
     }
 }
