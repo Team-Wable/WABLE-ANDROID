@@ -28,7 +28,6 @@ class NotificationActionViewHolder(
     private val onProfileClick: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     private lateinit var item: NotificationActionModel
-    private val dummyUserName = "차은우"
 
     init {
         binding.root.setOnClickListener {
@@ -206,7 +205,7 @@ class NotificationActionViewHolder(
         val resourceString = if (data.notificationTriggerType in listOf("contentLiked", "commentLiked")) {
             binding.root.context.getString(
                 resId,
-                dummyUserName
+                data.memberNickname
             )
         } else {
             binding.root.context.getString(resId)
