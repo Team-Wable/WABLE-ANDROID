@@ -126,6 +126,7 @@ fun ProfileRoute(
             viewModel.navigateToAgreeTerms()
         },
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
+        onDuplicateBtnClick = { viewModel.getNickNameValidation() },
         onRandomImageChange = { newImage ->
             viewModel.onRandomImageChange(newImage)
             viewModel.onImageSelected(null)
@@ -140,6 +141,7 @@ fun ProfileRoute(
 fun ProfileScreen(
     profileState: ProfileState,
     onProfilePlusBtnClick: () -> Unit = {},
+    onDuplicateBtnClick: () -> Unit = {},
     onRandomImageChange: (ProfileImageType) -> Unit = {},
     onNicknameChange: (String) -> Unit = {}, // 닉네임 변경 핸들러
     onNextBtnClick: (String, String) -> Unit,
@@ -198,8 +200,9 @@ fun ProfileScreen(
                     text = stringResource(R.string.profile_edit_btn_duplicate),
                     onClick = {
                         focusManager.clearFocus()
+                        onDuplicateBtnClick()
                     },
-                    enabled = profileState.textFieldType == NicknameType.CORRECT,
+                    enabled = profileState.textFieldType != NicknameType.INVALID,
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }

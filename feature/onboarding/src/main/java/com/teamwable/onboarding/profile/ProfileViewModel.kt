@@ -2,6 +2,8 @@ package com.teamwable.onboarding.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwable.data.repository.ProfileRepository
+import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val nicknameValidationUseCase: NicknameValidationUseCase,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<ProfileSideEffect>()
     val sideEffect: SharedFlow<ProfileSideEffect> = _sideEffect.asSharedFlow()
@@ -56,6 +59,18 @@ class ProfileViewModel @Inject constructor(
     private fun validateNickname(nickname: String) {
         viewModelScope.launch {
             _profileState.update { it.copy(textFieldType = nicknameValidationUseCase(nickname)) }
+        }
+    }
+
+    fun getNickNameValidation() {
+        viewModelScope.launch {
+            profileRepository.getNickNameDoubleCheck(_profileState.value.nickname)
+                .onSuccess {
+                    _profileState.update { it.copy(textFieldType = NicknameType.CORRECT) }
+                }
+                .onFailure {
+                    _profileState.update { it.copy(textFieldType = NicknameType.DUPLICATE) }
+                }
         }
     }
 }
