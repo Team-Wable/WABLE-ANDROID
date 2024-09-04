@@ -69,6 +69,7 @@ androidxComposeMaterial3 = "1.2.1"
 # # https://developer.android.com/jetpack/androidx/releases/test
 androidxTestExt = "1.1.5"
 hiltNavigationComposeVersion = "1.2.0"
+firebaseMessagingKtx = "24.0.1"
 
 [libraries]
 # kotlin
@@ -161,6 +162,7 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 # datastore
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-datastore" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
