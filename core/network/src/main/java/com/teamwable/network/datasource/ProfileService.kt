@@ -9,6 +9,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -26,6 +27,7 @@ interface ProfileService {
     @PATCH("api/v1/withdrawal")
     suspend fun patchWithdrawal(@Body requestWithdrawalDto: RequestWithdrawalDto): BaseUnitResponse<Unit>
 
+    @Multipart
     @PATCH("api/v1/user-profile2")
     suspend fun patchUserProfile(
         @Part("info") requestProfileEdit: RequestBody,
