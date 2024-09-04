@@ -1,7 +1,7 @@
 package com.teamwable.data.mapper.toModel
 
-import com.teamwable.model.NotificationActionModel
-import com.teamwable.model.NotificationInformationModel
+import com.teamwable.model.notification.NotificationActionModel
+import com.teamwable.model.notification.NotificationInformationModel
 import com.teamwable.network.dto.response.notification.ResponseInformationDto
 import com.teamwable.network.dto.response.notification.ResponseNotificationsDto
 
@@ -25,5 +25,6 @@ internal fun ResponseInformationDto.toNotificationInformationModel(): Notificati
     NotificationInformationModel(
         infoNotificationType = infoNotificationType,
         time = time,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        infoNotificationId = infoNotificationId,
     )

@@ -1,4 +1,4 @@
-package com.teamwable.model
+package com.teamwable.model.notification
 
 data class NotificationActionModel(
     val memberId: Int,
@@ -11,6 +11,6 @@ data class NotificationActionModel(
     val notificationText: String,
     val isNotificationChecked: Boolean,
     val isDeleted: Boolean,
-    val notificationId: Int,
+    val notificationId: Long,
     val triggerMemberId: Int,
 )
