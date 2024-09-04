@@ -11,10 +11,10 @@ import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
-import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,6 +50,8 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchAuthId() {
         viewModelScope.launch {
+            delay(1000)
+            _uiState.value = HomeUiState.Success
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
                 .collectLatest { authId = it }
@@ -112,7 +114,7 @@ class HomeViewModel @Inject constructor(
 sealed interface HomeUiState {
     data object Loading : HomeUiState
 
-    data class Success(val profile: Profile) : HomeUiState
+    data object Success : HomeUiState
 
     data class Error(val errorMessage: String) : HomeUiState
 }

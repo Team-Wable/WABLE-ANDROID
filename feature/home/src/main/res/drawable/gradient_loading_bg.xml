@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!-- color 여기만 쓰여서 하드 코딩 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="90"
+                android:centerColor="#1A5BA4FD"
+                android:endColor="#0302E9CF"
+                android:startColor="#268F4BFF"
+                android:type="linear" />
+        </shape>
+    </item>
+</layer-list>
