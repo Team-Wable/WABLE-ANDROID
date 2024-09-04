@@ -81,10 +81,10 @@ class PushAlarmFragment : BindingFragment<FragmentPushAlarmBinding>(FragmentPush
 
     private fun initPushAlarmSettingClickListener() {
         binding.tvPushAlarmContent.setOnClickListener {
-            navigateToAppSettings()
+            requireContext().navigateToAppSettings()
         }
         binding.btnPushAlarmMore.setOnClickListener {
-            navigateToAppSettings()
+            requireContext().navigateToAppSettings()
         }
     }
 

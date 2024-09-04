@@ -52,13 +52,6 @@ fun Fragment.statusBarColorOf(
     requireActivity().statusBarColorOf(resId)
 }
 
-fun Fragment.navigateToAppSettings() {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    val uri = Uri.fromParts("package", requireContext().packageName, null)
-    intent.data = uri
-    startActivity(intent)
-}
-
 fun Fragment.openUri(uri: String) {
     Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
 }
