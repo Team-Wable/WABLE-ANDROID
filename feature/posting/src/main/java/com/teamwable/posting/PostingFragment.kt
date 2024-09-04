@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,10 +17,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.teamwable.common.uistate.UiState
 import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -35,6 +38,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     private val viewModel by viewModels<PostingViewModel>()
 
     private var isTitleNull = true
+    private var totalTitleLength = 0
     private var totalContentLength = 0
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
@@ -63,6 +67,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     override fun initView() {
         showKeyboard()
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         initBackBtnClickListener()
         initDialogExitBtnClickListener()
         initEditTextBtn()
@@ -70,7 +75,24 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         initPhotoBtnClickListener()
         initGalleryLauncher()
         initPhotoPickerLauncher()
-        observePhotoUri()
+
+        setupObservePosting()
+        setupObservePhotoUri()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+        }
+    }
+
+    private fun setupObservePosting() {
+        viewModel.postingUiState.flowWithLifecycle(viewLifeCycle).onEach {
+            when (it) {
+                is UiState.Success -> findNavController().popBackStack()
+                else -> Unit
+            }
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun initPhotoPickerLauncher() {
@@ -115,7 +137,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         }
     }
 
-    private fun observePhotoUri() {
+    private fun setupObservePhotoUri() {
         viewModel.photoUri.flowWithLifecycle(viewLifeCycle).onEach { getUri ->
             getUri?.let { uri ->
                 handleUploadImageClick(Uri.parse(uri))
@@ -138,11 +160,11 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     private fun showKeyboard() {
-        binding.etPostingContent.requestFocus()
+        binding.etPostingTitle.requestFocus()
 
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(binding.etPostingContent, InputMethodManager.SHOW_IMPLICIT)
+        inputMethodManager.showSoftInput(binding.etPostingTitle, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun initBackBtnClickListener() {
@@ -161,18 +183,19 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
         binding.run {
             etPostingTitle.doAfterTextChanged {
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
-                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
+                totalTitleLength = etPostingTitle.text.length
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
             }
             etPostingContent.doAfterTextChanged {
                 totalContentLength = etPostingContent.text.length
-                handleUploadProgressAndBtn(isTitleNull, totalContentLength)
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
             }
         }
     }
 
-    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalContentLength: Int) {
+    private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalTitleLength: Int, totalContentLength: Int) {
         when {
-            (!isTitleNull && totalContentLength <= POSTING_MAX) -> {
+            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.purple_50,
@@ -183,7 +206,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
 
-            totalContentLength >= POSTING_MAX + 1 -> {
+            (totalTitleLength + totalContentLength) >= POSTING_MAX + 1 -> {
                 updateProgress(
                     com.teamwable.ui.R.color.error,
                     com.teamwable.ui.R.color.gray_200,
@@ -203,12 +226,16 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
         }
-        return updateTextCount(totalContentLength)
+        return updateTextCount(totalTitleLength + totalContentLength)
     }
 
-    private fun initUploadingActivateBtnClickListener() {
-        binding.btnPostingUpload.setOnClickListener {
-            findNavController().popBackStack()
+    private fun initUploadingActivateBtnClickListener() = with(binding) {
+        btnPostingUpload.setOnDuplicateBlockClick {
+            viewModel.posting(
+                etPostingTitle.text.toString(),
+                etPostingContent.text.toString(),
+                viewModel.photoUri.value
+            )
         }
     }
 

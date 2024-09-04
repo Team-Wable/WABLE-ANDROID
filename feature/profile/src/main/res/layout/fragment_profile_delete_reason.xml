@@ -243,8 +243,6 @@
         android:backgroundTint="@color/sel_bottom_btn_color"
         android:enabled="false"
         android:gravity="center"
-        android:paddingTop="15dp"
-        android:paddingBottom="12dp"
         android:text="@string/btn_profile_delete_next"
         android:textAppearance="@style/TextAppearance.Wable.Head2"
         android:textColor="@color/gray_600"
