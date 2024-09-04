@@ -8,7 +8,7 @@ data class ResponseFeedDto(
     @SerialName("memberId") val memberId: Long,
     @SerialName("memberProfileUrl") val memberProfileUrl: String,
     @SerialName("memberNickname") val memberNickname: String,
-    @SerialName("contentId") val contentId: Long,
+    @SerialName("contentId") val contentId: Long? = null,
     @SerialName("contentTitle") val contentTitle: String,
     @SerialName("contentText") val contentText: String,
     @SerialName("time") val time: String,

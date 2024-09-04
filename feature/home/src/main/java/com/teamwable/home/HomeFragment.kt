@@ -3,19 +3,29 @@ package com.teamwable.home
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
+import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
-import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.setDividerWithPadding
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,26 +47,30 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
-                    is HomeUiState.RemoveFeed -> {
-                        findNavController().popBackStack()
-                        feedAdapter.removeFeed(uiState.feedId)
-                    }
-
                     else -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
                 }
             }
         }
     }
 
-    // TODO : test용 toast 지우기
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            toast("item")
-            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed))
+            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
         }
 
-        override fun onGhostBtnClick(postAuthorId: Long) {
-            toast("ghost")
+        override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            }
         }
 
         override fun onLikeBtnClick(id: Long) {
@@ -64,11 +78,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            handleProfileNavigation(id)
         }
 
         override fun onFeedImageClick(image: String) {
-            toast("image")
+            feedActionHandler.onImageClick(image)
         }
 
         override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
@@ -77,16 +91,25 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 postAuthorId,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
+                binding.root,
             )
         }
 
         override fun onCommentBtnClick(feedId: Long) {}
     }
 
+    private fun handleProfileNavigation(id: Long) {
+        when (viewModel.fetchUserType(id)) {
+            ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
+            ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            ProfileUserType.EMPTY -> return
+        }
+    }
+
     private fun setAdapter() {
         binding.rvHome.apply {
             adapter = feedAdapter
-            if (itemDecorationCount == 0) setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
+            if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
     }
@@ -94,8 +117,17 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateFeeds().collectLatest { pagingData ->
-                feedAdapter.submitData(pagingData)
+                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                feedAdapter.submitData(transformedPagingData)
             }
+        }
+        setSwipeLayout()
+    }
+
+    private fun setSwipeLayout() {
+        binding.layoutHomeSwipe.setOnRefreshListener {
+            feedAdapter.refresh()
+            binding.layoutHomeSwipe.isRefreshing = false
         }
     }
 

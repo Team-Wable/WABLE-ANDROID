@@ -3,23 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_profile"
-    app:startDestination="@id/navigation_profile">
+    app:startDestination="@id/navigation_profile_auth">
     <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.teamwable.profile.profile.ProfileFragment"
+        android:id="@+id/navigation_profile_auth"
+        android:name="com.teamwable.profile.profile.ProfileAuthFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
-        <argument
-            android:name="user_id"
-            android:defaultValue="-1L"
-            app:argType="long" />
-        <deepLink app:uri="@string/deeplink_url_profile" />
         <action
             android:id="@+id/action_profile_to_profile_information"
             app:destination="@id/navigation_profile_information" />
         <action
             android:id="@+id/action_profile_to_push_notification"
             app:destination="@id/navigation_push_notification" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_member"
+        android:name="com.teamwable.profile.profile.ProfileMemberFragment"
+        android:label="ProfileMemberFragment"
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="user_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <deepLink app:uri="@string/deeplink_url_profile" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile_information"
@@ -43,7 +49,12 @@
         android:id="@+id/navigation_profile_delete_confirm"
         android:name="com.teamwable.profile.hamburger.ProfileDeleteConfirmFragment"
         android:label="ProfileDeleteConfirmFragment"
-        tools:layout="@layout/fragment_profile_delete_confirm" />
+        tools:layout="@layout/fragment_profile_delete_confirm">
+        <argument
+            android:name="reasons"
+            app:argType="string[]"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_push_notification"
         android:name="com.teamwable.profile.hamburger.PushNotificationFragment"
