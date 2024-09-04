@@ -9,17 +9,20 @@
         android:id="@+id/navigation_home"
         android:name="com.teamwable.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/navigation_home_detail"
         android:name="com.teamwable.home.HomeDetailFragment"
         android:label="HomeDetailFragment"
         tools:layout="@layout/fragment_home_detail">
         <argument
-            android:name="content"
-            app:argType="com.teamwable.model.Feed" />
+            android:name="feed_id"
+            app:argType="long" />
+        <deepLink app:uri="@string/deeplink_url_home_detail" />
     </fragment>
+
     <action
         android:id="@+id/action_home_to_home_detail"
-        app:destination="@id/navigation_home_detail"/>
+        app:destination="@id/navigation_home_detail" />
 </navigation>

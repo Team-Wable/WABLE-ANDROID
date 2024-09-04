@@ -12,4 +12,5 @@ enum class SnackbarType(
     GHOST(R.string.label_snack_bar_ghost),
     COMMENT_ING(R.string.label_snack_bar_comment_ing),
     COMMENT_COMPLETE(R.string.label_snack_bar_comment_complete),
+    REPORT(R.string.label_snack_bar_report),
 }

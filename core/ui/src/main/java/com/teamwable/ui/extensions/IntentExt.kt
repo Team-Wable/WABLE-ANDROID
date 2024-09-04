@@ -3,6 +3,7 @@ package com.teamwable.ui.extensions
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
@@ -24,6 +25,15 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? =
             getParcelable(key)
                 as? T
     }
+
+inline fun <reified T : java.io.Serializable> Bundle.getSerializableCompat(key: String, clazz: Class<T>): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getSerializable(key, clazz)
+    } else {
+        @Suppress("DEPRECATION")
+        getSerializable(key) as? T
+    }
+}
 
 inline fun <reified T : Activity> navigateTo(context: Context) {
     Intent(context, T::class.java).apply {

@@ -79,16 +79,6 @@
         app:layout_constraintStart_toEndOf="@id/tv_comment_ghost_level"
         app:layout_constraintTop_toTopOf="@id/tv_comment_ghost_level" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_comment_more"
-        style="@style/Wable.Icon.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_home_more"
-        app:iconSize="32dp"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tv_comment_content"
         android:layout_width="0dp"
@@ -100,6 +90,26 @@
         app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
         app:layout_constraintTop_toBottomOf="@id/tv_comment_ghost_level"
         tools:text="@string/dummy" />
+
+    <View
+        android:id="@+id/view_comment_transparent_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:backgroundTint="#0FFCFCFD" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_comment_more"
+        style="@style/Wable.Icon.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_home_more"
+        app:iconSize="32dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_comment_ghost"
