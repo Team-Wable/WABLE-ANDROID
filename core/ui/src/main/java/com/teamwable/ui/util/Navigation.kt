@@ -7,4 +7,6 @@ interface Navigation {
     fun navigateToProfileAuthFragment()
 
     fun navigateToErrorFragment()
+
+    fun navigateToNewsFragment()
 }

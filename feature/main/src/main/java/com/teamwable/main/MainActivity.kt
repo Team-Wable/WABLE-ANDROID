@@ -117,6 +117,10 @@ class MainActivity : AppCompatActivity(), Navigation {
         ErrorFragment.newInstance(navController)
     }
 
+    override fun navigateToNewsFragment() {
+        binding.bnvMain.selectedItemId = R.id.graph_news
+    }
+
     companion object {
         fun createIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

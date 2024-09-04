@@ -2,16 +2,19 @@ package com.teamwable.notification.action
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.teamwable.common.uistate.UiState
 import com.teamwable.notification.NotificationItemDecorator
 import com.teamwable.notification.NotificationViewModel
 import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
-import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.DeepLinkDestination
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.Arg.FEED_ID
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -39,26 +42,15 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
         }.launchIn(viewLifeCycleScope)
     }
 
-
     private fun initNotificationActionAdapter() = with(binding) {
         notificationAdapter = NotificationActionAdapter(
             onNotificationClick = { notificationActionData, position ->
-                when (notificationActionData.notificationTriggerType) {
-                    requireContext().stringOf(NotificationActionType.CONTENT_LIKED.title) -> toast("contentLiked") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.COMMENT.title) -> toast("comment") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.COMMENT_LIKED.title) -> toast("commentLiked") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.ACTING_CONTINUE.title) -> toast("actingContinue") // Todo : 글쓰기 이동
-                    requireContext().stringOf(NotificationActionType.BE_GHOST.title) -> toast("beGhost") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.CONTENT_GHOST.title) -> toast("contentGhost") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.COMMENT_GHOST.title) -> toast("commentGhost") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.USER_BAN.title) -> toast("userBan") // Todo : Unit
-                    requireContext().stringOf(NotificationActionType.POPULAR_WRITER.title) -> toast("popularWriter") // Todo : 게시글 상세 이동
-                    requireContext().stringOf(NotificationActionType.POPULAR_CONTENT.title) -> toast("popularContent") // Todo : 게시글 상세 이동
-                }
+                findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to notificationActionData.notificationTriggerId))
             },
-            onProfileClick = {
-                toast("profile") // Todo : 마페뷰 이동
-            })
+            onProfileClick = { userId ->
+                if (userId != -1) findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to userId))
+            },
+        )
 
         rvNotificationContent.adapter = notificationAdapter
         if (rvNotificationContent.itemDecorationCount == 0) {
