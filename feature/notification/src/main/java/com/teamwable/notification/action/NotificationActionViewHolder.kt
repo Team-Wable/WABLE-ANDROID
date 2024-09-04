@@ -9,7 +9,9 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.notification.NotificationActionModel
@@ -30,11 +32,11 @@ class NotificationActionViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            onNotificationClick(item, adapterPosition)
+            if (this::item.isInitialized) onNotificationClick(item, adapterPosition)
         }
 
         binding.ivNotificationVpProfile.setOnClickListener {
-            onProfileClick(item.triggerMemberId)
+            if (this::item.isInitialized) onProfileClick(item.triggerMemberId)
         }
     }
 
@@ -166,22 +168,20 @@ class NotificationActionViewHolder(
         name: String,
         endIndex: Int
     ) {
-        when (data.notificationTriggerType) {
-            in listOf("contentLiked", "comment", "commentLiked", "popularWriter") -> {
-                spannableText.setSpan(
-                    clickableSpan(data, true),
-                    0,
-                    name.length + endIndex + 1,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                spannableText.setSpan(
-                    clickableSpan(data, false),
-                    data.triggerMemberNickname.length + endIndex + 2,
-                    spannableText.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                binding.tvNotificationVpContent.movementMethod = LinkMovementMethod.getInstance()
-            }
+        if (data.notificationTriggerType != "popularContent") {
+            spannableText.setSpan(
+                clickableSpan(data, true),
+                0,
+                name.length + endIndex + 1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            spannableText.setSpan(
+                clickableSpan(data, false),
+                data.triggerMemberNickname.length + endIndex + 2,
+                spannableText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            binding.tvNotificationVpContent.movementMethod = LinkMovementMethod.getInstance()
         }
     }
 
@@ -212,7 +212,7 @@ class NotificationActionViewHolder(
             binding.root.context.getString(resId)
         }
 
-        return if (data.notificationTriggerType in listOf("contentLiked", "comment", "commentLiked", "popularWriter", "contentGhost", "commentGhost")) {
+        return if (data.notificationTriggerType in listOf("contentLiked", "comment", "commentLiked", "popularWriter")) {
             "$name$resourceString\n: ${getPopularContent(data.notificationText)}"
         } else {
             "$name$resourceString"
@@ -230,5 +230,20 @@ class NotificationActionViewHolder(
     companion object {
         const val MAX_LEN = 15
         const val ACTING_CONTINUE_LEN = 21
+
+        fun from(
+            parent: ViewGroup,
+            onNotificationClick: (NotificationActionModel, Int) -> Unit,
+            onProfileClick: (Int) -> Unit
+        ): NotificationActionViewHolder =
+            NotificationActionViewHolder(
+                ItemNotificationVpBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false,
+                ),
+                onNotificationClick,
+                onProfileClick
+            )
     }
 }

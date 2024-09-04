@@ -1,6 +1,8 @@
 package com.teamwable.notification.information
 
 import android.os.Build
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.notification.NotificationInformationModel
@@ -18,7 +20,7 @@ class NotificationInformationViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            click(item, adapterPosition)
+            if (this::item.isInitialized) click(item, adapterPosition)
         }
     }
 
@@ -37,5 +39,17 @@ class NotificationInformationViewHolder(
             }
             tvNotificationVpTime.text = CalculateTime().getCalculateTime(root.context, data.time)
         }
+    }
+
+    companion object {
+        fun from(parent: ViewGroup, click: (NotificationInformationModel, Int) -> Unit): NotificationInformationViewHolder =
+            NotificationInformationViewHolder(
+                ItemNotificationVpBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false,
+                ),
+                click,
+            )
     }
 }
