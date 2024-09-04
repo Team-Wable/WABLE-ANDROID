@@ -91,7 +91,7 @@ fun AgreeTermsScreen(
                 .weight(1f),
         ) {
             Text(
-                text = "와블 이용을 위해\n동의가 필요해요",
+                text = stringResource(R.string.agree_terms_title),
                 style = WableTheme.typography.head00,
                 color = WableTheme.colors.black,
                 modifier = Modifier.padding(top = 16.dp),
