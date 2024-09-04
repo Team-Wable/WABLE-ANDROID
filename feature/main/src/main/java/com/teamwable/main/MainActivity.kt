@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.ui.R.id.navigation_feed_image_dialog,
                     com.teamwable.ui.R.id.navigation_bottomSheet,
                     com.teamwable.home.R.id.navigation_loading,
+                    R.id.navigation_error,
                 ),
         )
     }
@@ -107,6 +108,13 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     override fun navigateToProfileAuthFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_profile
+    }
+
+    override fun navigateToErrorFragment() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
+        val navController = navHostFragment.navController
+        ErrorFragment.newInstance(navController)
     }
 
     companion object {
