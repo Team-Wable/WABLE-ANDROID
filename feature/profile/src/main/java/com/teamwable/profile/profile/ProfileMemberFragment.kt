@@ -12,6 +12,7 @@ import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
+import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.Navigation
@@ -31,6 +32,7 @@ class ProfileMemberFragment : BindingProfileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnProfileEdit.visible(false)
         initBackBtnClickListener()
         viewModel.fetchProfileInfo(userId)
         collect()
