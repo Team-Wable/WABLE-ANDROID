@@ -21,6 +21,7 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.hideKeyboard
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -155,7 +156,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
-        binding.ibHomeDetailCommentInputUpload.setOnClickListener {
+        binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
             viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
             commentSnackbar.show()
             binding.etHomeDetailCommentInput.text.clear()
