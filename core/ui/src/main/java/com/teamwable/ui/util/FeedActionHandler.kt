@@ -5,9 +5,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.teamwable.model.Feed
+import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -55,6 +57,18 @@ class FeedActionHandler(
     fun onImageClick(image: String) {
         val encodedUrl = URLEncoder.encode(image, "UTF-8")
         FeedImageDialog.show(context, navController, encodedUrl)
+    }
+
+    fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
+        val likeCount = viewHolder.likeCountTv.text.toString().toInt()
+        val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
+            likeCount + 1
+        } else {
+            if (likeCount > 0) likeCount - 1 else 0
+        }
+
+        viewHolder.likeCountTv.text = updatedLikeCount.toString()
+        saveLike(id, LikeState(viewHolder.likeBtn.isChecked, updatedLikeCount.toString()))
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {
