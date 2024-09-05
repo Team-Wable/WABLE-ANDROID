@@ -83,7 +83,6 @@ internal fun MainScreen(
                             )
                         },
                         navigateToHome = { startActivity(localContext, intent, null) },
-                        intentProvider = intentProvider,
                     )
                     loginNavGraph(
                         navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
