@@ -1,7 +1,7 @@
 package com.teamwable.network.datasource
 
 import com.teamwable.network.dto.request.RequestGhostDto
-import com.teamwable.network.dto.request.RequestPostLikeDto
+import com.teamwable.network.dto.request.RequestPostFeedLikeDto
 import com.teamwable.network.dto.response.ResponseFeedDto
 import com.teamwable.network.util.BaseResponse
 import com.teamwable.network.util.BaseUnitResponse
@@ -42,7 +42,7 @@ interface FeedService {
     @POST("api/v1/content/{contentId}/liked")
     suspend fun postFeedLike(
         @Path(value = "contentId") contentId: Long,
-        @Body alarmTriggerType: RequestPostLikeDto,
+        @Body alarmTriggerType: RequestPostFeedLikeDto,
     ): BaseUnitResponse<Unit>
 
     @DELETE("api/v1/content/{contentId}/unliked")

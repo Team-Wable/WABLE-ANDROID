@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.teamwable.data.mapper.toData.toPostFeedLikeDto
 import com.teamwable.data.mapper.toData.toPostGhostDto
-import com.teamwable.data.mapper.toData.toPostLikeDto
 import com.teamwable.data.mapper.toModel.toFeed
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.model.Feed
@@ -61,7 +61,7 @@ class DefaultFeedRepository @Inject constructor(
     }
 
     override suspend fun postFeedLike(feedId: Long): Result<Unit> = runCatching {
-        apiService.postFeedLike(feedId, "contentLiked".toPostLikeDto())
+        apiService.postFeedLike(feedId, "contentLiked".toPostFeedLikeDto())
         Unit
     }.onFailure {
         return it.handleThrowable()
