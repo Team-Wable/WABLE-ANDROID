@@ -76,11 +76,11 @@ class TokenInterceptor @Inject constructor(
     }
 
     private fun handleFailedTokenReissue() {
-        CoroutineScope(Dispatchers.IO).launch {
-            defaultWablePreferenceDatasource.clear()
-            withContext(Dispatchers.Main) {
-                ProcessPhoenix.triggerRebirth(context)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                defaultWablePreferenceDatasource.clear()
             }
+            ProcessPhoenix.triggerRebirth(context)
         }
     }
 
