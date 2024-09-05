@@ -95,33 +95,33 @@
         app:layout_constraintTop_toBottomOf="@id/tv_feed_ghost_level"
         tools:text="@string/dummy" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_feed_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/content_description_feed_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1.7"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_title"
+        app:shapeAppearanceOverlay="@style/WableRoundedImage8"
+        tools:src="@drawable/img_empty" />
+
     <TextView
         android:id="@+id/tv_feed_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:autoLink="web"
         android:textAppearance="@style/TextAppearance.Wable.Body4"
         android:textColor="@color/gray_800"
         android:textColorLink="@color/info"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_feed_title"
+        app:layout_constraintTop_toBottomOf="@id/iv_feed_img"
         tools:text="@string/dummy" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_feed_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:contentDescription="@string/content_description_feed_image"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="1.7"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_feed_content"
-        app:shapeAppearanceOverlay="@style/WableRoundedImage8"
-        tools:src="@drawable/img_empty" />
 
     <View
         android:id="@+id/view_feed_transparent_bg"
@@ -147,14 +147,13 @@
         android:id="@+id/btn_feed_ghost"
         android:layout_width="0dp"
         android:layout_height="31dp"
-        android:layout_marginTop="20dp"
         android:background="@drawable/sel_feed_ghost"
         android:enabled="true"
         android:minHeight="0dp"
         app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="2.2"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/iv_feed_img"
         app:rippleColor="@color/white" />
 
     <TextView
@@ -174,6 +173,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="4dp"
         app:icon="@drawable/ic_home_comment_btn"
+        app:iconSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/btn_feed_like"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@id/tv_feed_comment_count"
@@ -193,13 +193,12 @@
     <CheckBox
         android:id="@+id/btn_feed_like"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginVertical="4dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/sel_feed_heart"
         android:button="@null"
-        app:layout_constraintBottom_toBottomOf="@id/btn_feed_ghost"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@id/tv_feed_like_count"
-        app:layout_constraintTop_toTopOf="@id/btn_feed_ghost" />
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

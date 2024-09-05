@@ -1,4 +1,4 @@
-package com.teamwable.home
+package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
 import androidx.core.widget.doAfterTextChanged
@@ -9,7 +9,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
+import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
+import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.ui.base.BindingFragment
@@ -79,7 +81,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         findNavController().popBackStack()
                     }
 
-                    else -> Unit
+                    is HomeDetailUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is HomeDetailUiState.Loading -> Unit
                 }
             }
         }
@@ -92,7 +95,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                         commentAdapter.refresh()
                     }
 
-                    is HomeDetailSideEffect.ShowGhostSnackBar -> Snackbar.make(binding.root, SnackbarType.GHOST).show()
+                    is HomeDetailSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                 }
             }
         }
@@ -183,13 +186,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             feedActionHandler.onImageClick(image)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(feed: Feed) {
             feedActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                feed,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
-                binding.root,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
@@ -213,13 +215,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             handleProfileNavigation(id)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(comment: Comment) {
             commentActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                comment,
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeComment = { viewModel.removeComment(it) },
-                binding.root,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
@@ -237,7 +238,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
             flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 feedAdapter.submitData(transformedPagingData)
             }
         }
@@ -246,7 +251,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun submitCommentList(feed: Feed) {
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
+                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 commentAdapter.submitData(transformedPagingData)
             }
         }

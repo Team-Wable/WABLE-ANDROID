@@ -14,4 +14,6 @@ interface ProfileRepository {
     suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit>
 
     suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit>
+
+    suspend fun postReport(nickname: String, relateText: String): Result<Unit>
 }

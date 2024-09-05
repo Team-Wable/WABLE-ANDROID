@@ -20,4 +20,6 @@ object BundleKey {
     const val USER_ID = "userId"
     const val USER_NICKNAME = "nickname"
     const val USER_TYPE = "userType"
+    const val POSTING_RESULT = "postingResult"
+    const val IS_UPLOADED = "isUploaded"
 }

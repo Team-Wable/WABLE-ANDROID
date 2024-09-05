@@ -5,9 +5,9 @@ import com.teamwable.notification.NotificationItemDecorator
 import com.teamwable.notification.NotificationViewModel
 import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,9 +24,9 @@ class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBi
     private fun initNotificationInformationAdapter() = with(binding) {
         notificationAdapter = NotificationInformationAdapter(click = { notificationInformationData, position ->
             when (NotificationInformationType.valueOf(notificationInformationData.infoNotificationType)) {
-                NotificationInformationType.GAMEDONE -> toast("GAMEDONE") // Todo : 소식 경기 탭으로 이동
-                NotificationInformationType.GAMESTART -> toast("GAMESTART") // Todo : Unit
-                NotificationInformationType.WEEKDONE -> toast("WEEKDONE") // Todo : 소식 경기 탭으로 이동
+                NotificationInformationType.GAMEDONE -> (activity as Navigation).navigateToNewsFragment()
+                NotificationInformationType.GAMESTART -> Unit
+                NotificationInformationType.WEEKDONE -> (activity as Navigation).navigateToNewsFragment()
             }
         })
 

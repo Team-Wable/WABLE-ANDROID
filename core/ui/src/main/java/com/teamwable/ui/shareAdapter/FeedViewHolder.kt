@@ -22,7 +22,7 @@ class FeedViewHolder private constructor(
         setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(item.feedId) }
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.ivFeedImg) { feedClickListener.onFeedImageClick(item.image) }
-        setupClickListener(binding.btnFeedMore) { feedClickListener.onKebabBtnClick(item.feedId, item.postAuthorId) }
+        setupClickListener(binding.btnFeedMore) { feedClickListener.onKebabBtnClick(item) }
     }
 
     private fun setupClickListener(vararg views: View, action: () -> Unit) {
@@ -36,13 +36,17 @@ class FeedViewHolder private constructor(
     fun bind(feed: Feed?) {
         item = feed ?: return
         val isImageInclude = feed.image.isNotBlank()
+        val isContentBlank = feed.content.isBlank()
         with(binding) {
             ivFeedProfileImg.load(feed.postAuthorProfile)
             tvFeedNickname.text = feed.postAuthorNickname
             tvFeedGhostLevel.text = feed.postAuthorGhost
             tvFeedUploadTime.text = feed.uploadTime
             tvFeedTitle.text = feed.title
-            tvFeedContent.text = feed.content
+            tvFeedContent.apply {
+                text = feed.content
+                visible(!isContentBlank)
+            }
             ivFeedImg.apply {
                 if (isImageInclude) load(feed.image)
                 visible(isImageInclude)
@@ -52,7 +56,8 @@ class FeedViewHolder private constructor(
             tvFeedCommentCount.text = feed.commentNumber
             tvTeamTag.teamName = feed.postAuthorTeamTag
             btnFeedGhost.isEnabled = !feed.isPostAuthorGhost
-            binding.viewFeedTransparentBg.setBackgroundColor(Color.parseColor(feed.ghostColor))
+            viewFeedTransparentBg.setBackgroundColor(Color.parseColor(feed.ghostColor))
+            btnFeedGhost.visible(!feed.isAuth)
         }
     }
 

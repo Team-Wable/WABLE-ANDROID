@@ -26,11 +26,11 @@ import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
-import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -63,6 +63,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
+                    is ProfileFeedUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     else -> Unit
                 }
             }
@@ -72,7 +73,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileFeedSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ProfileFeedSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, SnackbarType.GHOST).show() }
+                    is ProfileFeedSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, sideEffect.type).show() }
                 }
             }
         }
@@ -99,13 +100,12 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             feedActionHandler.onImageClick(image)
         }
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(feed: Feed) {
             feedActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                feed,
                 fetchUserType = { userType },
                 removeFeed = { viewModel.removeFeed(it) },
-                parentFragment?.view ?: return,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
@@ -123,7 +123,11 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateFeeds(userId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleFeedsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                    val isAuth = userType == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 feedAdapter.submitData(transformedPagingData)
             }
         }

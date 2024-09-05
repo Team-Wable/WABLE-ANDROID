@@ -7,9 +7,11 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
+import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.model.Profile
+import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileFeedListViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProfileFeedUiState>(ProfileFeedUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -60,8 +63,16 @@ class ProfileFeedListViewModel @Inject constructor(
             feedRepository.postGhost(request)
                 .onSuccess {
                     ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
-                    _event.emit(ProfileFeedSideEffect.ShowSnackBar)
+                    _event.emit(ProfileFeedSideEffect.ShowSnackBar(SnackbarType.GHOST))
                 }
+                .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun reportUser(nickname: String, relateText: String) {
+        viewModelScope.launch {
+            profileRepository.postReport(nickname, relateText)
+                .onSuccess { _event.emit(ProfileFeedSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
                 .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
         }
     }
@@ -76,7 +87,7 @@ sealed interface ProfileFeedUiState {
 }
 
 sealed interface ProfileFeedSideEffect {
-    data object ShowSnackBar : ProfileFeedSideEffect
+    data class ShowSnackBar(val type: SnackbarType) : ProfileFeedSideEffect
 
     data object DismissBottomSheet : ProfileFeedSideEffect
 }

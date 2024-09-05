@@ -1,5 +1,6 @@
 package com.teamwable.network.datasource
 
+import com.teamwable.network.dto.request.RequestReportDto
 import com.teamwable.network.dto.request.RequestWithdrawalDto
 import com.teamwable.network.dto.response.ResponseProfileInfoDto
 import com.teamwable.network.dto.response.profile.ResponseMemberDataDto
@@ -11,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,7 +29,6 @@ interface ProfileService {
     @PATCH("api/v1/withdrawal")
     suspend fun patchWithdrawal(@Body requestWithdrawalDto: RequestWithdrawalDto): BaseUnitResponse<Unit>
 
-    @Multipart
     @PATCH("api/v1/user-profile2")
     suspend fun patchUserProfile(
         @Part("info") requestProfileEdit: RequestBody,
@@ -37,5 +38,11 @@ interface ProfileService {
     @GET("api/v1/nickname-validation")
     suspend fun getNickNameDoubleCheck(
         @Query("nickname") nickname: String,
+    ): BaseUnitResponse<Unit>
+
+    @Multipart
+    @POST("api/v1/report/slack")
+    suspend fun postReport(
+        @Body request: RequestReportDto,
     ): BaseUnitResponse<Unit>
 }

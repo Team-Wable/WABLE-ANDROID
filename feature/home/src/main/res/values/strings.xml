@@ -8,4 +8,11 @@
     <string name="label_home_detail_toolbar_back">게시글</string>
     <string name="hint_home_detail_comment_input">%s에게 댓글 남기기...</string>
 
+
+    <!-- loading -->
+    <string-array name="loading_contents">
+        <item>경기 보고 어디서 모여?\n와블에서!</item>
+        <item>와글와글</item>
+        <item>경기 라이브로 챙겨 본 후, 하이라이트\n보고, BJ 경기 후기, 전문가 평가까지\n싹 찾아보는 사람 손~!</item>
+    </string-array>
 </resources>

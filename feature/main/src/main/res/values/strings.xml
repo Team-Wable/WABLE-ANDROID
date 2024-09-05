@@ -6,4 +6,9 @@
     <string name="label_bnv_news">소식</string>
     <string name="label_bnv_notification">알림</string>
     <string name="label_bnv_profile">마이</string>
+
+    <!-- error -->
+    <string name="label_error_title">이런!</string>
+    <string name="label_error_content">현재 요청하신 페이지를 찾을 수 없어요!</string>
+    <string name="label_error_btn">홈으로 가기</string>
 </resources>

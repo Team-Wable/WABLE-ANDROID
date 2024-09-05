@@ -20,6 +20,7 @@ data class Feed(
     val image: String,
     val postAuthorTeamTag: String,
     val ghostColor: String = GhostColor.DEFAULT_0,
+    val isAuth: Boolean = false,
 ) : Parcelable
 
 object GhostColor {
