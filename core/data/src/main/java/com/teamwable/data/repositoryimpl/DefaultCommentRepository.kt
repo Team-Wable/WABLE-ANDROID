@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.teamwable.data.mapper.toData.toPostCommentDto
+import com.teamwable.data.mapper.toData.toPostCommentLikeDto
 import com.teamwable.data.mapper.toData.toPostGhostDto
 import com.teamwable.data.mapper.toModel.toComment
 import com.teamwable.data.repository.CommentRepository
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class DefaultCommentRepository @Inject constructor(
+internal class DefaultCommentRepository @Inject constructor(
     private val apiService: CommentService,
 ) : CommentRepository {
     override fun getHomeDetailComments(feedId: Long): Flow<PagingData<Comment>> {
@@ -59,6 +60,21 @@ class DefaultCommentRepository @Inject constructor(
 
     override suspend fun postGhost(request: Ghost): Result<Unit> = runCatching {
         apiService.postGhost(request.toPostGhostDto())
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun postCommentLike(commentId: Long, commentContent: String): Result<Unit> = runCatching {
+        val request = Pair("commentLiked", commentContent).toPostCommentLikeDto()
+        apiService.postCommentLike(commentId, request)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun deleteCommentLike(commentId: Long): Result<Unit> = runCatching {
+        apiService.deleteCommentLike(commentId)
         Unit
     }.onFailure {
         return it.handleThrowable()

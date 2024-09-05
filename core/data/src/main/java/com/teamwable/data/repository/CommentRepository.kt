@@ -15,4 +15,8 @@ interface CommentRepository {
     suspend fun postComment(contentId: Long, commentText: String): Result<Unit>
 
     suspend fun postGhost(request: Ghost): Result<Unit>
+
+    suspend fun postCommentLike(commentId: Long, commentContent: String): Result<Unit>
+
+    suspend fun deleteCommentLike(commentId: Long): Result<Unit>
 }

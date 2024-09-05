@@ -2,6 +2,7 @@ package com.teamwable.network.datasource
 
 import com.teamwable.network.dto.request.RequestGhostDto
 import com.teamwable.network.dto.request.RequestPostCommentDto
+import com.teamwable.network.dto.request.RequestPostCommentLikeDto
 import com.teamwable.network.dto.response.ResponseCommentDto
 import com.teamwable.network.util.BaseResponse
 import com.teamwable.network.util.BaseUnitResponse
@@ -39,5 +40,16 @@ interface CommentService {
     @POST("api/v1/ghost2")
     suspend fun postGhost(
         @Body request: RequestGhostDto,
+    ): BaseUnitResponse<Unit>
+
+    @POST("api/v1/comment/{commentId}/liked")
+    suspend fun postCommentLike(
+        @Path(value = "commentId") commentId: Long,
+        @Body alarmTriggerType: RequestPostCommentLikeDto,
+    ): BaseUnitResponse<Unit>
+
+    @DELETE("api/v1/comment/{commentId}/unliked")
+    suspend fun deleteCommentLike(
+        @Path(value = "commentId") commentId: Long,
     ): BaseUnitResponse<Unit>
 }
