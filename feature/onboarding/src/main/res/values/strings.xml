@@ -2,6 +2,7 @@
 <resources>
     <!--    공통-->
     <string name="btn_next_text">다음으로</string>
+    <string name="btn_completed">완료</string>
     <!--    언제 부터 lck를 시청하셨나요? 화면-->
     <string name="first_lck_watch_title">언제부터 LCK를 시청하셨나요?</string>
     <string name="first_lck_watch_description">꼭 LCK가 아닌 LOL경기여도 좋아요</string>
@@ -20,4 +21,5 @@
     <string name="agree_term_privacy_policy">[필수] 개인정보 수집 및 이용동의</string>
     <string name="agree_term_age_confirmation">[필수] 만 14세 이상입니다</string>
     <string name="agree_term_marketing_consent">마케팅 활용/광고성 정보 수신동의</string>
+    <string name="agree_terms_title">와블 이용을 위해\n동의가 필요해요</string>
 </resources>

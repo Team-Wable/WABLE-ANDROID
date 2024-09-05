@@ -2,6 +2,9 @@ package com.teamwable.onboarding.agreeterms
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwable.data.repository.ProfileRepository
+import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.agreeterms.model.AgreeTermsSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AgreeTermsViewModel @Inject constructor() : ViewModel() {
+class AgreeTermsViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository,
+    private val userInfoRepository: UserInfoRepository,
+) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<AgreeTermsSideEffect>()
     val sideEffect: SharedFlow<AgreeTermsSideEffect> = _sideEffect.asSharedFlow()
 
@@ -29,5 +35,18 @@ class AgreeTermsViewModel @Inject constructor() : ViewModel() {
 
     fun showLoginDialog(show: Boolean) {
         _showDialog.update { show }
+    }
+
+    fun patchUserProfile(memberInfoEditModel: MemberInfoEditModel, imgUrl: String?) {
+        viewModelScope.launch {
+            profileRepository.patchUserProfile(memberInfoEditModel, imgUrl)
+                .onSuccess {
+                    _sideEffect.emit(AgreeTermsSideEffect.ShowDialog)
+                    userInfoRepository.saveAutoLogin(true)
+                }
+                .onFailure {
+                    _sideEffect.emit(AgreeTermsSideEffect.ShowSnackBar(it))
+                }
+        }
     }
 }

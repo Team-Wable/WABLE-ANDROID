@@ -27,11 +27,13 @@ import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
+import com.teamwable.designsystem.type.MemberInfoType
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.agreeterms.model.AgreeTerm
 import com.teamwable.onboarding.agreeterms.model.AgreeTermsSideEffect
-import timber.log.Timber
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun AgreeTermsRoute(
@@ -43,27 +45,37 @@ fun AgreeTermsRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
-    Timber.d("args: ${args.userList}")
+    val userInfo = args.userList.toPersistentList()
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
                     is AgreeTermsSideEffect.NavigateToHome -> navigateToHome()
-                    else -> Unit
+                    is AgreeTermsSideEffect.ShowDialog -> viewModel.showLoginDialog(true)
+                    is AgreeTermsSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
             }
     }
 
     AgreeTermsScreen(
         onNextBtnClick = { marketingConsent ->
-            viewModel.showLoginDialog(true)
-            Timber.tag("consent").d(marketingConsent.toString())
+            viewModel.patchUserProfile(
+                memberInfoEditModel = MemberInfoEditModel(
+                    nickname = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
+                    isAlarmAllowed = marketingConsent,
+                    memberLckYears = userInfo[MemberInfoType.MEMBER_LCK_YEAR.ordinal].toInt(),
+                    memberFanTeam = userInfo[MemberInfoType.MEMBER_FAN_TEAM.ordinal].takeIf { it.isNotEmpty() },
+                    memberDefaultProfileImage = userInfo[MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal].takeIf { it.isNotEmpty() },
+                ),
+                imgUrl = userInfo[MemberInfoType.MEMBER_PROFILE_URL.ordinal].takeIf { it.isNotEmpty() },
+            )
         },
     )
 
     if (showDialog) {
         WableButtonDialog(
+            userName = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
             dialogType = DialogType.WELLCOME,
             onClick = { viewModel.navigateToHome() },
             onDismissRequest = { viewModel.showLoginDialog(false) },
@@ -90,7 +102,7 @@ fun AgreeTermsScreen(
                 .weight(1f),
         ) {
             Text(
-                text = "와블 이용을 위해\n동의가 필요해요",
+                text = stringResource(R.string.agree_terms_title),
                 style = WableTheme.typography.head00,
                 color = WableTheme.colors.black,
                 modifier = Modifier.padding(top = 16.dp),
@@ -132,7 +144,7 @@ fun AgreeTermsScreen(
         }
 
         WableButton(
-            text = stringResource(R.string.btn_next_text),
+            text = stringResource(R.string.btn_completed),
             onClick = {
                 onNextBtnClick(checkedStates[AgreeTerm.MARKETING_CONSENT.ordinal])
             },

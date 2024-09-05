@@ -5,9 +5,8 @@ import javax.inject.Inject
 
 class NicknameValidationUseCase @Inject constructor() {
     operator fun invoke(input: String): NicknameType = when {
-        input.isEmpty() -> NicknameType.DEFAULT
         !isLengthValid(input) || !isOnlyAlphanumeric(input) -> NicknameType.INVALID
-        else -> NicknameType.CORRECT
+        else -> NicknameType.DEFAULT
     }
 
     private fun isOnlyAlphanumeric(input: String): Boolean =

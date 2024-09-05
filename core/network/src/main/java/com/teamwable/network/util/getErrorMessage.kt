@@ -6,7 +6,7 @@ import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-private const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
+const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
 
 private fun HttpException.getErrorMessage(): String {
     val errorBody = response()?.errorBody()?.string() ?: return UNKNOWN_ERROR_MESSAGE
