@@ -18,7 +18,7 @@ internal class DefaultPostingRepository @Inject constructor(
     override suspend fun postingMultiPart(title: String, content: String, uriImage: String?): Result<Unit> {
         return runCatching {
             val textRequestBody = createContentRequestBody(title, content)
-            val imagePart = contentResolver.createImagePart(uriImage)
+            val imagePart = contentResolver.createImagePart(uriImage, FILE_NAME)
 
             postingService.postingMultiPart(textRequestBody, imagePart)
             Unit
@@ -31,5 +31,9 @@ internal class DefaultPostingRepository @Inject constructor(
             put("contentText", content)
         }.toString()
         return contentJson.toRequestBody("application/json".toMediaTypeOrNull())
+    }
+
+    companion object {
+        private const val FILE_NAME = "image"
     }
 }
