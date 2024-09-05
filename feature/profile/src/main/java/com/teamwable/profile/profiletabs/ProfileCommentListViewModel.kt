@@ -10,6 +10,7 @@ import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.model.Comment
 import com.teamwable.model.Ghost
+import com.teamwable.model.LikeState
 import com.teamwable.model.Profile
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,14 +36,17 @@ class ProfileCommentListViewModel @Inject constructor(
 
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     fun updateComments(userId: Long): Flow<PagingData<Comment>> {
         val commentsFlow = commentRepository.getProfileComments(userId).cachedIn(viewModelScope)
-        return combine(commentsFlow, removedCommentsFlow, ghostedFeedsFlow) { commentsFlow, removedCommentIds, ghostedUserIds ->
+        return combine(commentsFlow, removedCommentsFlow, ghostedFeedsFlow, likeFeedsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
             commentsFlow
                 .filter { removedCommentIds.contains(it.commentId).not() }
                 .map { data ->
-                    if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    val likeState = likeStates[data.commentId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -74,6 +78,21 @@ class ProfileCommentListViewModel @Inject constructor(
             profileRepository.postReport(nickname, relateText)
                 .onSuccess { _event.emit(ProfileCommentSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
                 .onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateLike(commentId: Long, commentText: String, likeState: LikeState) {
+        val currentLikeState = likeFeedsFlow.value[commentId]
+        if (currentLikeState?.isLiked == likeState.isLiked) return
+
+        viewModelScope.launch {
+            val result = if (likeState.isLiked) commentRepository.postCommentLike(commentId, commentText) else commentRepository.deleteCommentLike(commentId)
+
+            result.onSuccess {
+                likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
+                    put(commentId, likeState)
+                }
+            }.onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
         }
     }
 }
