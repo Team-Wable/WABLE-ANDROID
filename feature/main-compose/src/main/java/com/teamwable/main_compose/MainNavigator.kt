@@ -8,10 +8,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
 import com.teamwable.navigation.Route
+import com.teamwable.onboarding.agreeterms.naviagation.navigateToAgreeTerms
+import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
+import com.teamwable.onboarding.profile.naviagation.navigateToProfile
+import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
 
-internal class MainNavigator(
+class MainNavigator(
     val navController: NavHostController,
 ) {
     private val currentDestination: NavDestination?
@@ -24,6 +29,22 @@ internal class MainNavigator(
         navController.navigateLogin(navOptions)
     }
 
+    fun navigateToFirstLckWatch() {
+        navController.navigateToFirstLckWatch()
+    }
+
+    fun navigateToSelectLckTeam(userList: List<String>) {
+        navController.navigateToSelectLckTeam(userList)
+    }
+
+    fun navigateToProfile(userList: List<String>) {
+        navController.navigateToProfile(userList)
+    }
+
+    fun navigateToAgreeTerms(userList: List<String>) {
+        navController.navigateToAgreeTerms(userList)
+    }
+
     private fun popBackStack() {
         navController.popBackStack()
     }
@@ -32,6 +53,17 @@ internal class MainNavigator(
         if (!isSameCurrentDestination<Route.Login>()) {
             popBackStack()
         }
+    }
+
+    fun resetToLogin() {
+        val navOptions = navOptions {
+            popUpTo(startDestination) {
+                saveState = true
+            }
+            launchSingleTop = true
+        }
+
+        navController.navigateLogin(navOptions)
     }
 
     fun isBackStackNotEmpty(): Boolean = navController.previousBackStackEntry != null

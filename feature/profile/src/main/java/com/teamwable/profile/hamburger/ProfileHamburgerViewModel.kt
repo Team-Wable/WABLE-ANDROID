@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,7 +58,7 @@ class ProfileHamburgerViewModel @Inject constructor(
 
     fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
         viewModelScope.launch {
-            profileRepository.patchProfileUriEdit(info, url)
+            profileRepository.patchUserProfile(info, url)
                 .onSuccess { info.isPushAlarmAllowed?.let { _pushAlarmAllowedState.value = it } }
                 .onFailure { Timber.d("fail", it.message.toString()) }
         }
@@ -69,5 +68,4 @@ class ProfileHamburgerViewModel @Inject constructor(
         viewModelScope.launch {
             userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
         }
-
 }

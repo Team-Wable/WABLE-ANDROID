@@ -3,9 +3,10 @@ package com.teamwable.network.util
 import com.teamwable.model.network.Error
 import org.json.JSONObject
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-private const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
+const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
 
 private fun HttpException.getErrorMessage(): String {
     val errorBody = response()?.errorBody()?.string() ?: return UNKNOWN_ERROR_MESSAGE
@@ -20,12 +21,13 @@ private fun parseErrorMessage(errorBody: String): String {
     }
 }
 
+fun Throwable.toCustomError(): Throwable = when (this) {
+    is HttpException -> Error.ApiError(this.getErrorMessage())
+    is UnknownHostException -> Error.NetWorkConnectError("인터넷에 연결해 주세요")
+    is SocketTimeoutException -> Error.TimeOutError("서버가 응답하지 않습니다")
+    else -> this // 원래 Exception을 그대로 반환
+}
+
 fun <T> Throwable.handleThrowable(): Result<T> {
-    return Result.failure(
-        when (this) {
-            is HttpException -> Error.ApiError(this.getErrorMessage())
-            is UnknownHostException -> Error.NetWorkConnectError("인터넷에 연결해 주세요")
-            else -> this
-        },
-    )
+    return Result.failure(this.toCustomError())
 }

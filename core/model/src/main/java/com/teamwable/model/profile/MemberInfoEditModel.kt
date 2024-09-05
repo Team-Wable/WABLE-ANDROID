@@ -1,12 +1,12 @@
 package com.teamwable.model.profile
 
 data class MemberInfoEditModel(
-    val nickname: String? = "",
-    val isAlarmAllowed: Boolean? = false,
-    val memberIntro: String? = "",
-    val isPushAlarmAllowed: Boolean? = false,
-    val fcmToken: String? = "",
-    val memberLckYears: Int = 0,
-    val memberFanTeam: String? = "",
-    val memberDefaultProfileImage: String? = ""
+    val nickname: String? = null,
+    val isAlarmAllowed: Boolean? = null,
+    val memberIntro: String? = null,
+    val isPushAlarmAllowed: Boolean? = null,
+    val fcmToken: String? = null,
+    val memberLckYears: Int? = null,
+    val memberFanTeam: String? = null,
+    val memberDefaultProfileImage: String? = null,
 )

@@ -10,10 +10,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PATCH
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ProfileService {
     @GET("api/v1/viewmember/{viewmemberId}")
@@ -27,6 +29,7 @@ interface ProfileService {
     @PATCH("api/v1/withdrawal")
     suspend fun patchWithdrawal(@Body requestWithdrawalDto: RequestWithdrawalDto): BaseUnitResponse<Unit>
 
+    @Multipart
     @POST("api/v1/report/slack")
     suspend fun postReport(
         @Body request: RequestReportDto,
@@ -36,5 +39,10 @@ interface ProfileService {
     suspend fun patchUserProfile(
         @Part("info") requestProfileEdit: RequestBody,
         @Part file: MultipartBody.Part?,
+    ): BaseUnitResponse<Unit>
+
+    @GET("api/v1/nickname-validation")
+    suspend fun getNickNameDoubleCheck(
+        @Query("nickname") nickname: String,
     ): BaseUnitResponse<Unit>
 }
