@@ -1,13 +1,18 @@
 package com.teamwable.home
 
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.map
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
@@ -33,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -56,6 +62,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> Unit
+                    is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
         }
@@ -65,6 +72,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    is HomeSideEffect.SaveIsPushAllowed -> viewModel.saveIsPushAlarmAllowed(sideEffect.isAllowed)
                 }
             }
         }
@@ -166,4 +174,44 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             if (isUploaded) scrollToTop()
         }
     }
+
+    private val requestPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+        when (it) {
+            true -> handlePushAlarmPermissionGranted()
+            false -> handlePushAlarmPermissionDenied()
+        }
+    }
+
+    private fun initPushAlarmPermissionAlert() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
+            requestPermission.launch(permissionList)
+        } else {
+            handlePushAlarmPermissionGranted()
+        }
+    }
+
+    private fun handlePushAlarmPermissionGranted() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    viewModel.patchUserProfileUri(
+                        MemberInfoEditModel(
+                            isPushAlarmAllowed = true,
+                            fcmToken = task.result,
+                        ),
+                    )
+                    Timber.tag("fcm").d("fcm token: $task.result")
+                } else {
+                    Timber.d(task.exception)
+                    return@OnCompleteListener
+                }
+            },
+        )
+    }
+
+    private fun handlePushAlarmPermissionDenied() =
+        viewModel.patchUserProfileUri(MemberInfoEditModel(isPushAlarmAllowed = false))
 }

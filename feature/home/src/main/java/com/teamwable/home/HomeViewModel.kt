@@ -12,6 +12,7 @@ import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.model.LikeState
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,6 +49,7 @@ class HomeViewModel @Inject constructor(
     private var authId = -1L
 
     init {
+        fetchIsPushAlarmAllowed()
         fetchAuthId()
     }
 
@@ -128,6 +131,29 @@ class HomeViewModel @Inject constructor(
             }.onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
+
+    fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
+        viewModelScope.launch {
+            profileRepository.patchUserProfile(info, url)
+                .onSuccess { _event.emit(HomeSideEffect.SaveIsPushAllowed(info.isPushAlarmAllowed ?: return@launch)) }
+                .onFailure {
+                    Timber.e(it.message.toString())
+                    _uiState.value = HomeUiState.Error(it.message.toString())
+                }
+        }
+    }
+
+    fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
+        viewModelScope.launch {
+            userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
+        }
+    }
+
+    fun fetchIsPushAlarmAllowed() {
+        viewModelScope.launch {
+            userInfoRepository.getIsPushAlarmAllowed().collectLatest { _uiState.value = HomeUiState.AddPushAlarmPermission(it) }
+        }
+    }
 }
 
 sealed interface HomeUiState {
@@ -136,10 +162,14 @@ sealed interface HomeUiState {
     data object Success : HomeUiState
 
     data class Error(val errorMessage: String) : HomeUiState
+
+    data class AddPushAlarmPermission(val isAllowed: Boolean) : HomeUiState
 }
 
 sealed interface HomeSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeSideEffect
 
     data object DismissBottomSheet : HomeSideEffect
+
+    data class SaveIsPushAllowed(val isAllowed: Boolean) : HomeSideEffect
 }
