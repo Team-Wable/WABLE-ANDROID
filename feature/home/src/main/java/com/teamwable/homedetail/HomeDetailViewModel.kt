@@ -2,21 +2,29 @@ package com.teamwable.homedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.CommentRepository
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.model.LikeState
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,6 +43,9 @@ class HomeDetailViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
+    private val ghostedFlow = MutableStateFlow(setOf<Long>())
+    private val likeCommentsFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     private var authId: Long = -1
 
@@ -50,7 +61,30 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateComments(feedId: Long) = commentRepository.getHomeDetailComments(feedId)
+    fun updateHomeDetailToFlow(feed: Feed): Flow<PagingData<Feed>> {
+        val feedFlow = flowOf(PagingData.from(listOf(feed))).cachedIn(viewModelScope)
+        return combine(feedFlow, ghostedFlow, likeFeedsFlow) { feedsFlow, ghostedUserIds, likeStates ->
+            feedsFlow
+                .map { data ->
+                    val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                }
+        }
+    }
+
+    fun updateComments(feedId: Long): Flow<PagingData<Comment>> {
+        val commentsFlow = commentRepository.getHomeDetailComments(feedId).cachedIn(viewModelScope)
+        return combine(commentsFlow, removedCommentsFlow, ghostedFlow, likeCommentsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
+            commentsFlow
+                .filter { removedCommentIds.contains(it.commentId).not() }
+                .map { data ->
+                    val likeState = likeStates[data.commentId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                }
+        }
+    }
 
     fun fetchUserType(userId: Long): ProfileUserType {
         return when {
@@ -67,7 +101,10 @@ class HomeDetailViewModel @Inject constructor(
     fun removeComment(commentId: Long) {
         viewModelScope.launch {
             commentRepository.deleteComment(commentId)
-                .onSuccess { _uiState.value = HomeDetailUiState.RemoveComment(commentId) }
+                .onSuccess {
+                    removedCommentsFlow.value = removedCommentsFlow.value.toMutableSet().apply { add(commentId) }
+                    _event.emit(HomeDetailSideEffect.DismissBottomSheet)
+                }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -80,7 +117,7 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateHomeDetail(feedId: Long) {
+    fun updateHomeDetailToNetwork(feedId: Long) {
         viewModelScope.launch {
             feedRepository.getHomeDetail(feedId)
                 .onSuccess { _uiState.value = HomeDetailUiState.Success(it.copy(feedId = feedId)) }
@@ -96,18 +133,13 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateFeedGhost(request: Ghost) {
-        viewModelScope.launch {
-            feedRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.GHOST)) }
-                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
-        }
-    }
-
-    fun updateCommentGhost(request: Ghost) {
+    fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             commentRepository.postGhost(request)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.GHOST)) }
+                .onSuccess {
+                    ghostedFlow.value = ghostedFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.GHOST))
+                }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -131,7 +163,21 @@ class HomeDetailViewModel @Inject constructor(
                 likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
                     put(feedId, likeState)
                 }
-                updateHomeDetail(feedId)
+            }.onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateCommentLike(commentId: Long, commentText: String, likeState: LikeState) {
+        val currentLikeState = likeCommentsFlow.value[commentId]
+        if (currentLikeState?.isLiked == likeState.isLiked) return
+
+        viewModelScope.launch {
+            val result = if (likeState.isLiked) commentRepository.postCommentLike(commentId, commentText) else commentRepository.deleteCommentLike(commentId)
+
+            result.onSuccess {
+                likeCommentsFlow.value = likeCommentsFlow.value.toMutableMap().apply {
+                    put(commentId, likeState)
+                }
             }.onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -142,8 +188,6 @@ sealed interface HomeDetailUiState {
 
     data class Success(val feed: Feed) : HomeDetailUiState
 
-    data class RemoveComment(val commentId: Long) : HomeDetailUiState
-
     data object RemoveFeed : HomeDetailUiState
 
     data class Error(val errorMessage: String) : HomeDetailUiState
@@ -153,4 +197,6 @@ sealed interface HomeDetailSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeDetailSideEffect
 
     data object ShowCommentSnackBar : HomeDetailSideEffect
+
+    data object DismissBottomSheet : HomeDetailSideEffect
 }
