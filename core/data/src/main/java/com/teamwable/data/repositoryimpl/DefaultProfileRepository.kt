@@ -1,7 +1,7 @@
 package com.teamwable.data.repositoryimpl
 
-import com.teamwable.data.mapper.toData.toReportDto
 import android.content.ContentResolver
+import com.teamwable.data.mapper.toData.toReportDto
 import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
@@ -41,14 +41,6 @@ internal class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
-    override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
-        val request = Pair(nickname, relateText).toReportDto()
-        apiService.postReport(request)
-        Unit
-    }.onFailure {
-        return it.handleThrowable()
-    }
-
     override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runCatching {
         val infoRequestBody = createContentRequestBody(info)
         val filePart = contentResolver.createImagePart(imgUrl)
@@ -74,5 +66,13 @@ internal class DefaultProfileRepository @Inject constructor(
             put("memberDefaultProfileImage", info.memberDefaultProfileImage)
         }.toString()
         return contentJson.toRequestBody("application/json".toMediaTypeOrNull())
+    }
+
+    override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
+        val request = Pair(nickname, relateText).toReportDto()
+        apiService.postReport(request)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
     }
 }
