@@ -23,3 +23,12 @@ object BundleKey {
     const val POSTING_RESULT = "postingResult"
     const val IS_UPLOADED = "isUploaded"
 }
+
+object FcmTag {
+    const val RELATED_CONTENT_ID = "relateContentId"
+    const val CHANNEL_NAME = "FCM_CHANNEL"
+    const val CHANNEL_ID = "FCM_CHANNEL_ID"
+    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_TITLE = "gcm.notification.title"
+    const val NOTIFICATION_BODY = "gcm.notification.body"
+}

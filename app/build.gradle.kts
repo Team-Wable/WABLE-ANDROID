@@ -71,6 +71,9 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.google.play.services)
+    implementation(libs.firebase.messaging.ktx)
+
     // kakao
     implementation(libs.kakao.login)
 }
