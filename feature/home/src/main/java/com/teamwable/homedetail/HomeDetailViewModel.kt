@@ -8,6 +8,7 @@ import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.LikeState
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,8 @@ class HomeDetailViewModel @Inject constructor(
 
     private val _event = MutableSharedFlow<HomeDetailSideEffect>()
     val event = _event.asSharedFlow()
+
+    private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     private var authId: Long = -1
 
@@ -114,6 +117,22 @@ class HomeDetailViewModel @Inject constructor(
             profileRepository.postReport(nickname, relateText)
                 .onSuccess { _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateLike(feedId: Long, likeState: LikeState) {
+        val currentLikeState = likeFeedsFlow.value[feedId]
+        if (currentLikeState?.isLiked == likeState.isLiked) return
+
+        viewModelScope.launch {
+            val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
+
+            result.onSuccess {
+                likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
+                    put(feedId, likeState)
+                }
+                updateHomeDetail(feedId)
+            }.onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.teamwable.home
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.map
 import com.teamwable.home.databinding.FragmentHomeBinding
@@ -13,11 +14,11 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -27,6 +28,7 @@ import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
+import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -37,6 +39,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private val viewModel: HomeViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private lateinit var feedActionHandler: FeedActionHandler
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -78,8 +81,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             }
         }
 
-        override fun onLikeBtnClick(id: Long) {
-            toast("like")
+        override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
+            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                }
+            }
         }
 
         override fun onPostAuthorProfileClick(id: Long) {

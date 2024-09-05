@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
@@ -29,6 +30,7 @@ import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -39,6 +41,7 @@ import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
+import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
@@ -52,6 +55,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private val viewModel: HomeDetailViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
     private lateinit var feedActionHandler: FeedActionHandler
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     private var isCommentNull = true
     private var totalCommentLength = 0
@@ -174,8 +178,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             }
         }
 
-        override fun onLikeBtnClick(id: Long) {
-            toast("like")
+        override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
+            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                }
+            }
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
