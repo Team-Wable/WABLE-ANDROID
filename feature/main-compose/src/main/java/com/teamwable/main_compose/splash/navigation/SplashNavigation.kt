@@ -2,6 +2,7 @@ package com.teamwable.main_compose.splash.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.teamwable.main_compose.splash.SplashRoute
 import com.teamwable.navigation.Route
 
 fun NavGraphBuilder.splashNavGraph(
@@ -9,9 +10,9 @@ fun NavGraphBuilder.splashNavGraph(
     navigateToHome: () -> Unit,
 ) {
     composable<Route.Splash> {
-        /*  SplashScreen(
-              navigateToHome = navigateToHome,
-              navigateToLogIn = navigateToLogIn
-          )*/
+        SplashRoute(
+            navigateToHome = navigateToHome,
+            navigateToLogIn = navigateToLogIn,
+        )
     }
 }
