@@ -57,8 +57,8 @@ class MainNavigator(
 
     fun resetToLogin() {
         val navOptions = navOptions {
-            popUpTo(startDestination) {
-                saveState = true
+            popUpTo(Route.Login) {
+                inclusive = true
             }
             launchSingleTop = true
         }
