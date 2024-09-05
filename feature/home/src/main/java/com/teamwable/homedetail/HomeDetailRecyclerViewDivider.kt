@@ -20,9 +20,14 @@ class HomeDetailRecyclerViewDivider(
             val child = parent.getChildAt(i)
             val params = child.layoutParams as RecyclerView.LayoutParams
             val top = child.bottom + params.bottomMargin
-            val bottom = top + (if (i == 0) firstItemDivider!!.intrinsicHeight else otherItemsDivider!!.intrinsicHeight)
 
-            val divider = if (i == 0) firstItemDivider else otherItemsDivider
+            val adapterPosition = parent.getChildAdapterPosition(child)
+
+            val dividerHeight = if (adapterPosition == 0) firstItemDivider!!.intrinsicHeight else otherItemsDivider!!.intrinsicHeight
+
+            val bottom = top + dividerHeight
+
+            val divider = if (adapterPosition == 0) firstItemDivider else otherItemsDivider
             divider?.setBounds(left, top, right, bottom)
             divider?.draw(c)
         }
