@@ -62,7 +62,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> Unit
-                    is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
+                    is HomeUiState.AddPushAlarmPermission -> if (uiState.isAllowed == null) initPushAlarmPermissionAlert()
                 }
             }
         }
@@ -72,7 +72,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is HomeSideEffect.SaveIsPushAllowed -> viewModel.saveIsPushAlarmAllowed(sideEffect.isAllowed)
+                    else -> Unit
                 }
             }
         }

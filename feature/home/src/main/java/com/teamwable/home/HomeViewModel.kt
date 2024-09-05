@@ -49,8 +49,8 @@ class HomeViewModel @Inject constructor(
     private var authId = -1L
 
     init {
-        fetchIsPushAlarmAllowed()
         fetchAuthId()
+        fetchIsPushAlarmAllowed()
     }
 
     private fun fetchAuthId() {
@@ -149,7 +149,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchIsPushAlarmAllowed() {
+    private fun fetchIsPushAlarmAllowed() {
         viewModelScope.launch {
             userInfoRepository.getIsPushAlarmAllowed().collectLatest { _uiState.value = HomeUiState.AddPushAlarmPermission(it) }
         }
@@ -163,7 +163,7 @@ sealed interface HomeUiState {
 
     data class Error(val errorMessage: String) : HomeUiState
 
-    data class AddPushAlarmPermission(val isAllowed: Boolean) : HomeUiState
+    data class AddPushAlarmPermission(val isAllowed: Boolean?) : HomeUiState
 }
 
 sealed interface HomeSideEffect {
