@@ -35,12 +35,12 @@ class ProfileCommentListViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
-    private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
-    private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val ghostedCommentsFlow = MutableStateFlow(setOf<Long>())
+    private val likeCommentsFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     fun updateComments(userId: Long): Flow<PagingData<Comment>> {
         val commentsFlow = commentRepository.getProfileComments(userId).cachedIn(viewModelScope)
-        return combine(commentsFlow, removedCommentsFlow, ghostedFeedsFlow, likeFeedsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
+        return combine(commentsFlow, removedCommentsFlow, ghostedCommentsFlow, likeCommentsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
             commentsFlow
                 .filter { removedCommentIds.contains(it.commentId).not() }
                 .map { data ->
@@ -66,7 +66,7 @@ class ProfileCommentListViewModel @Inject constructor(
         viewModelScope.launch {
             commentRepository.postGhost(request)
                 .onSuccess {
-                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    ghostedCommentsFlow.value = ghostedCommentsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
                     _event.emit(ProfileCommentSideEffect.ShowSnackBar(SnackbarType.GHOST))
                 }
                 .onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
@@ -82,14 +82,14 @@ class ProfileCommentListViewModel @Inject constructor(
     }
 
     fun updateLike(commentId: Long, commentText: String, likeState: LikeState) {
-        val currentLikeState = likeFeedsFlow.value[commentId]
+        val currentLikeState = likeCommentsFlow.value[commentId]
         if (currentLikeState?.isLiked == likeState.isLiked) return
 
         viewModelScope.launch {
             val result = if (likeState.isLiked) commentRepository.postCommentLike(commentId, commentText) else commentRepository.deleteCommentLike(commentId)
 
             result.onSuccess {
-                likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
+                likeCommentsFlow.value = likeCommentsFlow.value.toMutableMap().apply {
                     put(commentId, likeState)
                 }
             }.onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
