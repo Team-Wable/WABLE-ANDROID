@@ -29,6 +29,7 @@ interface ProfileService {
     @PATCH("api/v1/withdrawal")
     suspend fun patchWithdrawal(@Body requestWithdrawalDto: RequestWithdrawalDto): BaseUnitResponse<Unit>
 
+    @Multipart
     @PATCH("api/v1/user-profile2")
     suspend fun patchUserProfile(
         @Part("info") requestProfileEdit: RequestBody,
@@ -40,7 +41,6 @@ interface ProfileService {
         @Query("nickname") nickname: String,
     ): BaseUnitResponse<Unit>
 
-    @Multipart
     @POST("api/v1/report/slack")
     suspend fun postReport(
         @Body request: RequestReportDto,
