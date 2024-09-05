@@ -181,7 +181,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
             feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
                 singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateFeedLike(feedId, likeState)
                 }
             }
         }

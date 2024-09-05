@@ -120,7 +120,7 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateLike(feedId: Long, likeState: LikeState) {
+    fun updateFeedLike(feedId: Long, likeState: LikeState) {
         val currentLikeState = likeFeedsFlow.value[feedId]
         if (currentLikeState?.isLiked == likeState.isLiked) return
 
