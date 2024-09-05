@@ -6,12 +6,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
-suspend fun ContentResolver.createImagePart(uriString: String?): MultipartBody.Part? {
+suspend fun ContentResolver.createImagePart(uriString: String?, fileName: String): MultipartBody.Part? {
     if (uriString.isNullOrEmpty()) return null
     val uri = runCatching { Uri.parse(uriString) }.getOrElse { return null }
 
     return withContext(Dispatchers.IO) {
         val imageRequestBody = ContentUriRequestBody(this@createImagePart, uri)
-        imageRequestBody.toMultiPartData("image")
+        imageRequestBody.toMultiPartData(fileName)
     }
 }
