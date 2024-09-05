@@ -43,7 +43,7 @@ internal class DefaultProfileRepository @Inject constructor(
 
     override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runCatching {
         val infoRequestBody = createContentRequestBody(info)
-        val filePart = contentResolver.createImagePart(imgUrl)
+        val filePart = contentResolver.createImagePart(imgUrl, FILE_NAME)
 
         apiService.patchUserProfile(infoRequestBody, filePart)
         Unit
@@ -74,5 +74,9 @@ internal class DefaultProfileRepository @Inject constructor(
         Unit
     }.onFailure {
         return it.handleThrowable()
+    }
+
+    companion object {
+        private const val FILE_NAME = "file"
     }
 }

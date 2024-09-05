@@ -51,10 +51,6 @@ fun LoginRoute(
 
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.observeAutoLogin()
-    }
-
     LaunchedEffect(lifecycleOwner) {
         viewModel.loginSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->

@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:onboarding"))
+    implementation(libs.lottie.compose)
 }

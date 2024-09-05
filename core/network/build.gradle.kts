@@ -34,4 +34,5 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(libs.androidx.exifinterface)
     implementation(libs.paging)
+    implementation(libs.process.phoenix)
 }

@@ -23,7 +23,7 @@ class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Route.Login
+    val startDestination = Route.Splash
 
     fun navigateToLogin(navOptions: NavOptions) {
         navController.navigateLogin(navOptions)
@@ -57,8 +57,8 @@ class MainNavigator(
 
     fun resetToLogin() {
         val navOptions = navOptions {
-            popUpTo(startDestination) {
-                saveState = true
+            popUpTo(Route.Login) {
+                inclusive = true
             }
             launchSingleTop = true
         }

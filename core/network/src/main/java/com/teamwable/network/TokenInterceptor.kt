@@ -1,8 +1,8 @@
 package com.teamwable.network
 
 import android.app.Application
-import android.content.Intent
 import android.widget.Toast
+import com.jakewharton.processphoenix.ProcessPhoenix
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.util.UNKNOWN_ERROR_MESSAGE
@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -74,14 +75,12 @@ class TokenInterceptor @Inject constructor(
         }
     }
 
-    private fun handleFailedTokenReissue() = with(context) {
+    private fun handleFailedTokenReissue() {
         CoroutineScope(Dispatchers.Main).launch {
-            defaultWablePreferenceDatasource.clear()
-            startActivity(
-                Intent.makeRestartActivityTask(
-                    packageManager.getLaunchIntentForPackage(packageName)?.component,
-                ),
-            )
+            withContext(Dispatchers.IO) {
+                defaultWablePreferenceDatasource.clear()
+            }
+            ProcessPhoenix.triggerRebirth(context)
         }
     }
 

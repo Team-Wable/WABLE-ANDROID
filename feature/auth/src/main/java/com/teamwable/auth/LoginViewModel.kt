@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,16 +32,6 @@ class LoginViewModel @Inject constructor(
 
     private val _showDialog = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> get() = _showDialog
-
-    fun observeAutoLogin() {
-        viewModelScope.launch {
-            userInfoRepository.getAutoLogin().collectLatest { isAutoLogin ->
-                if (isAutoLogin) {
-                    _loginSideEffect.emit(LoginSideEffect.NavigateToMain)
-                }
-            }
-        }
-    }
 
     fun showLoginDialog(show: Boolean) {
         _showDialog.update { show }
