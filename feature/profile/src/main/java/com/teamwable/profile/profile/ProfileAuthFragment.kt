@@ -15,6 +15,7 @@ import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,7 +50,8 @@ class ProfileAuthFragment : BindingProfileFragment() {
                         setProfilePagerAdapter(uiState.profile)
                     }
 
-                    else -> Unit
+                    is ProfileAuthUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is ProfileAuthUiState.Loading -> Unit
                 }
             }
         }

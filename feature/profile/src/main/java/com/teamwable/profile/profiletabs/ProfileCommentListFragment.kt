@@ -6,6 +6,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
+import com.teamwable.model.Comment
 import com.teamwable.model.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
@@ -25,11 +26,11 @@ import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
-import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -62,6 +63,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
+                    is ProfileCommentUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     else -> Unit
                 }
             }
@@ -71,7 +73,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileCommentSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ProfileCommentSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, SnackbarType.GHOST).show() }
+                    is ProfileCommentSideEffect.ShowSnackBar -> parentFragment?.let { Snackbar.make(it.view ?: return@let, sideEffect.type).show() }
                 }
             }
         }
@@ -90,13 +92,12 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
         override fun onPostAuthorProfileClick(id: Long) {}
 
-        override fun onKebabBtnClick(feedId: Long, postAuthorId: Long) {
+        override fun onKebabBtnClick(comment: Comment) {
             commentActionHandler.onKebabBtnClick(
-                feedId,
-                postAuthorId,
+                comment,
                 fetchUserType = { userType },
                 removeComment = { viewModel.removeComment(it) },
-                parentFragment?.view ?: return,
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
             )
         }
 
@@ -116,7 +117,11 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewModel.updateComments(userId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map { FeedTransformer.handleCommentsData(it, binding.root.context) }
+                val transformedPagingData = pagingData.map {
+                    val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
+                    val isAuth = userType == ProfileUserType.AUTH
+                    transformedFeed.copy(isAuth = isAuth)
+                }
                 commentAdapter.submitData(transformedPagingData)
             }
         }

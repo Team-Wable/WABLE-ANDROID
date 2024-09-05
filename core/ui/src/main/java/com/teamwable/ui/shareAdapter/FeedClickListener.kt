@@ -13,7 +13,7 @@ interface FeedClickListener {
 
     fun onFeedImageClick(image: String)
 
-    fun onKebabBtnClick(feedId: Long, postAuthorId: Long)
+    fun onKebabBtnClick(feed: Feed)
 
     fun onCommentBtnClick(feedId: Long)
 }

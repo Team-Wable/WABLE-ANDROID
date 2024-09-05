@@ -7,12 +7,14 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
+import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
-import com.teamwable.model.Profile
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +30,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val userInfoRepository: UserInfoRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -47,6 +50,8 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchAuthId() {
         viewModelScope.launch {
+            delay(1000)
+            _uiState.value = HomeUiState.Success
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
                 .collectLatest { authId = it }
@@ -91,8 +96,16 @@ class HomeViewModel @Inject constructor(
             feedRepository.postGhost(request)
                 .onSuccess {
                     ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
-                    _event.emit(HomeSideEffect.ShowSnackBar)
+                    _event.emit(HomeSideEffect.ShowSnackBar(SnackbarType.GHOST))
                 }
+                .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun reportUser(nickname: String, relateText: String) {
+        viewModelScope.launch {
+            profileRepository.postReport(nickname, relateText)
+                .onSuccess { _event.emit(HomeSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
@@ -101,13 +114,13 @@ class HomeViewModel @Inject constructor(
 sealed interface HomeUiState {
     data object Loading : HomeUiState
 
-    data class Success(val profile: Profile) : HomeUiState
+    data object Success : HomeUiState
 
     data class Error(val errorMessage: String) : HomeUiState
 }
 
 sealed interface HomeSideEffect {
-    data object ShowSnackBar : HomeSideEffect
+    data class ShowSnackBar(val type: SnackbarType) : HomeSideEffect
 
     data object DismissBottomSheet : HomeSideEffect
 }

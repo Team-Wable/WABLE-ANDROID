@@ -14,6 +14,7 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -50,7 +51,8 @@ class ProfileMemberFragment : BindingProfileFragment() {
                         setProfilePagerAdapter(uiState.profile)
                     }
 
-                    else -> Unit
+                    is ProfileMemberUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is ProfileMemberUiState.Loading -> Unit
                 }
             }
         }

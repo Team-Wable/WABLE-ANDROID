@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.Comment
 import com.teamwable.ui.databinding.ItemCommentBinding
 import com.teamwable.ui.extensions.load
+import com.teamwable.ui.extensions.visible
 
 class CommentViewHolder private constructor(
     private val binding: ItemCommentBinding,
@@ -20,7 +21,7 @@ class CommentViewHolder private constructor(
         setupClickListener(binding.btnCommentGhost) { commentClickListener.onGhostBtnClick(item.postAuthorId, item.commentId) }
         setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(item.commentId) }
         setupClickListener(binding.ivCommentProfileImg, binding.tvCommentNickname) { commentClickListener.onPostAuthorProfileClick(item.postAuthorId) }
-        setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item.commentId, item.postAuthorId) }
+        setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item) }
     }
 
     private fun setupClickListener(vararg views: View, action: () -> Unit) {
@@ -43,7 +44,9 @@ class CommentViewHolder private constructor(
             tvCommentLikeCount.text = comment.likedNumber
             tvTeamTag.teamName = comment.postAuthorTeamTag
             btnCommentGhost.isEnabled = !comment.isPostAuthorGhost
-            binding.viewCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
+            viewCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
+            btnCommentGhost.visible(!comment.isAuth)
+            spacerComment.visible(!comment.isAuth)
         }
     }
 
