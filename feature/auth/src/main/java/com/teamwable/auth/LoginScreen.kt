@@ -42,7 +42,7 @@ import com.teamwable.designsystem.type.DialogType
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToOnBoarding: () -> Unit,
+    navigateToFirstLckWatch: () -> Unit,
     navigateToHome: () -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
@@ -60,7 +60,8 @@ fun LoginRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is LoginSideEffect.NavigateToMain -> navigateToHome()
-                    else -> Unit
+                    is LoginSideEffect.NavigateToFirstLckWatch -> navigateToFirstLckWatch()
+                    is LoginSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
             }
     }
@@ -130,12 +131,14 @@ fun LoginScreen(
             textAlign = Center,
         )
 
+        // Spacer로 텍스트와 이미지 사이 공간 조정
+        Spacer(modifier = Modifier.weight(1f))
+
         Image(
             painter = painterResource(id = R.drawable.img_login_background),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(top = 59.dp)
                 .fillMaxWidth()
                 .aspectRatio(1.2815f)
                 .align(alignment = Alignment.CenterHorizontally),

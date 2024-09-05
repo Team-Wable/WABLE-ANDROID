@@ -19,6 +19,11 @@ import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
+import com.teamwable.model.network.Error
+import com.teamwable.onboarding.agreeterms.naviagation.agreeTermsNavGraph
+import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
+import com.teamwable.onboarding.profile.naviagation.profileNavGraph
+import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -38,6 +43,8 @@ internal fun MainScreen(
             snackBarHostState.showSnackbar(
                 when (throwable) {
                     is UnknownHostException -> localContextResource.getString(R.string.error_message_network)
+                    is Error.ApiError -> throwable.message.toString()
+                    is Error.TimeOutError -> throwable.message.toString()
                     else -> localContextResource.getString(R.string.error_message_unknown)
                 },
             )
@@ -50,17 +57,18 @@ internal fun MainScreen(
                 visibility = navigator.shouldShowTopBar(),
                 canNavigateBack = navigator.isBackStackNotEmpty(),
                 navigateUp = { navigator.navigateUp() },
+                resetToLogin = { navigator.resetToLogin() },
             )
         },
         content = { innerPadding ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(innerPadding),
             ) {
                 NavHost(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
-                    modifier = Modifier.padding(innerPadding),
                 ) {
                     splashNavGraph(
                         navigateToLogIn = {
@@ -78,7 +86,23 @@ internal fun MainScreen(
                         intentProvider = intentProvider,
                     )
                     loginNavGraph(
-                        navigateToOnBoarding = {},
+                        navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
+                        navigateToHome = { startActivity(localContext, intent, null) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    firstLckWatchNavGraph(
+                        navigateToSelectLckTeam = { userList -> navigator.navigateToSelectLckTeam(userList) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    selectLckTeamNavGraph(
+                        navigateToProfile = { userList -> navigator.navigateToProfile(userList) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    profileNavGraph(
+                        navigateToAgreeTerms = { userList -> navigator.navigateToAgreeTerms(userList) },
+                        onShowErrorSnackBar = onShowErrorSnackBar,
+                    )
+                    agreeTermsNavGraph(
                         navigateToHome = { startActivity(localContext, intent, null) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )

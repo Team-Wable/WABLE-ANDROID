@@ -8,4 +8,8 @@ sealed class Error(message: String?) : Exception(message) {
     data class NetWorkConnectError(
         val errorMessage: String,
     ) : Error(errorMessage)
+
+    data class TimeOutError(
+        val errorMessage: String,
+    ) : Error(errorMessage)
 }

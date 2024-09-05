@@ -8,4 +8,14 @@
     <string name="dialog_wellcome_title">와블과 함께 해 주셔서 감사합니다!</string>
     <string name="dialog_wellcome_description">%1$s님,\n와블의 일원이 되신 것을 환영해요!\nLCK 함께 보며 같이 즐겨요 :)</string>
     <string name="dialog_wellcome_btn_text">와블 즐기러 가기</string>
+    <string name="permission_app_setting_dialog_title">권한이 필요해요</string>
+    <string name="permission_app_setting_dialog_description">이 앱은 파일 및 미디어 접근 권한이 필요해요. 앱 세팅으로 이동해서 권한을 부여 할 수 있어요.</string>
+    <string name="permission_app_setting_dialog_moving">이동하기</string>
+    <string name="permission_app_setting_dialog_cancel">취소하기</string>
+
+    <!--    닉네임-->
+    <string name="profile_edit_nickname_text">10자리 이내, 문자/숫자로 입력 가능해요</string>
+    <string name="profile_edit_nickname_false">닉네임에 사용할 수 없는 문자가 포함되어 있어요.</string>
+    <string name="profile_edit_nickname_success">사용 가능한 닉네임입니다.</string>
+    <string name="profile_edit_nickname_duplicate">이미 사용 중인 닉네임입니다.</string>
 </resources>
