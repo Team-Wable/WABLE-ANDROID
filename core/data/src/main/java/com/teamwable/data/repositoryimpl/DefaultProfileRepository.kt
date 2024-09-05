@@ -1,7 +1,7 @@
 package com.teamwable.data.repositoryimpl
 
-import com.teamwable.data.mapper.toData.toReportDto
 import android.content.ContentResolver
+import com.teamwable.data.mapper.toData.toReportDto
 import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
@@ -18,7 +18,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import javax.inject.Inject
 
-class DefaultProfileRepository @Inject constructor(
+internal class DefaultProfileRepository @Inject constructor(
     private val contentResolver: ContentResolver,
     private val apiService: ProfileService,
 ) : ProfileRepository {
@@ -41,22 +41,18 @@ class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
-    override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
-        val request = Pair(nickname, relateText).toReportDto()
-        apiService.postReport(request)
+    override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runCatching {
+        val infoRequestBody = createContentRequestBody(info)
+        val filePart = contentResolver.createImagePart(imgUrl)
+
+        apiService.patchUserProfile(infoRequestBody, filePart)
         Unit
-    }.onFailure {
-        return it.handleThrowable()
-    }
+    }.onFailure { return it.handleThrowable() }
 
-    override suspend fun patchProfileUriEdit(info: MemberInfoEditModel, file: String?): Result<Unit> {
-        return runCatching {
-            val infoRequestBody = createContentRequestBody(info)
-            val filePart = contentResolver.createImagePart(file)
-
-            apiService.patchUserProfile(infoRequestBody, filePart).success
-        }
-    }
+    override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runCatching {
+        apiService.getNickNameDoubleCheck(nickname)
+        Unit
+    }.onFailure { return it.handleThrowable() }
 
     private fun createContentRequestBody(info: MemberInfoEditModel): RequestBody {
         val contentJson = JSONObject().apply {
@@ -70,5 +66,13 @@ class DefaultProfileRepository @Inject constructor(
             put("memberDefaultProfileImage", info.memberDefaultProfileImage)
         }.toString()
         return contentJson.toRequestBody("application/json".toMediaTypeOrNull())
+    }
+
+    override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
+        val request = Pair(nickname, relateText).toReportDto()
+        apiService.postReport(request)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
     }
 }

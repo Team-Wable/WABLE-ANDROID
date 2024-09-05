@@ -56,7 +56,7 @@ class ContentUriRequestBody(
             if (inputStream == null) return
             // 이미지 크기를 계산하여 3MB를 초과하는 경우에만 inSampleSize 설정
             val option = BitmapFactory.Options().apply {
-                if (imageSizeMb >= 3) {
+                if (imageSizeMb >= 5) {
                     inSampleSize = calculateInSampleSize(this, MAX_WIDTH, MAX_HEIGHT)
                 }
             }
@@ -76,10 +76,10 @@ class ContentUriRequestBody(
             }
 
             val outputStream = ByteArrayOutputStream()
-            val compressRate = if (imageSizeMb >= 3) {
-                (300 / imageSizeMb).toInt()
+            val compressRate = if (imageSizeMb >= IMG_SIZE) {
+                ((100 * IMG_SIZE) / imageSizeMb).coerceIn(0.0, 100.0).toInt() // 압축률을 0에서 100 사이로 제한
             } else {
-                75 // 기본 압축률을 더 낮게 설정
+                75 // 기본 압축률
             }
 
             outputStream.use { stream ->
@@ -131,6 +131,7 @@ class ContentUriRequestBody(
     fun toMultiPartData(name: String) = MultipartBody.Part.createFormData(name, getFileName(), this)
 
     companion object {
+        private const val IMG_SIZE = 5
         const val MAX_WIDTH = 1024
         const val MAX_HEIGHT = 1024
     }

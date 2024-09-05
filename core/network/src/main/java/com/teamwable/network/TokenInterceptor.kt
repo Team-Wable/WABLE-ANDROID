@@ -2,8 +2,11 @@ package com.teamwable.network
 
 import android.app.Application
 import android.content.Intent
+import android.widget.Toast
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.network.datasource.AuthService
+import com.teamwable.network.util.UNKNOWN_ERROR_MESSAGE
+import com.teamwable.network.util.toCustomError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -47,19 +50,26 @@ class TokenInterceptor @Inject constructor(
         mutex.withLock {
             val accessToken = defaultWablePreferenceDatasource.accessToken.first()
             val refreshToken = defaultWablePreferenceDatasource.refreshToken.first()
-            val tokenResult = runBlocking(Dispatchers.IO) {
-                authService.getReissueToken(accessToken, refreshToken)
-            }
 
-            return when {
-                tokenResult.success -> {
-                    defaultWablePreferenceDatasource.updateAccessToken(
-                        BEARER + tokenResult.data.accessToken,
-                    )
-                    true
+            return try {
+                val tokenResult = runBlocking(Dispatchers.IO) {
+                    authService.getReissueToken(accessToken, refreshToken)
                 }
 
-                else -> false
+                when (tokenResult.success) {
+                    true -> {
+                        defaultWablePreferenceDatasource.updateAccessToken(
+                            BEARER + tokenResult.data.accessToken,
+                        )
+                        true
+                    }
+
+                    false -> false
+                }
+            } catch (e: Exception) {
+                val errorMessage = e.toCustomError().message ?: UNKNOWN_ERROR_MESSAGE
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                false
             }
         }
     }
