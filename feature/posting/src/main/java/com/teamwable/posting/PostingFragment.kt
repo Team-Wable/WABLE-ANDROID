@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -85,7 +86,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            if (!(binding.etPostingTitle.text.isEmpty() && binding.etPostingContent.text.isEmpty() && viewModel.photoUri.value.isNullOrBlank()))
+                TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            else findNavController().popBackStack()
         }
     }
 
@@ -181,7 +184,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initBackBtnClickListener() {
         binding.ivPostingAppbarBack.setOnClickListener {
-            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            if (!(binding.etPostingTitle.text.isEmpty() && binding.etPostingContent.text.isEmpty() && viewModel.photoUri.value.isNullOrBlank()))
+                TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            else findNavController().popBackStack()
         }
     }
 
@@ -197,17 +202,23 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
                 totalTitleLength = etPostingTitle.text.length
                 handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+
+                val contentMaxLength = POSTING_MAX - totalTitleLength
+                etPostingContent.filters = arrayOf(InputFilter.LengthFilter(contentMaxLength.coerceAtLeast(0)))
             }
             etPostingContent.doAfterTextChanged {
                 totalContentLength = etPostingContent.text.length
                 handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+
+                val titleMaxLength = POSTING_MAX - totalContentLength
+                etPostingTitle.filters = arrayOf(InputFilter.LengthFilter(titleMaxLength.coerceAtLeast(0)))
             }
         }
     }
 
     private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalTitleLength: Int, totalContentLength: Int) {
         when {
-            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX) -> {
+            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX - 1) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.purple_50,
@@ -218,7 +229,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
 
-            (totalTitleLength + totalContentLength) >= POSTING_MAX + 1 -> {
+            (totalTitleLength + totalContentLength) >= POSTING_MAX -> {
                 updateProgress(
                     com.teamwable.ui.R.color.error,
                     com.teamwable.ui.R.color.gray_200,
@@ -280,6 +291,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     companion object {
-        const val POSTING_MAX = 499
+        const val POSTING_MAX = 500
     }
 }
