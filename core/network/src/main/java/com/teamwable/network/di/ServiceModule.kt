@@ -2,7 +2,6 @@ package com.teamwable.network.di
 
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.datasource.CommentService
-import com.teamwable.network.datasource.DummyService
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.NotificationService
@@ -18,12 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object ServiceModule {
-    @Singleton
-    @Provides
-    fun provideDummyService(
-        @WableRetrofit retrofit: Retrofit,
-    ): DummyService = retrofit.create(DummyService::class.java)
-
     @Singleton
     @Provides
     fun provideAuthService(
