@@ -15,11 +15,13 @@ class FeedViewHolder private constructor(
     feedClickListener: FeedClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private lateinit var item: Feed
+    val likeBtn = binding.btnFeedLike
+    val likeCountTv = binding.tvFeedLikeCount
 
     init {
         setupClickListener(itemView, binding.tvFeedContent, binding.btnFeedComment) { feedClickListener.onItemClick(item) }
         setupClickListener(binding.btnFeedGhost) { feedClickListener.onGhostBtnClick(item.postAuthorId, item.feedId) }
-        setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(item.feedId) }
+        setupClickListener(binding.btnFeedLike) { feedClickListener.onLikeBtnClick(this, item.feedId, item.isLiked) }
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.ivFeedImg) { feedClickListener.onFeedImageClick(item.image) }
         setupClickListener(binding.btnFeedMore) { feedClickListener.onKebabBtnClick(item) }

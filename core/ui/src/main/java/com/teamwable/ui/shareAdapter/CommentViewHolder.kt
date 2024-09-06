@@ -15,11 +15,13 @@ class CommentViewHolder private constructor(
     commentClickListener: CommentClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private lateinit var item: Comment
+    val likeBtn = binding.btnCommentLike
+    val likeCountTv = binding.tvCommentLikeCount
 
     init {
         setupClickListener(itemView, binding.tvCommentContent) { commentClickListener.onItemClick(item.feedId ?: return@setupClickListener) }
         setupClickListener(binding.btnCommentGhost) { commentClickListener.onGhostBtnClick(item.postAuthorId, item.commentId) }
-        setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(item.commentId) }
+        setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(this, item) }
         setupClickListener(binding.ivCommentProfileImg, binding.tvCommentNickname) { commentClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item) }
     }

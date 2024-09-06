@@ -1,23 +1,29 @@
 package com.teamwable.home
 
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.map
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -27,16 +33,19 @@ import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
+import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
     private val viewModel: HomeViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private lateinit var feedActionHandler: FeedActionHandler
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -53,6 +62,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> Unit
+                    is HomeUiState.AddPushAlarmPermission -> if (uiState.isAllowed == null) initPushAlarmPermissionAlert()
                 }
             }
         }
@@ -62,6 +72,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    else -> Unit
                 }
             }
         }
@@ -78,8 +89,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             }
         }
 
-        override fun onLikeBtnClick(id: Long) {
-            toast("like")
+        override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
+            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                }
+            }
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
@@ -159,4 +174,44 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             if (isUploaded) scrollToTop()
         }
     }
+
+    private val requestPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+        when (it) {
+            true -> handlePushAlarmPermissionGranted()
+            false -> handlePushAlarmPermissionDenied()
+        }
+    }
+
+    private fun initPushAlarmPermissionAlert() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
+            requestPermission.launch(permissionList)
+        } else {
+            handlePushAlarmPermissionGranted()
+        }
+    }
+
+    private fun handlePushAlarmPermissionGranted() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    viewModel.patchUserProfileUri(
+                        MemberInfoEditModel(
+                            isPushAlarmAllowed = true,
+                            fcmToken = task.result,
+                        ),
+                    )
+                    Timber.tag("fcm").d("fcm token: $task.result")
+                } else {
+                    Timber.d(task.exception)
+                    return@OnCompleteListener
+                }
+            },
+        )
+    }
+
+    private fun handlePushAlarmPermissionDenied() =
+        viewModel.patchUserProfileUri(MemberInfoEditModel(isPushAlarmAllowed = false))
 }

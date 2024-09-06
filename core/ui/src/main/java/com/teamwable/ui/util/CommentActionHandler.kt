@@ -5,8 +5,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.teamwable.model.Comment
+import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.shareAdapter.CommentViewHolder
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -48,6 +50,18 @@ class CommentActionHandler(
                 else -> Unit
             }
         }
+    }
+
+    fun onLikeBtnClick(viewHolder: CommentViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
+        val likeCount = viewHolder.likeCountTv.text.toString().toInt()
+        val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
+            likeCount + 1
+        } else {
+            if (likeCount > 0) likeCount - 1 else 0
+        }
+
+        viewHolder.likeCountTv.text = updatedLikeCount.toString()
+        saveLike(id, LikeState(viewHolder.likeBtn.isChecked, updatedLikeCount.toString()))
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {

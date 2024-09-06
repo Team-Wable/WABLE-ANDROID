@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.teamwable.data.mapper.toData.toPostFeedLikeDto
 import com.teamwable.data.mapper.toData.toPostGhostDto
 import com.teamwable.data.mapper.toModel.toFeed
 import com.teamwable.data.repository.FeedRepository
@@ -55,6 +56,20 @@ class DefaultFeedRepository @Inject constructor(
 
     override suspend fun postGhost(request: Ghost): Result<Boolean> = runCatching {
         apiService.postGhost(request.toPostGhostDto()).success
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun postFeedLike(feedId: Long): Result<Unit> = runCatching {
+        apiService.postFeedLike(feedId, "contentLiked".toPostFeedLikeDto())
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun deleteFeedLike(feedId: Long): Result<Unit> = runCatching {
+        apiService.deleteFeedLike(feedId)
+        Unit
     }.onFailure {
         return it.handleThrowable()
     }

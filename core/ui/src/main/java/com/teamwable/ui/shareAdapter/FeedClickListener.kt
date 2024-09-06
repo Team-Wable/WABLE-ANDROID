@@ -7,7 +7,7 @@ interface FeedClickListener {
 
     fun onGhostBtnClick(postAuthorId: Long, feedId: Long)
 
-    fun onLikeBtnClick(id: Long)
+    fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean)
 
     fun onPostAuthorProfileClick(id: Long)
 

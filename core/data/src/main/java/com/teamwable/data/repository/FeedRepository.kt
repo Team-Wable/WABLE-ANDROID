@@ -15,4 +15,8 @@ interface FeedRepository {
     suspend fun getHomeDetail(feedId: Long): Result<Feed>
 
     suspend fun postGhost(request: Ghost): Result<Boolean>
+
+    suspend fun postFeedLike(feedId: Long): Result<Unit>
+
+    suspend fun deleteFeedLike(feedId: Long): Result<Unit>
 }

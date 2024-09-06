@@ -4,9 +4,10 @@ import android.content.res.ColorStateList
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.PagingData
+import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwable.home.R
@@ -20,15 +21,16 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.hideKeyboard
-import com.teamwable.ui.extensions.setDivider
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
+import com.teamwable.ui.shareAdapter.CommentViewHolder
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
+import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -39,9 +41,9 @@ import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
+import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -52,6 +54,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private val viewModel: HomeDetailViewModel by viewModels()
     private lateinit var commentActionHandler: CommentActionHandler
     private lateinit var feedActionHandler: FeedActionHandler
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     private var isCommentNull = true
     private var totalCommentLength = 0
@@ -60,7 +63,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
-        viewModel.updateHomeDetail(args.feedId)
+        viewModel.updateHomeDetailToNetwork(args.feedId)
         collect(commentSnackbar)
         initBackBtnClickListener()
     }
@@ -70,11 +73,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
                     is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
-
-                    is HomeDetailUiState.RemoveComment -> {
-                        findNavController().popBackStack()
-                        commentAdapter.removeComment(uiState.commentId)
-                    }
 
                     is HomeDetailUiState.RemoveFeed -> {
                         findNavController().popBackStack()
@@ -96,6 +94,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     }
 
                     is HomeDetailSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
+                    is HomeDetailSideEffect.DismissBottomSheet -> findNavController().popBackStack()
                 }
             }
         }
@@ -157,7 +156,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
-        binding.ibHomeDetailCommentInputUpload.setOnClickListener {
+        binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
             viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
             commentSnackbar.show()
             binding.etHomeDetailCommentInput.text.clear()
@@ -170,12 +169,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
             feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateFeedGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
             }
         }
 
-        override fun onLikeBtnClick(id: Long) {
-            toast("like")
+        override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
+            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateFeedLike(feedId, likeState)
+                }
+            }
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
@@ -203,12 +206,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun onClickCommentItem() = object : CommentClickListener {
         override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
             commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateCommentGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
             }
         }
 
-        override fun onLikeBtnClick(id: Long) {
-            toast("commentlike")
+        override fun onLikeBtnClick(viewHolder: CommentViewHolder, comment: Comment) {
+            commentActionHandler.onLikeBtnClick(viewHolder, comment.commentId) { commentId, likeState ->
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    if (comment.isLiked != viewHolder.likeBtn.isChecked) viewModel.updateCommentLike(commentId, comment.content, likeState)
+                }
+            }
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
@@ -237,7 +244,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
-            flowOf(PagingData.from(listOf(feed))).collectLatest { pagingData ->
+            viewModel.updateHomeDetailToFlow(feed).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
                     val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
                     val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
@@ -249,6 +256,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun submitCommentList(feed: Feed) {
+        var isFirstLoad = true
+
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
@@ -259,6 +268,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 commentAdapter.submitData(transformedPagingData)
             }
         }
+
+        viewLifeCycleScope.launch {
+            // 답글 아래로 스크롤
+            commentAdapter.loadStateFlow.collectLatest { loadStates ->
+                if (loadStates.source.append is LoadState.NotLoading && !isFirstLoad)
+                    binding.rvHomeDetail.smoothScrollToPosition(commentAdapter.itemCount)
+
+                if (loadStates.source.refresh is LoadState.NotLoading && isFirstLoad) isFirstLoad = false
+            }
+        }
     }
 
     private fun concatAdapter() {
@@ -267,9 +286,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 feedAdapter,
                 commentAdapter,
             )
-            if (itemDecorationCount == 0) {
-                setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
-            }
+            if (itemDecorationCount == 0) addItemDecoration(HomeDetailRecyclerViewDivider(binding.root.context))
         }
         setSwipeLayout()
     }
@@ -277,7 +294,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun setSwipeLayout() {
         val feedId = arguments?.getLong(FEED_ID)
         binding.layoutHomeSwipe.setOnRefreshListener {
-            if (feedId != null) viewModel.updateHomeDetail(feedId)
+            if (feedId != null) viewModel.updateHomeDetailToNetwork(feedId)
             commentAdapter.refresh()
             binding.layoutHomeSwipe.isRefreshing = false
         }

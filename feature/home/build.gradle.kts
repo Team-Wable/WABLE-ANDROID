@@ -25,4 +25,8 @@ dependencies {
     // Third Party
     implementation(libs.glide)
     implementation(libs.lottie)
+
+    // firebase
+    implementation(libs.google.play.services)
+    implementation(libs.firebase.messaging.ktx)
 }

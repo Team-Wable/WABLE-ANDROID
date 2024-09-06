@@ -10,6 +10,7 @@ import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.LikeState
 import com.teamwable.model.Profile
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,14 +37,17 @@ class ProfileFeedListViewModel @Inject constructor(
 
     private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> {
         val feedsFlow = feedRepository.getProfileFeeds(userId).cachedIn(viewModelScope)
-        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds ->
+        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates ->
             feedsFlow
                 .filter { removedFeedIds.contains(it.feedId).not() }
                 .map { data ->
-                    if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -73,6 +78,19 @@ class ProfileFeedListViewModel @Inject constructor(
         viewModelScope.launch {
             profileRepository.postReport(nickname, relateText)
                 .onSuccess { _event.emit(ProfileFeedSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
+                .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateLike(feedId: Long, likeState: LikeState) {
+        val currentLikeState = likeFeedsFlow.value[feedId]
+        if (currentLikeState?.isLiked == likeState.isLiked) return
+
+        viewModelScope.launch {
+            val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
+
+            result
+                .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
                 .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
         }
     }
