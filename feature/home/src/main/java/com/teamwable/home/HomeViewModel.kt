@@ -55,11 +55,13 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchAuthId() {
         viewModelScope.launch {
-            delay(1000)
-            _uiState.value = HomeUiState.Success
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
-                .collectLatest { authId = it }
+                .collectLatest {
+                    authId = it
+                    delay(500) // 로딩뷰를 위한 delay
+                    _uiState.value = HomeUiState.Success
+                }
         }
     }
 
