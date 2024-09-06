@@ -295,7 +295,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         val feedId = arguments?.getLong(FEED_ID)
         binding.layoutHomeSwipe.setOnRefreshListener {
             if (feedId != null) viewModel.updateHomeDetailToNetwork(feedId)
-            commentAdapter.refresh()
             binding.layoutHomeSwipe.isRefreshing = false
         }
     }
