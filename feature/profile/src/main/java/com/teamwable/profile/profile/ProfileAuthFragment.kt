@@ -7,7 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
-import com.teamwable.profile.R
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
@@ -46,7 +46,15 @@ class ProfileAuthFragment : BindingProfileFragment() {
 
     private fun initProfileEditClickListener() {
         binding.btnProfileEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_profile_auth_to_profile_edit)
+            val profile = (viewModel.uiState.value as? ProfileAuthUiState.Success)?.profile ?: return@setOnClickListener
+            val action = ProfileAuthFragmentDirections.actionProfileAuthToProfileEdit(
+                MemberInfoEditModel(
+                    nickname = profile.nickName,
+                    memberDefaultProfileImage = profile.profileImg,
+                ),
+            )
+
+            findNavController().navigate(action)
         }
     }
 

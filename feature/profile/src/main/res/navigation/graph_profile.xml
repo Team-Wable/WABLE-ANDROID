@@ -67,5 +67,9 @@
         android:id="@+id/navigation_profile_edit"
         android:name="com.teamwable.profile.profile.edit.ProfileEditFragment"
         android:label="ProfileEditFragment"
-        tools:layout="@layout/fragment_profile_edit" />
+        tools:layout="@layout/fragment_profile_edit" >
+        <argument
+            android:name="memberProfileModel"
+            app:argType="com.teamwable.model.profile.MemberInfoEditModel" />
+    </fragment>
 </navigation>
