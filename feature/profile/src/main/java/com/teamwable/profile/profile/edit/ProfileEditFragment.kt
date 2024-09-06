@@ -1,5 +1,6 @@
 package com.teamwable.profile.profile.edit
 
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.profile.R
@@ -14,15 +15,14 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
 
     private fun initProfileEditAppBar() {
         binding.viewProfileEditAppbar.apply {
-            btnProfileAppbarBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
+            btnProfileAppbarBack.setOnClickListener { findNavController().popBackStack() }
             tvProfileAppbarTitle.text = getString(R.string.profile_edit_app_bar)
         }
     }
 
     private fun initComposeView() {
         binding.composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
                     ProfileEditRoute(
