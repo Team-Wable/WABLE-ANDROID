@@ -1,6 +1,7 @@
 package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
+import android.os.Bundle
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -37,6 +38,9 @@ import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.FEED_STATE
+import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
+import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
@@ -76,6 +80,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
 
                     is HomeDetailUiState.RemoveFeed -> {
+                        saveFeedStateResult(Feed(feedId = uiState.feedId), isRemoved = true)
                         findNavController().popBackStack()
                         findNavController().popBackStack()
                     }
@@ -249,6 +254,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         viewLifeCycleScope.launch {
             viewModel.updateHomeDetailToFlow(feed).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
+                    saveFeedStateResult(it)
                     val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
                     val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
                     transformedFeed.copy(isAuth = isAuth)
@@ -310,6 +316,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.toolbarHomeDetail.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun saveFeedStateResult(feed: Feed, isRemoved: Boolean = false) {
+        parentFragmentManager.setFragmentResult(
+            HOME_DETAIL_RESULT,
+            Bundle().apply {
+                putParcelable(FEED_STATE, feed)
+                putBoolean(IS_FEED_REMOVED, isRemoved)
+            },
+        )
     }
 
     companion object {

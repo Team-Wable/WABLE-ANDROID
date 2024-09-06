@@ -12,11 +12,13 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.LikeState
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
@@ -28,6 +30,9 @@ import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.FEED_STATE
+import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
+import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
@@ -52,6 +57,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         setAdapter()
         initNavigatePostingFabClickListener()
         fetchFeedUploaded()
+        fetchFeedFromHomeDetail()
     }
 
     private fun collect() {
@@ -179,6 +185,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
             val isUploaded = result.getBoolean(IS_UPLOADED, false)
             if (isUploaded) feedAdapter.refresh()
+        }
+    }
+
+    private fun fetchFeedFromHomeDetail() {
+        parentFragmentManager.setFragmentResultListener(HOME_DETAIL_RESULT, viewLifecycleOwner) { _, result ->
+            val feed: Feed = result.parcelable(FEED_STATE) ?: return@setFragmentResultListener
+            val isRemoved = result.getBoolean(IS_FEED_REMOVED)
+            if (isRemoved) viewModel.updateFeedRemoveState(feed.feedId)
+            viewModel.updateFeedGhostState(feed.postAuthorId, feed.isPostAuthorGhost)
+            viewModel.updateFeedLikeState(feed.feedId, LikeState(feed.isLiked, feed.likedNumber))
         }
     }
 

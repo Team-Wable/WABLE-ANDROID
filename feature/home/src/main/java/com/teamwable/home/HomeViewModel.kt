@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         fetchAuthId()
-        fetchIsPushAlarmAllowed()
+        //  fetchIsPushAlarmAllowed()
     }
 
     private fun fetchAuthId() {
@@ -94,22 +94,30 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             feedRepository.deleteFeed(feedId)
                 .onSuccess {
-                    removedFeedsFlow.value = removedFeedsFlow.value.toMutableSet().apply { add(feedId) }
+                    updateFeedRemoveState(feedId)
                     _event.emit(HomeSideEffect.DismissBottomSheet)
                 }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
 
+    fun updateFeedRemoveState(feedId: Long) {
+        removedFeedsFlow.update { it.toMutableSet().apply { add(feedId) } }
+    }
+
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
                 .onSuccess {
-                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    updateFeedGhostState(request.postAuthorId, isGhosted = true)
                     _event.emit(HomeSideEffect.ShowSnackBar(SnackbarType.GHOST))
                 }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun updateFeedGhostState(postAuthorId: Long, isGhosted: Boolean) {
+        ghostedFeedsFlow.update { it.toMutableSet().apply { if (isGhosted) add(postAuthorId) } }
     }
 
     fun reportUser(nickname: String, relateText: String) {
@@ -128,9 +136,13 @@ class HomeViewModel @Inject constructor(
             val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
 
             result
-                .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
+                .onSuccess { updateFeedLikeState(feedId, likeState) }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun updateFeedLikeState(feedId: Long, likeState: LikeState) {
+        likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } }
     }
 
     fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {

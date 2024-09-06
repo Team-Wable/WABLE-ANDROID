@@ -129,7 +129,7 @@ class HomeDetailViewModel @Inject constructor(
     fun removeFeed(feedId: Long) {
         viewModelScope.launch {
             feedRepository.deleteFeed(feedId)
-                .onSuccess { _uiState.value = HomeDetailUiState.RemoveFeed }
+                .onSuccess { _uiState.value = HomeDetailUiState.RemoveFeed(feedId) }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
@@ -185,7 +185,7 @@ sealed interface HomeDetailUiState {
 
     data class Success(val feed: Feed) : HomeDetailUiState
 
-    data object RemoveFeed : HomeDetailUiState
+    data class RemoveFeed(val feedId: Long) : HomeDetailUiState
 
     data class Error(val errorMessage: String) : HomeDetailUiState
 }
