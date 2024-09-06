@@ -29,6 +29,12 @@ class ProfileViewModel @Inject constructor(
     private val _profileState = MutableStateFlow(ProfileState())
     val profileState: StateFlow<ProfileState> = _profileState
 
+    fun updatePermissionState(isGranted: Boolean) {
+        viewModelScope.launch {
+            _profileState.update { it.copy(isPermissionGranted = isGranted) }
+        }
+    }
+
     fun navigateToAgreeTerms() {
         viewModelScope.launch {
             _sideEffect.emit(ProfileSideEffect.NavigateToAgreeTerms)
@@ -37,7 +43,8 @@ class ProfileViewModel @Inject constructor(
 
     fun requestImagePicker() {
         viewModelScope.launch {
-            _sideEffect.emit(ProfileSideEffect.RequestImagePicker)
+            if (_profileState.value.isPermissionGranted) _sideEffect.emit(ProfileSideEffect.RequestImagePicker)
+            else _sideEffect.emit(ProfileSideEffect.ShowPermissionDeniedDialog)
         }
     }
 

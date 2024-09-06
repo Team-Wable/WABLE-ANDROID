@@ -48,6 +48,7 @@ import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.permission.launchImagePicker
 import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
+import timber.log.Timber
 
 @Composable
 fun ProfileRoute(
@@ -66,21 +67,22 @@ fun ProfileRoute(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
-        if (!isGranted) openDialog = true
+        try {
+            if (isGranted) viewModel.updatePermissionState(true)
+            else openDialog = true
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 
     LaunchedEffect(Unit) {
-        when {
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> {
-                permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-            }
-
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> {
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-
-            else -> Unit
+        val permission = when {
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
+            else -> return@LaunchedEffect
         }
+
+        permissionLauncher.launch(permission)
     }
 
     val galleryLauncher = rememberGalleryLauncher { uri ->
@@ -111,6 +113,7 @@ fun ProfileRoute(
             onClick = {
                 openDialog = false
                 context.navigateToAppSettings()
+                viewModel.updatePermissionState(true) // Todo: 추후에 callback으로 변경할게요
             },
             onDismissRequest = { openDialog = false },
         )

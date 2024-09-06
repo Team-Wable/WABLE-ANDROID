@@ -10,4 +10,6 @@ data class ProfileState(
     val textFieldType: NicknameType = NicknameType.DEFAULT,
     val selectedImageUri: String? = null,
     val currentImage: ProfileImageType = ProfileImageType.entries.random(),
+    val isPermissionGranted: Boolean = false,
+    val openDialog: Boolean = false,
 )
