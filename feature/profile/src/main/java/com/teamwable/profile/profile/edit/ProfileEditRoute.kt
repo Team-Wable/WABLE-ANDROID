@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.ProfileScreen
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.permission.launchImagePicker
@@ -46,7 +47,13 @@ fun ProfileEditRoute(
     ProfileScreen(
         profileState = profileState,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            viewModel.navigateToProfile()
+            viewModel.patchUserProfile(
+                memberInfoEditModel = MemberInfoEditModel(
+                    nickname = nickname,
+                    memberDefaultProfileImage = defaultImage,
+                ),
+                imgUrl = imageUri,
+            )
         },
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
         onDuplicateBtnClick = { viewModel.getNickNameValidation() },

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
@@ -28,12 +29,6 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _profileState = MutableStateFlow(ProfileState())
     val profileState: StateFlow<ProfileState> = _profileState
-
-    fun navigateToProfile() {
-        viewModelScope.launch {
-            _sideEffect.emit(ProfileSideEffect.NavigateToProfile)
-        }
-    }
 
     fun requestImagePicker() {
         viewModelScope.launch {
@@ -70,6 +65,18 @@ class ProfileEditViewModel @Inject constructor(
                 }
                 .onFailure {
                     _profileState.update { it.copy(textFieldType = NicknameType.DUPLICATE) }
+                }
+        }
+    }
+
+    fun patchUserProfile(memberInfoEditModel: MemberInfoEditModel, imgUrl: String?) {
+        viewModelScope.launch {
+            profileRepository.patchUserProfile(memberInfoEditModel, imgUrl)
+                .onSuccess {
+                    _sideEffect.emit(ProfileSideEffect.NavigateToProfile)
+                }
+                .onFailure {
+                    _sideEffect.emit(ProfileSideEffect.ShowSnackBar(it))
                 }
         }
     }
