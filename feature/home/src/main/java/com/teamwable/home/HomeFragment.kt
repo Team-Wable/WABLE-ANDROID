@@ -1,6 +1,5 @@
 package com.teamwable.home
 
-import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -149,10 +148,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     }
 
     private fun scrollToTopOnRefresh() {
+        var isFirstLoad = true
+
         viewLifeCycleScope.launch {
             feedAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.source.append is LoadState.NotLoading)
+                if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
+
+                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
                     binding.rvHome.scrollToPosition(0)
+                    isFirstLoad = true
+                }
             }
         }
     }
@@ -187,12 +192,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     }
 
     private fun initPushAlarmPermissionAlert() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
-            requestPermission.launch(permissionList)
-        } else {
-            handlePushAlarmPermissionGranted()
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
+//            requestPermission.launch(permissionList)
+//        } else {
+//            handlePushAlarmPermissionGranted()
+//        }
     }
 
     private fun handlePushAlarmPermissionGranted() {

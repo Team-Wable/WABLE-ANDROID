@@ -58,6 +58,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private var isCommentNull = true
     private var totalCommentLength = 0
+    private var isCommentAdded = false
 
     override fun initView() {
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -90,6 +91,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 when (sideEffect) {
                     is HomeDetailSideEffect.ShowCommentSnackBar -> {
                         commentSnackbar.updateToCommentComplete()
+                        isCommentAdded = true
                         commentAdapter.refresh()
                     }
 
@@ -104,6 +106,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         submitFeedList(feed)
         submitCommentList(feed)
         concatAdapter()
+        scrollToBottomOnCommentAdded()
         initEditTextHint(feed.postAuthorNickname)
         initEditTextBtn(feed.feedId, commentSnackbar)
     }
@@ -256,8 +259,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun submitCommentList(feed: Feed) {
-        var isFirstLoad = true
-
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
@@ -268,14 +269,20 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 commentAdapter.submitData(transformedPagingData)
             }
         }
+    }
+
+    private fun scrollToBottomOnCommentAdded() {
+        var isFirstLoad = true
 
         viewLifeCycleScope.launch {
             // 답글 아래로 스크롤
             commentAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.source.append is LoadState.NotLoading && !isFirstLoad)
+                if (loadStates.source.append is LoadState.NotLoading && isCommentAdded) {
                     binding.rvHomeDetail.smoothScrollToPosition(commentAdapter.itemCount)
+                    if (loadStates.append.endOfPaginationReached) isCommentAdded = false
+                }
 
-                if (loadStates.source.refresh is LoadState.NotLoading && isFirstLoad) isFirstLoad = false
+                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) isFirstLoad = false
             }
         }
     }
