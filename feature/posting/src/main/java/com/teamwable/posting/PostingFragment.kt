@@ -1,12 +1,13 @@
 package com.teamwable.posting
 
-import android.Manifest
 import android.content.Context
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -24,7 +25,6 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setOnDuplicateBlockClick
-import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
@@ -34,7 +34,6 @@ import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingBinding::inflate) {
@@ -46,26 +45,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
     private lateinit var getPhotoPickerLauncher: ActivityResultLauncher<PickVisualMediaRequest>
-    private val requestPermissions =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            when (isGranted) {
-                true -> {
-                    try {
-                        selectImage()
-                    } catch (e: Exception) {
-                        Timber.tag("posting_fragment").e("에러 : ${e.message}")
-                    }
-                }
-
-                false -> handlePermissionDenied()
-            }
-        }
-
-    private fun handlePermissionDenied() {
-        if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_IMAGES)) {
-            context?.showPermissionAppSettingsDialog()
-        }
-    }
 
     override fun initView() {
         showKeyboard()
@@ -85,7 +64,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            if (!(binding.etPostingTitle.text.isEmpty() && binding.etPostingContent.text.isEmpty() && viewModel.photoUri.value.isNullOrBlank()))
+                TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            else findNavController().popBackStack()
         }
     }
 
@@ -123,19 +104,8 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initPhotoBtnClickListener() = with(binding) {
         ivPostingPhotoBtn.setOnClickListener {
-            getGalleryPermission()
-            showKeyboard()
-        }
-    }
-
-    private fun getGalleryPermission() {
-        // api 34 이상인 경우
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             selectImage()
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions.launch(Manifest.permission.READ_MEDIA_IMAGES)
-        } else {
-            requestPermissions.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            showKeyboard()
         }
     }
 
@@ -181,7 +151,9 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initBackBtnClickListener() {
         binding.ivPostingAppbarBack.setOnClickListener {
-            TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            if (!(binding.etPostingTitle.text.isEmpty() && binding.etPostingContent.text.isEmpty() && viewModel.photoUri.value.isNullOrBlank()))
+                TwoButtonDialog.Companion.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+            else findNavController().popBackStack()
         }
     }
 
@@ -196,18 +168,27 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             etPostingTitle.doAfterTextChanged {
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
                 totalTitleLength = etPostingTitle.text.length
+
                 handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+                setEditTextMaxLen(etPostingContent, totalTitleLength)
             }
             etPostingContent.doAfterTextChanged {
                 totalContentLength = etPostingContent.text.length
+
                 handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+                setEditTextMaxLen(etPostingTitle, totalContentLength)
             }
         }
     }
 
+    private fun setEditTextMaxLen(view: EditText, totalViewLen: Int) {
+        val contentMaxLength = POSTING_MAX - totalViewLen
+        view.filters = arrayOf(InputFilter.LengthFilter(contentMaxLength.coerceAtLeast(0)))
+    }
+
     private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalTitleLength: Int, totalContentLength: Int) {
         when {
-            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX) -> {
+            (!isTitleNull && (totalTitleLength + totalContentLength) <= POSTING_MAX - 1) -> {
                 updateProgress(
                     com.teamwable.ui.R.color.gray_600,
                     com.teamwable.ui.R.color.purple_50,
@@ -218,7 +199,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
                 }
             }
 
-            (totalTitleLength + totalContentLength) >= POSTING_MAX + 1 -> {
+            (totalTitleLength + totalContentLength) >= POSTING_MAX -> {
                 updateProgress(
                     com.teamwable.ui.R.color.error,
                     com.teamwable.ui.R.color.gray_200,
@@ -280,6 +261,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
     }
 
     companion object {
-        const val POSTING_MAX = 499
+        const val POSTING_MAX = 500
     }
 }
