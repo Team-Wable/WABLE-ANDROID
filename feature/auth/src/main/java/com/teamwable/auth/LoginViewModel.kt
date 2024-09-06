@@ -114,8 +114,12 @@ class LoginViewModel @Inject constructor(
 
     private fun checkIsNewUser(newUser: Boolean) {
         viewModelScope.launch {
-            if (newUser) saveIsAutoLogin(true)
-            else _loginSideEffect.emit(LoginSideEffect.NavigateToFirstLckWatch)
+            if (newUser) {
+                _loginSideEffect.emit(LoginSideEffect.NavigateToFirstLckWatch)
+            } else {
+                _loginSideEffect.emit(LoginSideEffect.NavigateToMain)
+                saveIsAutoLogin(true)
+            }
         }
     }
 
