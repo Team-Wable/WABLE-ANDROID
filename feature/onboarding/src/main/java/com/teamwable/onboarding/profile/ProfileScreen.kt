@@ -206,7 +206,7 @@ fun ProfileScreen(
                         focusManager.clearFocus()
                         onDuplicateBtnClick()
                     },
-                    enabled = profileState.textFieldType != NicknameType.INVALID,
+                    enabled = profileState.textFieldType != NicknameType.INVALID && profileState.nickname.isNotEmpty(),
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }

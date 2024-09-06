@@ -16,7 +16,7 @@ class NicknameValidationUseCase @Inject constructor() {
         input.length in MIN_LENGTH..MAX_LENGTH
 
     companion object {
-        private const val MIN_LENGTH = 1
+        private const val MIN_LENGTH = 0
         private const val MAX_LENGTH = 10
     }
 }
