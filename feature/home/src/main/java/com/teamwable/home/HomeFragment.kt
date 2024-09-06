@@ -37,6 +37,7 @@ import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
 import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.FcmTag.RELATED_CONTENT_ID
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
@@ -68,7 +69,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (uiState) {
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-                    is HomeUiState.Success -> Unit
+                    is HomeUiState.Success -> activity?.let { navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let) }
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
@@ -84,9 +85,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
     }
 
+    private fun navigateToHomeDetailFragment(feedId: Long) = findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feedId))
+
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
+            navigateToHomeDetailFragment(feed.feedId)
         }
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
