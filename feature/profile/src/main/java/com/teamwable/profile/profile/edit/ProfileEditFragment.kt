@@ -1,6 +1,8 @@
 package com.teamwable.profile.profile.edit
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.teamwable.designsystem.theme.WableTheme
@@ -9,6 +11,7 @@ import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileEditBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.util.Arg.PROFILE_EDIT_RESULT
 
 class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(FragmentProfileEditBinding::inflate) {
     private val args: ProfileEditFragmentArgs by navArgs()
@@ -35,7 +38,7 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
                 WableTheme {
                     ProfileEditRoute(
                         profile = profile,
-                        navigateToProfile = { findNavController().popBackStack() },
+                        navigateToProfile = { updatedProfile -> saveAndNavigateBack(updatedProfile) },
                         onShowErrorSnackBar = { throwable -> toast(throwable?.message.toString()) },
                     )
                 }
