@@ -1,5 +1,7 @@
 package com.teamwable.home
 
+import android.Manifest
+import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -67,7 +69,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> Unit
-                    is HomeUiState.AddPushAlarmPermission -> if (uiState.isAllowed == null) initPushAlarmPermissionAlert()
+                    is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
         }
@@ -77,7 +79,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    else -> Unit
                 }
             }
         }
@@ -208,27 +209,27 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     }
 
     private fun initPushAlarmPermissionAlert() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
-//            requestPermission.launch(permissionList)
-//        } else {
-//            handlePushAlarmPermissionGranted()
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permissionList = Manifest.permission.POST_NOTIFICATIONS
+            requestPermission.launch(permissionList)
+        } else {
+            handlePushAlarmPermissionGranted()
+        }
     }
 
     private fun handlePushAlarmPermissionGranted() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val token = task.result
                     viewModel.patchUserProfileUri(
                         MemberInfoEditModel(
                             isPushAlarmAllowed = true,
-                            fcmToken = task.result,
+                            fcmToken = token,
                         ),
                     )
-                    Timber.tag("fcm").d("fcm token: $task.result")
+                    Timber.e("token is $token")
                 } else {
-                    Timber.d(task.exception)
                     return@OnCompleteListener
                 }
             },

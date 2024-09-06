@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +50,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         fetchAuthId()
-        //  fetchIsPushAlarmAllowed()
+        fetchIsPushAlarmAllowed()
     }
 
     private fun fetchAuthId() {
@@ -60,9 +59,16 @@ class HomeViewModel @Inject constructor(
                 .map { it.toLong() }
                 .collectLatest {
                     authId = it
-                    delay(500) // 로딩뷰를 위한 delay
-                    _uiState.value = HomeUiState.Success
                 }
+        }
+    }
+
+    private fun fetchIsPushAlarmAllowed() {
+        viewModelScope.launch {
+            userInfoRepository.getIsPushAlarmAllowed().collectLatest {
+                delay(500) // 로딩뷰를 위한 delay
+                if (!it) _uiState.value = HomeUiState.AddPushAlarmPermission else _uiState.value = HomeUiState.Success
+            }
         }
     }
 
@@ -148,23 +154,14 @@ class HomeViewModel @Inject constructor(
     fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
         viewModelScope.launch {
             profileRepository.patchUserProfile(info, url)
-                .onSuccess { _event.emit(HomeSideEffect.SaveIsPushAllowed(info.isPushAlarmAllowed ?: return@launch)) }
-                .onFailure {
-                    Timber.e(it.message.toString())
-                    _uiState.value = HomeUiState.Error(it.message.toString())
-                }
+                .onSuccess { saveIsPushAlarmAllowed(info.isPushAlarmAllowed ?: false) }
+                .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
 
-    fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
+    private fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
         viewModelScope.launch {
             userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
-        }
-    }
-
-    private fun fetchIsPushAlarmAllowed() {
-        viewModelScope.launch {
-            userInfoRepository.getIsPushAlarmAllowed().collectLatest { _uiState.value = HomeUiState.AddPushAlarmPermission(it) }
         }
     }
 }
@@ -176,13 +173,11 @@ sealed interface HomeUiState {
 
     data class Error(val errorMessage: String) : HomeUiState
 
-    data class AddPushAlarmPermission(val isAllowed: Boolean?) : HomeUiState
+    data object AddPushAlarmPermission : HomeUiState
 }
 
 sealed interface HomeSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeSideEffect
 
     data object DismissBottomSheet : HomeSideEffect
-
-    data class SaveIsPushAllowed(val isAllowed: Boolean) : HomeSideEffect
 }
