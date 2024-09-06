@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.map
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -35,7 +36,6 @@ import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -131,6 +131,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
+        scrollToTopOnRefresh()
+        setSwipeLayout()
     }
 
     private fun submitList() {
@@ -144,21 +146,21 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 feedAdapter.submitData(transformedPagingData)
             }
         }
-        setSwipeLayout()
+    }
+
+    private fun scrollToTopOnRefresh() {
+        viewLifeCycleScope.launch {
+            feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                if (loadStates.source.append is LoadState.NotLoading)
+                    binding.rvHome.scrollToPosition(0)
+            }
+        }
     }
 
     private fun setSwipeLayout() {
         binding.layoutHomeSwipe.setOnRefreshListener {
             binding.layoutHomeSwipe.isRefreshing = false
-            scrollToTop()
-        }
-    }
-
-    private fun scrollToTop() {
-        feedAdapter.refresh()
-        viewLifeCycleScope.launch {
-            delay(800)
-            binding.rvHome.smoothScrollToPosition(0)
+            feedAdapter.refresh()
         }
     }
 
@@ -171,7 +173,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun fetchFeedUploaded() {
         parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
             val isUploaded = result.getBoolean(IS_UPLOADED, false)
-            if (isUploaded) scrollToTop()
+            if (isUploaded) feedAdapter.refresh()
         }
     }
 
