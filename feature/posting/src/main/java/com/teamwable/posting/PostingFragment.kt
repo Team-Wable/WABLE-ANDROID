@@ -1,6 +1,5 @@
 package com.teamwable.posting
 
-import android.Manifest
 import android.content.Context
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -26,7 +25,6 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setOnDuplicateBlockClick
-import com.teamwable.ui.extensions.showPermissionAppSettingsDialog
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
@@ -36,7 +34,6 @@ import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingBinding::inflate) {
@@ -48,26 +45,6 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private lateinit var getGalleryLauncher: ActivityResultLauncher<String>
     private lateinit var getPhotoPickerLauncher: ActivityResultLauncher<PickVisualMediaRequest>
-    private val requestPermissions =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            when (isGranted) {
-                true -> {
-                    try {
-                        selectImage()
-                    } catch (e: Exception) {
-                        Timber.tag("posting_fragment").e("에러 : ${e.message}")
-                    }
-                }
-
-                false -> handlePermissionDenied()
-            }
-        }
-
-    private fun handlePermissionDenied() {
-        if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_IMAGES)) {
-            context?.showPermissionAppSettingsDialog()
-        }
-    }
 
     override fun initView() {
         showKeyboard()
@@ -127,19 +104,8 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initPhotoBtnClickListener() = with(binding) {
         ivPostingPhotoBtn.setOnClickListener {
-            getGalleryPermission()
-            showKeyboard()
-        }
-    }
-
-    private fun getGalleryPermission() {
-        // api 34 이상인 경우
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             selectImage()
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions.launch(Manifest.permission.READ_MEDIA_IMAGES)
-        } else {
-            requestPermissions.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            showKeyboard()
         }
     }
 
