@@ -36,6 +36,7 @@ class ProfileMemberFragment : BindingProfileFragment() {
         initBackBtnClickListener()
         viewModel.fetchProfileInfo(userId)
         collect()
+        setSwipeLayout()
     }
 
     private fun initBackBtnClickListener() {
@@ -57,6 +58,13 @@ class ProfileMemberFragment : BindingProfileFragment() {
                     is ProfileMemberUiState.Loading -> Unit
                 }
             }
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.layoutProfileSwipe.setOnRefreshListener {
+            binding.layoutProfileSwipe.isRefreshing = false
+            viewModel.fetchProfileInfo(userId)
         }
     }
 

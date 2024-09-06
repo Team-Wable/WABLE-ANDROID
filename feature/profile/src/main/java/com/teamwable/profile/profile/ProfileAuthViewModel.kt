@@ -25,7 +25,7 @@ class ProfileAuthViewModel @Inject constructor(
         fetchAuthId()
     }
 
-    private fun fetchAuthId() {
+    fun fetchAuthId() {
         viewModelScope.launch {
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
