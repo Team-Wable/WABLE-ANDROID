@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -88,11 +89,9 @@ class ProfileFeedListViewModel @Inject constructor(
         viewModelScope.launch {
             val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
 
-            result.onSuccess {
-                likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
-                    put(feedId, likeState)
-                }
-            }.onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
+            result
+                .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
+                .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
         }
     }
 }

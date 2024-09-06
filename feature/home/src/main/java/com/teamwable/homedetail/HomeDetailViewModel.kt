@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -159,11 +160,9 @@ class HomeDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
 
-            result.onSuccess {
-                likeFeedsFlow.value = likeFeedsFlow.value.toMutableMap().apply {
-                    put(feedId, likeState)
-                }
-            }.onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+            result
+                .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
 
@@ -174,11 +173,9 @@ class HomeDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = if (likeState.isLiked) commentRepository.postCommentLike(commentId, commentText) else commentRepository.deleteCommentLike(commentId)
 
-            result.onSuccess {
-                likeCommentsFlow.value = likeCommentsFlow.value.toMutableMap().apply {
-                    put(commentId, likeState)
-                }
-            }.onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
+            result
+                .onSuccess { likeCommentsFlow.update { it.toMutableMap().apply { put(commentId, likeState) } } }
+                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
     }
 }
