@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.ProfileScreen
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
@@ -18,6 +19,7 @@ import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 @Composable
 fun ProfileEditRoute(
     viewModel: ProfileEditViewModel = hiltViewModel(),
+    profile: MemberInfoEditModel,
     navigateToProfile: () -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit = {},
 ) {
@@ -31,6 +33,16 @@ fun ProfileEditRoute(
 
     val photoPickerLauncher = rememberPhotoPickerLauncher { uri ->
         viewModel.onImageSelected(uri.toString())
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.onNicknameChanged(profile.nickname ?: "")
+        val profileType = ProfileImageType.entries.find { it.name == profile.memberDefaultProfileImage }
+        if (profileType != null) {
+            viewModel.onRandomImageChange(profileType)
+        } else {
+            viewModel.onImageSelected(profile.memberDefaultProfileImage)
+        }
     }
 
     LaunchedEffect(lifecycleOwner) {
