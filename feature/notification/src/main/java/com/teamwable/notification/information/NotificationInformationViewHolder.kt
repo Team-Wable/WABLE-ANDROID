@@ -19,7 +19,7 @@ class NotificationInformationViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            if (this::item.isInitialized) click(item, adapterPosition)
+            if (this::item.isInitialized) click(item, absoluteAdapterPosition)
         }
     }
 
