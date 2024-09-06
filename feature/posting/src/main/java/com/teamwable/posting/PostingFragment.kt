@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -201,19 +202,22 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
             etPostingTitle.doAfterTextChanged {
                 isTitleNull = etPostingTitle.text.isNullOrBlank()
                 totalTitleLength = etPostingTitle.text.length
-                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
 
-                val contentMaxLength = POSTING_MAX - totalTitleLength
-                etPostingContent.filters = arrayOf(InputFilter.LengthFilter(contentMaxLength.coerceAtLeast(0)))
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+                setEditTextMaxLen(etPostingContent, totalTitleLength)
             }
             etPostingContent.doAfterTextChanged {
                 totalContentLength = etPostingContent.text.length
-                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
 
-                val titleMaxLength = POSTING_MAX - totalContentLength
-                etPostingTitle.filters = arrayOf(InputFilter.LengthFilter(titleMaxLength.coerceAtLeast(0)))
+                handleUploadProgressAndBtn(isTitleNull, totalTitleLength, totalContentLength)
+                setEditTextMaxLen(etPostingTitle, totalContentLength)
             }
         }
+    }
+
+    private fun setEditTextMaxLen(view: EditText, totalViewLen: Int) {
+        val contentMaxLength = POSTING_MAX - totalViewLen
+        view.filters = arrayOf(InputFilter.LengthFilter(contentMaxLength.coerceAtLeast(0)))
     }
 
     private fun handleUploadProgressAndBtn(isTitleNull: Boolean, totalTitleLength: Int, totalContentLength: Int) {
