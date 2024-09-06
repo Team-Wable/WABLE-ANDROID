@@ -43,6 +43,7 @@ internal fun MainScreen(
             snackBarHostState.showSnackbar(
                 when (throwable) {
                     is UnknownHostException -> localContextResource.getString(R.string.error_message_network)
+                    is Error.NetWorkConnectError -> localContextResource.getString(R.string.error_message_network)
                     is Error.ApiError -> throwable.message.toString()
                     is Error.TimeOutError -> throwable.message.toString()
                     else -> localContextResource.getString(R.string.error_message_unknown)
