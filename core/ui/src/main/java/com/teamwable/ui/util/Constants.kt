@@ -14,6 +14,7 @@ object Arg {
     const val FEED_IMAGE_URL = "img_url"
     const val FEED_ID = "feed_id"
     const val CONTENT = "content"
+    const val PROFILE_EDIT_RESULT = "profile_edit_result"
 }
 
 object BundleKey {
