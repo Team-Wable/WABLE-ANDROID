@@ -42,4 +42,7 @@
     <string name="label_ghost_comment_type">commentGhost</string>
     <string name="label_ghost_content_type">contentGhost</string>
     <string name="label_ghost_complete">투명도 적용 완료</string>
+
+    <!-- content description -->
+    <string name="content_description_loading_spinner">로딩 스피너입니다.</string>
 </resources>

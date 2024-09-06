@@ -32,6 +32,7 @@ import com.teamwable.ui.shareAdapter.CommentViewHolder
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -297,7 +298,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.rvHomeDetail.apply {
             adapter = ConcatAdapter(
                 feedAdapter,
-                commentAdapter,
+                commentAdapter.withLoadStateFooter(PagingLoadingAdapter()),
             )
             if (itemDecorationCount == 0) addItemDecoration(HomeDetailRecyclerViewDivider(binding.root.context))
         }

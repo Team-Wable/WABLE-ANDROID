@@ -28,6 +28,7 @@ import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -136,7 +137,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun setAdapter() {
         binding.rvHome.apply {
-            adapter = feedAdapter
+            adapter = feedAdapter.withLoadStateFooter(PagingLoadingAdapter())
             if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
