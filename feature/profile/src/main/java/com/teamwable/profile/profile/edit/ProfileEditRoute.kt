@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.ProfileScreen
@@ -66,6 +67,7 @@ fun ProfileEditRoute(
 
     ProfileScreen(
         profileState = profileState,
+        profileEditType = ProfileEditType.PROFILE,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
             viewModel.patchUserProfile(
                 memberInfoEditModel = profile.copy(

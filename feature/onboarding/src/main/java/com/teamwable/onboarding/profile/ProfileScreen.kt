@@ -39,6 +39,7 @@ import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.MemberInfoType
 import com.teamwable.designsystem.type.NicknameType
+import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
@@ -121,6 +122,7 @@ fun ProfileRoute(
 
     ProfileScreen(
         profileState = profileState,
+        profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
             userMutableList = userMutableList.toMutableList().apply {
                 set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
@@ -144,6 +146,7 @@ fun ProfileRoute(
 @Composable
 fun ProfileScreen(
     profileState: ProfileState,
+    profileEditType: ProfileEditType,
     onProfilePlusBtnClick: () -> Unit = {},
     onDuplicateBtnClick: () -> Unit = {},
     onRandomImageChange: (ProfileImageType) -> Unit = {},
@@ -169,14 +172,14 @@ fun ProfileScreen(
                 },
         ) {
             Text(
-                text = stringResource(R.string.profile_edit_title),
+                text = stringResource(profileEditType.title),
                 style = WableTheme.typography.head00,
                 color = WableTheme.colors.black,
                 modifier = Modifier.padding(top = 16.dp),
             )
 
             Text(
-                text = stringResource(R.string.profile_edit_description),
+                text = stringResource(profileEditType.description),
                 style = WableTheme.typography.body02,
                 color = WableTheme.colors.gray600,
                 modifier = Modifier.padding(top = 6.dp),
@@ -213,7 +216,7 @@ fun ProfileScreen(
         }
 
         WableButton(
-            text = stringResource(R.string.btn_next_text),
+            text = stringResource(profileEditType.buttonText),
             onClick = {
                 onNextBtnClick(
                     profileState.nickname,
@@ -235,6 +238,7 @@ fun GreetingPreview() {
             onNextBtnClick = { _, _, _ -> },
             onProfilePlusBtnClick = {},
             profileState = ProfileState(),
+            profileEditType = ProfileEditType.PROFILE,
         )
     }
 }

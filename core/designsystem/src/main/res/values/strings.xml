@@ -18,4 +18,15 @@
     <string name="profile_edit_nickname_false">닉네임에 사용할 수 없는 문자가 포함되어 있어요.</string>
     <string name="profile_edit_nickname_success">사용 가능한 닉네임입니다.</string>
     <string name="profile_edit_nickname_duplicate">이미 사용 중인 닉네임입니다.</string>
+
+    <!--    프로필 편집-->
+    <string name="onboarding_edit_title">와블에서 활동할 \n프로필을 등록해 주세요</string>
+    <string name="onboarding_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
+    <string name="onboarding_edit_button">다음으로</string>
+    <string name="profile_edit_xml_title">와블에서 멋진 모습으로\n활동해 보세요!</string>
+    <string name="profile_edit_button">수정완료</string>
+
+    <!--    공통-->
+    <string name="empty"> </string>
+
 </resources>
