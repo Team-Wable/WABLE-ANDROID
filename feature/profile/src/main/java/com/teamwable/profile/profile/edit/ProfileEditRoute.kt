@@ -52,7 +52,7 @@ fun ProfileEditRoute(
                     is ProfileSideEffect.NavigateToProfile -> navigateToProfile(
                         profile.copy(
                             nickname = profileState.nickname,
-                            memberDefaultProfileImage = profileState.selectedImageUri ?: profile.memberDefaultProfileImage,
+                            memberDefaultProfileImage = profileState.selectedImageUri,
                         ),
                     )
 
@@ -74,6 +74,7 @@ fun ProfileEditRoute(
                 ),
                 imgUrl = imageUri,
             )
+            viewModel.onImageSelected(imageUri ?: defaultImage)
         },
         onProfilePlusBtnClick = { viewModel.requestImagePicker() },
         onDuplicateBtnClick = { viewModel.getNickNameValidation() },
