@@ -28,7 +28,6 @@ class ProfileAuthFragment : BindingProfileFragment() {
         setAppbar()
         initAppbarHamburgerClickListener()
         collect()
-        // setSwipeLayout()
     }
 
     private fun setAppbar() {
@@ -55,13 +54,6 @@ class ProfileAuthFragment : BindingProfileFragment() {
                     is ProfileAuthUiState.Loading -> Unit
                 }
             }
-        }
-    }
-
-    private fun setSwipeLayout() {
-        binding.layoutProfileSwipe.setOnRefreshListener {
-            binding.layoutProfileSwipe.isRefreshing = false
-            viewModel.fetchAuthId()
         }
     }
 
