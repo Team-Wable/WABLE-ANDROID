@@ -2,6 +2,7 @@ package com.teamwable.profile.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -11,7 +12,6 @@ import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
-import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
@@ -23,7 +23,6 @@ import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileAuthFragment : BindingProfileFragment() {
@@ -37,13 +36,12 @@ class ProfileAuthFragment : BindingProfileFragment() {
         collect()
 
         setFragmentResultListener(PROFILE_EDIT_RESULT) { requestKey, bundle ->
-            Timber.tag("requestKey").d(requestKey)
             val updatedProfile = bundle.parcelable<MemberInfoEditModel>(PROFILE_EDIT_RESULT)
-            Timber.tag("requestKey").d(updatedProfile.toString())
             if (updatedProfile != null) {
-//                viewModel.fetchAuthId()
-                binding.ivProfileImg.load(updatedProfile.memberDefaultProfileImage)
-                binding.tvProfileNickname.text = updatedProfile.nickname
+                viewModel.updateProfile(
+                    nickname = updatedProfile.nickname ?: "",
+                    imageUrl = updatedProfile.memberDefaultProfileImage ?: "",
+                )
             }
         }
     }
