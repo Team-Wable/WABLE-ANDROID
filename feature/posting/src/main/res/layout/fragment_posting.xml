@@ -73,11 +73,13 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="@string/hint_posting_title"
+                android:maxLength="500"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.Wable.Head1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_700"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/dummy" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_posting_photo"

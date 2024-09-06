@@ -31,7 +31,7 @@ class NotificationActionViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            if (this::item.isInitialized) onNotificationClick(item, adapterPosition)
+            if (this::item.isInitialized) onNotificationClick(item, absoluteAdapterPosition)
         }
 
         binding.ivNotificationVpProfile.setOnClickListener {
@@ -141,12 +141,17 @@ class NotificationActionViewHolder(
     }
 
     private fun getSpannablePopularText(name: String, data: NotificationActionModel): SpannableStringBuilder {
-        val popularText = name + getPopularContent(data.notificationText)
+        val popularText = if (data.notificationText.isNotEmpty()) {
+            "$name\n: ${cutContentMaxLen(data.notificationText)}"
+        } else {
+            name
+        }
+
         val spannablePopularText = SpannableStringBuilder(popularText)
         spannablePopularText.setSpan(
             StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
             0,
-            name.replace("\n: ", "").length,
+            name.length - 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         return spannablePopularText
@@ -220,20 +225,20 @@ class NotificationActionViewHolder(
             binding.root.context.getString(resId)
         }
 
-        return if (data.notificationTriggerType in listOf(
+        return if ((data.notificationTriggerType in listOf(
                 binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
                 binding.root.context.stringOf(NotificationActionType.COMMENT.title),
                 binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
                 binding.root.context.stringOf(NotificationActionType.POPULAR_WRITER.title)
-            )
+            )) && data.notificationText.isNotBlank()
         ) {
-            "$name$resourceString\n: ${getPopularContent(data.notificationText)}"
+            "$name$resourceString\n: ${cutContentMaxLen(data.notificationText)}"
         } else {
             "$name$resourceString"
         }
     }
 
-    private fun getPopularContent(notificationText: String): String {
+    private fun cutContentMaxLen(notificationText: String): String {
         return if (notificationText.length > MAX_LEN) {
             notificationText.substring(0, MAX_LEN) + binding.root.context.stringOf(R.string.tv_notification_action_more)
         } else {

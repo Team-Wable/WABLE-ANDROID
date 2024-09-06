@@ -15,6 +15,7 @@
         android:layout_width="44dp"
         android:layout_height="0dp"
         android:padding="4dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_profile_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1"

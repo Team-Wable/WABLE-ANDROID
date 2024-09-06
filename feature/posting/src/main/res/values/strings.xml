@@ -7,6 +7,6 @@
     <string name="hint_posting_content">본문은 생략이 가능해요</string>
     <string name="tv_posting_progress_base">0/500</string>
     <string name="btn_posting_upload">게시</string>
-    <string name="tv_posting_progress_count">(%1$d/500)</string>
+    <string name="tv_posting_progress_count">%1$d/500</string>
 
 </resources>

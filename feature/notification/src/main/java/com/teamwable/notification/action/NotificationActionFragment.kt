@@ -67,8 +67,8 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
             viewModel.getNotifications().collectLatest { pagingData ->
                 notificationAdapter.submitData(pagingData)
             }
-            viewModel.patchCheck()
         }
+        viewModel.patchCheck()
     }
 
     private fun setEmptyLayout() = with(binding) {
