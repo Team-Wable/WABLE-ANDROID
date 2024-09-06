@@ -19,6 +19,7 @@ import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 fun ProfileEditRoute(
     viewModel: ProfileEditViewModel = hiltViewModel(),
     navigateToProfile: () -> Unit,
+    onShowErrorSnackBar: (throwable: Throwable?) -> Unit = {},
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -38,6 +39,7 @@ fun ProfileEditRoute(
                 when (sideEffect) {
                     is ProfileSideEffect.NavigateToProfile -> navigateToProfile()
                     is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
+                    is ProfileSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
 
                     else -> Unit
                 }

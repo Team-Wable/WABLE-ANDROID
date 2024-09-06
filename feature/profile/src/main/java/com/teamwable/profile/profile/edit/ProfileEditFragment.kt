@@ -6,6 +6,7 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileEditBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.toast
 
 class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(FragmentProfileEditBinding::inflate) {
     override fun initView() {
@@ -27,6 +28,7 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
                 WableTheme {
                     ProfileEditRoute(
                         navigateToProfile = { findNavController().popBackStack() },
+                        onShowErrorSnackBar = { throwable -> toast(throwable?.message.toString()) },
                     )
                 }
             }
