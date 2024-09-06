@@ -36,7 +36,7 @@ class ProfileMemberFragment : BindingProfileFragment() {
         initBackBtnClickListener()
         viewModel.fetchProfileInfo(userId)
         collect()
-        setSwipeLayout()
+        // setSwipeLayout()
     }
 
     private fun initBackBtnClickListener() {

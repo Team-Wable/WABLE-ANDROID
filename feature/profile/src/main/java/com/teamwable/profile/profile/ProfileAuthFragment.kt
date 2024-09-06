@@ -28,7 +28,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
         setAppbar()
         initAppbarHamburgerClickListener()
         collect()
-        setSwipeLayout()
+        // setSwipeLayout()
     }
 
     private fun setAppbar() {
