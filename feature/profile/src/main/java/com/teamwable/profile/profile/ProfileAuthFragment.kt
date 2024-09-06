@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
+import com.teamwable.profile.R
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
@@ -27,6 +29,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
         super.onViewCreated(view, savedInstanceState)
         setAppbar()
         initAppbarHamburgerClickListener()
+        initProfileEditClickListener()
         collect()
     }
 
@@ -38,6 +41,12 @@ class ProfileAuthFragment : BindingProfileFragment() {
     private fun initAppbarHamburgerClickListener() {
         binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
             ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
+        }
+    }
+
+    private fun initProfileEditClickListener() {
+        binding.btnProfileEdit.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_auth_to_profile_edit)
         }
     }
 
