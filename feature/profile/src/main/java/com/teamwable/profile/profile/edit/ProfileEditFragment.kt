@@ -45,4 +45,12 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
             }
         }
     }
+
+    private fun saveAndNavigateBack(updatedProfile: MemberInfoEditModel) {
+        setFragmentResult(
+            PROFILE_EDIT_RESULT,
+            bundleOf(PROFILE_EDIT_RESULT to updatedProfile),
+        )
+        findNavController().popBackStack()
+    }
 }
