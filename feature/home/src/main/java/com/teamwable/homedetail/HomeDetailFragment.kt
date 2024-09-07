@@ -1,6 +1,7 @@
 package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
+import android.os.Bundle
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -31,12 +32,16 @@ import com.teamwable.ui.shareAdapter.CommentViewHolder
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.FEED_STATE
+import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
+import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
@@ -58,6 +63,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private var isCommentNull = true
     private var totalCommentLength = 0
+    private var isCommentAdded = false
 
     override fun initView() {
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -75,6 +81,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
 
                     is HomeDetailUiState.RemoveFeed -> {
+                        saveFeedStateResult(Feed(feedId = uiState.feedId), isRemoved = true)
                         findNavController().popBackStack()
                         findNavController().popBackStack()
                     }
@@ -90,6 +97,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 when (sideEffect) {
                     is HomeDetailSideEffect.ShowCommentSnackBar -> {
                         commentSnackbar.updateToCommentComplete()
+                        isCommentAdded = true
                         commentAdapter.refresh()
                     }
 
@@ -104,6 +112,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         submitFeedList(feed)
         submitCommentList(feed)
         concatAdapter()
+        scrollToBottomOnCommentAdded()
         initEditTextHint(feed.postAuthorNickname)
         initEditTextBtn(feed.feedId, commentSnackbar)
     }
@@ -246,6 +255,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         viewLifeCycleScope.launch {
             viewModel.updateHomeDetailToFlow(feed).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
+                    saveFeedStateResult(it)
                     val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
                     val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
                     transformedFeed.copy(isAuth = isAuth)
@@ -256,8 +266,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun submitCommentList(feed: Feed) {
-        var isFirstLoad = true
-
         viewLifeCycleScope.launch {
             viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
                 val transformedPagingData = pagingData.map {
@@ -268,14 +276,20 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 commentAdapter.submitData(transformedPagingData)
             }
         }
+    }
+
+    private fun scrollToBottomOnCommentAdded() {
+        var isFirstLoad = true
 
         viewLifeCycleScope.launch {
             // 답글 아래로 스크롤
             commentAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.source.append is LoadState.NotLoading && !isFirstLoad)
+                if (loadStates.source.append is LoadState.NotLoading && isCommentAdded) {
                     binding.rvHomeDetail.smoothScrollToPosition(commentAdapter.itemCount)
+                    if (loadStates.append.endOfPaginationReached) isCommentAdded = false
+                }
 
-                if (loadStates.source.refresh is LoadState.NotLoading && isFirstLoad) isFirstLoad = false
+                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) isFirstLoad = false
             }
         }
     }
@@ -284,7 +298,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.rvHomeDetail.apply {
             adapter = ConcatAdapter(
                 feedAdapter,
-                commentAdapter,
+                commentAdapter.withLoadStateFooter(PagingLoadingAdapter()),
             )
             if (itemDecorationCount == 0) addItemDecoration(HomeDetailRecyclerViewDivider(binding.root.context))
         }
@@ -295,7 +309,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         val feedId = arguments?.getLong(FEED_ID)
         binding.layoutHomeSwipe.setOnRefreshListener {
             if (feedId != null) viewModel.updateHomeDetailToNetwork(feedId)
-            commentAdapter.refresh()
             binding.layoutHomeSwipe.isRefreshing = false
         }
     }
@@ -304,6 +317,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.toolbarHomeDetail.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun saveFeedStateResult(feed: Feed, isRemoved: Boolean = false) {
+        parentFragmentManager.setFragmentResult(
+            HOME_DETAIL_RESULT,
+            Bundle().apply {
+                putParcelable(FEED_STATE, feed)
+                putBoolean(IS_FEED_REMOVED, isRemoved)
+            },
+        )
     }
 
     companion object {

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
@@ -12,6 +13,7 @@ import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
+import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.Navigation
@@ -31,9 +33,11 @@ class ProfileMemberFragment : BindingProfileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnProfileEdit.visible(false)
         initBackBtnClickListener()
         viewModel.fetchProfileInfo(userId)
         collect()
+        setSwipeLayout()
     }
 
     private fun initBackBtnClickListener() {
@@ -55,6 +59,19 @@ class ProfileMemberFragment : BindingProfileFragment() {
                     is ProfileMemberUiState.Loading -> Unit
                 }
             }
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.appbarProfileInfo.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
+            },
+        )
+
+        binding.layoutProfileSwipe.setOnRefreshListener {
+            binding.layoutProfileSwipe.isRefreshing = false
+            viewModel.fetchProfileInfo(userId)
         }
     }
 

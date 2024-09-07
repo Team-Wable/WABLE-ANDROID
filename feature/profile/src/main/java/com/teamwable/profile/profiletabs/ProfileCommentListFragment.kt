@@ -24,6 +24,7 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.CommentViewHolder
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -115,7 +116,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
     private fun setAdapter() {
         binding.rvProfileComment.apply {
-            adapter = commentAdapter
+            adapter = commentAdapter.withLoadStateFooter(PagingLoadingAdapter())
             if (itemDecorationCount == 0) setDivider(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()

@@ -2,6 +2,7 @@ package com.teamwable
 
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.addCallback
 import androidx.navigation.fragment.findNavController
 import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentLoadingBinding
@@ -13,9 +14,12 @@ import kotlin.random.Random
 
 class LoadingFragment : BindingFragment<FragmentLoadingBinding>(FragmentLoadingBinding::inflate) {
     override fun initView() {
+        blockNavigateToBack()
         initLoadingContent()
         initAnimation()
     }
+
+    private fun blockNavigateToBack() = activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {}
 
     private fun initAnimation() {
         viewLifeCycleScope.launch {

@@ -22,6 +22,9 @@ object BundleKey {
     const val USER_TYPE = "userType"
     const val POSTING_RESULT = "postingResult"
     const val IS_UPLOADED = "isUploaded"
+    const val HOME_DETAIL_RESULT = "homeDetailResult"
+    const val FEED_STATE = "feedState"
+    const val IS_FEED_REMOVED = "isFeedRemoved"
 }
 
 object FcmTag {
