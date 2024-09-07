@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import com.google.android.material.appbar.AppBarLayout
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberInfoEditModel
@@ -36,16 +36,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
         initProfileEditClickListener()
         collect()
         setSwipeLayout()
-
-        setFragmentResultListener(PROFILE_EDIT_RESULT) { requestKey, bundle ->
-            val updatedProfile = bundle.parcelable<MemberInfoEditModel>(PROFILE_EDIT_RESULT)
-            if (updatedProfile != null) {
-                viewModel.updateProfile(
-                    nickname = updatedProfile.nickname ?: "",
-                    imageUrl = updatedProfile.memberDefaultProfileImage ?: "",
-                )
-            }
-        }
+        updateProfileFromEditResult()
     }
 
     private fun setAppbar() {
@@ -99,6 +90,18 @@ class ProfileAuthFragment : BindingProfileFragment() {
         binding.layoutProfileSwipe.setOnRefreshListener {
             binding.layoutProfileSwipe.isRefreshing = false
             viewModel.fetchAuthId()
+        }
+    }
+
+    private fun updateProfileFromEditResult() {
+        setFragmentResultListener(PROFILE_EDIT_RESULT) { requestKey, bundle ->
+            val updatedProfile = bundle.parcelable<MemberInfoEditModel>(PROFILE_EDIT_RESULT)
+            if (updatedProfile != null) {
+                viewModel.updateProfile(
+                    nickname = updatedProfile.nickname.orEmpty(),
+                    imageUrl = updatedProfile.memberDefaultProfileImage.orEmpty(),
+                )
+            }
         }
     }
 

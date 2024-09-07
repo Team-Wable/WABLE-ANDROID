@@ -126,8 +126,8 @@ internal fun ProfileRoute(
         onNextBtnClick = { nickname, imageUri, defaultImage ->
             userMutableList = userMutableList.toMutableList().apply {
                 set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
-                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri ?: "")
-                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage ?: "")
+                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri.orEmpty())
+                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage.orEmpty())
             }
             viewModel.navigateToAgreeTerms()
         },
