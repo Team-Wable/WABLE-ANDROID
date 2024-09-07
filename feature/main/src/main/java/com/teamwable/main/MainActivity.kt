@@ -13,8 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.teamwable.common.uistate.UiState
+import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.restartApp
@@ -22,8 +24,10 @@ import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -47,10 +51,7 @@ class MainActivity : AppCompatActivity(), Navigation {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        appUpdateHelper = AppUpdateHandler(this)
-        appUpdateHelper.checkForAppUpdate(activityResultLauncher)
-
+        setInAppUpdate()
         initView()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity(), Navigation {
     override fun onResume() {
         super.onResume()
         appUpdateHelper.resumeUpdateIfNeeded(activityResultLauncher)
+    }
+
+    private fun setInAppUpdate() {
+        appUpdateHelper = AppUpdateHandler(this)
+        appUpdateHelper.checkForAppUpdate(activityResultLauncher)
     }
 
     private fun initView() {
@@ -93,6 +99,8 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
 
         initBottomNavigationChangedListener(navController)
+        initBottomNaviSelectedListener(navController)
+        initBottomNaviReSelectedListener(navController)
     }
 
     private fun initBottomNavigationChangedListener(navController: NavController) {
@@ -143,6 +151,34 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     override fun navigateToNewsFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_news
+    }
+
+    private fun initBottomNaviSelectedListener(navController: NavController) {
+        binding.bnvMain.setOnItemSelectedListener {
+            if (it.itemId == R.id.graph_home) {
+                lifecycleScope.launch {
+                    delay(100)
+                    findHomeFragment()?.updateToLoadingState()
+                }
+            }
+            it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun initBottomNaviReSelectedListener(navController: NavController) {
+        binding.bnvMain.setOnItemReselectedListener {
+            if (it.itemId == R.id.graph_home) {
+                lifecycleScope.launch {
+                    delay(100)
+                    findHomeFragment()?.refreshHome()
+                }
+            }
+            it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun findHomeFragment(): HomeFragment? = supportFragmentManager.findFragmentById(R.id.fcv_main)?.let { hostFragment ->
+        hostFragment.childFragmentManager.fragments.firstOrNull { it is HomeFragment } as? HomeFragment
     }
 
     companion object {

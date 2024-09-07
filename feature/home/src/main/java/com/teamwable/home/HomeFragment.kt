@@ -64,6 +64,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         fetchFeedFromHomeDetail()
     }
 
+    fun updateToLoadingState() = viewModel.updateLoadingState()
+
     private fun collect() {
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
@@ -176,9 +178,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun setSwipeLayout() {
         binding.layoutHomeSwipe.setOnRefreshListener {
             binding.layoutHomeSwipe.isRefreshing = false
-            feedAdapter.refresh()
+            refreshHome()
         }
     }
+
+    fun refreshHome() = feedAdapter.refresh()
 
     private fun initNavigatePostingFabClickListener() {
         binding.fabHomeNavigatePosting.setOnClickListener {
@@ -189,7 +193,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun fetchFeedUploaded() {
         parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
             val isUploaded = result.getBoolean(IS_UPLOADED, false)
-            if (isUploaded) feedAdapter.refresh()
+            if (isUploaded) refreshHome()
         }
     }
 

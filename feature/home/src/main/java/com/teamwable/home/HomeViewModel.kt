@@ -72,6 +72,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun updateLoadingState() {
+        viewModelScope.launch {
+            _uiState.value = HomeUiState.Loading
+            delay(500) // 로딩뷰를 위한 delay
+            _uiState.value = HomeUiState.Success
+        }
+    }
+
     fun updateFeeds(): Flow<PagingData<Feed>> {
         return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates ->
             feedsFlow
