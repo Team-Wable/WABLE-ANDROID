@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
@@ -16,6 +17,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.teamwable.common.uistate.UiState
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.restartApp
+import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,14 +30,34 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var appUpdateHelper: AppUpdateHandler
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                toast(getString(R.string.label_in_app_update_fail))
+            } else {
+                toast(getString(R.string.label_in_app_update_success))
+                restartApp()
+            }
+        }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        appUpdateHelper = AppUpdateHandler(this)
+        appUpdateHelper.checkForAppUpdate(activityResultLauncher)
+
         initView()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateHelper.resumeUpdateIfNeeded(activityResultLauncher)
     }
 
     private fun initView() {
