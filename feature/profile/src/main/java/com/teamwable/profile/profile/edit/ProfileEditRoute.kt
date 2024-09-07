@@ -18,7 +18,7 @@ import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 
 @Composable
-fun ProfileEditRoute(
+internal fun ProfileEditRoute(
     viewModel: ProfileEditViewModel = hiltViewModel(),
     profile: MemberInfoEditModel,
     navigateToProfile: (MemberInfoEditModel) -> Unit,

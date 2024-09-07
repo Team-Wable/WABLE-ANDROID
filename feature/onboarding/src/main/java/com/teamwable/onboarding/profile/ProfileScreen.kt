@@ -52,7 +52,7 @@ import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 import timber.log.Timber
 
 @Composable
-fun ProfileRoute(
+internal fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     args: Route.Profile,
     navigateToAgreeTerms: (List<String>) -> Unit,

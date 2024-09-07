@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileEditViewModel @Inject constructor(
+internal class ProfileEditViewModel @Inject constructor(
     private val nicknameValidationUseCase: NicknameValidationUseCase,
     private val profileRepository: ProfileRepository,
 ) : ViewModel() {
