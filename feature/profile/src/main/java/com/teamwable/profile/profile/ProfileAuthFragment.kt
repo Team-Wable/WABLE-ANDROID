@@ -2,19 +2,24 @@ package com.teamwable.profile.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
+import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.util.Arg.PROFILE_EDIT_RESULT
 import com.teamwable.ui.util.BottomSheetTag.PROFILE_HAMBURGER_BOTTOM_SHEET
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,8 +33,10 @@ class ProfileAuthFragment : BindingProfileFragment() {
         super.onViewCreated(view, savedInstanceState)
         setAppbar()
         initAppbarHamburgerClickListener()
+        initProfileEditClickListener()
         collect()
         setSwipeLayout()
+        updateProfileFromEditResult()
     }
 
     private fun setAppbar() {
@@ -40,6 +47,20 @@ class ProfileAuthFragment : BindingProfileFragment() {
     private fun initAppbarHamburgerClickListener() {
         binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
             ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
+        }
+    }
+
+    private fun initProfileEditClickListener() {
+        binding.btnProfileEdit.setOnClickListener {
+            val profile = (viewModel.uiState.value as? ProfileAuthUiState.Success)?.profile ?: return@setOnClickListener
+            val action = ProfileAuthFragmentDirections.actionProfileAuthToProfileEdit(
+                MemberInfoEditModel(
+                    nickname = profile.nickName,
+                    memberDefaultProfileImage = profile.profileImg,
+                ),
+            )
+
+            findNavController().navigate(action)
         }
     }
 
@@ -69,6 +90,18 @@ class ProfileAuthFragment : BindingProfileFragment() {
         binding.layoutProfileSwipe.setOnRefreshListener {
             binding.layoutProfileSwipe.isRefreshing = false
             viewModel.fetchAuthId()
+        }
+    }
+
+    private fun updateProfileFromEditResult() {
+        setFragmentResultListener(PROFILE_EDIT_RESULT) { requestKey, bundle ->
+            val updatedProfile = bundle.parcelable<MemberInfoEditModel>(PROFILE_EDIT_RESULT)
+            if (updatedProfile != null) {
+                viewModel.updateProfile(
+                    nickname = updatedProfile.nickname.orEmpty(),
+                    imageUrl = updatedProfile.memberDefaultProfileImage.orEmpty(),
+                )
+            }
         }
     }
 

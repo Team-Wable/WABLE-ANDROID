@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.teamwable.wable.feature")
+    id("com.teamwable.wable.compose.feature")
     id("com.teamwable.wable.test")
 }
 android {
@@ -12,6 +13,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:data"))
+    implementation(project(":feature:onboarding"))
 
     // AndroidX
     implementation(libs.fragment.ktx)

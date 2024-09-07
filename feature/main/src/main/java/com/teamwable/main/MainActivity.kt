@@ -126,6 +126,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.home.R.id.navigation_loading,
                     R.id.navigation_error,
                     com.teamwable.ui.R.id.navigation_two_button_dialog,
+                    com.teamwable.profile.R.id.navigation_profile_edit,
                 ),
         )
     }

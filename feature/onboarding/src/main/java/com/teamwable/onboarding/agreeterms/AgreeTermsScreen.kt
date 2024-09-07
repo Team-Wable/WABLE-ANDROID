@@ -65,7 +65,7 @@ fun AgreeTermsRoute(
                     nickname = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
                     isAlarmAllowed = marketingConsent,
                     memberLckYears = userInfo[MemberInfoType.MEMBER_LCK_YEAR.ordinal].toInt(),
-                    memberFanTeam = userInfo[MemberInfoType.MEMBER_FAN_TEAM.ordinal].takeIf { it.isNotEmpty() },
+                    memberFanTeam = userInfo[MemberInfoType.MEMBER_FAN_TEAM.ordinal],
                     memberDefaultProfileImage = userInfo[MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal].takeIf { it.isNotEmpty() },
                 ),
                 imgUrl = userInfo[MemberInfoType.MEMBER_PROFILE_URL.ordinal].takeIf { it.isNotEmpty() },

@@ -12,4 +12,8 @@ sealed class Error(message: String?) : Exception(message) {
     data class TimeOutError(
         val errorMessage: String,
     ) : Error(errorMessage)
+
+    data class UnknownError(
+        val errorMessage: String,
+    ) : Error(errorMessage)
 }

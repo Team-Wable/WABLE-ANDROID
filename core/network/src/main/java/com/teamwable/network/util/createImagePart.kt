@@ -7,8 +7,11 @@ import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 suspend fun ContentResolver.createImagePart(uriString: String?, fileName: String): MultipartBody.Part? {
-    if (uriString.isNullOrEmpty()) return null
-    val uri = runCatching { Uri.parse(uriString) }.getOrElse { return null }
+    val uri = runCatching { Uri.parse(uriString ?: return null) }
+        .getOrNull()
+        ?.takeUnless {
+            it.scheme.equals("http", ignoreCase = true) || it.scheme.equals("https", ignoreCase = true)
+        } ?: return null
 
     return withContext(Dispatchers.IO) {
         val imageRequestBody = ContentUriRequestBody(this@createImagePart, uri)

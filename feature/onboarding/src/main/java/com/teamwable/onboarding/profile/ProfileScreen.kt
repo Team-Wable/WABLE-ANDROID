@@ -39,6 +39,7 @@ import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.MemberInfoType
 import com.teamwable.designsystem.type.NicknameType
+import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
@@ -48,9 +49,10 @@ import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.permission.launchImagePicker
 import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
+import timber.log.Timber
 
 @Composable
-fun ProfileRoute(
+internal fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     args: Route.Profile,
     navigateToAgreeTerms: (List<String>) -> Unit,
@@ -66,21 +68,22 @@ fun ProfileRoute(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
-        if (!isGranted) openDialog = true
+        try {
+            if (isGranted) viewModel.updatePhotoPermissionState(true)
+            else openDialog = true
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 
     LaunchedEffect(Unit) {
-        when {
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> {
-                permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-            }
-
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> {
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-
-            else -> Unit
+        val permission = when {
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
+            else -> return@LaunchedEffect
         }
+
+        permissionLauncher.launch(permission)
     }
 
     val galleryLauncher = rememberGalleryLauncher { uri ->
@@ -111,6 +114,7 @@ fun ProfileRoute(
             onClick = {
                 openDialog = false
                 context.navigateToAppSettings()
+                viewModel.updatePhotoPermissionState(true) // Todo: 추후에 callback으로 변경할게요
             },
             onDismissRequest = { openDialog = false },
         )
@@ -118,11 +122,12 @@ fun ProfileRoute(
 
     ProfileScreen(
         profileState = profileState,
+        profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
             userMutableList = userMutableList.toMutableList().apply {
                 set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
-                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri ?: "")
-                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage ?: "")
+                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri.orEmpty())
+                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage.orEmpty())
             }
             viewModel.navigateToAgreeTerms()
         },
@@ -141,6 +146,7 @@ fun ProfileRoute(
 @Composable
 fun ProfileScreen(
     profileState: ProfileState,
+    profileEditType: ProfileEditType,
     onProfilePlusBtnClick: () -> Unit = {},
     onDuplicateBtnClick: () -> Unit = {},
     onRandomImageChange: (ProfileImageType) -> Unit = {},
@@ -166,14 +172,14 @@ fun ProfileScreen(
                 },
         ) {
             Text(
-                text = stringResource(R.string.profile_edit_title),
+                text = stringResource(profileEditType.title),
                 style = WableTheme.typography.head00,
                 color = WableTheme.colors.black,
                 modifier = Modifier.padding(top = 16.dp),
             )
 
             Text(
-                text = stringResource(R.string.profile_edit_description),
+                text = stringResource(profileEditType.description),
                 style = WableTheme.typography.body02,
                 color = WableTheme.colors.gray600,
                 modifier = Modifier.padding(top = 6.dp),
@@ -203,14 +209,14 @@ fun ProfileScreen(
                         focusManager.clearFocus()
                         onDuplicateBtnClick()
                     },
-                    enabled = profileState.textFieldType != NicknameType.INVALID,
+                    enabled = profileState.textFieldType != NicknameType.INVALID && profileState.nickname.isNotEmpty(),
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }
         }
 
         WableButton(
-            text = stringResource(R.string.btn_next_text),
+            text = stringResource(profileEditType.buttonText),
             onClick = {
                 onNextBtnClick(
                     profileState.nickname,
@@ -232,6 +238,7 @@ fun GreetingPreview() {
             onNextBtnClick = { _, _, _ -> },
             onProfilePlusBtnClick = {},
             profileState = ProfileState(),
+            profileEditType = ProfileEditType.PROFILE,
         )
     }
 }

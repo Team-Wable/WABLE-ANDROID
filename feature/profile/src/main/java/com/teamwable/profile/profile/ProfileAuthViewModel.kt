@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,6 +41,24 @@ class ProfileAuthViewModel @Inject constructor(
                     _uiState.value = ProfileAuthUiState.Success(it)
                 }
                 .onFailure { _uiState.value = ProfileAuthUiState.Error(it.message.toString()) }
+        }
+    }
+
+    fun updateProfile(nickname: String, imageUrl: String) {
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                when (currentState) {
+                    is ProfileAuthUiState.Success -> {
+                        val updatedProfile = currentState.profile.copy(
+                            nickName = nickname,
+                            profileImg = imageUrl,
+                        )
+                        currentState.copy(profile = updatedProfile)
+                    }
+
+                    else -> currentState
+                }
+            }
         }
     }
 }

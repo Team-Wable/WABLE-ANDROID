@@ -1,5 +1,9 @@
 package com.teamwable.model.profile
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class MemberInfoEditModel(
     val nickname: String? = null,
     val isAlarmAllowed: Boolean? = null,
@@ -9,4 +13,4 @@ data class MemberInfoEditModel(
     val memberLckYears: Int? = null,
     val memberFanTeam: String? = null,
     val memberDefaultProfileImage: String? = null,
-)
+) : Parcelable

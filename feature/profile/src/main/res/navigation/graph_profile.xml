@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_profile_to_push_notification"
             app:destination="@id/navigation_push_notification" />
+        <action
+            android:id="@+id/action_profile_auth_to_profile_edit"
+            app:destination="@id/navigation_profile_edit" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile_member"
@@ -60,4 +63,13 @@
         android:name="com.teamwable.profile.hamburger.PushAlarmFragment"
         android:label="PushNotificationFragment"
         tools:layout="@layout/fragment_push_alarm" />
+    <fragment
+        android:id="@+id/navigation_profile_edit"
+        android:name="com.teamwable.profile.profile.edit.ProfileEditFragment"
+        android:label="ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit" >
+        <argument
+            android:name="memberProfileModel"
+            app:argType="com.teamwable.model.profile.MemberInfoEditModel" />
+    </fragment>
 </navigation>
