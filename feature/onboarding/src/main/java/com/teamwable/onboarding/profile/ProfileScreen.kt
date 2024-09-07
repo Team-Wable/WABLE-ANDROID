@@ -69,7 +69,7 @@ fun ProfileRoute(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         try {
-            if (isGranted) viewModel.updatePermissionState(true)
+            if (isGranted) viewModel.updatePhotoPermissionState(true)
             else openDialog = true
         } catch (e: Exception) {
             Timber.e(e)
@@ -114,7 +114,7 @@ fun ProfileRoute(
             onClick = {
                 openDialog = false
                 context.navigateToAppSettings()
-                viewModel.updatePermissionState(true) // Todo: 추후에 callback으로 변경할게요
+                viewModel.updatePhotoPermissionState(true) // Todo: 추후에 callback으로 변경할게요
             },
             onDismissRequest = { openDialog = false },
         )

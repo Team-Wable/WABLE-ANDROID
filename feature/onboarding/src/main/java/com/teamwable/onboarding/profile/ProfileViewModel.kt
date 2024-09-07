@@ -29,7 +29,7 @@ class ProfileViewModel @Inject constructor(
     private val _profileState = MutableStateFlow(ProfileState())
     val profileState: StateFlow<ProfileState> = _profileState
 
-    fun updatePermissionState(isGranted: Boolean) {
+    fun updatePhotoPermissionState(isGranted: Boolean) {
         viewModelScope.launch {
             _profileState.update { it.copy(isPermissionGranted = isGranted) }
         }
