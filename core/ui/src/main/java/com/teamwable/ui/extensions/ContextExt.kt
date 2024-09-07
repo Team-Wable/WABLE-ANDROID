@@ -113,5 +113,4 @@ fun Context.restartApp() {
     val intent = packageManager.getLaunchIntentForPackage(packageName)
     intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent)
-    if (this is Activity) finish()
 }
