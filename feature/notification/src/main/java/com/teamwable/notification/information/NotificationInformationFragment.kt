@@ -7,6 +7,7 @@ import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +31,7 @@ class NotificationInformationFragment : BindingFragment<FragmentNotificationVpBi
             }
         })
 
-        rvNotificationContent.adapter = notificationAdapter
+        rvNotificationContent.adapter = notificationAdapter.withLoadStateFooter(PagingLoadingAdapter())
         if (rvNotificationContent.itemDecorationCount == 0) {
             rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
         }

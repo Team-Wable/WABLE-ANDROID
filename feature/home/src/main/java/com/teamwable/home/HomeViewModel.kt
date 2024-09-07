@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,9 +59,24 @@ class HomeViewModel @Inject constructor(
                 .map { it.toLong() }
                 .collectLatest {
                     authId = it
-                    delay(500) // 로딩뷰를 위한 delay
-                    _uiState.value = HomeUiState.Success
                 }
+        }
+    }
+
+    private fun fetchIsPushAlarmAllowed() {
+        viewModelScope.launch {
+            userInfoRepository.getIsPushAlarmAllowed().collectLatest {
+                delay(500) // 로딩뷰를 위한 delay
+                if (!it) _uiState.value = HomeUiState.AddPushAlarmPermission else _uiState.value = HomeUiState.Success
+            }
+        }
+    }
+
+    fun updateLoadingState() {
+        viewModelScope.launch {
+            _uiState.value = HomeUiState.Loading
+            delay(500) // 로딩뷰를 위한 delay
+            _uiState.value = HomeUiState.Success
         }
     }
 
@@ -94,22 +108,30 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             feedRepository.deleteFeed(feedId)
                 .onSuccess {
-                    removedFeedsFlow.value = removedFeedsFlow.value.toMutableSet().apply { add(feedId) }
+                    updateFeedRemoveState(feedId)
                     _event.emit(HomeSideEffect.DismissBottomSheet)
                 }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
 
+    fun updateFeedRemoveState(feedId: Long) {
+        removedFeedsFlow.update { it.toMutableSet().apply { add(feedId) } }
+    }
+
     fun updateGhost(request: Ghost) {
         viewModelScope.launch {
             feedRepository.postGhost(request)
                 .onSuccess {
-                    ghostedFeedsFlow.value = ghostedFeedsFlow.value.toMutableSet().apply { add(request.postAuthorId) }
+                    updateFeedGhostState(request.postAuthorId, isGhosted = true)
                     _event.emit(HomeSideEffect.ShowSnackBar(SnackbarType.GHOST))
                 }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun updateFeedGhostState(postAuthorId: Long, isGhosted: Boolean) {
+        ghostedFeedsFlow.update { it.toMutableSet().apply { if (isGhosted) add(postAuthorId) } }
     }
 
     fun reportUser(nickname: String, relateText: String) {
@@ -128,31 +150,26 @@ class HomeViewModel @Inject constructor(
             val result = if (likeState.isLiked) feedRepository.postFeedLike(feedId) else feedRepository.deleteFeedLike(feedId)
 
             result
-                .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
+                .onSuccess { updateFeedLikeState(feedId, likeState) }
                 .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun updateFeedLikeState(feedId: Long, likeState: LikeState) {
+        likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } }
     }
 
     fun patchUserProfileUri(info: MemberInfoEditModel, url: String? = null) {
         viewModelScope.launch {
             profileRepository.patchUserProfile(info, url)
-                .onSuccess { _event.emit(HomeSideEffect.SaveIsPushAllowed(info.isPushAlarmAllowed ?: return@launch)) }
-                .onFailure {
-                    Timber.e(it.message.toString())
-                    _uiState.value = HomeUiState.Error(it.message.toString())
-                }
+                .onSuccess { saveIsPushAlarmAllowed(info.isPushAlarmAllowed ?: false) }
+                .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
         }
     }
 
-    fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
+    private fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
         viewModelScope.launch {
             userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
-        }
-    }
-
-    private fun fetchIsPushAlarmAllowed() {
-        viewModelScope.launch {
-            userInfoRepository.getIsPushAlarmAllowed().collectLatest { _uiState.value = HomeUiState.AddPushAlarmPermission(it) }
         }
     }
 }
@@ -164,13 +181,11 @@ sealed interface HomeUiState {
 
     data class Error(val errorMessage: String) : HomeUiState
 
-    data class AddPushAlarmPermission(val isAllowed: Boolean?) : HomeUiState
+    data object AddPushAlarmPermission : HomeUiState
 }
 
 sealed interface HomeSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeSideEffect
 
     data object DismissBottomSheet : HomeSideEffect
-
-    data class SaveIsPushAllowed(val isAllowed: Boolean) : HomeSideEffect
 }

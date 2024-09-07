@@ -53,6 +53,7 @@ android {
         }
         release {
             signingConfig = signingConfigs.getByName("release")
+            // TO DO: 추후 난독화 설정하겠습니다.
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

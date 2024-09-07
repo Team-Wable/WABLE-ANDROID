@@ -76,7 +76,7 @@ class WableFirebaseMessagingService : FirebaseMessagingService() {
     ): Notification {
         val pendingIntent = createPendingIntent(contentId)
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(com.teamwable.common.R.drawable.ic_share_symbol)
+            .setSmallIcon(com.teamwable.common.R.drawable.img_fcm_symbol)
             .setContentTitle(title)
             .setContentText(body)
             .setColor(colorOf(com.teamwable.ui.R.color.white))

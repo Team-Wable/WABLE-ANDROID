@@ -13,6 +13,7 @@ import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,7 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
             },
         )
 
-        rvNotificationContent.adapter = notificationAdapter
+        rvNotificationContent.adapter = notificationAdapter.withLoadStateFooter(PagingLoadingAdapter())
         if (rvNotificationContent.itemDecorationCount == 0) {
             rvNotificationContent.addItemDecoration(NotificationItemDecorator(requireContext()))
         }

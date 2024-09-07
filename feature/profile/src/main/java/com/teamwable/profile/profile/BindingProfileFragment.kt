@@ -13,6 +13,7 @@ import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.load
+import com.teamwable.ui.type.TeamTag
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
@@ -40,7 +41,7 @@ abstract class BindingProfileFragment : Fragment() {
         viewProfileAppbar.tvProfileAppbarTitle.text = data.nickName
         ivProfileImg.load(data.profileImg)
         tvProfileNickname.text = data.nickName
-        tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag, data.lckYears)
+        tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag.ifBlank { TeamTag.LCK.name }, data.lckYears)
         tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, data.ghost)
         setGhostProgress(data.ghost)
     }

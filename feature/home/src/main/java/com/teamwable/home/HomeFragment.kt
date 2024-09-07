@@ -1,22 +1,26 @@
 package com.teamwable.home
 
+import android.Manifest
 import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.map
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
+import com.teamwable.model.LikeState
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
@@ -24,18 +28,22 @@ import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.FEED_STATE
+import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
+import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.FcmTag.RELATED_CONTENT_ID
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -53,7 +61,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         setAdapter()
         initNavigatePostingFabClickListener()
         fetchFeedUploaded()
+        fetchFeedFromHomeDetail()
     }
+
+    fun updateToLoadingState() = viewModel.updateLoadingState()
 
     private fun collect() {
         viewLifeCycleScope.launch {
@@ -61,8 +72,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (uiState) {
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-                    is HomeUiState.Success -> Unit
-                    is HomeUiState.AddPushAlarmPermission -> if (uiState.isAllowed == null) initPushAlarmPermissionAlert()
+                    is HomeUiState.Success -> activity?.let { navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let) }
+                    is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
         }
@@ -72,15 +83,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    else -> Unit
                 }
             }
         }
     }
 
+    private fun navigateToHomeDetailFragment(feedId: Long) = findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feedId))
+
     private fun onClickFeedItem() = object : FeedClickListener {
         override fun onItemClick(feed: Feed) {
-            findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feed.feedId))
+            navigateToHomeDetailFragment(feed.feedId)
         }
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
@@ -127,10 +139,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun setAdapter() {
         binding.rvHome.apply {
-            adapter = feedAdapter
+            adapter = feedAdapter.withLoadStateFooter(PagingLoadingAdapter())
             if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
         submitList()
+        scrollToTopOnRefresh()
+        setSwipeLayout()
     }
 
     private fun submitList() {
@@ -144,23 +158,31 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 feedAdapter.submitData(transformedPagingData)
             }
         }
-        setSwipeLayout()
+    }
+
+    private fun scrollToTopOnRefresh() {
+        var isFirstLoad = true
+
+        viewLifeCycleScope.launch {
+            feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
+
+                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
+                    binding.rvHome.scrollToPosition(0)
+                    isFirstLoad = true
+                }
+            }
+        }
     }
 
     private fun setSwipeLayout() {
         binding.layoutHomeSwipe.setOnRefreshListener {
             binding.layoutHomeSwipe.isRefreshing = false
-            scrollToTop()
+            refreshHome()
         }
     }
 
-    private fun scrollToTop() {
-        feedAdapter.refresh()
-        viewLifeCycleScope.launch {
-            delay(800)
-            binding.rvHome.smoothScrollToPosition(0)
-        }
-    }
+    fun refreshHome() = feedAdapter.refresh()
 
     private fun initNavigatePostingFabClickListener() {
         binding.fabHomeNavigatePosting.setOnClickListener {
@@ -171,7 +193,17 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun fetchFeedUploaded() {
         parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
             val isUploaded = result.getBoolean(IS_UPLOADED, false)
-            if (isUploaded) scrollToTop()
+            if (isUploaded) refreshHome()
+        }
+    }
+
+    private fun fetchFeedFromHomeDetail() {
+        parentFragmentManager.setFragmentResultListener(HOME_DETAIL_RESULT, viewLifecycleOwner) { _, result ->
+            val feed: Feed = result.parcelable(FEED_STATE) ?: return@setFragmentResultListener
+            val isRemoved = result.getBoolean(IS_FEED_REMOVED)
+            if (isRemoved) viewModel.updateFeedRemoveState(feed.feedId)
+            viewModel.updateFeedGhostState(feed.postAuthorId, feed.isPostAuthorGhost)
+            viewModel.updateFeedLikeState(feed.feedId, LikeState(feed.isLiked, feed.likedNumber))
         }
     }
 
@@ -186,7 +218,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun initPushAlarmPermissionAlert() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val permissionList = android.Manifest.permission.POST_NOTIFICATIONS
+            val permissionList = Manifest.permission.POST_NOTIFICATIONS
             requestPermission.launch(permissionList)
         } else {
             handlePushAlarmPermissionGranted()
@@ -197,15 +229,15 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val token = task.result
                     viewModel.patchUserProfileUri(
                         MemberInfoEditModel(
                             isPushAlarmAllowed = true,
-                            fcmToken = task.result,
+                            fcmToken = token,
                         ),
                     )
-                    Timber.tag("fcm").d("fcm token: $task.result")
+                    Timber.e("token is $token")
                 } else {
-                    Timber.d(task.exception)
                     return@OnCompleteListener
                 }
             },

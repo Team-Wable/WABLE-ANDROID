@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.material.appbar.AppBarLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
@@ -34,6 +35,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
         initAppbarHamburgerClickListener()
         initProfileEditClickListener()
         collect()
+        setSwipeLayout()
 
         setFragmentResultListener(PROFILE_EDIT_RESULT) { requestKey, bundle ->
             val updatedProfile = bundle.parcelable<MemberInfoEditModel>(PROFILE_EDIT_RESULT)
@@ -84,6 +86,19 @@ class ProfileAuthFragment : BindingProfileFragment() {
                     is ProfileAuthUiState.Loading -> Unit
                 }
             }
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.appbarProfileInfo.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
+            },
+        )
+
+        binding.layoutProfileSwipe.setOnRefreshListener {
+            binding.layoutProfileSwipe.isRefreshing = false
+            viewModel.fetchAuthId()
         }
     }
 

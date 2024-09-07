@@ -86,8 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:autoLink="web"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.Wable.Head2"
         android:textColorLink="@color/info"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"

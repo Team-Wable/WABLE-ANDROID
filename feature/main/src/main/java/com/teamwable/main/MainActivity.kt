@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
@@ -12,29 +13,57 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.teamwable.common.uistate.UiState
+import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.restartApp
+import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var appUpdateHelper: AppUpdateHandler
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                toast(getString(R.string.label_in_app_update_fail))
+            } else {
+                toast(getString(R.string.label_in_app_update_success))
+                restartApp()
+            }
+        }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setInAppUpdate()
         initView()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateHelper.resumeUpdateIfNeeded(activityResultLauncher)
+    }
+
+    private fun setInAppUpdate() {
+        appUpdateHelper = AppUpdateHandler(this)
+        appUpdateHelper.checkForAppUpdate(activityResultLauncher)
     }
 
     private fun initView() {
@@ -70,6 +99,8 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
 
         initBottomNavigationChangedListener(navController)
+        initBottomNaviSelectedListener(navController)
+        initBottomNaviReSelectedListener(navController)
     }
 
     private fun initBottomNavigationChangedListener(navController: NavController) {
@@ -94,6 +125,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.ui.R.id.navigation_bottomSheet,
                     com.teamwable.home.R.id.navigation_loading,
                     R.id.navigation_error,
+                    com.teamwable.ui.R.id.navigation_two_button_dialog,
                     com.teamwable.profile.R.id.navigation_profile_edit,
                 ),
         )
@@ -120,6 +152,34 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     override fun navigateToNewsFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_news
+    }
+
+    private fun initBottomNaviSelectedListener(navController: NavController) {
+        binding.bnvMain.setOnItemSelectedListener {
+            if (it.itemId == R.id.graph_home) {
+                lifecycleScope.launch {
+                    delay(100)
+                    findHomeFragment()?.updateToLoadingState()
+                }
+            }
+            it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun initBottomNaviReSelectedListener(navController: NavController) {
+        binding.bnvMain.setOnItemReselectedListener {
+            if (it.itemId == R.id.graph_home) {
+                lifecycleScope.launch {
+                    delay(100)
+                    findHomeFragment()?.refreshHome()
+                }
+            }
+            it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun findHomeFragment(): HomeFragment? = supportFragmentManager.findFragmentById(R.id.fcv_main)?.let { hostFragment ->
+        hostFragment.childFragmentManager.fragments.firstOrNull { it is HomeFragment } as? HomeFragment
     }
 
     companion object {
