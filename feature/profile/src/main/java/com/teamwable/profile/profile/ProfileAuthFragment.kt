@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
@@ -28,6 +29,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
         setAppbar()
         initAppbarHamburgerClickListener()
         collect()
+        setSwipeLayout()
     }
 
     private fun setAppbar() {
@@ -54,6 +56,19 @@ class ProfileAuthFragment : BindingProfileFragment() {
                     is ProfileAuthUiState.Loading -> Unit
                 }
             }
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.appbarProfileInfo.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
+            },
+        )
+
+        binding.layoutProfileSwipe.setOnRefreshListener {
+            binding.layoutProfileSwipe.isRefreshing = false
+            viewModel.fetchAuthId()
         }
     }
 
