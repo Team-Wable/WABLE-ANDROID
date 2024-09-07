@@ -52,8 +52,13 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
+            // https://developer.android.com/ndk/guides/ndk-stack?hl=ko
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
+
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
