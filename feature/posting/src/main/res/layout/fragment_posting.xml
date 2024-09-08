@@ -114,7 +114,7 @@
             <EditText
                 android:id="@+id/et_posting_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="12dp"
                 android:autoLink="web"
                 android:background="@null"
@@ -126,6 +126,7 @@
                 android:textColor="@color/gray_800"
                 android:textColorHint="@color/gray_500"
                 android:textColorLink="@color/gray_800"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_posting_photo"
                 tools:text="@string/dummy" />
 

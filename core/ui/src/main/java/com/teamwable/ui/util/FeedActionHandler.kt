@@ -36,7 +36,7 @@ class FeedActionHandler(
                 DialogType.DELETE_FEED -> removeFeed(feed.feedId)
                 DialogType.REPORT -> {
                     navController.popBackStack()
-                    reportUser(feed.postAuthorNickname, feed.content)
+                    reportUser(feed.postAuthorNickname, "${feed.title}\n${feed.content}")
                 }
 
                 else -> Unit

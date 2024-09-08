@@ -72,7 +72,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (uiState) {
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-                    is HomeUiState.Success -> activity?.let { navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let) }
+                    is HomeUiState.Success -> activity?.let {
+                        navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let)
+                        it.intent.removeExtra(RELATED_CONTENT_ID)
+                    }
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
