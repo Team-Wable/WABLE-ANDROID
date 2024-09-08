@@ -2,8 +2,6 @@ package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -66,22 +64,6 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private var isCommentNull = true
     private var totalCommentLength = 0
     private var isCommentAdded = false
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initViewTouchListener(view)
-    }
-
-    private fun initViewTouchListener(view: View) {
-        view.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                binding.root.context.hideKeyboard(view)
-                view.performClick()
-                return@setOnTouchListener true
-            }
-            false
-        }
-    }
 
     override fun initView() {
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
