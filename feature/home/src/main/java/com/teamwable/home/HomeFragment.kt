@@ -11,6 +11,8 @@ import androidx.paging.LoadState
 import androidx.paging.map
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_POST
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.databinding.FragmentHomeBinding
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
@@ -76,6 +78,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                         navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let)
                         it.intent.removeExtra(RELATED_CONTENT_ID)
                     }
+
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
@@ -189,6 +192,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun initNavigatePostingFabClickListener() {
         binding.fabHomeNavigatePosting.setOnClickListener {
+            trackEvent(CLICK_WRITE_POST)
             findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Posting)
         }
     }

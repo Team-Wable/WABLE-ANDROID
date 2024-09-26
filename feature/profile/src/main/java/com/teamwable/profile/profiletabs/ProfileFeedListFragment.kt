@@ -7,6 +7,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
+import com.teamwable.common.util.AmplitudeProfileTag.CLICK_WRITE_FIRSTPOST
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.profile.R
@@ -167,6 +169,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
 
     private fun initNavigateToPostingBtnClickListener() {
         binding.btnProfileFeedAuthNavigatePosting.setOnClickListener {
+            trackEvent(CLICK_WRITE_FIRSTPOST)
             findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Posting)
         }
     }

@@ -18,6 +18,11 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_HOME_BOTNAVI
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_MYPROFILE_BOTNAVI
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NEWS_BOTNAVI
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NOTI_BOTNAVI
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
@@ -162,12 +167,20 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     private fun initBottomNaviSelectedListener(navController: NavController) {
         binding.bnvMain.setOnItemSelectedListener {
-            if (it.itemId == R.id.graph_home) {
-                lifecycleScope.launch {
-                    delay(100)
-                    findHomeFragment()?.updateToLoadingState()
+            when (it.itemId) {
+                R.id.graph_home -> {
+                    trackEvent(CLICK_HOME_BOTNAVI)
+                    lifecycleScope.launch {
+                        delay(100)
+                        findHomeFragment()?.updateToLoadingState()
+                    }
                 }
+
+                R.id.graph_news -> trackEvent(CLICK_NEWS_BOTNAVI)
+                R.id.graph_notification -> trackEvent(CLICK_NOTI_BOTNAVI)
+                R.id.graph_profile -> trackEvent(CLICK_MYPROFILE_BOTNAVI)
             }
+
             it.onNavDestinationSelected(navController)
         }
     }

@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_GHOST_COMMENT
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_LIKE_COMMENT
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.model.Comment
 import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
@@ -43,6 +46,7 @@ class CommentActionHandler(
     }
 
     fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+        trackEvent(CLICK_GHOST_COMMENT)
         navigateToDialog(type)
         handleDialogResult { dialogType ->
             when (dialogType) {
@@ -55,6 +59,7 @@ class CommentActionHandler(
     fun onLikeBtnClick(viewHolder: CommentViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
         val likeCount = viewHolder.likeCountTv.text.toString().toInt()
         val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
+            trackEvent(CLICK_LIKE_COMMENT)
             likeCount + 1
         } else {
             if (likeCount > 0) likeCount - 1 else 0
