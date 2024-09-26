@@ -22,7 +22,6 @@ import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.hideKeyboard
-import com.teamwable.ui.extensions.restartApp
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity(), Navigation {
                 toast(getString(R.string.label_in_app_update_fail))
             } else {
                 toast(getString(R.string.label_in_app_update_success))
-                restartApp()
             }
         }
 
