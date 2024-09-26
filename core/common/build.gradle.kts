@@ -1,22 +1,36 @@
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.teamwable.wable.feature")
 }
 
-fun String.removeQuotes(): String {
-    return this.replace("\"", "")
+val properties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
 }
 
 android {
     namespace = "com.teamwable.common"
 
-    defaultConfig {
-        val amplitudeApiKey = properties["amplitude.api.key"].toString().removeQuotes()
-        buildConfigField("String", "AMPLITUDE_API_KEY", "\"${amplitudeApiKey}\"")
+    buildTypes {
+        getByName("debug") {
+            val amplitudeDevApiKey = properties["amplitude.dev.api.key"] as? String ?: ""
+            buildConfigField("String", "AMPLITUDE_API_KEY", "\"${amplitudeDevApiKey}\"")
+        }
+
+        getByName("release") {
+            val amplitudeRelApiKey = properties["amplitude.rel.api.key"] as? String ?: ""
+            buildConfigField("String", "AMPLITUDE_API_KEY", "\"${amplitudeRelApiKey}\"")
+        }
+    }
+
+    buildFeatures.apply {
+        buildConfig = true
     }
 }
 
 dependencies {
     // Third Party
     implementation(libs.amplitude)
+    implementation(libs.google.play.services)
 }
