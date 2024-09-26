@@ -1,11 +1,11 @@
 package com.teamwable.profile.hamburger
 
-import android.content.Intent
-import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudeAuthTag.CLICK_DELETE_ACCOUNT
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileInformationBinding
@@ -70,6 +70,7 @@ class ProfileInformationFragment : BindingFragment<FragmentProfileInformationBin
 
     private fun initDeleteBtnClickListener() {
         binding.tvProfileInformationDelete.setOnClickListener {
+            trackEvent(CLICK_DELETE_ACCOUNT)
             findNavController().navigate(R.id.action_navigation_profile_information_to_navigation_profile_delete_reason)
         }
     }

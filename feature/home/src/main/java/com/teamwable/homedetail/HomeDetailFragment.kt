@@ -11,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_COMMENT
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
 import com.teamwable.model.Comment
@@ -166,6 +168,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
+            trackEvent(CLICK_WRITE_COMMENT)
             viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
             commentSnackbar.show()
             binding.etHomeDetailCommentInput.text.clear()

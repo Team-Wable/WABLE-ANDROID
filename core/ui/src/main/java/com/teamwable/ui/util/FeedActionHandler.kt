@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_DELETE_POST
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_GHOST_POST
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_LIKE_POST
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.model.Feed
 import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
@@ -33,7 +37,10 @@ class FeedActionHandler(
         }
         handleDialogResult { dialogType ->
             when (dialogType) {
-                DialogType.DELETE_FEED -> removeFeed(feed.feedId)
+                DialogType.DELETE_FEED -> {
+                    trackEvent(CLICK_DELETE_POST)
+                    removeFeed(feed.feedId)
+                }
                 DialogType.REPORT -> {
                     navController.popBackStack()
                     reportUser(feed.postAuthorNickname, "${feed.title}\n${feed.content}")
@@ -45,6 +52,7 @@ class FeedActionHandler(
     }
 
     fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+        trackEvent(CLICK_GHOST_POST)
         navigateToDialog(type)
         handleDialogResult { dialogType ->
             when (dialogType) {
@@ -62,6 +70,7 @@ class FeedActionHandler(
     fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
         val likeCount = viewHolder.likeCountTv.text.toString().toInt()
         val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
+            trackEvent(CLICK_LIKE_POST)
             likeCount + 1
         } else {
             if (likeCount > 0) likeCount - 1 else 0

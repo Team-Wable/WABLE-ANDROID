@@ -44,7 +44,7 @@ class AppUpdateHandler(private val context: Context) {
         appUpdateManager.startUpdateFlowForResult(
             appUpdateInfo,
             activityResultLauncher,
-            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+            AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
         )
     }
 
@@ -55,7 +55,7 @@ class AppUpdateHandler(private val context: Context) {
                 appUpdateManager.startUpdateFlowForResult(
                     appUpdateInfo,
                     activityResultLauncher,
-                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
                 )
             }
         }

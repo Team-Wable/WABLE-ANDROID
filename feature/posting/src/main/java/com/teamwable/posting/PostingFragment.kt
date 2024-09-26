@@ -20,6 +20,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudePostTag.CLICK_ATTACH_PHOTO
+import com.teamwable.common.util.AmplitudePostTag.CLICK_UPLOAD_POST
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.posting.databinding.FragmentPostingBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.TwoButtonDialog
@@ -104,6 +107,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initPhotoBtnClickListener() = with(binding) {
         ivPostingPhotoBtn.setOnClickListener {
+            trackEvent(CLICK_ATTACH_PHOTO)
             selectImage()
             showKeyboard()
         }
@@ -224,6 +228,7 @@ class PostingFragment : BindingFragment<FragmentPostingBinding>(FragmentPostingB
 
     private fun initUploadingActivateBtnClickListener() = with(binding) {
         btnPostingUpload.setOnDuplicateBlockClick {
+            trackEvent(CLICK_UPLOAD_POST)
             viewModel.posting(
                 etPostingTitle.text.toString(),
                 etPostingContent.text.toString(),

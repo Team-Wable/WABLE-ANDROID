@@ -2,6 +2,8 @@ package com.teamwable.profile.hamburger
 
 import android.widget.CheckBox
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.util.AmplitudeAuthTag.CLICK_NEXT_DELETEREASON
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileDeleteReasonBinding
 import com.teamwable.ui.base.BindingFragment
@@ -37,6 +39,7 @@ class ProfileDeleteReasonFragment : BindingFragment<FragmentProfileDeleteReasonB
             if (isEnabled) {
                 setTextColor(colorOf(com.teamwable.ui.R.color.white))
                 setOnClickListener {
+                    trackEvent(CLICK_NEXT_DELETEREASON)
                     navigateUpToProfileDeleteConfirmFragment()
                 }
             } else {

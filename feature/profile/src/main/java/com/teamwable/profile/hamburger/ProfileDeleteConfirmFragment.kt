@@ -6,6 +6,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudeAuthTag.CLICK_NEXT_DELETEGUIDE
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileDeleteConfirmBinding
 import com.teamwable.ui.base.BindingFragment
@@ -74,6 +76,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
                 if (isEnabled) {
                     setTextColor(colorOf(com.teamwable.ui.R.color.white))
                     setOnClickListener {
+                        trackEvent(CLICK_NEXT_DELETEGUIDE)
                         showToProfileDeleteDialogFragment()
                     }
                 } else {

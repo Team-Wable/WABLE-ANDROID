@@ -5,6 +5,11 @@ import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.util.AmplitudeAuthTag.CLICK_COMPLETE_LOGOUT
+import com.teamwable.common.util.AmplitudeAuthTag.CLICK_NEXT_DELETEACCOUNT
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_APPLYGHOST_POPUP
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WITHDRAWGHOST_POPUP
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.databinding.DialogTwoButtonBinding
 import com.teamwable.ui.extensions.DeepLinkDestination
@@ -49,12 +54,24 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
 
     private fun initNoBtnClickListener() {
         binding.btnDialogTwoButtonNo.setOnClickListener {
+            when (type) {
+                DialogType.TRANSPARENCY -> trackEvent(CLICK_WITHDRAWGHOST_POPUP)
+                else -> Unit
+            }
+
             findNavController().popBackStack()
         }
     }
 
     private fun initYesBtnClickListener() {
         binding.btnDialogTwoButtonYes.setOnClickListener {
+            when (type) {
+                DialogType.TRANSPARENCY -> trackEvent(CLICK_APPLYGHOST_POPUP)
+                DialogType.DELETE_ACCOUNT -> trackEvent(CLICK_NEXT_DELETEACCOUNT)
+                DialogType.LOGOUT -> trackEvent(CLICK_COMPLETE_LOGOUT)
+                else -> Unit
+            }
+
             val result = Bundle().apply { putString(DIALOG_TYPE, type.name) }
             setFragmentResult(DIALOG_RESULT, result)
             findNavController().popBackStack()

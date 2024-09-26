@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
+import com.teamwable.common.util.AmplitudeUtil.initAmplitude
 import com.teamwable.ui.util.FcmTag.CHANNEL_ID
 import com.teamwable.ui.util.FcmTag.CHANNEL_NAME
 import com.teamwable.wable.BuildConfig.KAKAO_APP_KEY
@@ -29,6 +30,7 @@ class WableApp : Application() {
         setDarkMode()
         setKaKaoSdk()
         createNotificationChannel()
+        initAmplitude(context)
     }
 
     private fun setTimber() {
