@@ -60,12 +60,12 @@ object AmplitudeNotiTag {
 
 object AmplitudeProfileTag {
     const val CLICK_WRITE_FIRSTPOST = "click_write_firstpost"
-    const val CLICK_COMPLETE_LOGOUT = "click_complete_logout"
 }
 
 object AmplitudeAuthTag {
-    const val CLICK_DELETE_ACOUNT = "click_delete_account"
+    const val CLICK_DELETE_ACCOUNT = "click_delete_account"
     const val CLICK_NEXT_DELETEREASON = "click_next_deletereason"
     const val CLICK_NEXT_DELETEGUIDE = "click_next_deleteguide"
     const val CLICK_NEXT_DELETEACCOUNT = "click_done_deleteaccount"
+    const val CLICK_COMPLETE_LOGOUT = "click_complete_logout"
 }
