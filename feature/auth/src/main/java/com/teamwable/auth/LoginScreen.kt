@@ -32,6 +32,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.auth.model.LoginSideEffect
+import com.teamwable.common.util.AmplitudeSignInTag.CLICK_AGREE_POPUP_SIGNUP
+import com.teamwable.common.util.AmplitudeSignInTag.CLICK_SIGNIN_KAKAO
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.extension.system.SetStatusBarColor
@@ -67,6 +70,7 @@ fun LoginRoute(
             dialogType = DialogType.LOGIN,
             onClick = {
                 viewModel.startKaKaoLogin(context)
+                trackEvent(CLICK_AGREE_POPUP_SIGNUP)
             },
             onDismissRequest = { viewModel.showLoginDialog(false) },
         )
@@ -75,6 +79,7 @@ fun LoginRoute(
     LoginScreen(
         onLoginBtnClick = {
             viewModel.showLoginDialog(true)
+            trackEvent(CLICK_SIGNIN_KAKAO)
         },
     )
 }

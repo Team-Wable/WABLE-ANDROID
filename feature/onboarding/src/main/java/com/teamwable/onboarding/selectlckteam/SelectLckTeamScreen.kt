@@ -27,6 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_DETOUR_TEAM_SIGNUP
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_NEXT_TEAM_SIGNUP
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
@@ -63,6 +66,8 @@ fun SelectLckTeamRoute(
                 set(MemberInfoType.MEMBER_FAN_TEAM.ordinal, it)
             }
             viewModel.navigateToProfile()
+            if (it.isNotEmpty()) trackEvent(CLICK_NEXT_TEAM_SIGNUP)
+            else trackEvent(CLICK_DETOUR_TEAM_SIGNUP)
         },
     )
 }
