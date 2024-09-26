@@ -31,6 +31,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_ADD_PICTURE_PROFILE_SIGNUP
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_CHANGE_PICTURE_PROFILE_SIGNUP
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_NEXT_PROFILE_SIGNUP
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.button.WableSmallButton
 import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
@@ -130,12 +134,17 @@ internal fun ProfileRoute(
                 set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage.orEmpty())
             }
             viewModel.navigateToAgreeTerms()
+            trackEvent(CLICK_NEXT_PROFILE_SIGNUP)
         },
-        onProfilePlusBtnClick = { viewModel.requestImagePicker() },
+        onProfilePlusBtnClick = {
+            viewModel.requestImagePicker()
+            trackEvent(CLICK_ADD_PICTURE_PROFILE_SIGNUP)
+        },
         onDuplicateBtnClick = { viewModel.getNickNameValidation() },
         onRandomImageChange = { newImage ->
             viewModel.onRandomImageChange(newImage)
             viewModel.onImageSelected(null)
+            trackEvent(CLICK_CHANGE_PICTURE_PROFILE_SIGNUP)
         },
         onNicknameChange = { newNickname ->
             viewModel.onNicknameChanged(newNickname)

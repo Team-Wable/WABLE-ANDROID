@@ -22,6 +22,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_COMPLETE_TNC_SIGNUP
+import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_JOIN_POPUP_SIGNUP
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
@@ -70,6 +73,7 @@ fun AgreeTermsRoute(
                 ),
                 imgUrl = userInfo[MemberInfoType.MEMBER_PROFILE_URL.ordinal].takeIf { it.isNotEmpty() },
             )
+            trackEvent(CLICK_COMPLETE_TNC_SIGNUP)
         },
     )
 
@@ -77,7 +81,10 @@ fun AgreeTermsRoute(
         WableButtonDialog(
             userName = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
             dialogType = DialogType.WELLCOME,
-            onClick = { viewModel.navigateToHome() },
+            onClick = {
+                viewModel.navigateToHome()
+                trackEvent(CLICK_JOIN_POPUP_SIGNUP)
+            },
             onDismissRequest = { viewModel.showLoginDialog(false) },
         )
     }
