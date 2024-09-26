@@ -61,13 +61,23 @@ fun Context.openKeyboard(view: View) {
 fun Context.dialogFragmentResize(
     dialogFragment: DialogFragment,
     horizontalMargin: Float,
+    verticalMargin: Float? = null,
 ) {
     val dpToPixel = Resources.getSystem().displayMetrics.density
     val dialogHorizontalMarginInPixels = (dpToPixel * horizontalMargin + 0.5f).toInt() // 반올림 처리
     val deviceWidth = Resources.getSystem().displayMetrics.widthPixels
+
+    val height = if (verticalMargin != null) {
+        val dialogVerticalMarginInPixels = (dpToPixel * verticalMargin + 0.5f).toInt()
+        val deviceHeight = Resources.getSystem().displayMetrics.heightPixels
+        deviceHeight - 2 * dialogVerticalMarginInPixels
+    } else {
+        WindowManager.LayoutParams.WRAP_CONTENT
+    }
+
     dialogFragment.dialog?.window?.setLayout(
         deviceWidth - 2 * dialogHorizontalMarginInPixels,
-        WindowManager.LayoutParams.WRAP_CONTENT,
+        height,
     )
     dialogFragment.dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }

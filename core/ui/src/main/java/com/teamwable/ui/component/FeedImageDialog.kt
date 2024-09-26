@@ -22,7 +22,7 @@ class FeedImageDialog() : BindingDialogFragment<DialogFeedImageBinding>(DialogFe
 
     override fun onResume() {
         super.onResume()
-        context?.dialogFragmentResize(this, 0f)
+        context?.dialogFragmentResize(this, 0f, 0f)
     }
 
     override fun initView() {
