@@ -52,3 +52,6 @@
 
 -keep class * extends android.app.Activity { *; }
 -keep class * extends android.app.Service { *; }
+
+#play-services-ads.
+-keep class com.google.android.gms.ads.** { *; }
