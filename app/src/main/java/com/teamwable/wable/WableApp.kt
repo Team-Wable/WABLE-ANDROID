@@ -30,7 +30,7 @@ class WableApp : Application() {
         setDarkMode()
         setKaKaoSdk()
         createNotificationChannel()
-        initAmplitude(applicationContext)
+        initAmplitude(context)
     }
 
     private fun setTimber() {
