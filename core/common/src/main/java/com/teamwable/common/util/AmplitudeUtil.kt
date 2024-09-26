@@ -9,9 +9,10 @@ object AmplitudeUtil {
     private lateinit var amplitude: Amplitude
 
     fun initAmplitude(applicationContext: Context) {
+        val key = AMPLITUDE_API_KEY
         amplitude = Amplitude(
             Configuration(
-                apiKey = AMPLITUDE_API_KEY,
+                apiKey = key,
                 context = applicationContext,
             ),
         )
