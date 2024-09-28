@@ -5,12 +5,12 @@ import com.teamwable.data.mapper.toData.toReportDto
 import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
+import com.teamwable.data.util.createImagePart
 import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.network.datasource.ProfileService
 import com.teamwable.network.dto.request.RequestWithdrawalDto
-import com.teamwable.network.util.createImagePart
 import com.teamwable.network.util.handleThrowable
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody

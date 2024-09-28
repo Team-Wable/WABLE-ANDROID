@@ -2,8 +2,8 @@ package com.teamwable.data.repositoryimpl
 
 import android.content.ContentResolver
 import com.teamwable.data.repository.PostingRepository
+import com.teamwable.data.util.createImagePart
 import com.teamwable.network.datasource.PostingService
-import com.teamwable.network.util.createImagePart
 import com.teamwable.network.util.handleThrowable
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
