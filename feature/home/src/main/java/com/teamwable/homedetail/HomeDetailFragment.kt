@@ -2,6 +2,7 @@ package com.teamwable.homedetail
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_COMMENT
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.R
@@ -117,6 +119,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         scrollToBottomOnCommentAdded()
         initEditTextHint(feed.postAuthorNickname)
         initEditTextBtn(feed.feedId, commentSnackbar)
+        initRvClickListenerToHideKeyboard()
     }
 
     private fun initEditTextHint(nickname: String) {
@@ -177,7 +180,9 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun onClickFeedItem() = object : FeedClickListener {
-        override fun onItemClick(feed: Feed) {}
+        override fun onItemClick(feed: Feed) {
+            requireActivity().hideKeyboard(binding.root)
+        }
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
             feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
@@ -243,7 +248,9 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             )
         }
 
-        override fun onItemClick(feedId: Long) {}
+        override fun onItemClick(feedId: Long) {
+            requireActivity().hideKeyboard(binding.root)
+        }
     }
 
     private fun handleProfileNavigation(id: Long) {
@@ -274,7 +281,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 val transformedPagingData = pagingData.map {
                     val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
                     val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
-                    transformedFeed.copy(isAuth = isAuth)
+                    transformedFeed.copy(isAuth = isAuth, feedId = feed.feedId)
                 }
                 commentAdapter.submitData(transformedPagingData)
             }
@@ -330,6 +337,23 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 putBoolean(IS_FEED_REMOVED, isRemoved)
             },
         )
+    }
+
+    private fun initRvClickListenerToHideKeyboard() {
+        binding.rvHomeDetail.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                val child = rv.findChildViewUnder(e.x, e.y)
+                if (child == null) {
+                    requireActivity().hideKeyboard(binding.root)
+                    return true
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     companion object {
