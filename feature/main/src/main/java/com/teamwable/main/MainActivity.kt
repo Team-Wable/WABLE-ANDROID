@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +24,6 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
-import com.teamwable.ui.extensions.hideKeyboard
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
@@ -65,11 +62,6 @@ class MainActivity : AppCompatActivity(), Navigation {
     override fun onResume() {
         super.onResume()
         appUpdateHelper.resumeUpdateIfNeeded(activityResultLauncher)
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        hideKeyboard(currentFocus ?: View(this))
-        return super.dispatchTouchEvent(ev)
     }
 
     private fun setInAppUpdate() {
