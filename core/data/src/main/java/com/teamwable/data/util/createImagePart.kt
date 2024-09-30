@@ -1,4 +1,4 @@
-package com.teamwable.network.util
+package com.teamwable.data.util
 
 import android.content.ContentResolver
 import android.net.Uri

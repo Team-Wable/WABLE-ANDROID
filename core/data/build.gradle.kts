@@ -14,4 +14,5 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(libs.paging)
     implementation(libs.okhttp)
+    implementation(libs.androidx.exifinterface)
 }

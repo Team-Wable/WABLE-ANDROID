@@ -1,4 +1,4 @@
-package com.teamwable.network.util
+package com.teamwable.data.util
 
 import android.content.ContentResolver
 import android.graphics.Bitmap
@@ -41,53 +41,55 @@ class ContentUriRequestBody(
     }
 
     private fun compressBitmap() {
-        var originalBitmap: Bitmap? = null
+        var originalBitmap: Bitmap
         val exif: ExifInterface
 
         contentResolver.openInputStream(uri).use { inputStream ->
             if (inputStream == null) return
             exif = ExifInterface(inputStream)
-        }
 
-        // 이미지 크기를 계산하여 imageSizeMb 선언
-        val imageSizeMb = size / (1024.0 * 1024.0)
-
-        contentResolver.openInputStream(uri).use { inputStream ->
-            if (inputStream == null) return
-            // 이미지 크기를 계산하여 3MB를 초과하는 경우에만 inSampleSize 설정
+            val imageSizeMb = size / (1024.0 * 1024.0)
             val option = BitmapFactory.Options().apply {
-                if (imageSizeMb >= 5) {
+                if (imageSizeMb >= IMAGE_SIZE_MB) {
                     inSampleSize = calculateInSampleSize(this, MAX_WIDTH, MAX_HEIGHT)
                 }
             }
-            originalBitmap = BitmapFactory.decodeStream(inputStream, null, option)
+
+            originalBitmap =
+                BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, option)
+                    ?: return
         }
 
-        originalBitmap?.let { bitmap ->
-            val orientation = exif.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL,
+        val orientation = exif.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL,
+        )
+        val rotatedBitmap = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(originalBitmap, 90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(originalBitmap, 180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(originalBitmap, 270f)
+            else -> originalBitmap
+        }
+
+        val outputStream = ByteArrayOutputStream()
+        val imageSizeMb = size / (MAX_WIDTH * MAX_HEIGHT.toDouble())
+
+        outputStream.use {
+            val compressRate = ((IMAGE_SIZE_MB / imageSizeMb) * 100).toInt()
+            rotatedBitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                if (imageSizeMb >= IMAGE_SIZE_MB) compressRate else 100,
+                it,
             )
-            val rotatedBitmap = when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90f)
-                ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180f)
-                ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270f)
-                else -> bitmap
-            }
-
-            val outputStream = ByteArrayOutputStream()
-            val compressRate = if (imageSizeMb >= IMG_SIZE) {
-                ((100 * IMG_SIZE) / imageSizeMb).coerceIn(0.0, 100.0).toInt() // 압축률을 0에서 100 사이로 제한
-            } else {
-                75 // 기본 압축률
-            }
-
-            outputStream.use { stream ->
-                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, compressRate, stream)
-            }
-            compressedImage = outputStream.toByteArray()
-            size = compressedImage?.size?.toLong() ?: -1L
         }
+
+        compressedImage = outputStream.toByteArray()
+        size = compressedImage?.size?.toLong() ?: -1L
+
+        if (rotatedBitmap != originalBitmap) {
+            originalBitmap.recycle()
+        }
+        rotatedBitmap.recycle()
     }
 
     private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
@@ -131,7 +133,7 @@ class ContentUriRequestBody(
     fun toMultiPartData(name: String) = MultipartBody.Part.createFormData(name, getFileName(), this)
 
     companion object {
-        private const val IMG_SIZE = 5
+        const val IMAGE_SIZE_MB = 1
         const val MAX_WIDTH = 1024
         const val MAX_HEIGHT = 1024
     }
