@@ -34,7 +34,7 @@ import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.LckTeamType
-import com.teamwable.designsystem.type.MemberInfoType
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.selectlckteam.component.LckTeamItem
@@ -44,17 +44,17 @@ import com.teamwable.onboarding.selectlckteam.model.SelectLckTeamSideEffect
 fun SelectLckTeamRoute(
     viewModel: SelectLckTeamViewModel = hiltViewModel(),
     args: Route.SelectLckTeam,
-    navigateToProfile: (List<String>) -> Unit,
+    navigateToProfile: (MemberInfoEditModel) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    var userMutableList by remember { mutableStateOf(args.userList) }
+    var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is SelectLckTeamSideEffect.NavigateToProfile -> navigateToProfile(userMutableList)
+                    is SelectLckTeamSideEffect.NavigateToProfile -> navigateToProfile(memberInfoEditModel)
                     else -> Unit
                 }
             }
@@ -62,9 +62,7 @@ fun SelectLckTeamRoute(
 
     SelectLckTeamScreen(
         onNextBtnClick = {
-            userMutableList = userMutableList.toMutableList().apply {
-                set(MemberInfoType.MEMBER_FAN_TEAM.ordinal, it)
-            }
+            memberInfoEditModel = memberInfoEditModel.copy(memberFanTeam = it)
             viewModel.navigateToProfile()
             if (it.isNotEmpty()) trackEvent(CLICK_NEXT_TEAM_SIGNUP)
             else trackEvent(CLICK_DETOUR_TEAM_SIGNUP)
