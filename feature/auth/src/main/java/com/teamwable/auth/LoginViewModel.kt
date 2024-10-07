@@ -87,7 +87,7 @@ class LoginViewModel @Inject constructor(
                     saveAccessToken(response.accessToken)
                     saveRefreshToken(response.refreshToken)
                     saveMemberId(response.memberId)
-                    checkIsNewUser(response.isNewUser)
+                    checkIsNewUser(response.nickName.isBlank())
                 }.onFailure {
                     _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(it))
                 }
