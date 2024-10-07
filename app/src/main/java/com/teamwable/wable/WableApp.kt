@@ -8,7 +8,6 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.util.Utility
 import com.teamwable.common.util.AmplitudeUtil.initAmplitude
 import com.teamwable.ui.util.FcmTag.CHANNEL_ID
 import com.teamwable.ui.util.FcmTag.CHANNEL_NAME
@@ -44,8 +43,6 @@ class WableApp : Application() {
 
     private fun setKaKaoSdk() {
         KakaoSdk.init(this, KAKAO_APP_KEY)
-        var keyHash = Utility.getKeyHash(this)
-        Timber.tag("Kakao").d("KeyHash: $keyHash")
     }
 
     private fun createNotificationChannel() {
