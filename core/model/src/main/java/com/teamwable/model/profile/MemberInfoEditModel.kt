@@ -2,7 +2,9 @@ package com.teamwable.model.profile
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Parcelize
 data class MemberInfoEditModel(
     val nickname: String? = null,
