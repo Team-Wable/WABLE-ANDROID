@@ -1,5 +1,6 @@
 package com.teamwable.navigation
 
+import com.teamwable.model.profile.MemberInfoEditModel
 import kotlinx.serialization.Serializable
 
 sealed interface Route {
@@ -13,11 +14,11 @@ sealed interface Route {
     data object FirstLckWatch : Route
 
     @Serializable
-    data class SelectLckTeam(val userList: List<String>) : Route
+    data class SelectLckTeam(val memberInfoEditModel: MemberInfoEditModel) : Route
 
     @Serializable
-    data class Profile(val userList: List<String>) : Route
+    data class Profile(val memberInfoEditModel: MemberInfoEditModel) : Route
 
     @Serializable
-    data class AgreeTerms(val userList: List<String>) : Route
+    data class AgreeTerms(val memberInfoEditModel: MemberInfoEditModel, val profileUri: String?) : Route
 }
