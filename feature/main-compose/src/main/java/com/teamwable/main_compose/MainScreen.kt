@@ -91,15 +91,15 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     firstLckWatchNavGraph(
-                        navigateToSelectLckTeam = { userList -> navigator.navigateToSelectLckTeam(userList) },
+                        navigateToSelectLckTeam = navigator::navigateToSelectLckTeam,
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     selectLckTeamNavGraph(
-                        navigateToProfile = { userList -> navigator.navigateToProfile(userList) },
+                        navigateToProfile = navigator::navigateToProfile,
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     profileNavGraph(
-                        navigateToAgreeTerms = { userList -> navigator.navigateToAgreeTerms(userList) },
+                        navigateToAgreeTerms = navigator::navigateToAgreeTerms,
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     agreeTermsNavGraph(
