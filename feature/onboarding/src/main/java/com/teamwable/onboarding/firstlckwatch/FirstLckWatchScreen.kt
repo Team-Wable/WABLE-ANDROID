@@ -30,7 +30,7 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.system.SetStatusBarColor
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.MemberInfoType
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.firstlckwatch.component.WableExposedDropdownBox
 import com.teamwable.onboarding.firstlckwatch.model.FirstLckWatchSideEffect
@@ -39,20 +39,17 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun FirstLckWatchRoute(
     viewModel: FirstLckWatchViewModel = hiltViewModel(),
-    navigateToSelectLckTeam: (List<String>) -> Unit,
+    navigateToSelectLckTeam: (MemberInfoEditModel) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-
-    val userListSize = MemberInfoType.entries.size
-    val userList: List<String> = List(userListSize) { "" }
-    var userMutableList by remember { mutableStateOf(userList) }
+    var memberInfoEditModel by remember { mutableStateOf(MemberInfoEditModel()) }
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.firstLckWatchSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam(userMutableList)
+                    is FirstLckWatchSideEffect.NavigateToSelectLckTeam -> navigateToSelectLckTeam(memberInfoEditModel)
                     else -> Unit
                 }
             }
@@ -60,9 +57,7 @@ fun FirstLckWatchRoute(
 
     FirstLckWatchScreen(
         onNextBtnClick = {
-            userMutableList = userMutableList.toMutableList().apply {
-                set(MemberInfoType.MEMBER_LCK_YEAR.ordinal, it)
-            }
+            memberInfoEditModel = memberInfoEditModel.copy(memberLckYears = it)
             viewModel.navigateToSelectTeam()
             trackEvent(CLICK_NEXT_YEAR_SIGNUP)
         },
@@ -71,7 +66,7 @@ fun FirstLckWatchRoute(
 
 @Composable
 fun FirstLckWatchScreen(
-    onNextBtnClick: (String) -> Unit,
+    onNextBtnClick: (Int) -> Unit,
 ) {
     SetStatusBarColor(color = WableTheme.colors.white)
 
@@ -138,7 +133,7 @@ fun FirstLckWatchScreen(
 
         WableButton(
             text = stringResource(R.string.btn_next_text),
-            onClick = { onNextBtnClick(options[selectedIndex].toString()) },
+            onClick = { onNextBtnClick(options[selectedIndex]) },
             enabled = true,
             modifier = Modifier.padding(bottom = 24.dp),
         )

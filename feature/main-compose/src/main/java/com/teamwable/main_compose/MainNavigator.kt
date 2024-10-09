@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.navigateLogin
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.agreeterms.naviagation.navigateToAgreeTerms
 import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
@@ -33,16 +34,16 @@ class MainNavigator(
         navController.navigateToFirstLckWatch()
     }
 
-    fun navigateToSelectLckTeam(userList: List<String>) {
-        navController.navigateToSelectLckTeam(userList)
+    fun navigateToSelectLckTeam(memberInfoEditModel: MemberInfoEditModel) {
+        navController.navigateToSelectLckTeam(memberInfoEditModel)
     }
 
-    fun navigateToProfile(userList: List<String>) {
-        navController.navigateToProfile(userList)
+    fun navigateToProfile(memberInfoEditModel: MemberInfoEditModel) {
+        navController.navigateToProfile(memberInfoEditModel)
     }
 
-    fun navigateToAgreeTerms(userList: List<String>) {
-        navController.navigateToAgreeTerms(userList)
+    fun navigateToAgreeTerms(memberInfoEditModel: MemberInfoEditModel, profileUri: String?) {
+        navController.navigateToAgreeTerms(memberInfoEditModel, profileUri)
     }
 
     private fun popBackStack() {

@@ -41,10 +41,10 @@ import com.teamwable.designsystem.component.dialog.PermissionAppSettingsDialog
 import com.teamwable.designsystem.component.textfield.WableBasicTextField
 import com.teamwable.designsystem.extension.system.navigateToAppSettings
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.MemberInfoType
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
@@ -59,14 +59,14 @@ import timber.log.Timber
 internal fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     args: Route.Profile,
-    navigateToAgreeTerms: (List<String>) -> Unit,
+    navigateToAgreeTerms: (MemberInfoEditModel, String?) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val profileState by viewModel.profileState.collectAsStateWithLifecycle()
 
-    var userMutableList by remember { mutableStateOf(args.userList) }
+    var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
     var openDialog by remember { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -102,7 +102,7 @@ internal fun ProfileRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(userMutableList)
+                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(memberInfoEditModel, profileState.selectedImageUri)
 
                     is ProfileSideEffect.ShowPermissionDeniedDialog -> openDialog = true
 
@@ -128,11 +128,10 @@ internal fun ProfileRoute(
         profileState = profileState,
         profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            userMutableList = userMutableList.toMutableList().apply {
-                set(MemberInfoType.MEMBER_NICKNAME.ordinal, nickname)
-                set(MemberInfoType.MEMBER_PROFILE_URL.ordinal, imageUri.orEmpty())
-                set(MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal, defaultImage.orEmpty())
-            }
+            memberInfoEditModel = memberInfoEditModel.copy(
+                nickname = nickname,
+                memberDefaultProfileImage = defaultImage.orEmpty(),
+            )
             viewModel.navigateToAgreeTerms()
             trackEvent(CLICK_NEXT_PROFILE_SIGNUP)
         },

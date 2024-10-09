@@ -60,15 +60,15 @@ processPhoenix = "3.0.0"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
-androidxComposeBom = "2024.05.00"
+androidxComposeBom = "2024.09.03"
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 androidxComposeCompiler = "1.5.14"
 # https://developer.android.com/jetpack/androidx/releases/navigation
-androidxComposeNavigation = "2.8.0-alpha08"
+androidxComposeNavigation = "2.8.2"
 # https://developer.android.com/jetpack/androidx/releases/compose-material3
-androidxComposeMaterial3 = "1.3.0-rc01"
+androidxComposeMaterial3 = "1.3.0"
 # # https://developer.android.com/jetpack/androidx/releases/test
-androidxTestExt = "1.1.5"
+androidxTestExt = "1.2.1"
 hiltNavigationComposeVersion = "1.2.0"
 firebaseMessagingKtx = "24.0.1"
 

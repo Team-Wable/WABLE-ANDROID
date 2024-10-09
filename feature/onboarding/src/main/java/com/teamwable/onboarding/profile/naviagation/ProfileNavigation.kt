@@ -4,18 +4,25 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
+import com.teamwable.navigation.parcelableNavType
 import com.teamwable.onboarding.profile.ProfileRoute
+import kotlin.reflect.typeOf
 
-fun NavController.navigateToProfile(userList: List<String>) {
-    this.navigate(Route.Profile(userList))
+fun NavController.navigateToProfile(memberInfoEditModel: MemberInfoEditModel) {
+    this.navigate(Route.Profile(memberInfoEditModel))
 }
 
 fun NavGraphBuilder.profileNavGraph(
-    navigateToAgreeTerms: (List<String>) -> Unit,
+    navigateToAgreeTerms: (MemberInfoEditModel, String?) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
-    composable<Route.Profile> { backStackEntry ->
+    composable<Route.Profile>(
+        typeMap = mapOf(
+            typeOf<MemberInfoEditModel>() to parcelableNavType<MemberInfoEditModel>(),
+        ),
+    ) { backStackEntry ->
         val args = backStackEntry.toRoute<Route.Profile>()
         ProfileRoute(
             navigateToAgreeTerms = navigateToAgreeTerms,

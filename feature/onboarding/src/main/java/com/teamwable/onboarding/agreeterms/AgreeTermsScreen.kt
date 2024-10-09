@@ -30,13 +30,10 @@ import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
-import com.teamwable.designsystem.type.MemberInfoType
-import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.agreeterms.model.AgreeTerm
 import com.teamwable.onboarding.agreeterms.model.AgreeTermsSideEffect
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun AgreeTermsRoute(
@@ -48,7 +45,7 @@ fun AgreeTermsRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
-    val userInfo = args.userList.toPersistentList()
+    val memberInfoEditModel = args.memberInfoEditModel
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -64,14 +61,11 @@ fun AgreeTermsRoute(
     AgreeTermsScreen(
         onNextBtnClick = { marketingConsent ->
             viewModel.patchUserProfile(
-                memberInfoEditModel = MemberInfoEditModel(
-                    nickname = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
+                memberInfoEditModel = memberInfoEditModel.copy(
                     isAlarmAllowed = marketingConsent,
-                    memberLckYears = userInfo[MemberInfoType.MEMBER_LCK_YEAR.ordinal].toInt(),
-                    memberFanTeam = userInfo[MemberInfoType.MEMBER_FAN_TEAM.ordinal],
-                    memberDefaultProfileImage = userInfo[MemberInfoType.MEMBER_DEFAULT_PROFILE_IMAGE.ordinal].takeIf { it.isNotEmpty() },
+                    memberDefaultProfileImage = memberInfoEditModel.memberDefaultProfileImage.takeIf { !it.isNullOrEmpty() },
                 ),
-                imgUrl = userInfo[MemberInfoType.MEMBER_PROFILE_URL.ordinal].takeIf { it.isNotEmpty() },
+                imgUrl = args.profileUri.takeIf { !it.isNullOrEmpty() },
             )
             trackEvent(CLICK_COMPLETE_TNC_SIGNUP)
         },
@@ -79,7 +73,7 @@ fun AgreeTermsRoute(
 
     if (showDialog) {
         WableButtonDialog(
-            userName = userInfo[MemberInfoType.MEMBER_NICKNAME.ordinal],
+            userName = memberInfoEditModel.nickname.orEmpty(),
             dialogType = DialogType.WELLCOME,
             onClick = {
                 viewModel.navigateToHome()
