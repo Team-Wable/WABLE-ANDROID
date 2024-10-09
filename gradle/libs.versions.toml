@@ -147,7 +147,6 @@ lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", versio
 amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
 amplitude-ads = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "amplitude-ads" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-process-phoenix = { group = "com.jakewharton", name = "process-phoenix", version.ref = "processPhoenix" }
 
 ## Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
