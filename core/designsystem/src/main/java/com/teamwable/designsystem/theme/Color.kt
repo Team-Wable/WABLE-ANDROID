@@ -22,6 +22,7 @@ val Warning = Color(0xFFEE9209)
 val Error = Color(0xFFF01F1F)
 val SystemNavigationBar = Color(0xFFF5F5F5)
 val SystemLoginSystemAppBar = Color(0xFFEBE2FD)
+val SnackBar = Color(0xE6F7F7F7)
 
 // Gray Scale
 val Black = Color(0xFF0E0E0E)
@@ -100,6 +101,7 @@ class WableColors(
     kdf10: Color,
     hle50: Color,
     hle10: Color,
+    snackBar: Color,
 ) {
     var purple50 by mutableStateOf(purple50)
         private set
@@ -181,6 +183,8 @@ class WableColors(
         private set
     var hle10 by mutableStateOf(hle10)
         private set
+    var snackBar by mutableStateOf(snackBar)
+        private set
 
     fun copy(): WableColors = WableColors(
         purple50,
@@ -223,6 +227,7 @@ class WableColors(
         kdf10,
         hle50,
         hle10,
+        snackBar,
     )
 
     fun update(other: WableColors) {
@@ -266,6 +271,7 @@ class WableColors(
         kdf10 = other.kdf10
         hle50 = other.hle50
         hle10 = other.hle10
+        snackBar = other.snackBar
     }
 }
 
@@ -310,6 +316,7 @@ fun wableLightColors(
     kdf10: Color = Kdf10,
     hle50: Color = Hle50,
     hle10: Color = Hle10,
+    snackBar: Color = SnackBar,
 ) = WableColors(
     purple50,
     purple100,
@@ -351,4 +358,5 @@ fun wableLightColors(
     kdf10,
     hle50,
     hle10,
+    snackBar,
 )
