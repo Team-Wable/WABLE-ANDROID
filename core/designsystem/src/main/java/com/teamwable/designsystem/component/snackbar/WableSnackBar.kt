@@ -25,6 +25,8 @@ import com.teamwable.designsystem.extension.modifier.dropShadow
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.SnackBarType
 
+const val SNACK_BAR_DURATION = 2000L
+
 @Composable
 fun WableSnackBar(
     modifier: Modifier = Modifier,
@@ -34,7 +36,7 @@ fun WableSnackBar(
 ) {
     Box(
         modifier = modifier
-            .padding(18.dp)
+            .padding(horizontal = 18.dp)
             .fillMaxWidth()
             .border(
                 width = 1.dp,
