@@ -24,7 +24,7 @@ fun WableSnackBarPopUp(
         Popup(
             onDismissRequest = onDismissRequest,
             properties = PopupProperties(
-                focusable = true,
+                focusable = false,
                 dismissOnBackPress = true,
                 dismissOnClickOutside = false,
                 excludeFromSystemGesture = true,
