@@ -75,7 +75,7 @@ fun WableSnackBarContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (snackBarType) {
-            SnackBarType.LOADING -> WableCircularIndicator()
+            SnackBarType.LOADING, SnackBarType.LOADING_PROFILE -> WableCircularIndicator()
             else -> WableSnackBarImage(snackBarType)
         }
         Text(
