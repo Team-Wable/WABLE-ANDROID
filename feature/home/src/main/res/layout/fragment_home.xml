@@ -10,7 +10,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        android:paddingBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -71,4 +70,16 @@
             app:pressedTranslationZ="0dp"
             app:tint="@null" />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아직 작성된 글이 없어요."
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

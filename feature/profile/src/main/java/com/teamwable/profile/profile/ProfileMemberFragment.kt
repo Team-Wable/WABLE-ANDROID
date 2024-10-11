@@ -28,7 +28,7 @@ class ProfileMemberFragment : BindingProfileFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = arguments?.getLong(Arg.PROFILE_USER_ID) ?: -1L
+        userId = arguments?.getLong(Arg.PROFILE_USER_ID) ?: return
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
