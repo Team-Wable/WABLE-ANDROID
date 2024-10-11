@@ -9,6 +9,7 @@ import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
+import com.teamwable.profile.profile.edit.model.ProfilePatchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,9 @@ internal class ProfileEditViewModel @Inject constructor(
 
     private val _profileState = MutableStateFlow(ProfileState())
     val profileState: StateFlow<ProfileState> = _profileState
+
+    private val _profilePatchState = MutableStateFlow<ProfilePatchState>(ProfilePatchState.Idle)
+    val profileLoadingState: StateFlow<ProfilePatchState> get() = _profilePatchState
 
     fun requestImagePicker() {
         viewModelScope.launch {
@@ -71,11 +75,14 @@ internal class ProfileEditViewModel @Inject constructor(
 
     fun patchUserProfile(memberInfoEditModel: MemberInfoEditModel, imgUrl: String?) {
         viewModelScope.launch {
+            _profilePatchState.update { ProfilePatchState.Loading }
             profileRepository.patchUserProfile(memberInfoEditModel, imgUrl)
                 .onSuccess {
+                    _profilePatchState.update { ProfilePatchState.Idle }
                     _sideEffect.emit(ProfileSideEffect.NavigateToProfile)
                 }
                 .onFailure {
+                    _profilePatchState.update { ProfilePatchState.Idle }
                     _sideEffect.emit(ProfileSideEffect.ShowSnackBar(it))
                 }
         }
