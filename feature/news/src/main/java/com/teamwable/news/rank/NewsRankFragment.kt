@@ -1,7 +1,5 @@
 package com.teamwable.news.rank
 
-import android.content.Intent
-import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -37,7 +35,8 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
     private fun setupGameTypeObserve() {
         viewModel.gameTypeUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
-                is UiState.Success -> setSeasonText(it.data)
+                // 임시 하드 코딩
+                is UiState.Success -> setSeasonText("2024 LCK Summer")
                 else -> Unit
             }
         }.launchIn(viewLifeCycleScope)
@@ -76,7 +75,7 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
         spannableString.setSpan(
             ForegroundColorSpan(colorOf(com.teamwable.ui.R.color.sky_50)),
             16, spannableString.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
 
         binding.btnNewsRankOpinion.text = spannableString

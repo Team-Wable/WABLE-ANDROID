@@ -27,6 +27,7 @@ import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
+import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
@@ -177,6 +178,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     binding.rvHome.scrollToPosition(0)
                     isFirstLoad = true
                 }
+            }
+        }
+
+        viewLifeCycleScope.launch {
+            feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
+                binding.tvEmpty.visible(isEmptyList)
             }
         }
     }
