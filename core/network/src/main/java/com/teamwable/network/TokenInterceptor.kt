@@ -1,12 +1,10 @@
 package com.teamwable.network
 
 import android.app.Application
+import android.content.Intent
 import android.widget.Toast
-import com.jakewharton.processphoenix.ProcessPhoenix
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.network.datasource.AuthService
-import com.teamwable.network.util.UNKNOWN_ERROR_MESSAGE
-import com.teamwable.network.util.toCustomError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -14,7 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -68,19 +65,22 @@ class TokenInterceptor @Inject constructor(
                     false -> false
                 }
             } catch (e: Exception) {
-                val errorMessage = e.toCustomError().message ?: UNKNOWN_ERROR_MESSAGE
-                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                 false
             }
         }
     }
 
-    private fun handleFailedTokenReissue() {
+    private fun handleFailedTokenReissue() = with(context) {
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                defaultWablePreferenceDatasource.clear()
-            }
-            ProcessPhoenix.triggerRebirth(context)
+            defaultWablePreferenceDatasource.clear()
+            startActivity(
+                Intent.makeRestartActivityTask(
+                    packageManager.getLaunchIntentForPackage(packageName)?.component,
+                ).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                },
+            )
+            Toast.makeText(context, "재 로그인이 필요해요", Toast.LENGTH_SHORT).show()
         }
     }
 
