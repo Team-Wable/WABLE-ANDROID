@@ -12,4 +12,5 @@ enum class SnackBarType(
     ERROR(image = com.teamwable.common.R.drawable.ic_home_toast_error),
     SUCCESS(image = com.teamwable.common.R.drawable.ic_home_toast_success),
     LOADING(message = R.string.snackbar_text_loading),
+    LOADING_PROFILE(message = R.string.snackbar_text_loading),
 }

@@ -79,7 +79,11 @@ fun WableSnackBarContent(
             else -> WableSnackBarImage(snackBarType)
         }
         Text(
-            text = if (snackBarType == SnackBarType.LOADING) stringResource(id = R.string.snackbar_text_loading) else message,
+            text = when (snackBarType) {
+                SnackBarType.LOADING -> stringResource(id = R.string.snackbar_text_loading)
+                SnackBarType.LOADING_PROFILE -> stringResource(id = R.string.snackbar_text_profile_loading)
+                else -> message
+            },
             textAlign = TextAlign.Start,
             color = WableTheme.colors.black,
             style = WableTheme.typography.body03,

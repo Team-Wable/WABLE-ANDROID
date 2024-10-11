@@ -31,5 +31,6 @@
 
     <!--    스낵바-->
     <string name="snackbar_text_loading">회원가입이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
+    <string name="snackbar_text_profile_loading">프로필 수정이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
 
 </resources>
