@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
+import com.teamwable.designsystem.component.snackbar.SNACK_BAR_DURATION
 import com.teamwable.designsystem.component.snackbar.WableSnackBar
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.type.SnackBarType
@@ -29,6 +30,7 @@ import com.teamwable.onboarding.agreeterms.naviagation.agreeTermsNavGraph
 import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
 import com.teamwable.onboarding.profile.naviagation.profileNavGraph
 import com.teamwable.onboarding.selectlckteam.naviagation.selectLckTeamNavGraph
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -44,7 +46,11 @@ internal fun MainScreen(
     val localContextResource = LocalContext.current.resources
     val onShowErrorSnackBar: (throwable: Throwable?) -> Unit = { throwable ->
         coroutineScope.launch {
-            snackBarHostState.showSnackbar(getErrorMessage(throwable, localContextResource))
+            val job = launch {
+                snackBarHostState.showSnackbar(getErrorMessage(throwable, localContextResource))
+            }
+            delay(SNACK_BAR_DURATION)
+            job.cancel()
         }
     }
 
@@ -107,7 +113,7 @@ internal fun MainScreen(
             SnackbarHost(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 15.dp)
+                    .padding(top = 30.dp)
                     .zIndex(1f),
                 hostState = snackBarHostState,
                 snackbar = { snackBarData ->
