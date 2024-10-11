@@ -2,6 +2,7 @@ package com.teamwable.network
 
 import android.app.Application
 import android.content.Intent
+import android.widget.Toast
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.network.datasource.AuthService
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +26,7 @@ class TokenInterceptor @Inject constructor(
     private val authService: AuthService,
 ) : Interceptor {
     private val mutex = Mutex()
+    private var currentToast: Toast? = null
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
@@ -71,10 +73,17 @@ class TokenInterceptor @Inject constructor(
     }
 
     private fun handleFailedTokenReissue() = CoroutineScope(Dispatchers.Main).launch {
+        showToast()
         withContext(Dispatchers.IO) {
             defaultWablePreferenceDatasource.clear()
         }
         restartActivity()
+    }
+
+    private fun showToast() {
+        currentToast?.cancel()
+        currentToast = Toast.makeText(context, "재 로그인이 필요해요", Toast.LENGTH_SHORT)
+        currentToast?.show()
     }
 
     private suspend fun restartActivity() = with(context) {
