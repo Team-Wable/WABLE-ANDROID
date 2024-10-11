@@ -10,7 +10,6 @@ import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileEditBinding
 import com.teamwable.ui.base.BindingFragment
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.util.Arg.PROFILE_EDIT_RESULT
 
 class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(FragmentProfileEditBinding::inflate) {
@@ -39,7 +38,6 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
                     ProfileEditRoute(
                         profile = profile,
                         navigateToProfile = { updatedProfile -> saveAndNavigateBack(updatedProfile) },
-                        onShowErrorSnackBar = { throwable -> toast(throwable?.message.toString()) },
                     )
                 }
             }
