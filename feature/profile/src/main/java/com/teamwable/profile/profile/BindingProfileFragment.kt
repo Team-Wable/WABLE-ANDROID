@@ -28,7 +28,7 @@ abstract class BindingProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = FragmentProfileBinding.inflate(layoutInflater)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
