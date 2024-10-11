@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.getThrowableMessage
 import com.teamwable.designsystem.component.snackbar.SNACK_BAR_DURATION
 import com.teamwable.designsystem.component.snackbar.WableSnackBar
 import com.teamwable.designsystem.component.snackbar.WableSnackBarPopUp
@@ -29,7 +30,6 @@ import com.teamwable.onboarding.profile.permission.launchImagePicker
 import com.teamwable.onboarding.profile.permission.rememberGalleryLauncher
 import com.teamwable.onboarding.profile.permission.rememberPhotoPickerLauncher
 import com.teamwable.profile.profile.edit.model.ProfilePatchState
-import com.teamwable.ui.util.getErrorMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,7 +51,7 @@ internal fun ProfileEditRoute(
     val onShowErrorSnackBar: (throwable: Throwable?) -> Unit = { throwable ->
         coroutineScope.launch {
             val job = launch {
-                snackBarHostState.showSnackbar(getErrorMessage(throwable, localContextResource))
+                snackBarHostState.showSnackbar(message = getThrowableMessage(throwable, localContextResource))
             }
             delay(SNACK_BAR_DURATION)
             job.cancel()
