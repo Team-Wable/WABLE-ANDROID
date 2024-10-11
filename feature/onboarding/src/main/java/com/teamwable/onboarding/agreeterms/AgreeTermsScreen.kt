@@ -28,11 +28,14 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
+import com.teamwable.designsystem.component.snackbar.WableSnackBarPopUp
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
+import com.teamwable.designsystem.type.SnackBarType
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.agreeterms.model.AgreeTerm
+import com.teamwable.onboarding.agreeterms.model.AgreeTermState
 import com.teamwable.onboarding.agreeterms.model.AgreeTermsSideEffect
 
 @Composable
@@ -44,6 +47,7 @@ fun AgreeTermsRoute(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
+    val agreeTermState by viewModel.agreeTermState.collectAsStateWithLifecycle()
 
     val memberInfoEditModel = args.memberInfoEditModel
 
@@ -82,6 +86,11 @@ fun AgreeTermsRoute(
             onDismissRequest = { viewModel.showLoginDialog(false) },
         )
     }
+
+    WableSnackBarPopUp(
+        isVisible = agreeTermState is AgreeTermState.Loading,
+        snackBarType = SnackBarType.LOADING,
+    )
 }
 
 @Composable

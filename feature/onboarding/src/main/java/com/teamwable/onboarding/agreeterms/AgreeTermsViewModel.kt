@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.profile.MemberInfoEditModel
+import com.teamwable.onboarding.agreeterms.model.AgreeTermState
 import com.teamwable.onboarding.agreeterms.model.AgreeTermsSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,6 +28,9 @@ class AgreeTermsViewModel @Inject constructor(
     private val _showDialog = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> get() = _showDialog
 
+    private val _agreeTermState = MutableStateFlow<AgreeTermState>(AgreeTermState.Idle)
+    val agreeTermState: StateFlow<AgreeTermState> get() = _agreeTermState
+
     fun navigateToHome() {
         viewModelScope.launch {
             _sideEffect.emit(AgreeTermsSideEffect.NavigateToHome)
@@ -39,14 +43,21 @@ class AgreeTermsViewModel @Inject constructor(
 
     fun patchUserProfile(memberInfoEditModel: MemberInfoEditModel, imgUrl: String?) {
         viewModelScope.launch {
+            _agreeTermState.update { AgreeTermState.Loading }
             profileRepository.patchUserProfile(memberInfoEditModel, imgUrl)
-                .onSuccess {
-                    _sideEffect.emit(AgreeTermsSideEffect.ShowDialog)
-                    userInfoRepository.saveAutoLogin(true)
-                }
-                .onFailure {
-                    _sideEffect.emit(AgreeTermsSideEffect.ShowSnackBar(it))
-                }
+                .onSuccess { handleSuccess() }
+                .onFailure { handleFailure(it) }
         }
+    }
+
+    private suspend fun handleSuccess() {
+        _agreeTermState.update { AgreeTermState.Idle }
+        _sideEffect.emit(AgreeTermsSideEffect.ShowDialog)
+        userInfoRepository.saveAutoLogin(true)
+    }
+
+    private suspend fun handleFailure(it: Throwable) {
+        _agreeTermState.update { AgreeTermState.Idle }
+        _sideEffect.emit(AgreeTermsSideEffect.ShowSnackBar(it))
     }
 }
