@@ -16,6 +16,7 @@ import com.teamwable.onboarding.agreeterms.naviagation.navigateToAgreeTerms
 import com.teamwable.onboarding.firstlckwatch.naviagation.navigateToFirstLckWatch
 import com.teamwable.onboarding.profile.naviagation.navigateToProfile
 import com.teamwable.onboarding.selectlckteam.naviagation.navigateToSelectLckTeam
+import kotlinx.collections.immutable.persistentListOf
 
 class MainNavigator(
     val navController: NavHostController,
@@ -25,6 +26,10 @@ class MainNavigator(
             .currentBackStackEntryAsState().value?.destination
 
     val startDestination = Route.Splash
+
+    private val topBarHiddenRoutes = persistentListOf(
+        Route.Login::class, Route.Splash::class,
+    )
 
     fun navigateToLogin(navOptions: NavOptions) {
         navController.navigateLogin(navOptions)
@@ -74,10 +79,7 @@ class MainNavigator(
     }
 
     @Composable
-    fun shouldShowTopBar(): Boolean {
-        val currentRoute = currentDestination?.route ?: return false
-        return !(currentRoute.contains("Login") || currentRoute.contains("Splash"))
-    }
+    fun shouldShowTopBar(): Boolean = !topBarHiddenRoutes.any { currentDestination?.hasRoute(it) ?: false }
 
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean {
         return navController.currentDestination?.hasRoute<T>() == true

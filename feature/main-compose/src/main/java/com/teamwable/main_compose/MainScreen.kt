@@ -20,11 +20,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.teamwable.auth.naviagation.loginNavGraph
 import com.teamwable.common.intentprovider.IntentProvider
+import com.teamwable.common.util.getThrowableMessage
 import com.teamwable.designsystem.component.snackbar.SNACK_BAR_DURATION
 import com.teamwable.designsystem.component.snackbar.WableSnackBar
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.type.SnackBarType
-import com.teamwable.main_compose.extensions.getErrorMessage
 import com.teamwable.main_compose.splash.navigation.splashNavGraph
 import com.teamwable.onboarding.agreeterms.naviagation.agreeTermsNavGraph
 import com.teamwable.onboarding.firstlckwatch.naviagation.firstLckWatchNavGraph
@@ -47,7 +47,7 @@ internal fun MainScreen(
     val onShowErrorSnackBar: (throwable: Throwable?) -> Unit = { throwable ->
         coroutineScope.launch {
             val job = launch {
-                snackBarHostState.showSnackbar(getErrorMessage(throwable, localContextResource))
+                snackBarHostState.showSnackbar(message = getThrowableMessage(throwable, localContextResource))
             }
             delay(SNACK_BAR_DURATION)
             job.cancel()

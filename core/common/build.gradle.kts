@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+
     // Third Party
     implementation(libs.amplitude)
     implementation(libs.google.play.services)
