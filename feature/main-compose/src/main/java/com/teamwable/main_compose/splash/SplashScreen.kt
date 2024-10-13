@@ -14,7 +14,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.main_compose.R
@@ -29,9 +28,6 @@ fun SplashRoute(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wable_splash))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-    )
 
     LaunchedEffect(Unit) {
         delay(2000)
@@ -50,21 +46,18 @@ fun SplashRoute(
 
     WableSplashScreen(
         composition = composition,
-        progress = progress,
     )
 }
 
 @Composable
 fun WableSplashScreen(
     composition: LottieComposition?,
-    progress: Float,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         LottieAnimation(
             composition = composition,
-            progress = { progress },
             modifier = Modifier.align(Alignment.Center),
         )
     }
@@ -76,7 +69,6 @@ fun GreetingPreview() {
     WableTheme {
         WableSplashScreen(
             composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wable_splash)).value,
-            progress = 1.0f,
         )
     }
 }
