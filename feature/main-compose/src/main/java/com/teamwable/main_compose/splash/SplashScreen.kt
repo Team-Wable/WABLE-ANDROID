@@ -14,7 +14,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.teamwable.designsystem.theme.WableTheme
@@ -32,7 +31,6 @@ fun SplashRoute(
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wable_splash))
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        iterations = LottieConstants.IterateForever,
     )
 
     LaunchedEffect(Unit) {
