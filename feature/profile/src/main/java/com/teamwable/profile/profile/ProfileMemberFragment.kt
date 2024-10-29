@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
@@ -63,12 +62,6 @@ class ProfileMemberFragment : BindingProfileFragment() {
     }
 
     private fun setSwipeLayout() {
-        binding.appbarProfileInfo.addOnOffsetChangedListener(
-            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
-            },
-        )
-
         binding.layoutProfileSwipe.setOnRefreshListener {
             binding.layoutProfileSwipe.isRefreshing = false
             viewModel.fetchProfileInfo(userId)
