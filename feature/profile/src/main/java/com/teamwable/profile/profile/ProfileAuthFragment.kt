@@ -13,6 +13,7 @@ import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.parcelable
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -44,7 +45,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
     }
 
     private fun initAppbarHamburgerClickListener() {
-        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
+        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnDuplicateBlockClick {
             ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
         }
     }
