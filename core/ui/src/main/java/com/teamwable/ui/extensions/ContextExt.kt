@@ -124,3 +124,22 @@ fun Context.restartApp() {
     intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent)
 }
+
+fun Context.showAlertDialog(
+    title: String,
+    message: String,
+    positiveButtonText: String,
+    negativeButtonText: String,
+    onPositiveClick: () -> Unit,
+) {
+    val builder = AlertDialog.Builder(this)
+    builder.setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(positiveButtonText) { dialog, _ ->
+            dialog.dismiss()
+            onPositiveClick()
+        }
+        .setNegativeButton(negativeButtonText) { dialog, _ -> dialog.dismiss() }
+
+    builder.create().show()
+}

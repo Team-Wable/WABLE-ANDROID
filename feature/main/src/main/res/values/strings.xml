@@ -18,5 +18,5 @@
     <string name="label_in_app_update_content">와블이 새롭게 업그레이드 되었어요. 업데이트를 통해 최신 버전으로 즐겨보세요.</string>
     <string name="label_in_app_update_yes">업데이트 하기</string>
     <string name="label_in_app_update_next">다음에</string>
-    <string name="label_in_app_update_success">업데이트되었습니다. 앱을 재시작 해주세요.</string>
+    <string name="label_in_app_update_success">업데이트 중 입니다.</string>
 </resources>

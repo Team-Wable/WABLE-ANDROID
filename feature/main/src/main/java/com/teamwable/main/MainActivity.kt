@@ -15,6 +15,11 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.InstallStatus
 import com.teamwable.common.uistate.UiState
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_HOME_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_MYPROFILE_BOTNAVI
@@ -24,6 +29,7 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.showAlertDialog
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
@@ -39,6 +45,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var appUpdateHelper: AppUpdateHandler
+    private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -48,6 +55,14 @@ class MainActivity : AppCompatActivity(), Navigation {
                 toast(getString(R.string.label_in_app_update_success))
             }
         }
+
+    private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) Timber.i("Download Complete")
+        lifecycleScope.launch {
+            delay(5000)
+            appUpdateManager.completeUpdate()
+        }
+    }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,19 +74,22 @@ class MainActivity : AppCompatActivity(), Navigation {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
-    override fun onResume() {
-        super.onResume()
-        appUpdateHelper.resumeUpdateIfNeeded(activityResultLauncher)
+    private fun setInAppUpdate() {
+        appUpdateHelper = AppUpdateHandler(appUpdateManager).apply {
+            checkForAppUpdate { appUpdateInfo -> showUpdateDialog(appUpdateInfo) }
+        }
     }
 
-    private fun setInAppUpdate() {
-        appUpdateHelper = AppUpdateHandler(this)
-        appUpdateHelper.checkForAppUpdate(activityResultLauncher)
-    }
+    private fun showUpdateDialog(appUpdateInfo: AppUpdateInfo) = showAlertDialog(
+        title = getString(R.string.label_in_app_update_title),
+        message = getString(R.string.label_in_app_update_content),
+        positiveButtonText = getString(R.string.label_in_app_update_yes),
+        negativeButtonText = getString(R.string.label_in_app_update_next),
+        onPositiveClick = { appUpdateHelper.startUpdate(appUpdateInfo, activityResultLauncher) },
+    )
 
     private fun initView() {
         setBottomNavigation()
-
         setupNumberObserve()
     }
 
