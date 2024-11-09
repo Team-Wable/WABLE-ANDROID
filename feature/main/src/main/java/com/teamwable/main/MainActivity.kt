@@ -57,10 +57,12 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
-        if (state.installStatus() == InstallStatus.DOWNLOADED) Timber.i("Download Complete")
-        lifecycleScope.launch {
-            delay(5000)
-            appUpdateManager.completeUpdate()
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            Timber.i("Download Complete")
+            lifecycleScope.launch {
+                delay(5000)
+                appUpdateManager.completeUpdate()
+            }
         }
     }
 
@@ -74,7 +76,13 @@ class MainActivity : AppCompatActivity(), Navigation {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        appUpdateManager.unregisterListener(installStateUpdatedListener)
+    }
+
     private fun setInAppUpdate() {
+        appUpdateManager.registerListener(installStateUpdatedListener)
         appUpdateHelper = AppUpdateHandler(appUpdateManager).apply {
             checkForAppUpdate { appUpdateInfo -> showUpdateDialog(appUpdateInfo) }
         }
