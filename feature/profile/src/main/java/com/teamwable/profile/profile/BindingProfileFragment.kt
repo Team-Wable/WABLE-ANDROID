@@ -37,7 +37,8 @@ abstract class BindingProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.appbarProfileInfo.removeOnOffsetChangedListener(offsetChangedListener)
+        if (this::offsetChangedListener.isInitialized)
+            binding.appbarProfileInfo.removeOnOffsetChangedListener(offsetChangedListener)
         _binding = null
     }
 
