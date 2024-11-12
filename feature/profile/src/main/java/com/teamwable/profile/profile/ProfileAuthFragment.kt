@@ -6,7 +6,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberInfoEditModel
@@ -14,6 +13,7 @@ import com.teamwable.profile.hamburger.ProfileHamburgerBottomSheet
 import com.teamwable.profile.profiletabs.ProfilePagerStateAdapter
 import com.teamwable.profile.profiletabs.ProfileTabType
 import com.teamwable.ui.extensions.parcelable
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -45,7 +45,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
     }
 
     private fun initAppbarHamburgerClickListener() {
-        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnClickListener {
+        binding.viewProfileAppbar.btnProfileAppbarHamburger.setOnDuplicateBlockClick {
             ProfileHamburgerBottomSheet().show(childFragmentManager, PROFILE_HAMBURGER_BOTTOM_SHEET)
         }
     }
@@ -81,12 +81,6 @@ class ProfileAuthFragment : BindingProfileFragment() {
     }
 
     private fun setSwipeLayout() {
-        binding.appbarProfileInfo.addOnOffsetChangedListener(
-            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
-            },
-        )
-
         binding.layoutProfileSwipe.setOnRefreshListener {
             binding.layoutProfileSwipe.isRefreshing = false
             viewModel.fetchAuthId()

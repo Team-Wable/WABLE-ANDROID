@@ -21,7 +21,7 @@ class SingleEventHandler private constructor() {
     }
 
     companion object {
-        private const val DEBOUNCE_DELAY = 500L
+        private const val DEBOUNCE_DELAY = 200L
 
         fun from(): SingleEventHandler = SingleEventHandler()
     }

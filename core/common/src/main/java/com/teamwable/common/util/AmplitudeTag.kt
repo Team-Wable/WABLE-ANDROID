@@ -10,7 +10,7 @@ object AmplitudeSignUpTag {
     const val CLICK_DETOUR_TEAM_SIGNUP = "click_detour_team_signup"
     const val CLICK_NEXT_TEAM_SIGNUP = "click_next_team_signup"
     const val CLICK_CHANGE_PICTURE_PROFILE_SIGNUP = "click_change_picture_profile_signup"
-    const val CLICK_ADD_PICTURE_PROFILE_SIGNUP = "k_add_picture_profile_signup"
+    const val CLICK_ADD_PICTURE_PROFILE_SIGNUP = "click_add_picture_profile_signup"
     const val CLICK_NEXT_PROFILE_SIGNUP = "click_next_profile_signup"
     const val CLICK_COMPLETE_TNC_SIGNUP = "click_complete_tnc_signup"
     const val CLICK_JOIN_POPUP_SIGNUP = "click_join_popup_signup"

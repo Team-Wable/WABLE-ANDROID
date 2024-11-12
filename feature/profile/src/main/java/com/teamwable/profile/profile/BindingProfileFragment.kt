@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.appbar.AppBarLayout
 import com.teamwable.model.Profile
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileBinding
@@ -23,6 +24,8 @@ abstract class BindingProfileFragment : Fragment() {
     protected val binding: FragmentProfileBinding
         get() = requireNotNull(_binding) { "ViewBinding is not initialized" }
 
+    private lateinit var offsetChangedListener: AppBarLayout.OnOffsetChangedListener
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,6 +37,8 @@ abstract class BindingProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (this::offsetChangedListener.isInitialized)
+            binding.appbarProfileInfo.removeOnOffsetChangedListener(offsetChangedListener)
         _binding = null
     }
 
@@ -43,7 +48,15 @@ abstract class BindingProfileFragment : Fragment() {
         tvProfileNickname.text = data.nickName
         tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag.ifBlank { TeamTag.LCK.name }, data.lckYears)
         tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, data.ghost)
+        setSwipeLayout()
         setGhostProgress(data.ghost)
+    }
+
+    private fun setSwipeLayout() {
+        offsetChangedListener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            binding.layoutProfileSwipe.isEnabled = verticalOffset == 0
+        }
+        binding.appbarProfileInfo.addOnOffsetChangedListener(offsetChangedListener)
     }
 
     private fun setGhostProgress(percentage: Int) {
