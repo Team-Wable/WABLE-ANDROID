@@ -32,9 +32,14 @@
     <string name="label_feed_ghost_level">투명도 %s%%</string>
     <string name="label_feed_upload_time">· %s</string>
 
+    <!-- comment -->
+    <string name="label_comment_write_child_comment">답글쓰기</string>
+
     <!-- snack bar -->
-    <string name="label_snack_bar_comment_ing">답글 남기는 중</string>
-    <string name="label_snack_bar_comment_complete">답글을 남겼어요</string>
+    <string name="label_snack_bar_comment_ing">댓글 남기는 중</string>
+    <string name="label_snack_bar_comment_complete">댓글을 남겼어요</string>
+    <string name="label_snack_bar_child_comment_ing">답글 남기는 중</string>
+    <string name="label_snack_bar_child_comment_complete">답글을 남겼어요</string>
     <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
     <string name="label_snack_bar_report">신고 접수가 완료되었어요.\n24시간 내에 조치할 예정이에요.</string>
 
