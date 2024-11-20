@@ -11,4 +11,5 @@ data class UserModel(
     val memberFanTeam: String,
     val memberLckYears: Int,
     val memberLevel: Int,
+    val isAdmin: Boolean,
 )
