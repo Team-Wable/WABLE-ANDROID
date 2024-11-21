@@ -15,6 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:background="@color/black"
             android:minHeight="0dp">
 
             <ImageView
@@ -28,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:text="@string/tv_news_appbar_title"
-                android:textAppearance="@style/TextAppearance.Wable.Head1" />
+                android:textAppearance="@style/TextAppearance.Wable.Head1"
+                android:textColor="@color/white" />
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -58,14 +60,17 @@
         android:id="@+id/tl_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/padding_horizontal"
         android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lottie_news_tab"
         app:tabIndicator="@drawable/shape_fill_2_rect"
         app:tabIndicatorColor="@color/purple_50"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="2dp"
         app:tabSelectedTextAppearance="@style/TextAppearance.Wable.Body1"
-        app:tabSelectedTextColor="@color/black"
+        app:tabSelectedTextColor="@color/purple_50"
         app:tabTextAppearance="@style/TextAppearance.Wable.Body2"
         app:tabTextColor="@color/gray_600">
 
