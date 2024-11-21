@@ -41,6 +41,8 @@ object AmplitudePostTag {
 object AmplitudeNewsTag {
     const val CLICK_GAMESCHEDULE = "click_gameschedule"
     const val CLICK_RANKING = "click_ranking"
+    const val CLICK_NEWS = "click_news"
+    const val CLICK_NOTICE = "click_notice"
 }
 
 object AmplitudeNotiTag {
