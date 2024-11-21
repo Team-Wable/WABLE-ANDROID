@@ -48,6 +48,7 @@ abstract class BindingProfileFragment : Fragment() {
         tvProfileNickname.text = data.nickName
         tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag.ifBlank { TeamTag.LCK.name }, data.lckYears)
         tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, data.ghost)
+        tvProfileLevel.text = getString(R.string.label_profile_level, data.level)
         setSwipeLayout()
         setGhostProgress(data.ghost)
     }
