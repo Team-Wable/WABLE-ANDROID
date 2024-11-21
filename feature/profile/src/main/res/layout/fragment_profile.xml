@@ -58,17 +58,29 @@
                             tools:src="@drawable/img_empty" />
 
                         <ImageView
-                            android:id="@+id/tv_profile_level_tag"
+                            android:id="@+id/iv_profile_level_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginBottom="2dp"
                             android:contentDescription="@string/content_description_profile_level_tag"
-                            android:src="@drawable/ic_profile_tag_level_1"
+                            android:src="@drawable/ic_profile_level"
                             app:layout_constraintBottom_toTopOf="@id/tv_profile_nickname"
                             app:layout_constraintStart_toEndOf="@id/iv_profile_img"
                             app:layout_constraintTop_toTopOf="@id/iv_profile_img"
                             app:layout_constraintVertical_chainStyle="packed" />
+
+                        <TextView
+                            android:id="@+id/tv_profile_level"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:textAppearance="@style/TextAppearance.Wable.Caption1"
+                            android:textColor="@color/gray_600"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_profile_level_tag"
+                            app:layout_constraintStart_toEndOf="@id/iv_profile_level_tag"
+                            app:layout_constraintTop_toTopOf="@id/iv_profile_level_tag"
+                            tools:text="LV. 999999" />
 
                         <TextView
                             android:id="@+id/tv_profile_nickname"
@@ -78,8 +90,8 @@
                             android:maxLength="10"
                             android:textAppearance="@style/TextAppearance.Wable.Head2"
                             app:layout_constraintBottom_toBottomOf="@id/iv_profile_img"
-                            app:layout_constraintStart_toStartOf="@id/tv_profile_level_tag"
-                            app:layout_constraintTop_toBottomOf="@id/tv_profile_level_tag"
+                            app:layout_constraintStart_toStartOf="@id/iv_profile_level_tag"
+                            app:layout_constraintTop_toBottomOf="@id/iv_profile_level_tag"
                             tools:text="@string/dummy" />
 
                         <com.google.android.material.button.MaterialButton
