@@ -62,8 +62,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/padding_horizontal"
         android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lottie_news_tab"
         app:tabIndicator="@drawable/shape_fill_2_rect"
         app:tabIndicatorColor="@color/purple_50"
