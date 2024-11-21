@@ -17,4 +17,5 @@ internal fun ResponseCommentDto.toComment(): Comment =
         this.time,
         this.memberFanTeam,
         this.contentId,
+        this.isBlind ?: false,
     )

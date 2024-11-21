@@ -19,4 +19,5 @@ data class ResponseCommentDto(
     @SerialName("commentImageUrl") val commentImageUrl: String? = null,
     @SerialName("memberFanTeam") val memberFanTeam: String,
     @SerialName("contentId") val contentId: Long? = null,
+    @SerialName("isBlind") val isBlind: Boolean? = null, // TODO::임시로 nullable 받음 대댓글 구현후 non-null 변경 예정
 )

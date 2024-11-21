@@ -13,6 +13,7 @@ data class Comment(
     val uploadTime: String,
     val postAuthorTeamTag: String,
     val feedId: Long?,
+    val isBlind: Boolean,
     val ghostColor: String = GhostColor.DEFAULT_0,
     val isAuth: Boolean = false,
 )
