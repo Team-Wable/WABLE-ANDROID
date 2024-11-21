@@ -121,7 +121,6 @@
                 android:gravity="top|start"
                 android:hint="@string/hint_posting_content"
                 android:importantForAutofill="no"
-                android:inputType="textVisiblePassword|textMultiLine|textNoSuggestions"
                 android:maxLength="500"
                 android:textColor="@color/gray_800"
                 android:textColorHint="@color/gray_500"
