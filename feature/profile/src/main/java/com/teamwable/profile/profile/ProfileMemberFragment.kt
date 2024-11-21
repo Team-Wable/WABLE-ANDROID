@@ -13,7 +13,6 @@ import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
-import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +68,7 @@ class ProfileMemberFragment : BindingProfileFragment() {
     }
 
     private fun setProfilePagerAdapter(data: Profile) {
-        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, data.id, data.nickName, ProfileUserType.MEMBER)
+        binding.vpProfile.adapter = ProfilePagerStateAdapter(this, data.id, data.nickName, viewModel.fetchUserType())
         TabLayoutMediator(
             binding.tlProfile, binding.vpProfile,
         ) { tab, position ->
