@@ -16,4 +16,6 @@ interface ProfileRepository {
     suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit>
 
     suspend fun postReport(nickname: String, relateText: String): Result<Unit>
+
+    suspend fun postBan(banInfo: Triple<Long, String, Long>): Result<Unit>
 }

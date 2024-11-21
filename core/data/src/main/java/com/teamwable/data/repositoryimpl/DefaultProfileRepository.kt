@@ -1,6 +1,7 @@
 package com.teamwable.data.repositoryimpl
 
 import android.content.ContentResolver
+import com.teamwable.data.mapper.toData.toBanDto
 import com.teamwable.data.mapper.toData.toReportDto
 import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
@@ -71,6 +72,13 @@ internal class DefaultProfileRepository @Inject constructor(
     override suspend fun postReport(nickname: String, relateText: String): Result<Unit> = runCatching {
         val request = Pair(nickname, relateText).toReportDto()
         apiService.postReport(request)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun postBan(banInfo: Triple<Long, String, Long>): Result<Unit> = runCatching {
+        apiService.postBan(banInfo.toBanDto())
         Unit
     }.onFailure {
         return it.handleThrowable()
