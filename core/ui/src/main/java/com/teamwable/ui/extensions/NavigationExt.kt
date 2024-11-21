@@ -12,6 +12,8 @@ sealed class DeepLinkDestination(val addressRes: Int) {
 
     data object BottomSheet : DeepLinkDestination(R.string.deeplink_url_bottomsheet)
 
+    data object TwoLabelBottomSheet : DeepLinkDestination(R.string.deeplink_url_two_label_bottomsheet)
+
     data object Posting : DeepLinkDestination(R.string.deeplink_url_posting)
 
     data object Profile : DeepLinkDestination(R.string.deeplink_url_profile)
