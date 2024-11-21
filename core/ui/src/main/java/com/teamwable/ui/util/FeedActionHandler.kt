@@ -13,7 +13,9 @@ import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.component.TwoLabelBottomSheet
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -29,10 +31,17 @@ class FeedActionHandler(
     private val fragmentManager: FragmentManager,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    fun onKebabBtnClick(feed: Feed, fetchUserType: (Long) -> ProfileUserType, removeFeed: (Long) -> Unit, reportUser: (String, String) -> Unit) {
+    fun onKebabBtnClick(
+        feed: Feed,
+        fetchUserType: (Long) -> ProfileUserType,
+        removeFeed: (Long) -> Unit,
+        reportUser: (String, String) -> Unit,
+        banUser: (Feed, String) -> Unit,
+    ) {
         when (fetchUserType(feed.postAuthorId)) {
             ProfileUserType.AUTH -> navigateToBottomSheet(BottomSheetType.DELETE_FEED)
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
+            ProfileUserType.ADMIN -> navigateToTwoLabelBottomSheet(BottomSheetType.REPORT, BottomSheetType.BAN)
             ProfileUserType.EMPTY -> return
         }
         handleDialogResult { dialogType ->
@@ -41,9 +50,15 @@ class FeedActionHandler(
                     trackEvent(CLICK_DELETE_POST)
                     removeFeed(feed.feedId)
                 }
+
                 DialogType.REPORT -> {
                     navController.popBackStack()
                     reportUser(feed.postAuthorNickname, "${feed.title}\n${feed.content}")
+                }
+
+                DialogType.BAN -> {
+                    navController.popBackStack()
+                    banUser(feed, BanTriggerType.CONTENT.name.lowercase())
                 }
 
                 else -> Unit
@@ -85,11 +100,17 @@ class FeedActionHandler(
         handleBottomSheetResult()
     }
 
+    private fun navigateToTwoLabelBottomSheet(firstType: BottomSheetType, secondType: BottomSheetType) {
+        TwoLabelBottomSheet.show(context, navController, firstType, secondType)
+        handleBottomSheetResult()
+    }
+
     private fun handleBottomSheetResult() {
         fragmentManager.setFragmentResultListener(BOTTOM_SHEET_RESULT, lifecycleOwner) { _, bundle ->
             when (bundle.getString(BOTTOM_SHEET_TYPE)) {
                 BottomSheetType.DELETE_FEED.name -> navigateToDialog(DialogType.DELETE_FEED)
                 BottomSheetType.REPORT.name -> navigateToDialog(DialogType.REPORT)
+                BottomSheetType.BAN.name -> navigateToDialog(DialogType.BAN)
             }
         }
     }
