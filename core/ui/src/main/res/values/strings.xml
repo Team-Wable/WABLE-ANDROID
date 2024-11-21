@@ -38,6 +38,7 @@
 
     <!-- comment -->
     <string name="label_comment_write_child_comment">답글쓰기</string>
+    <string name="label_comment_blind">블라인드 처리된 내용이에요.</string>
 
     <!-- snack bar -->
     <string name="label_snack_bar_comment_ing">댓글 남기는 중</string>
