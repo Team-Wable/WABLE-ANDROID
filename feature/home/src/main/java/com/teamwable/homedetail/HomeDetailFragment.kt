@@ -212,6 +212,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> viewModel.banUser(Triple(trigger.postAuthorId, banType, trigger.feedId)) },
             )
         }
 
@@ -257,7 +258,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         when (viewModel.fetchUserType(id)) {
             ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
             ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
-            ProfileUserType.EMPTY -> return
+            else -> return
         }
     }
 

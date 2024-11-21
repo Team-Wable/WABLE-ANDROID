@@ -47,11 +47,14 @@ class HomeDetailViewModel @Inject constructor(
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFlow = MutableStateFlow(setOf<Long>())
     private val likeCommentsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val banFeedsFlow = MutableStateFlow(setOf<Long>())
 
     private var authId: Long = -1
+    private var isAdmin = false
 
     init {
         fetchAuthId()
+        fetchIsAdmin()
     }
 
     private fun fetchAuthId() {
@@ -62,13 +65,19 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
+    private fun fetchIsAdmin() = viewModelScope.launch {
+        userInfoRepository.getIsAdmin()
+            .collectLatest { isAdmin = it }
+    }
+
     fun updateHomeDetailToFlow(feed: Feed): Flow<PagingData<Feed>> {
         val feedFlow = flowOf(PagingData.from(listOf(feed))).cachedIn(viewModelScope)
-        return combine(feedFlow, ghostedFlow, likeFeedsFlow) { feedsFlow, ghostedUserIds, likeStates ->
+        return combine(feedFlow, ghostedFlow, likeFeedsFlow, banFeedsFlow) { feedsFlow, ghostedUserIds, likeStates, banState ->
             feedsFlow
                 .map { data ->
                     val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
+                    val transformedBan = if (banState.contains(data.feedId)) transformedGhost.copy(isBlind = true) else transformedGhost
                     transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
@@ -94,6 +103,8 @@ class HomeDetailViewModel @Inject constructor(
                 _uiState.value = HomeDetailUiState.Error("auth id is empty")
                 ProfileUserType.EMPTY
             }
+
+            isAdmin -> ProfileUserType.ADMIN
 
             else -> ProfileUserType.MEMBER
         }
@@ -177,6 +188,15 @@ class HomeDetailViewModel @Inject constructor(
                 .onSuccess { likeCommentsFlow.update { it.toMutableMap().apply { put(commentId, likeState) } } }
                 .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
+        profileRepository.postBan(banInfo)
+            .onSuccess {
+                banFeedsFlow.value = banFeedsFlow.value.toMutableSet().apply { add(banInfo.third) }
+                _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
+            .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
     }
 }
 

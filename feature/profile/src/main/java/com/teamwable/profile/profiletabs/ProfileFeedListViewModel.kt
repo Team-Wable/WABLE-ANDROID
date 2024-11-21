@@ -38,16 +38,18 @@ class ProfileFeedListViewModel @Inject constructor(
     private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val banFeedsFlow = MutableStateFlow(setOf<Long>())
 
     fun updateFeeds(userId: Long): Flow<PagingData<Feed>> {
         val feedsFlow = feedRepository.getProfileFeeds(userId).cachedIn(viewModelScope)
-        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates ->
+        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow, banFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates, banState ->
             feedsFlow
                 .filter { removedFeedIds.contains(it.feedId).not() }
                 .map { data ->
                     val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
-                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                    val transformedBan = if (banState.contains(data.feedId)) transformedGhost.copy(isBlind = true) else transformedGhost
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -93,6 +95,15 @@ class ProfileFeedListViewModel @Inject constructor(
                 .onSuccess { likeFeedsFlow.update { it.toMutableMap().apply { put(feedId, likeState) } } }
                 .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
+        profileRepository.postBan(banInfo)
+            .onSuccess {
+                banFeedsFlow.value = banFeedsFlow.value.toMutableSet().apply { add(banInfo.third) }
+                _event.emit(ProfileFeedSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
+            .onFailure { _uiState.value = ProfileFeedUiState.Error(it.message.toString()) }
     }
 }
 

@@ -116,6 +116,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 fetchUserType = { userType },
                 removeFeed = { viewModel.removeFeed(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> viewModel.banUser(Triple(trigger.postAuthorId, banType, trigger.feedId)) },
             )
         }
 
@@ -163,7 +164,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 tvProfileFeedMemberEmpty.visible(isEmpty)
             }
 
-            ProfileUserType.EMPTY -> return
+            else -> return
         }
     }
 
