@@ -20,4 +20,5 @@ data class ResponseFeedDto(
     @SerialName("isDeleted") val isDeleted: Boolean? = null,
     @SerialName("contentImageUrl") val contentImageUrl: String,
     @SerialName("memberFanTeam") val memberFanTeam: String,
+    @SerialName("isBlind") val isBlind: Boolean,
 )
