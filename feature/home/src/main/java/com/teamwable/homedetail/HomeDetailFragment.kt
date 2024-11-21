@@ -246,6 +246,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeComment = { viewModel.removeComment(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> }, // TODO::대댓글 구현 후 구현
             )
         }
 
