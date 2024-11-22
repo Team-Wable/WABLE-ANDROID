@@ -21,20 +21,12 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         initNewsViewPagerAdapter()
         initTabClickListener()
 
-        setBadgeOnNews(true)
-        setBadgeOnNotice(true)
+        setBadgeOnNews(NewsTabType.NEWS.idx, true)
+        setBadgeOnNews(NewsTabType.NOTICE.idx, true)
     }
 
-    private fun setBadgeOnNews(isVisible: Boolean) {
-        binding.tlNews.getTabAt(2)?.getOrCreateBadge()?.apply {
-            this.isVisible = isVisible
-            horizontalOffset = 1
-            if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
-        }
-    }
-
-    private fun setBadgeOnNotice(isVisible: Boolean) {
-        binding.tlNews.getTabAt(3)?.getOrCreateBadge()?.apply {
+    private fun setBadgeOnNews(idx: Int, isVisible: Boolean) {
+        binding.tlNews.getTabAt(idx)?.getOrCreateBadge()?.apply {
             this.isVisible = isVisible
             horizontalOffset = 1
             if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
@@ -46,10 +38,10 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
             vpNews.adapter = NewsViewPagerAdapter(this@NewsFragment)
             TabLayoutMediator(tlNews, vpNews) { tab, position ->
                 when (position) {
-                    0 -> tab.text = stringOf(R.string.tv_news_tab_match)
-                    1 -> tab.text = stringOf(R.string.tv_news_tab_rank)
-                    2 -> tab.text = stringOf(R.string.tv_news_tab_news)
-                    3 -> tab.text = stringOf(R.string.tv_news_tab_notice)
+                    NewsTabType.MATCH.idx -> tab.text = stringOf(R.string.tv_news_tab_match)
+                    NewsTabType.RANK.idx -> tab.text = stringOf(R.string.tv_news_tab_rank)
+                    NewsTabType.NEWS.idx -> tab.text = stringOf(R.string.tv_news_tab_news)
+                    NewsTabType.NOTICE.idx -> tab.text = stringOf(R.string.tv_news_tab_notice)
                 }
             }.attach()
         }
@@ -59,16 +51,16 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         binding.tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    0 -> trackEvent(CLICK_GAMESCHEDULE)
-                    1 -> trackEvent(CLICK_RANKING)
-                    2 -> {
+                    NewsTabType.MATCH.idx -> trackEvent(CLICK_GAMESCHEDULE)
+                    NewsTabType.RANK.idx -> trackEvent(CLICK_RANKING)
+                    NewsTabType.NEWS.idx -> {
                         trackEvent(CLICK_NEWS)
-                        setBadgeOnNews(false)
+                        setBadgeOnNews(NewsTabType.NEWS.idx, false)
                     }
 
-                    3 -> {
+                    NewsTabType.NOTICE.idx -> {
                         trackEvent(CLICK_NOTICE)
-                        setBadgeOnNotice(false)
+                        setBadgeOnNews(NewsTabType.NOTICE.idx, false)
                     }
                 }
             }
@@ -77,5 +69,10 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        statusBarColorOf(com.teamwable.ui.R.color.white)
     }
 }
