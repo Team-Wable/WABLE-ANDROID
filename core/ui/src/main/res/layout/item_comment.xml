@@ -150,7 +150,7 @@
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/sel_feed_heart"
-        android:backgroundTint="@color/gray_600"
+        android:backgroundTint="@color/sel_share_comment_like_color"
         android:button="@null"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
