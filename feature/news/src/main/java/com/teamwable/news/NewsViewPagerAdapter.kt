@@ -9,14 +9,14 @@ import com.teamwable.news.rank.NewsRankFragment
 
 class NewsViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 4
+    override fun getItemCount(): Int = NewsTabType.entries.size
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> NewsMatchFragment()
-            1 -> NewsRankFragment()
-            2 -> NewsNewsFragment()
-            3 -> NewsNoticeFragment()
+            NewsTabType.MATCH.idx -> NewsMatchFragment()
+            NewsTabType.RANK.idx -> NewsRankFragment()
+            NewsTabType.NEWS.idx -> NewsNewsFragment()
+            NewsTabType.NOTICE.idx -> NewsNoticeFragment()
             else -> NewsMatchFragment()
         }
     }
