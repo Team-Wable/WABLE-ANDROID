@@ -29,4 +29,10 @@
     <!-- item_news_math_score & item_news_rank -->
     <string name="tv_news_tbd">TBD</string>
 
+    <!-- fragment_news & fragment_news_news -->
+    <string name="tv_news_tab_news">뉴스</string>
+
+    <!-- fragment_news & fragment_news_notice -->
+    <string name="tv_news_tab_notice">공지사항</string>
+
 </resources>
