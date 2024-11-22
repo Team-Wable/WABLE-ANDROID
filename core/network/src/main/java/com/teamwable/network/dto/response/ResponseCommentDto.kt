@@ -19,5 +19,7 @@ data class ResponseCommentDto(
     @SerialName("commentImageUrl") val commentImageUrl: String? = null,
     @SerialName("memberFanTeam") val memberFanTeam: String,
     @SerialName("contentId") val contentId: Long? = null,
-    @SerialName("isBlind") val isBlind: Boolean? = null, // TODO::임시로 nullable 받음 대댓글 구현후 non-null 변경 예정
+    @SerialName("isBlind") val isBlind: Boolean,
+    @SerialName("parentCommentId") val parentCommentId: Long? = null, // -1 : 부모 댓글, null : profile의 comment, 이외 : 대댓글
+    @SerialName("childComments") val childComments: List<ResponseCommentDto>? = null, // null : 대댓글, [] : 부모 댓글의 대댓글 없음
 )

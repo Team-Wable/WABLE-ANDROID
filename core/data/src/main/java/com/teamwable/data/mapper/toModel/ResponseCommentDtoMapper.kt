@@ -17,5 +17,18 @@ internal fun ResponseCommentDto.toComment(): Comment =
         this.time,
         this.memberFanTeam,
         this.contentId,
-        this.isBlind ?: false,
+        this.isBlind,
+        this.parentCommentId ?: -1,
     )
+
+internal fun ResponseCommentDto.toComments(): List<Comment> {
+    val comments = mutableListOf<Comment>()
+
+    comments.add(this.toComment())
+
+    this.childComments?.forEach { child ->
+        comments.addAll(child.toComments())
+    }
+
+    return comments
+}

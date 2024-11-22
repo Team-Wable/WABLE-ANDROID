@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CommentService {
-    @GET("api/v2/content/{contentId}/comments")
+    @GET("api/v3/content/{contentId}/comments")
     suspend fun getHomeDetailComments(
         @Path(value = "contentId") contentId: Long,
         @Query(value = "cursor") cursor: Long = -1,
