@@ -78,7 +78,7 @@ class HomeDetailViewModel @Inject constructor(
                     val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
                     val transformedBan = if (banState.contains(data.feedId)) transformedGhost.copy(isBlind = true) else transformedGhost
-                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
