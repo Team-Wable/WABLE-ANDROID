@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_ui"
-    app:startDestination="@id/navigation_two_label_bottomsheet">
+    app:startDestination="@id/navigation_two_button_dialog">
 
     <dialog
         android:id="@+id/navigation_two_button_dialog"
@@ -42,14 +42,15 @@
         android:id="@+id/navigation_two_label_bottomsheet"
         android:name="com.teamwable.ui.component.TwoLabelBottomSheet"
         android:label="TwoLabelBottomSheet"
-        tools:layout="@layout/bottomsheet_two_label" />
-    <argument
-        android:name="${BOTTOM_SHEET_FIRST_TYPE}"
-        android:defaultValue="EMPTY"
-        app:argType="string" />
-    <argument
-        android:name="${BOTTOM_SHEET_SECOND_TYPE}"
-        android:defaultValue="EMPTY"
-        app:argType="string" />
-    <deepLink app:uri="@string/deeplink_url_two_label_bottomsheet" />
+        tools:layout="@layout/bottomsheet_two_label">
+        <argument
+            android:name="${BOTTOM_SHEET_FIRST_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <argument
+            android:name="${BOTTOM_SHEET_SECOND_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_two_label_bottomsheet" />
+    </dialog>
 </navigation>
