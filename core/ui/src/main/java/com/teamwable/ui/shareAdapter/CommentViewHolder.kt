@@ -13,10 +13,10 @@ import com.teamwable.ui.extensions.visible
 class CommentViewHolder private constructor(
     private val binding: ItemCommentBinding,
     commentClickListener: CommentClickListener,
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root), LikeableViewHolder {
     private lateinit var item: Comment
-    val likeBtn = binding.btnCommentLike
-    val likeCountTv = binding.tvCommentLikeCount
+    override val likeBtn = binding.btnCommentLike
+    override val likeCountTv = binding.tvCommentLikeCount
 
     init {
         setupClickListener(itemView, binding.tvCommentContent) { commentClickListener.onItemClick(item.feedId ?: return@setupClickListener) }

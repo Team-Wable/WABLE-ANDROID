@@ -32,10 +32,10 @@ import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentClickListener
-import com.teamwable.ui.shareAdapter.CommentViewHolder
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
 import com.teamwable.ui.shareAdapter.FeedViewHolder
+import com.teamwable.ui.shareAdapter.LikeableViewHolder
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
 import com.teamwable.ui.type.DialogType
@@ -228,7 +228,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             }
         }
 
-        override fun onLikeBtnClick(viewHolder: CommentViewHolder, comment: Comment) {
+        override fun onLikeBtnClick(viewHolder: LikeableViewHolder, comment: Comment) {
             commentActionHandler.onLikeBtnClick(viewHolder, comment.commentId) { commentId, likeState ->
                 singleEventHandler.debounce(coroutineScope = lifecycleScope) {
                     if (comment.isLiked != viewHolder.likeBtn.isChecked) viewModel.updateCommentLike(commentId, comment.content, likeState)
