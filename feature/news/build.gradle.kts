@@ -2,6 +2,7 @@
 plugins {
     id("com.teamwable.wable.feature")
     id("com.teamwable.wable.test")
+    id("com.teamwable.wable.compose.feature")
 }
 android {
     namespace = "com.teamwable.news"
@@ -9,9 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
-    implementation(project(":core:common"))
-    implementation(project(":core:model"))
-    implementation(project(":core:data"))
+    implementation(project(":core:designsystem"))
 
     // AndroidX
     implementation(libs.fragment.ktx)
