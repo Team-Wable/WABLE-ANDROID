@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -125,7 +125,10 @@ fun SelectLckTeamScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.padding(top = 18.dp),
             ) {
-                itemsIndexed(shuffledTeams) { index, team ->
+                items(
+                    items = shuffledTeams,
+                    key = { team -> team.teamName },
+                ) { team ->
                     // 팀이 선택된 상태인지 확인
                     val isSelected = team == selectedTeam
                     LckTeamItem(
