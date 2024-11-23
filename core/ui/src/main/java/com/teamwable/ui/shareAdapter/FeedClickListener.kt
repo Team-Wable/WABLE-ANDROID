@@ -15,5 +15,5 @@ interface FeedClickListener {
 
     fun onKebabBtnClick(feed: Feed)
 
-    fun onCommentBtnClick(feedId: Long)
+    fun onCommentBtnClick(postAuthorNickname: String)
 }

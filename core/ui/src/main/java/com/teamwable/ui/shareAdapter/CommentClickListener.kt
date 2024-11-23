@@ -14,6 +14,8 @@ interface CommentClickListener {
     fun onKebabBtnClick(comment: Comment)
 
     fun onItemClick(feedId: Long)
+
+    fun onChildCommentClick(comment: Comment)
 }
 
 interface LikeableViewHolder {

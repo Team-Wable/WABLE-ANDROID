@@ -113,6 +113,8 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
         override fun onItemClick(feedId: Long) {
             findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to feedId))
         }
+
+        override fun onChildCommentClick(comment: Comment) {}
     }
 
     private fun setAdapter() {

@@ -27,10 +27,12 @@ import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.hideKeyboard
 import com.teamwable.ui.extensions.setOnDuplicateBlockClick
+import com.teamwable.ui.extensions.showKeyboard
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.CommentAdapter
+import com.teamwable.ui.shareAdapter.CommentAdapter.Companion.PARENT_COMMENT_DEFAULT
 import com.teamwable.ui.shareAdapter.CommentClickListener
 import com.teamwable.ui.shareAdapter.FeedAdapter
 import com.teamwable.ui.shareAdapter.FeedClickListener
@@ -38,6 +40,7 @@ import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.shareAdapter.LikeableViewHolder
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.AlarmTriggerType
+import com.teamwable.ui.type.CommentType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
@@ -73,16 +76,17 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         val commentSnackbar = Snackbar.make(binding.root, SnackbarType.COMMENT_ING)
+        val childCommentSnackbar = Snackbar.make(binding.root, SnackbarType.CHILD_COMMENT_ING)
         viewModel.updateHomeDetailToNetwork(args.feedId)
-        collect(commentSnackbar)
+        collect(commentSnackbar, childCommentSnackbar)
         initBackBtnClickListener()
     }
 
-    private fun collect(commentSnackbar: Snackbar) {
+    private fun collect(commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         viewLifeCycleScope.launch {
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
-                    is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar)
+                    is HomeDetailUiState.Success -> setLayout(uiState.feed, commentSnackbar, childCommentSnackbar)
 
                     is HomeDetailUiState.RemoveFeed -> {
                         saveFeedStateResult(Feed(feedId = uiState.feedId), isRemoved = true)
@@ -100,43 +104,50 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is HomeDetailSideEffect.ShowCommentSnackBar -> {
-                        commentSnackbar.updateToCommentComplete()
+                        commentSnackbar.updateToCommentComplete(SnackbarType.COMMENT_COMPLETE)
                         isCommentAdded = true
                         commentAdapter.refresh()
                     }
 
                     is HomeDetailSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
+                    is HomeDetailSideEffect.ShowChildCommentSnackBar -> {
+                        childCommentSnackbar.updateToCommentComplete(SnackbarType.CHILD_COMMENT_COMPLETE)
+                        isCommentAdded = true
+                        commentAdapter.refresh()
+                    }
+
                     is HomeDetailSideEffect.DismissBottomSheet -> findNavController().popBackStack()
                 }
             }
         }
     }
 
-    private fun setLayout(feed: Feed, commentSnackbar: Snackbar) {
+    private fun setLayout(feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         submitFeedList(feed)
         submitCommentList(feed)
         concatAdapter()
         scrollToBottomOnCommentAdded()
-        initEditTextHint(feed.postAuthorNickname)
-        initEditTextBtn(feed.feedId, commentSnackbar)
+        initEditTextHint(feed.postAuthorNickname, CommentType.PARENT)
+        initEditTextBtn(feed.feedId, commentSnackbar, childCommentSnackbar)
         initRvClickListenerToHideKeyboard()
     }
 
-    private fun initEditTextHint(nickname: String) {
-        binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, nickname)
+    private fun initEditTextHint(nickname: String, type: CommentType) = when (type) {
+        CommentType.PARENT -> binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_comment_input, nickname)
+        CommentType.CHILD -> binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_child_comment_input, nickname)
     }
 
-    private fun initEditTextBtn(contentId: Long, commentSnackbar: Snackbar) {
+    private fun initEditTextBtn(contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         binding.run {
             etHomeDetailCommentInput.doAfterTextChanged {
                 isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
                 totalCommentLength = etHomeDetailCommentInput.text.length
-                handleUploadBtn(isCommentNull, totalCommentLength, contentId, commentSnackbar)
+                handleUploadBtn(isCommentNull, totalCommentLength, contentId, commentSnackbar, childCommentSnackbar)
             }
         }
     }
 
-    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, contentId: Long, commentSnackbar: Snackbar) {
+    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         when {
             (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
                 setUploadingBtnSrc(
@@ -144,7 +155,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = true
-                    initUploadingActivateBtnClickListener(contentId, commentSnackbar)
+                    initUploadingActivateBtnClickListener(contentId, commentSnackbar, childCommentSnackbar)
                 }
             }
 
@@ -169,11 +180,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         clickListener.invoke()
     }
 
-    private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar) {
+    private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
             trackEvent(CLICK_WRITE_COMMENT)
             viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
-            commentSnackbar.show()
+            if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
             binding.etHomeDetailCommentInput.text.clear()
             requireActivity().hideKeyboard(binding.root)
         }
@@ -216,9 +227,16 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             )
         }
 
-        override fun onCommentBtnClick(feedId: Long) {
-            binding.etHomeDetailCommentInput.requestFocus()
+        override fun onCommentBtnClick(postAuthorNickname: String) {
+            handleCommentBtnClick(postAuthorNickname, CommentType.PARENT)
+            viewModel.setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
         }
+    }
+
+    private fun handleCommentBtnClick(nickname: String, commentType: CommentType) {
+        initEditTextHint(nickname, commentType)
+        binding.etHomeDetailCommentInput.text.clear()
+        binding.root.context.showKeyboard(binding.etHomeDetailCommentInput)
     }
 
     private fun onClickCommentItem() = object : CommentClickListener {
@@ -252,6 +270,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
         override fun onItemClick(feedId: Long) {
             requireActivity().hideKeyboard(binding.root)
+        }
+
+        override fun onChildCommentClick(comment: Comment) {
+            handleCommentBtnClick(comment.postAuthorNickname, CommentType.CHILD)
+            viewModel.setParentCommentIds(comment.commentId, comment.postAuthorId)
         }
     }
 

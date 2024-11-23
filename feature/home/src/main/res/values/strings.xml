@@ -8,6 +8,7 @@
     <!-- home detail -->
     <string name="label_home_detail_toolbar_back">게시글</string>
     <string name="hint_home_detail_comment_input">%s에게 댓글 남기기...</string>
+    <string name="hint_home_detail_child_comment_input">%s에게 답글 남기기...</string>
 
     <!-- loading -->
     <string-array name="loading_contents">

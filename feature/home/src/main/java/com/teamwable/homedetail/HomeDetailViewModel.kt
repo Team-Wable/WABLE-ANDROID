@@ -14,6 +14,7 @@ import com.teamwable.model.Comment
 import com.teamwable.model.Feed
 import com.teamwable.model.Ghost
 import com.teamwable.model.LikeState
+import com.teamwable.ui.shareAdapter.CommentAdapter.Companion.PARENT_COMMENT_DEFAULT
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,6 +52,8 @@ class HomeDetailViewModel @Inject constructor(
 
     private var authId: Long = -1
     private var isAdmin = false
+    private var _parentCommentIds = Pair(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
+    val parentCommentIds get() = _parentCommentIds
 
     init {
         fetchAuthId()
@@ -121,12 +124,14 @@ class HomeDetailViewModel @Inject constructor(
         }
     }
 
-    fun addComment(contentId: Long, commentText: String) {
-        viewModelScope.launch {
-            commentRepository.postComment(contentId, commentText)
-                .onSuccess { _event.emit(HomeDetailSideEffect.ShowCommentSnackBar) }
-                .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
-        }
+    fun addComment(contentId: Long, commentText: String) = viewModelScope.launch {
+        commentRepository.postComment(contentId, Triple(commentText, _parentCommentIds.first, _parentCommentIds.second))
+            .onSuccess {
+                if (_parentCommentIds.first == PARENT_COMMENT_DEFAULT)
+                    _event.emit(HomeDetailSideEffect.ShowCommentSnackBar)
+                else _event.emit(HomeDetailSideEffect.ShowChildCommentSnackBar)
+            }
+            .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
     }
 
     fun updateHomeDetailToNetwork(feedId: Long) {
@@ -198,6 +203,10 @@ class HomeDetailViewModel @Inject constructor(
             }
             .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
     }
+
+    fun setParentCommentIds(parentCommentId: Long, parentCommentAuthorId: Long) {
+        _parentCommentIds = Pair(parentCommentId, parentCommentAuthorId)
+    }
 }
 
 sealed interface HomeDetailUiState {
@@ -214,6 +223,8 @@ sealed interface HomeDetailSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeDetailSideEffect
 
     data object ShowCommentSnackBar : HomeDetailSideEffect
+
+    data object ShowChildCommentSnackBar : HomeDetailSideEffect
 
     data object DismissBottomSheet : HomeDetailSideEffect
 }

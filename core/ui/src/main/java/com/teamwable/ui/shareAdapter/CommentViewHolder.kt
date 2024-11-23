@@ -24,6 +24,7 @@ class CommentViewHolder private constructor(
         setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(this, item) }
         setupClickListener(binding.ivCommentProfileImg, binding.tvCommentNickname) { commentClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item) }
+        setupClickListener(binding.btnCommentWriteChildComment, binding.tvCommentWriteChildCommentLabel) { commentClickListener.onChildCommentClick(item) }
     }
 
     private fun setupClickListener(vararg views: View, action: () -> Unit) {
