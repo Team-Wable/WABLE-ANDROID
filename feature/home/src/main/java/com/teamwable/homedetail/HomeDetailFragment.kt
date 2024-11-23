@@ -128,7 +128,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         concatAdapter()
         scrollToBottomOnCommentAdded()
         initEditTextHint(feed.postAuthorNickname, CommentType.PARENT)
-        initEditTextBtn(feed.feedId, commentSnackbar, childCommentSnackbar)
+        initEditTextBtn(feed, commentSnackbar, childCommentSnackbar)
         initRvClickListenerToHideKeyboard()
     }
 
@@ -137,17 +137,17 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         CommentType.CHILD -> binding.etHomeDetailCommentInput.hint = getString(R.string.hint_home_detail_child_comment_input, nickname)
     }
 
-    private fun initEditTextBtn(contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
+    private fun initEditTextBtn(feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         binding.run {
             etHomeDetailCommentInput.doAfterTextChanged {
                 isCommentNull = etHomeDetailCommentInput.text.isNullOrBlank()
                 totalCommentLength = etHomeDetailCommentInput.text.length
-                handleUploadBtn(isCommentNull, totalCommentLength, contentId, commentSnackbar, childCommentSnackbar)
+                handleUploadBtn(isCommentNull, totalCommentLength, feed, commentSnackbar, childCommentSnackbar)
             }
         }
     }
 
-    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
+    private fun handleUploadBtn(isCommentNull: Boolean, totalCommentLength: Int, feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         when {
             (!isCommentNull && totalCommentLength <= POSTING_MAX) -> {
                 setUploadingBtnSrc(
@@ -155,7 +155,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     com.teamwable.common.R.drawable.ic_home_comment_upload_btn_active,
                 ) {
                     binding.ibHomeDetailCommentInputUpload.isEnabled = true
-                    initUploadingActivateBtnClickListener(contentId, commentSnackbar, childCommentSnackbar)
+                    initUploadingActivateBtnClickListener(feed, commentSnackbar, childCommentSnackbar)
                 }
             }
 
@@ -180,11 +180,17 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         clickListener.invoke()
     }
 
-    private fun initUploadingActivateBtnClickListener(contentId: Long, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
+    private fun initUploadingActivateBtnClickListener(feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
             trackEvent(CLICK_WRITE_COMMENT)
-            viewModel.addComment(contentId, binding.etHomeDetailCommentInput.text.toString())
-            if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
+            viewModel.addComment(feed.feedId, binding.etHomeDetailCommentInput.text.toString())
+            if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) {
+                commentSnackbar.show()
+            } else {
+                childCommentSnackbar.show()
+                initEditTextHint(feed.postAuthorNickname, CommentType.PARENT)
+                viewModel.setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
+            }
             binding.etHomeDetailCommentInput.text.clear()
             requireActivity().hideKeyboard(binding.root)
         }
