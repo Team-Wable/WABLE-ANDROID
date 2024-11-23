@@ -5,18 +5,19 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.teamwable.model.Comment
 import com.teamwable.ui.extensions.ItemDiffCallback
+import com.teamwable.ui.type.CommentType
 
 class CommentAdapter(private val commentClickListener: CommentClickListener) : PagingDataAdapter<Comment, ViewHolder>(commentDiffCallback) {
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)?.parentCommentId ?: PARENT_COMMENT_DEFAULT) {
-            PARENT_COMMENT_DEFAULT -> VIEW_TYPE_COMMENT
-            else -> VIEW_TYPE_CHILD_COMMENT
+            PARENT_COMMENT_DEFAULT -> CommentType.PARENT.id
+            else -> CommentType.CHILD.id
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_COMMENT -> CommentViewHolder.from(parent, commentClickListener)
+            CommentType.PARENT.id -> CommentViewHolder.from(parent, commentClickListener)
             else -> ChildCommentViewHolder.from(parent, commentClickListener)
         }
     }
@@ -30,8 +31,6 @@ class CommentAdapter(private val commentClickListener: CommentClickListener) : P
     }
 
     companion object {
-        const val VIEW_TYPE_COMMENT = 0
-        const val VIEW_TYPE_CHILD_COMMENT = 1
         const val PARENT_COMMENT_DEFAULT = -1L
         private val commentDiffCallback = ItemDiffCallback<Comment>(
             onItemsTheSame = { old, new -> old.commentId == new.commentId },
