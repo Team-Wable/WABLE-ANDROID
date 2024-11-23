@@ -10,7 +10,6 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
 
     // AndroidX
     implementation(libs.fragment.ktx)
