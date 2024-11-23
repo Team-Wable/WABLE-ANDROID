@@ -48,7 +48,7 @@ class HomeDetailViewModel @Inject constructor(
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFlow = MutableStateFlow(setOf<Long>())
     private val likeCommentsFlow = MutableStateFlow(mapOf<Long, LikeState>())
-    private val banFeedsFlow = MutableStateFlow(setOf<Long>())
+    private val bannedFlow = MutableStateFlow(setOf<Long>())
 
     private var authId: Long = -1
     private var isAdmin = false
@@ -75,7 +75,7 @@ class HomeDetailViewModel @Inject constructor(
 
     fun updateHomeDetailToFlow(feed: Feed): Flow<PagingData<Feed>> {
         val feedFlow = flowOf(PagingData.from(listOf(feed))).cachedIn(viewModelScope)
-        return combine(feedFlow, ghostedFlow, likeFeedsFlow, banFeedsFlow) { feedsFlow, ghostedUserIds, likeStates, banState ->
+        return combine(feedFlow, ghostedFlow, likeFeedsFlow, bannedFlow) { feedsFlow, ghostedUserIds, likeStates, banState ->
             feedsFlow
                 .map { data ->
                     val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
@@ -88,13 +88,14 @@ class HomeDetailViewModel @Inject constructor(
 
     fun updateComments(feedId: Long): Flow<PagingData<Comment>> {
         val commentsFlow = commentRepository.getHomeDetailComments(feedId).cachedIn(viewModelScope)
-        return combine(commentsFlow, removedCommentsFlow, ghostedFlow, likeCommentsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
+        return combine(commentsFlow, removedCommentsFlow, ghostedFlow, likeCommentsFlow, bannedFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates, banState ->
             commentsFlow
                 .filter { removedCommentIds.contains(it.commentId).not() }
                 .map { data ->
                     val likeState = likeStates[data.commentId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
-                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                    val transformedBan = if (banState.contains(data.commentId)) transformedGhost.copy(isBlind = true) else transformedGhost
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -198,7 +199,7 @@ class HomeDetailViewModel @Inject constructor(
     fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
         profileRepository.postBan(banInfo)
             .onSuccess {
-                banFeedsFlow.value = banFeedsFlow.value.toMutableSet().apply { add(banInfo.third) }
+                bannedFlow.value = bannedFlow.value.toMutableSet().apply { add(banInfo.third) }
                 _event.emit(HomeDetailSideEffect.ShowSnackBar(SnackbarType.BAN))
             }
             .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
