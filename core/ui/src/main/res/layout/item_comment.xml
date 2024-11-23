@@ -173,7 +173,7 @@
         android:id="@+id/tv_comment_write_child_comment_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:padding="4dp"
         android:text="@string/label_comment_write_child_comment"
         android:textAppearance="@style/TextAppearance.Wable.Caption3"
         android:textColor="@color/gray_600"
