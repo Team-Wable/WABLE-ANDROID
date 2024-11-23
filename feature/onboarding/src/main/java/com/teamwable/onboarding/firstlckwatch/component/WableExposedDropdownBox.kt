@@ -25,12 +25,12 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.component.card.WableCustomCardWithStroke
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun WableExposedDropdownBox(
-    options: PersistentList<Int>,
+    options: ImmutableList<Int>,
     expanded: Boolean = false,
     selectedIndex: Int = 0,
     listState: LazyListState,
@@ -80,7 +80,10 @@ fun WableExposedDropdownBox(
                     contentPadding = PaddingValues(vertical = 4.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    itemsIndexed(options) { index, year ->
+                    itemsIndexed(
+                        items = options,
+                        key = { _, year -> year },
+                    ) { index, year ->
                         LckYearDropdownItem(
                             year = year.toString(),
                             onClick = {

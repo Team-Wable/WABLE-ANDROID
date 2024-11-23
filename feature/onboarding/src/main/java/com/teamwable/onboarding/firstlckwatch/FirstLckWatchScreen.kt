@@ -34,7 +34,7 @@ import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.firstlckwatch.component.WableExposedDropdownBox
 import com.teamwable.onboarding.firstlckwatch.model.FirstLckWatchSideEffect
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun FirstLckWatchRoute(
@@ -70,7 +70,7 @@ fun FirstLckWatchScreen(
 ) {
     SetStatusBarColor(color = WableTheme.colors.white)
 
-    val options = (2012..2024).toPersistentList()
+    val options = (2012..2024).toImmutableList()
 
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by rememberSaveable { mutableIntStateOf(options.lastIndex) }
