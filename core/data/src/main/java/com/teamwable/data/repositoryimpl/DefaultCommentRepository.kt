@@ -52,9 +52,8 @@ internal class DefaultCommentRepository @Inject constructor(
         return it.handleThrowable()
     }
 
-    override suspend fun postComment(contentId: Long, commentText: String): Result<Unit> = runCatching {
-        val request = Pair(commentText, "comment").toPostCommentDto()
-        apiService.postComment(contentId, request)
+    override suspend fun postComment(contentId: Long, commentInfo: Triple<String, Long, Long>): Result<Unit> = runCatching {
+        apiService.postComment(contentId, commentInfo.toPostCommentDto())
         Unit
     }.onFailure {
         return it.handleThrowable()

@@ -31,7 +31,7 @@ interface CommentService {
         @Path(value = "commentId") commentId: Long,
     ): BaseUnitResponse<Unit>
 
-    @POST("api/v1/content/{contentId}/comment")
+    @POST("api/v3/content/{contentId}/comment")
     suspend fun postComment(
         @Path(value = "contentId") contentId: Long,
         @Body request: RequestPostCommentDto,
