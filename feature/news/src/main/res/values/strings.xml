@@ -35,4 +35,7 @@
     <!-- fragment_news & fragment_news_notice -->
     <string name="tv_news_tab_notice">공지사항</string>
 
+    <!-- fragment_news_notice -->
+    <string name="tv_news_notice_empty">아직 작성된 공지사항이 없어요.</string>
+
 </resources>
