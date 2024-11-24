@@ -1,6 +1,8 @@
 package com.teamwable.news.notice
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +20,7 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.news.model.NewsInfoModel
 import com.teamwable.ui.util.CalculateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsNoticeItem(context: Context, data: NewsInfoModel, navigateToDetail: (NewsInfoModel) -> Unit) {
     Box(modifier = Modifier.clickable { navigateToDetail(data) }) {

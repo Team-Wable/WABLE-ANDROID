@@ -1,6 +1,8 @@
 package com.teamwable.news.notice
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +21,7 @@ import com.teamwable.news.NewsViewModel
 import com.teamwable.news.R
 import com.teamwable.news.model.NewsInfoModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun NewsNoticeRoute(
     viewModel: NewsViewModel = hiltViewModel(),
@@ -35,6 +38,7 @@ internal fun NewsNoticeRoute(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsNoticeScreen(
     context: Context,
