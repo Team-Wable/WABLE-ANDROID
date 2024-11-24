@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.R
-import com.teamwable.news.notice.component.NewsNoticeEmptyScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

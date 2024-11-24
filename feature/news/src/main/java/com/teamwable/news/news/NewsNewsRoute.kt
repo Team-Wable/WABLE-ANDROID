@@ -25,13 +25,13 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.LoadingScreen
+import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.R
 import com.teamwable.news.news.component.WableNewsItems
 import com.teamwable.news.news.component.WableNewsTopBanner
 import com.teamwable.news.news.model.NewsInfoSideEffect
-import com.teamwable.news.notice.component.NewsNoticeEmptyScreen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 

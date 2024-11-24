@@ -1,4 +1,4 @@
-package com.teamwable.news.notice.component
+package com.teamwable.designsystem.component.screen
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
