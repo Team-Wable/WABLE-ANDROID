@@ -20,14 +20,29 @@ import com.teamwable.news.news.component.WableNewsTopBanner
 
 @Composable
 fun NewsNewsRoute(
+    viewModel: NewsNewsViewModel = hiltViewModel(),
     navigateToDetail: (NewsInfoModel) -> Unit,
 ) {
     NewsNewsScreen(navigateToDetail)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val newsItems = viewModel.newsPagingFlow.collectAsLazyPagingItems()
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest { sideEffect ->
+                when (sideEffect) {
+                    is NewsInfoSideEffect.NavigateToDetail -> navigateToDetail(sideEffect.newsInfoModel)
+                    else -> Unit
+                }
+            }
+    }
+
 }
 
 @Composable
 fun NewsNewsScreen(
     navigateToProfile: (NewsInfoModel) -> Unit,
+    onItemClick: (NewsInfoModel) -> Unit,
 ) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 4.dp),
@@ -63,6 +78,7 @@ fun NewsNewsScreen(
                 newsItem = item,
                 onClick = navigateToProfile,
             )
+                            onClick = onItemClick,
         }
     }
 }
@@ -82,7 +98,8 @@ val newsList = List(20) { index ->
 fun GreetingPreview() {
     WableTheme {
         NewsNewsScreen(
-            navigateToProfile = {},
+            onItemClick = {},
+            newsItems = flowOf(PagingData.from(newsList)).collectAsLazyPagingItems(),
         )
     }
 }
