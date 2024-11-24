@@ -8,8 +8,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.teamwable.designsystem.extension.system.SetLightNavigationBar
-import com.teamwable.designsystem.extension.system.SetStatusBarColor
 
 private val LocalWableColors = staticCompositionLocalOf<WableColors> {
     error("No WableColors provided")
@@ -59,8 +57,6 @@ fun WableTheme(
 ) {
     val colors = wableLightColors()
     val typography = wableTypography()
-    SetStatusBarColor(color = colors.white)
-    SetLightNavigationBar()
     ProvideWableColorsAndTypography(colors, typography) {
         MaterialTheme(
             content = content, colorScheme = lightColorScheme(colors),

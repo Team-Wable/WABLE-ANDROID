@@ -7,7 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.teamwable.common.di.MAIN
 import com.teamwable.common.intentprovider.IntentProvider
+import com.teamwable.designsystem.extension.system.SetLightNavigationBar
+import com.teamwable.designsystem.extension.system.SetStatusBarColor
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.theme.WableTheme.colors
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,6 +27,8 @@ class MainComposeActivity : ComponentActivity() {
         setContent {
             WableTheme {
                 val navigator: MainNavigator = rememberMainNavigator()
+                SetStatusBarColor(color = colors.white)
+                SetLightNavigationBar()
                 MainScreen(
                     navigator = navigator,
                     intentProvider = intentProvider,
