@@ -1,8 +1,8 @@
 package com.teamwable.news
 
 import androidx.navigation.fragment.navArgs
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.databinding.FragmentNewsDetailBinding
-import com.teamwable.news.model.NewsInfoModel
 import com.teamwable.ui.base.BindingFragment
 
 class NewsDetailFragment : BindingFragment<FragmentNewsDetailBinding>(FragmentNewsDetailBinding::inflate) {

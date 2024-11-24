@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.news.model.NewsInfoModel
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.ui.util.CalculateTime
 
 @RequiresApi(Build.VERSION_CODES.O)

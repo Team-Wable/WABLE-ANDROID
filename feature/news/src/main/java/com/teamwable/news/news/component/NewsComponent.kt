@@ -26,7 +26,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.news.model.NewsInfoModel
+import com.teamwable.model.news.NewsInfoModel
 
 @Composable
 fun WableNewsTopBanner(

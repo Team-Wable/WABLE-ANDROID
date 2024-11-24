@@ -3,9 +3,9 @@ package com.teamwable.news.news
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsFragmentDirections
 import com.teamwable.news.databinding.FragmentNewsNewsBinding
-import com.teamwable.news.model.NewsInfoModel
 import com.teamwable.ui.base.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 

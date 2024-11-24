@@ -14,7 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.news.model.NewsInfoModel
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.news.component.WableNewsItems
 import com.teamwable.news.news.component.WableNewsTopBanner
 
