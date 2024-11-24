@@ -3,6 +3,7 @@ package com.teamwable.news.notice
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,7 +58,7 @@ fun NewsNoticeScreen(
 }
 
 @Composable
-fun NewsNoticeEmptyScreen(emptyTxt: Int) {
+fun NewsNoticeEmptyScreen(@StringRes emptyTxt: Int) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
             modifier = Modifier.align(Alignment.Center),
