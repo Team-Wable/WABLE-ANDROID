@@ -13,12 +13,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FeedService {
-    @GET("api/v2/contents")
+    @GET("api/v3/contents")
     suspend fun getHomeFeeds(
         @Query(value = "cursor") contentId: Long = -1,
     ): BaseResponse<List<ResponseFeedDto>>
 
-    @GET("api/v2/member/{memberId}/contents")
+    @GET("api/v3/member/{memberId}/contents")
     suspend fun getProfileFeeds(
         @Path("memberId") userId: Long,
         @Query(value = "cursor") contentId: Long = -1,
@@ -29,7 +29,7 @@ interface FeedService {
         @Path(value = "contentId") contentId: Long,
     ): BaseUnitResponse<Unit>
 
-    @GET("api/v2/content/{contentId}")
+    @GET("api/v3/content/{contentId}")
     suspend fun getHomeDetail(
         @Path(value = "contentId") contentId: Long,
     ): BaseResponse<ResponseFeedDto>

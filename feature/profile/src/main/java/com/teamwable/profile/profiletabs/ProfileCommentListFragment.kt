@@ -106,6 +106,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
                 fetchUserType = { userType },
                 removeComment = { viewModel.removeComment(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> viewModel.banUser(Triple(trigger.postAuthorId, banType, trigger.commentId)) },
             )
         }
 
@@ -151,7 +152,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
                 tvProfileCommentMemberEmptyLabel.visible(isEmpty)
             }
 
-            ProfileUserType.EMPTY -> return
+            else -> return
         }
     }
 

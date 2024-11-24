@@ -49,7 +49,13 @@ class CommentViewHolder private constructor(
             viewCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
             btnCommentGhost.visible(!comment.isAuth)
             spacerComment.visible(!comment.isAuth)
+            setBlindVisible(comment.isBlind)
         }
+    }
+
+    private fun setBlindVisible(isBlind: Boolean) = with(binding) {
+        tvCommentContent.visible(!isBlind)
+        tvCommentBlind.visible(isBlind)
     }
 
     companion object {

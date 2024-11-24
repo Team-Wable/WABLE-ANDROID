@@ -38,16 +38,18 @@ class ProfileCommentListViewModel @Inject constructor(
     private val removedCommentsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedCommentsFlow = MutableStateFlow(setOf<Long>())
     private val likeCommentsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val banFeedsFlow = MutableStateFlow(setOf<Long>())
 
     fun updateComments(userId: Long): Flow<PagingData<Comment>> {
         val commentsFlow = commentRepository.getProfileComments(userId).cachedIn(viewModelScope)
-        return combine(commentsFlow, removedCommentsFlow, ghostedCommentsFlow, likeCommentsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates ->
+        return combine(commentsFlow, removedCommentsFlow, ghostedCommentsFlow, likeCommentsFlow, banFeedsFlow) { commentsFlow, removedCommentIds, ghostedUserIds, likeStates, banState ->
             commentsFlow
                 .filter { removedCommentIds.contains(it.commentId).not() }
                 .map { data ->
                     val likeState = likeStates[data.commentId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
-                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                    val transformedBan = if (banState.contains(data.commentId)) transformedGhost.copy(isBlind = true) else transformedGhost
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -93,6 +95,15 @@ class ProfileCommentListViewModel @Inject constructor(
                 .onSuccess { likeCommentsFlow.update { it.toMutableMap().apply { put(commentId, likeState) } } }
                 .onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
         }
+    }
+
+    fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
+        profileRepository.postBan(banInfo)
+            .onSuccess {
+                banFeedsFlow.value = banFeedsFlow.value.toMutableSet().apply { add(banInfo.third) }
+                _event.emit(ProfileCommentSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
+            .onFailure { _uiState.value = ProfileCommentUiState.Error(it.message.toString()) }
     }
 }
 

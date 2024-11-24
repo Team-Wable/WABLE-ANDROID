@@ -21,6 +21,7 @@ data class Feed(
     val postAuthorTeamTag: String = "",
     val ghostColor: String = GhostColor.DEFAULT_0,
     val isAuth: Boolean = false,
+    val isBlind: Boolean = false,
 ) : Parcelable
 
 object GhostColor {

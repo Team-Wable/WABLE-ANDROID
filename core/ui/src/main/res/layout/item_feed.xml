@@ -90,7 +90,7 @@
         android:textColorLink="@color/info"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/tv_feed_ghost_level"
+        app:layout_constraintTop_toBottomOf="@id/view_feed_blind_bg"
         tools:text="@string/dummy" />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -199,4 +199,47 @@
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@id/tv_feed_like_count"
         app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_feed_blind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="view_feed_blind_bg,tv_feed_blind_label, iv_feed_blind" />
+
+    <View
+        android:id="@+id/view_feed_blind_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/shape_white_fill_8_rect"
+        android:backgroundTint="@color/gray_200"
+        app:layout_constraintDimensionRatio="328:98"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_ghost_level" />
+
+    <ImageView
+        android:id="@+id/iv_feed_blind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_share_blind"
+        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
+
+    <TextView
+        android:id="@+id/tv_feed_blind_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_200"
+        android:text="@string/label_feed_blind"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/gray_600"
+        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
 </androidx.constraintlayout.widget.ConstraintLayout>

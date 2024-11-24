@@ -59,6 +59,7 @@
     <string name="label_profile_tab_comment">댓글</string>
     <string name="label_profile_comment_auth_empty">아직 작성한 댓글이 없어요.</string>
     <string name="label_profile_comment_member_empty">아직 %s님이\n댓글을 작성하지 않았어요.</string>
+    <string name="label_profile_level">LV. %d</string>
 
     <!-- profile edit -->
     <string name="profile_edit_app_bar">프로필 편집</string>

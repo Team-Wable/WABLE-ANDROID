@@ -26,17 +26,28 @@
     <string name="label_dialog_cancel_posting__yes">나가기</string>
     <string name="label_dialog_share_no">취소</string>
     <string name="label_dialog_blank" />
+    <string name="label_dialog_ban_title">밴하시겠어요?</string>
+    <string name="label_dialog_ban_description">1회 누적 - 해당 글(게시글 or 댓글 or 답글)만 블라인드 처리\n2회 누적 - 해당 사용자 글 전체 블라인드 처리</string>
+    <string name="label_dialog_ban_yes">밴하기</string>
 
     <!-- feed -->
     <string name="content_description_feed_image">피드 이미지입니다.</string>
     <string name="label_feed_ghost_level">투명도 %s%%</string>
     <string name="label_feed_upload_time">· %s</string>
+    <string name="label_feed_blind">블라인드 처리된 게시글이에요.</string>
+
+    <!-- comment -->
+    <string name="label_comment_write_child_comment">답글쓰기</string>
+    <string name="label_comment_blind">블라인드 처리된 내용이에요.</string>
 
     <!-- snack bar -->
-    <string name="label_snack_bar_comment_ing">답글 남기는 중</string>
-    <string name="label_snack_bar_comment_complete">답글을 남겼어요</string>
+    <string name="label_snack_bar_comment_ing">댓글 남기는 중</string>
+    <string name="label_snack_bar_comment_complete">댓글을 남겼어요</string>
+    <string name="label_snack_bar_child_comment_ing">답글 남기는 중</string>
+    <string name="label_snack_bar_child_comment_complete">답글을 남겼어요</string>
     <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
     <string name="label_snack_bar_report">신고 접수가 완료되었어요.\n24시간 내에 조치할 예정이에요.</string>
+    <string name="label_snack_bar_ban">밴 ! 완 ! 료 !</string>
 
     <!-- ghost -->
     <string name="label_ghost_comment_type">commentGhost</string>

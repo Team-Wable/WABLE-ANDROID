@@ -1,5 +1,6 @@
 package com.teamwable.network.datasource
 
+import com.teamwable.network.dto.request.RequestBanDto
 import com.teamwable.network.dto.request.RequestReportDto
 import com.teamwable.network.dto.request.RequestWithdrawalDto
 import com.teamwable.network.dto.response.ResponseProfileInfoDto
@@ -44,5 +45,10 @@ interface ProfileService {
     @POST("api/v1/report/slack")
     suspend fun postReport(
         @Body request: RequestReportDto,
+    ): BaseUnitResponse<Unit>
+
+    @POST("api/v1/report/ban")
+    suspend fun postBan(
+        @Body request: RequestBanDto,
     ): BaseUnitResponse<Unit>
 }

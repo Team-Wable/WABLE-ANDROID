@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     R.id.navigation_error,
                     com.teamwable.ui.R.id.navigation_two_button_dialog,
                     com.teamwable.profile.R.id.navigation_profile_edit,
+                    com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                 ),
         )
     }
@@ -184,13 +185,14 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     private fun initBottomNaviSelectedListener(navController: NavController) {
+        var previousTabId = R.id.graph_home
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.graph_home -> {
                     trackEvent(CLICK_HOME_BOTNAVI)
                     lifecycleScope.launch {
                         delay(100)
-                        findHomeFragment()?.updateToLoadingState()
+                        if (previousTabId == R.id.graph_profile) findHomeFragment()?.updateToLoadingState()
                     }
                 }
 
@@ -198,7 +200,10 @@ class MainActivity : AppCompatActivity(), Navigation {
                 R.id.graph_notification -> trackEvent(CLICK_NOTI_BOTNAVI)
                 R.id.graph_profile -> trackEvent(CLICK_MYPROFILE_BOTNAVI)
             }
-
+            lifecycleScope.launch {
+                delay(200)
+                previousTabId = it.itemId
+            }
             it.onNavDestinationSelected(navController)
         }
     }

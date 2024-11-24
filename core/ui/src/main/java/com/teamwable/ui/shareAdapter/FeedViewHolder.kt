@@ -37,8 +37,8 @@ class FeedViewHolder private constructor(
 
     fun bind(feed: Feed?) {
         item = feed ?: return
-        val isImageInclude = feed.image.isNotBlank()
-        val isContentBlank = feed.content.isBlank()
+        val isImageInclude = feed.image.isNotBlank() && !feed.isBlind
+        val isContentBlank = feed.content.isBlank() || feed.isBlind
         with(binding) {
             ivFeedProfileImg.load(feed.postAuthorProfile)
             tvFeedNickname.text = feed.postAuthorNickname
@@ -60,7 +60,13 @@ class FeedViewHolder private constructor(
             btnFeedGhost.isEnabled = !feed.isPostAuthorGhost
             viewFeedTransparentBg.setBackgroundColor(Color.parseColor(feed.ghostColor))
             btnFeedGhost.visible(!feed.isAuth)
+            setBlindVisible(feed.isBlind)
         }
+    }
+
+    private fun setBlindVisible(isBlind: Boolean) = with(binding) {
+        groupFeedBlind.visible(isBlind)
+        tvFeedTitle.visible(!isBlind)
     }
 
     companion object {

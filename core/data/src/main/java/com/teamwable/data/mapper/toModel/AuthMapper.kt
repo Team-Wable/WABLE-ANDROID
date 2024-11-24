@@ -14,5 +14,6 @@ internal fun ResponseSocialLoginDto.toUserModel(): UserModel =
         isPushAlarmAllowed = isPushAlarmAllowed,
         memberFanTeam = memberFanTeam,
         memberLckYears = memberLckYears,
-        memberLevel = memberLevel
+        memberLevel = memberLevel,
+        isAdmin = isAdmin,
     )
