@@ -3,7 +3,9 @@ package com.teamwable.news.news
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.news.databinding.FragmentNewsNewsBinding
+import com.teamwable.news.model.NewsInfoModel
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,8 +15,15 @@ class NewsNewsFragment : BindingFragment<FragmentNewsNewsBinding>(FragmentNewsNe
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
+                    NewsNewsRoute(
+                        navigateToProfile = ::navigate,
+                    )
                 }
             }
         }
+    }
+
+    private fun navigate(newsInfoModel: NewsInfoModel) {
+        toast(newsInfoModel.newsId.toString())
     }
 }
