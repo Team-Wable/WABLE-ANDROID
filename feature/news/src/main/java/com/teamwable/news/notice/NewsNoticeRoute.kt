@@ -33,7 +33,7 @@ internal fun NewsNoticeRoute(
         if (this.isNotEmpty()) {
             NewsNoticeScreen(context = context, notices = this, navigateToDetail = navigateToDetail)
         } else {
-            NewsNoticeEmptyScreen()
+            NewsNoticeEmptyScreen(R.string.tv_news_notice_empty)
         }
     }
 }
@@ -45,25 +45,23 @@ fun NewsNoticeScreen(
     notices: List<NewsInfoModel>,
     navigateToDetail: (NewsInfoModel) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(notices) { notice ->
-                NewsNoticeItem(context, notice, navigateToDetail)
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = WableTheme.colors.gray200,
-                )
-            }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(notices) { notice ->
+            NewsNoticeItem(context, notice, navigateToDetail)
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = WableTheme.colors.gray200,
+            )
         }
     }
 }
 
 @Composable
-fun NewsNoticeEmptyScreen() {
+fun NewsNoticeEmptyScreen(emptyTxt: Int) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = stringResource(R.string.tv_news_notice_empty),
+            text = stringResource(emptyTxt),
             color = WableTheme.colors.gray500,
             style = WableTheme.typography.body02
         )
