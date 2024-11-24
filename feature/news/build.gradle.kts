@@ -20,4 +20,5 @@ dependencies {
     // Third Party
     implementation(libs.coil.core)
     implementation(libs.lottie)
+    implementation(libs.bundles.landscapist.glide)
 }
