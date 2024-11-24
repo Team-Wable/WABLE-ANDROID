@@ -1,9 +1,7 @@
 package com.teamwable.news.news
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -30,9 +27,11 @@ import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.LoadingScreen
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
+import com.teamwable.news.R
 import com.teamwable.news.news.component.WableNewsItems
 import com.teamwable.news.news.component.WableNewsTopBanner
 import com.teamwable.news.news.model.NewsInfoSideEffect
+import com.teamwable.news.notice.component.NewsNoticeEmptyScreen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 
@@ -58,23 +57,6 @@ fun NewsNewsRoute(
         newsItems = newsItems,
         onItemClick = viewModel::onItemClick,
     )
-}
-
-@Composable
-fun EmptyScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .aspectRatio(1f)
-            .padding(vertical = 16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = "현재 보여줄 뉴스가 없습니다.",
-            style = WableTheme.typography.body02,
-            color = Color.Gray,
-        )
-    }
 }
 
 @Composable
@@ -113,7 +95,7 @@ fun NewsNewsScreen(
 
         when {
             isLoading -> item { LoadingScreen() }
-            isEmpty -> item { EmptyScreen() }
+            isEmpty -> item { NewsNoticeEmptyScreen(emptyTxt = R.string.tv_news_info_empty) }
             else -> {
                 items(
                     count = newsItems.itemCount,

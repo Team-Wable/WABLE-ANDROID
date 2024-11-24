@@ -38,4 +38,7 @@
     <!-- fragment_news_notice -->
     <string name="tv_news_notice_empty">아직 작성된 공지사항이 없어요.</string>
 
+    <!-- fragment_news_info -->
+    <string name="tv_news_info_empty">아직 작성된 뉴스가 없어요.</string>
+
 </resources>
