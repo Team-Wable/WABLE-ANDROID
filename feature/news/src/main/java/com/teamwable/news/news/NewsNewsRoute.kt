@@ -3,7 +3,6 @@ package com.teamwable.news.news
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,53 +20,49 @@ import com.teamwable.news.news.component.WableNewsTopBanner
 
 @Composable
 fun NewsNewsRoute(
-    navigateToProfile: (NewsInfoModel) -> Unit,
+    navigateToDetail: (NewsInfoModel) -> Unit,
 ) {
-    NewsNewsScreen(navigateToProfile)
+    NewsNewsScreen(navigateToDetail)
 }
 
 @Composable
 fun NewsNewsScreen(
     navigateToProfile: (NewsInfoModel) -> Unit,
 ) {
-    Column(
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 4.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 4.dp),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            item {
-                WableNewsTopBanner(
-                    modifier = Modifier.padding(
-                        top = 13.dp,
-                        start = dimensionResource(com.teamwable.common.R.dimen.padding_horizontal),
-                        end = dimensionResource(com.teamwable.common.R.dimen.padding_horizontal),
-                    ),
-                ) {
-                    Column {
-                        Text(
-                            text = "와블이 추천드려요!",
-                            style = WableTheme.typography.body01,
-                            color = Color(0xFF9269EA),
-                        )
-                        Text(
-                            text = "그동안 어떤 일들이 있었을까요?",
-                            style = WableTheme.typography.caption02,
-                            color = Color(0xFF9469EA),
-                        )
-                    }
+        item {
+            WableNewsTopBanner(
+                modifier = Modifier.padding(
+                    top = 13.dp,
+                    start = dimensionResource(com.teamwable.common.R.dimen.padding_horizontal),
+                    end = dimensionResource(com.teamwable.common.R.dimen.padding_horizontal),
+                ),
+            ) {
+                Column {
+                    Text(
+                        text = "와블이 추천드려요!",
+                        style = WableTheme.typography.body01,
+                        color = Color(0xFF9269EA),
+                    )
+                    Text(
+                        text = "그동안 어떤 일들이 있었을까요?",
+                        style = WableTheme.typography.caption02,
+                        color = Color(0xFF9469EA),
+                    )
                 }
             }
-            items(
-                items = newsList,
-                key = { item -> item.newsId },
-            ) { item ->
-                WableNewsItems(
-                    newsItem = item,
-                    onClick = navigateToProfile,
-                )
-            }
+        }
+        items(
+            items = newsList,
+            key = { item -> item.newsId },
+        ) { item ->
+            WableNewsItems(
+                newsItem = item,
+                onClick = navigateToProfile,
+            )
         }
     }
 }
