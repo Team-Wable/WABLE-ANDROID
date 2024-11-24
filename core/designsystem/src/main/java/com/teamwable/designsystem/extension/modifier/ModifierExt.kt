@@ -3,6 +3,7 @@ package com.teamwable.designsystem.extension.modifier
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -88,3 +89,6 @@ fun Modifier.dropShadow(
         canvas.restore()
     }
 }
+
+fun Modifier.showIf(condition: Boolean): Modifier =
+    if (condition) this else Modifier.size(0.dp)
