@@ -30,8 +30,8 @@ fun NewsNoticeItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(WableTheme.colors.white)
-            .padding(vertical = 12.dp, horizontal = 20.dp)
             .clickable { navigateToDetail(data) }
+            .padding(vertical = 12.dp, horizontal = 20.dp)
     ) {
         Row {
             Text(text = data.newsTitle, style = WableTheme.typography.body01)
