@@ -104,7 +104,7 @@ fun NewsNewsScreen(
             else -> {
                 items(
                     count = newsItems.itemCount,
-                    key = newsItems.itemKey { it },
+                    key = newsItems.itemKey { it.newsId },
                     contentType = newsItems.itemContentType { ContentType.Item.name },
                 ) { index ->
                     newsItems[index]?.let {
