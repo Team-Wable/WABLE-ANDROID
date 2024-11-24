@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,21 +21,24 @@ import com.teamwable.ui.util.CalculateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NewsNoticeItem(context: Context, data: NewsInfoModel, navigateToDetail: (NewsInfoModel) -> Unit) {
-    Box(modifier = Modifier.clickable { navigateToDetail(data) }) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(WableTheme.colors.white)
-                .padding(vertical = 12.dp, horizontal = 20.dp)
-        ) {
-            Row {
-                Text(text = data.newsTitle, style = WableTheme.typography.body01)
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = CalculateTime().getCalculateTime(context, data.time), color = WableTheme.colors.gray500, style = WableTheme.typography.caption04)
-            }
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(text = data.newsText, color = WableTheme.colors.gray600, maxLines = 2, style = WableTheme.typography.body04)
+fun NewsNoticeItem(
+    context: Context,
+    data: NewsInfoModel,
+    navigateToDetail: (NewsInfoModel) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(WableTheme.colors.white)
+            .padding(vertical = 12.dp, horizontal = 20.dp)
+            .clickable { navigateToDetail(data) }
+    ) {
+        Row {
+            Text(text = data.newsTitle, style = WableTheme.typography.body01)
+            Spacer(modifier = Modifier.weight(1f))
+            Text(text = CalculateTime().getCalculateTime(context, data.time), color = WableTheme.colors.gray500, style = WableTheme.typography.caption04)
         }
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(text = data.newsText, color = WableTheme.colors.gray600, maxLines = 2, style = WableTheme.typography.body04)
     }
 }
