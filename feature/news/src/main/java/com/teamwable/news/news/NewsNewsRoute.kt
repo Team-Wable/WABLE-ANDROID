@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +28,7 @@ import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.LoadingScreen
 import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.ContentType
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.R
 import com.teamwable.news.news.component.WableNewsItems
@@ -70,7 +72,10 @@ fun NewsNewsScreen(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 4.dp),
     ) {
-        item {
+        item(
+            key = ContentType.Banner.name,
+            contentType = newsItems.itemContentType { ContentType.Banner.name },
+        ) {
             WableNewsTopBanner(
                 modifier = Modifier.padding(
                     top = 13.dp,
@@ -80,12 +85,12 @@ fun NewsNewsScreen(
             ) {
                 Column {
                     Text(
-                        text = "와블이 추천드려요!",
+                        text = stringResource(R.string.tv_news_info_banner_title),
                         style = WableTheme.typography.body01,
                         color = Color(0xFF9269EA),
                     )
                     Text(
-                        text = "그동안 어떤 일들이 있었을까요?",
+                        text = stringResource(R.string.tv_news_info_banner_description),
                         style = WableTheme.typography.caption02,
                         color = Color(0xFF9469EA),
                     )
@@ -100,7 +105,7 @@ fun NewsNewsScreen(
                 items(
                     count = newsItems.itemCount,
                     key = newsItems.itemKey { it },
-                    contentType = newsItems.itemContentType { "MyPagingItems" },
+                    contentType = newsItems.itemContentType { ContentType.Item.name },
                 ) { index ->
                     newsItems[index]?.let {
                         WableNewsItems(
@@ -109,7 +114,10 @@ fun NewsNewsScreen(
                         )
                     }
                 }
-                item {
+                item(
+                    key = ContentType.Spinner.name,
+                    contentType = newsItems.itemContentType { ContentType.Spinner.name },
+                ) {
                     if (newsItems.loadState.append is LoadState.Loading) {
                         WablePagingSpinner(
                             modifier = Modifier

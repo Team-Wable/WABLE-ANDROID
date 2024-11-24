@@ -40,5 +40,7 @@
 
     <!-- fragment_news_info -->
     <string name="tv_news_info_empty">아직 작성된 뉴스가 없어요.</string>
+    <string name="tv_news_info_banner_title">와블이 추천드려요!</string>
+    <string name="tv_news_info_banner_description">그동안 어떤 일들이 있었을까요?</string>
 
 </resources>
