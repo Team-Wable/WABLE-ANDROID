@@ -1,6 +1,7 @@
 package com.teamwable.news.news.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.extension.composable.toImageVector
-import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.news.model.NewsInfoModel
 
@@ -59,7 +59,7 @@ fun WableNewsItems(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .noRippleDebounceClickable { onClick(newsItem) },
+            .clickable { onClick(newsItem) },
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
