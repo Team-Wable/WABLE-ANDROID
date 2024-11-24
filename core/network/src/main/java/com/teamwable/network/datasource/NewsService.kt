@@ -1,10 +1,12 @@
 package com.teamwable.network.datasource
 
 import com.teamwable.network.dto.response.news.ResponseGameTypeDto
+import com.teamwable.network.dto.response.news.ResponseNewsInfoDto
 import com.teamwable.network.dto.response.news.ResponseRankDto
 import com.teamwable.network.dto.response.news.ResponseScheduleDto
 import com.teamwable.network.util.BaseResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface NewsService {
     @GET("api/v1/information/gametype")
@@ -15,4 +17,9 @@ interface NewsService {
 
     @GET("api/v1/information/rank")
     suspend fun getRank(): BaseResponse<List<ResponseRankDto>>
+
+    @GET("api/v1/information/news")
+    suspend fun getNewsInfo(
+        @Query(value = "cursor") contentId: Long = -1,
+    ): BaseResponse<List<ResponseNewsInfoDto>>
 }
