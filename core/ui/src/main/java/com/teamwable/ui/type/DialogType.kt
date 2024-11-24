@@ -17,6 +17,12 @@ enum class DialogType(
         yesLabel = R.string.label_dialog_report_yes,
         titleTypo = R.style.TextAppearance_Wable_Head1,
     ),
+    BAN(
+        title = R.string.label_dialog_ban_title,
+        description = R.string.label_dialog_ban_description,
+        yesLabel = R.string.label_dialog_ban_yes,
+        titleTypo = R.style.TextAppearance_Wable_Head1,
+    ),
     DELETE_FEED(
         title = R.string.label_dialog_delete_feed_title,
         description = R.string.label_dialog_delete_feed_description,

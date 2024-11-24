@@ -88,6 +88,7 @@ class LoginViewModel @Inject constructor(
                     saveRefreshToken(response.refreshToken)
                     saveMemberId(response.memberId)
                     checkIsNewUser(response.nickName.isBlank())
+                    saveIsAdmin(response.isAdmin)
                 }.onFailure {
                     _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(it))
                 }
@@ -126,6 +127,12 @@ class LoginViewModel @Inject constructor(
     private fun saveIsAutoLogin(input: Boolean) {
         viewModelScope.launch {
             userInfoRepository.saveAutoLogin(input)
+        }
+    }
+
+    private fun saveIsAdmin(isAdmin: Boolean) {
+        viewModelScope.launch {
+            userInfoRepository.saveIsAdmin(isAdmin)
         }
     }
 

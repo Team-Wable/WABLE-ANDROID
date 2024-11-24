@@ -15,6 +15,8 @@ object Arg {
     const val FEED_ID = "feed_id"
     const val CONTENT = "content"
     const val PROFILE_EDIT_RESULT = "profile_edit_result"
+    const val BOTTOM_SHEET_FIRST_TYPE = "bottom_sheet_first_type"
+    const val BOTTOM_SHEET_SECOND_TYPE = "bottom_sheet_second_type"
 }
 
 object BundleKey {

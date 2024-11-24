@@ -25,6 +25,7 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         val MemberId = intPreferencesKey("memberId")
         val MemberProfileUrl = stringPreferencesKey("memberProfileUrl")
         val IsPushAlarmAllowed = booleanPreferencesKey("isPushAlarmAllowed")
+        val IsAdmin = booleanPreferencesKey("isAdmin")
     }
 
     override val accessToken: Flow<String> = dataStore.data
@@ -69,6 +70,12 @@ class DefaultWablePreferenceDatasource @Inject constructor(
             preferences[PreferencesKeys.IsPushAlarmAllowed] ?: false
         }
 
+    override var isAdmin: Flow<Boolean> = dataStore.data
+        .catch { handleError(it) }
+        .map { preferences ->
+            preferences[PreferencesKeys.IsAdmin] ?: false
+        }
+
     override suspend fun updateAccessToken(accessToken: String) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.AccessToken] = accessToken
@@ -108,6 +115,12 @@ class DefaultWablePreferenceDatasource @Inject constructor(
     override suspend fun updateIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.IsPushAlarmAllowed] = isPushAlarmAllowed
+        }
+    }
+
+    override suspend fun updateIsAdmin(isAdmin: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IsAdmin] = isAdmin
         }
     }
 

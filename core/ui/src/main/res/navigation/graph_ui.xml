@@ -38,4 +38,19 @@
             app:argType="string" />
         <deepLink app:uri="@string/deeplink_url_image_dialog" />
     </dialog>
+    <dialog
+        android:id="@+id/navigation_two_label_bottomsheet"
+        android:name="com.teamwable.ui.component.TwoLabelBottomSheet"
+        android:label="TwoLabelBottomSheet"
+        tools:layout="@layout/bottomsheet_two_label">
+        <argument
+            android:name="${BOTTOM_SHEET_FIRST_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <argument
+            android:name="${BOTTOM_SHEET_SECOND_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_two_label_bottomsheet" />
+    </dialog>
 </navigation>

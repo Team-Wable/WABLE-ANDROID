@@ -11,7 +11,9 @@ import com.teamwable.model.Comment
 import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.component.TwoLabelBottomSheet
 import com.teamwable.ui.shareAdapter.CommentViewHolder
+import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.ProfileUserType
@@ -26,10 +28,17 @@ class CommentActionHandler(
     private val fragmentManager: FragmentManager,
     private val lifecycleOwner: LifecycleOwner,
 ) {
-    fun onKebabBtnClick(comment: Comment, fetchUserType: (Long) -> ProfileUserType, removeComment: (Long) -> Unit, reportUser: (String, String) -> Unit) {
+    fun onKebabBtnClick(
+        comment: Comment,
+        fetchUserType: (Long) -> ProfileUserType,
+        removeComment: (Long) -> Unit,
+        reportUser: (String, String) -> Unit,
+        banUser: (Comment, String) -> Unit,
+    ) {
         when (fetchUserType(comment.postAuthorId)) {
             ProfileUserType.AUTH -> navigateToBottomSheet(BottomSheetType.DELETE_FEED)
             ProfileUserType.MEMBER -> navigateToBottomSheet(BottomSheetType.REPORT)
+            ProfileUserType.ADMIN -> navigateToTwoLabelBottomSheet(BottomSheetType.REPORT, BottomSheetType.BAN)
             ProfileUserType.EMPTY -> return
         }
         handleDialogResult { dialogType ->
@@ -38,6 +47,11 @@ class CommentActionHandler(
                 DialogType.REPORT -> {
                     navController.popBackStack()
                     reportUser(comment.postAuthorNickname, comment.content)
+                }
+
+                DialogType.BAN -> {
+                    navController.popBackStack()
+                    banUser(comment, BanTriggerType.COMMENT.name.lowercase())
                 }
 
                 else -> Unit
@@ -74,11 +88,17 @@ class CommentActionHandler(
         handleBottomSheetResult()
     }
 
+    private fun navigateToTwoLabelBottomSheet(firstType: BottomSheetType, secondType: BottomSheetType) {
+        TwoLabelBottomSheet.show(context, navController, firstType, secondType)
+        handleBottomSheetResult()
+    }
+
     private fun handleBottomSheetResult() {
         fragmentManager.setFragmentResultListener(BOTTOM_SHEET_RESULT, lifecycleOwner) { _, bundle ->
             when (bundle.getString(BOTTOM_SHEET_TYPE)) {
                 BottomSheetType.DELETE_FEED.name -> navigateToDialog(DialogType.DELETE_FEED)
                 BottomSheetType.REPORT.name -> navigateToDialog(DialogType.REPORT)
+                BottomSheetType.BAN.name -> navigateToDialog(DialogType.BAN)
             }
         }
     }

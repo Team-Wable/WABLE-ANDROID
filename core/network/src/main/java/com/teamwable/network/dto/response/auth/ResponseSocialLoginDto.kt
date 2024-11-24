@@ -25,4 +25,6 @@ data class ResponseSocialLoginDto(
     val memberLckYears: Int,
     @SerialName("memberLevel")
     val memberLevel: Int,
+    @SerialName("isAdmin")
+    val isAdmin: Boolean,
 )

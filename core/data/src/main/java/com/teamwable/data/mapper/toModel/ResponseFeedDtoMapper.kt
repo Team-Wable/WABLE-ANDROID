@@ -19,4 +19,5 @@ internal fun ResponseFeedDto.toFeed(): Feed =
         this.commentNumber.toString(),
         this.contentImageUrl,
         this.memberFanTeam,
+        isBlind = this.isBlind,
     )

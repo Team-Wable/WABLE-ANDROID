@@ -17,6 +17,8 @@ interface UserInfoRepository {
 
     fun getIsPushAlarmAllowed(): Flow<Boolean>
 
+    fun getIsAdmin(): Flow<Boolean>
+
     suspend fun saveAccessToken(accessToken: String)
 
     suspend fun saveRefreshToken(refreshToken: String)
@@ -30,6 +32,8 @@ interface UserInfoRepository {
     suspend fun saveMemberProfileUrl(memberUrl: String)
 
     suspend fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean)
+
+    suspend fun saveIsAdmin(isAdmin: Boolean)
 
     suspend fun clearAll()
 

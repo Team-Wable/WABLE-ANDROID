@@ -212,6 +212,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> viewModel.banUser(Triple(trigger.postAuthorId, banType, trigger.feedId)) },
             )
         }
 
@@ -245,6 +246,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeComment = { viewModel.removeComment(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> }, // TODO::대댓글 구현 후 구현
             )
         }
 
@@ -256,8 +258,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun handleProfileNavigation(id: Long) {
         when (viewModel.fetchUserType(id)) {
             ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
-            ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
-            ProfileUserType.EMPTY -> return
+            in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            else -> return
         }
     }
 

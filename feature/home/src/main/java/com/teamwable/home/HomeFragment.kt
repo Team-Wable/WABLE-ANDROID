@@ -130,6 +130,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeFeed(it) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, banType -> viewModel.banUser(Triple(trigger.postAuthorId, banType, trigger.feedId)) },
             )
         }
 
@@ -139,8 +140,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     private fun handleProfileNavigation(id: Long) {
         when (viewModel.fetchUserType(id)) {
             ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
-            ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
-            ProfileUserType.EMPTY -> return
+            in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            else -> return
         }
     }
 
@@ -219,6 +220,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             if (isRemoved) viewModel.updateFeedRemoveState(feed.feedId)
             viewModel.updateFeedGhostState(feed.postAuthorId, feed.isPostAuthorGhost)
             viewModel.updateFeedLikeState(feed.feedId, LikeState(feed.isLiked, feed.likedNumber))
+            viewModel.updateFeedBanState(feed.feedId, feed.isBlind)
         }
     }
 

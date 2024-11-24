@@ -29,6 +29,9 @@ internal class DefaultUserInfoRepository @Inject constructor(
     override fun getIsPushAlarmAllowed(): Flow<Boolean> =
         wablePreferencesDataSource.isPushAlarmAllowed
 
+    override fun getIsAdmin(): Flow<Boolean> =
+        wablePreferencesDataSource.isAdmin
+
     override suspend fun saveAccessToken(accessToken: String) {
         wablePreferencesDataSource.updateAccessToken(accessToken)
     }
@@ -55,6 +58,10 @@ internal class DefaultUserInfoRepository @Inject constructor(
 
     override suspend fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean) {
         wablePreferencesDataSource.updateIsPushAlarmAllowed(isPushAlarmAllowed)
+    }
+
+    override suspend fun saveIsAdmin(isAdmin: Boolean) {
+        wablePreferencesDataSource.updateIsAdmin(isAdmin)
     }
 
     override suspend fun clearAll() {

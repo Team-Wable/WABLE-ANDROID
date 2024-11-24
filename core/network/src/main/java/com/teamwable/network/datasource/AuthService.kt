@@ -10,7 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
-    @POST("api/v1/auth")
+    @POST("api/v2/auth")
     suspend fun postLogin(
         @Body requestSocialLogin: RequestSocialLoginDto,
         @Header("Authorization") kakaoToken: String,

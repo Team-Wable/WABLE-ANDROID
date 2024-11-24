@@ -8,5 +8,6 @@ enum class BottomSheetType(
 ) {
     REPORT(R.string.label_dialog_report_yes),
     DELETE_FEED(R.string.label_dialog_delete_yes),
+    BAN(R.string.label_dialog_ban_yes),
     EMPTY(),
 }

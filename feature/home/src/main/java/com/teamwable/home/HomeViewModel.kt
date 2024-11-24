@@ -44,13 +44,16 @@ class HomeViewModel @Inject constructor(
     private val removedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val ghostedFeedsFlow = MutableStateFlow(setOf<Long>())
     private val likeFeedsFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    private val banFeedsFlow = MutableStateFlow(setOf<Long>())
     private val feedsFlow = feedRepository.getHomeFeeds().cachedIn(viewModelScope)
 
     private var authId = -1L
+    private var isAdmin = false
 
     init {
         fetchAuthId()
         fetchIsPushAlarmAllowed()
+        fetchIsAdmin()
     }
 
     private fun fetchAuthId() {
@@ -61,6 +64,11 @@ class HomeViewModel @Inject constructor(
                     authId = it
                 }
         }
+    }
+
+    private fun fetchIsAdmin() = viewModelScope.launch {
+        userInfoRepository.getIsAdmin()
+            .collectLatest { isAdmin = it }
     }
 
     private fun fetchIsPushAlarmAllowed() {
@@ -81,13 +89,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFeeds(): Flow<PagingData<Feed>> {
-        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates ->
+        return combine(feedsFlow, removedFeedsFlow, ghostedFeedsFlow, likeFeedsFlow, banFeedsFlow) { feedsFlow, removedFeedIds, ghostedUserIds, likeStates, banState ->
             feedsFlow
                 .filter { removedFeedIds.contains(it.feedId).not() }
                 .map { data ->
                     val likeState = likeStates[data.feedId] ?: LikeState(data.isLiked, data.likedNumber)
                     val transformedGhost = if (ghostedUserIds.contains(data.postAuthorId)) data.copy(isPostAuthorGhost = true) else data
-                    transformedGhost.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                    val transformedBan = if (banState.contains(data.feedId)) transformedGhost.copy(isBlind = true) else transformedGhost
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
@@ -99,6 +108,8 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = HomeUiState.Error("auth id is empty")
                 ProfileUserType.EMPTY
             }
+
+            isAdmin -> ProfileUserType.ADMIN
 
             else -> ProfileUserType.MEMBER
         }
@@ -171,6 +182,19 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             userInfoRepository.saveIsPushAlarmAllowed(isPushAlarmAllowed)
         }
+    }
+
+    fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
+        profileRepository.postBan(banInfo)
+            .onSuccess {
+                updateFeedBanState(feedId = banInfo.third, isBan = true)
+                _event.emit(HomeSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
+            .onFailure { _uiState.value = HomeUiState.Error(it.message.toString()) }
+    }
+
+    fun updateFeedBanState(feedId: Long, isBan: Boolean) {
+        banFeedsFlow.update { it.toMutableSet().apply { if (isBan) add(feedId) } }
     }
 }
 
