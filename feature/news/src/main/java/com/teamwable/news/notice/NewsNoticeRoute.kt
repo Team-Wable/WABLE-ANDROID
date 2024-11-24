@@ -46,7 +46,7 @@ fun NewsNoticeScreen(
     navigateToDetail: (NewsInfoModel) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(notices) { notice ->
+        items(items = notices, key = { item -> item.newsId }) { notice ->
             NewsNoticeItem(context, notice, navigateToDetail)
             HorizontalDivider(
                 thickness = 1.dp,
