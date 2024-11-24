@@ -8,12 +8,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.news.NewsViewModel
+import com.teamwable.news.R
 import com.teamwable.news.model.NewsInfoModel
 
 @Composable
@@ -54,6 +57,11 @@ fun NewsNoticeScreen(
 @Composable
 fun NewsNoticeEmptyScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "아직 작성된 공지사항이 없어요.", color = WableTheme.colors.gray500, style = WableTheme.typography.body02)
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = stringResource(R.string.tv_news_notice_empty),
+            color = WableTheme.colors.gray500,
+            style = WableTheme.typography.body02
+        )
     }
 }
