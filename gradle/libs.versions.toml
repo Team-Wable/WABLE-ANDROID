@@ -19,7 +19,7 @@ lifecycle = "2.8.4"
 dagger-hilt = "2.51.1"
 fragment-ktx = "1.8.2"
 splash-screen = "1.0.1"
-paging = "3.3.2"
+paging = "3.3.4"
 constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
@@ -56,7 +56,6 @@ lottie = "6.5.2"
 amplitude = "1.+"
 amplitude-ads = "18.1.0"
 activity = "1.9.1"
-processPhoenix = "3.0.0"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
@@ -164,6 +163,7 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
 # datastore
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-datastore" }
