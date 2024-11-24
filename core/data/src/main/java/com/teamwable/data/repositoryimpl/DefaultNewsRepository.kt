@@ -40,7 +40,7 @@ internal class DefaultNewsRepository @Inject constructor(
     }
 
     override fun getNewsInfo(): Flow<PagingData<NewsInfoModel>> {
-        return Pager(PagingConfig(pageSize = 3, prefetchDistance = 1)) {
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
             GenericPagingSource(
                 apiCall = { cursor -> newsService.getNewsInfo(cursor).data },
                 getNextCursor = { feeds -> feeds.lastOrNull()?.newsId },
