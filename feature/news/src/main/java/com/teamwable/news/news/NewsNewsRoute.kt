@@ -69,9 +69,9 @@ fun NewsNewsScreen(
 
 val newsList = List(20) { index ->
     NewsInfoModel(
-        newsId = index + 1,
+        newsId = (index + 1).toLong(),
         newsTitle = "제목입니다 제목입니다 제목입니다 제..",
-        newsText = "본문이 들어가는 aaaaaaaaaaaaaaaaaaaaaaa",
+        newsText = "${(index + 1)} 본문이 들어가는 aaaaaaaaaaaaaaaaaaaaaaa",
         newsImage = "aaaa",
         time = "2024-02-06 23:46:26",
     )
