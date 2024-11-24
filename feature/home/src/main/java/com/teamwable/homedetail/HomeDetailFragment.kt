@@ -258,7 +258,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun handleProfileNavigation(id: Long) {
         when (viewModel.fetchUserType(id)) {
             ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
-            ProfileUserType.MEMBER -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
             else -> return
         }
     }
