@@ -40,32 +40,39 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         viewModel.newsNumberUiState.flowWithLifecycle(lifecycle).onEach { state ->
             when (state) {
                 is UiState.Success -> {
-                    val localNewsNumber = viewModel.getNewsNumberFromLocal()
-                    val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
-
-                    val serverNewsNumber = state.data["news"]?.takeIf { it >= 0 } ?: 0
-                    val serverNoticeNumber = state.data["notice"]?.takeIf { it >= 0 } ?: 0
-
-                    if (serverNewsNumber != localNewsNumber) {
-                        Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
-                        setBadgeOnNews(NewsTabType.NEWS.idx, true)
-                        viewModel.saveNewsNumber(serverNewsNumber)
-                    } else {
-                        Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
-                    }
-
-                    if (serverNoticeNumber != localNoticeNumber) {
-                        Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
-                        setBadgeOnNews(NewsTabType.NOTICE.idx, true)
-                        viewModel.saveNoticeNumber(serverNoticeNumber)
-                    } else {
-                        Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
-                    }
+                    saveNumberFromServerToLocal(
+                        state.data["news"]?.takeIf { it >= 0 } ?: 0,
+                        state.data["notice"]?.takeIf { it >= 0 } ?: 0
+                    )
                 }
 
                 else -> Unit
             }
         }.launchIn(lifecycleScope)
+    }
+
+    private suspend fun saveNumberFromServerToLocal(serverNewsNumber: Int, serverNoticeNumber: Int) {
+//        viewModel.saveNewsNumber(1)
+//        viewModel.saveNoticeNumber(2)
+
+        val localNewsNumber = viewModel.getNewsNumberFromLocal()
+        val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
+
+        if (serverNewsNumber > localNewsNumber) {
+            Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
+            setBadgeOnNews(NewsTabType.NEWS.idx, true)
+            viewModel.saveNewsNumber(serverNewsNumber)
+        } else {
+            Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
+        }
+
+        if (serverNoticeNumber > localNoticeNumber) {
+            Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
+            setBadgeOnNews(NewsTabType.NOTICE.idx, true)
+            viewModel.saveNoticeNumber(serverNoticeNumber)
+        } else {
+            Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
+        }
     }
 
     private fun setBadgeOnNews(idx: Int, isVisible: Boolean) {
