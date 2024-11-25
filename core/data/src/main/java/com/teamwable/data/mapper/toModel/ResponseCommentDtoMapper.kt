@@ -18,7 +18,7 @@ internal fun ResponseCommentDto.toComment(): Comment =
         this.memberFanTeam,
         this.contentId,
         this.isBlind,
-        this.parentCommentId ?: -1,
+        this.parentCommentId,
     )
 
 internal fun ResponseCommentDto.toComments(): List<Comment> {

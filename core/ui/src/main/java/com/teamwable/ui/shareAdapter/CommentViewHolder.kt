@@ -51,6 +51,7 @@ class CommentViewHolder private constructor(
             btnCommentGhost.visible(!comment.isAuth)
             spacerComment.visible(!comment.isAuth)
             setBlindVisible(comment.isBlind)
+            groupCommentWriteChildComment.visible(comment.parentCommentId != null)
         }
     }
 

@@ -156,6 +156,12 @@
         app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
         app:layout_constraintTop_toBottomOf="@id/tv_comment_content" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_comment_write_child_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="btn_comment_write_child_comment, tv_comment_write_child_comment_label" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_comment_write_child_comment"
         style="@style/Wable.Icon.Button"

@@ -14,7 +14,7 @@ data class Comment(
     val postAuthorTeamTag: String,
     val feedId: Long?,
     val isBlind: Boolean,
-    val parentCommentId: Long,
+    val parentCommentId: Long?,
     val ghostColor: String = GhostColor.DEFAULT_0,
     val isAuth: Boolean = false,
 )
