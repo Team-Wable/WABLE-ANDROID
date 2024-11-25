@@ -1,4 +1,4 @@
-package com.teamwable.news
+package com.teamwable.news.detail
 
 import androidx.navigation.fragment.navArgs
 import com.teamwable.model.news.NewsInfoModel
