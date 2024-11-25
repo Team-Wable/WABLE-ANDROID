@@ -11,6 +11,8 @@ interface WablePreferencesDataSource {
     val memberProfileUrl: Flow<String>
     val isPushAlarmAllowed: Flow<Boolean>
     val isAdmin: Flow<Boolean>
+    val newsNumber: Flow<Int>
+    val noticeNumber: Flow<Int>
 
     suspend fun updateAccessToken(accessToken: String)
 
@@ -27,6 +29,10 @@ interface WablePreferencesDataSource {
     suspend fun updateIsPushAlarmAllowed(isPushAlarmAllowed: Boolean)
 
     suspend fun updateIsAdmin(isAdmin: Boolean)
+
+    suspend fun updateNewsNumber(newsNumber: Int)
+
+    suspend fun updateNoticeNumber(noticeNumber: Int)
 
     suspend fun clear()
 
