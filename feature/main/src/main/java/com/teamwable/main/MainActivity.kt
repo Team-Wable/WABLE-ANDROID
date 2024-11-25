@@ -30,6 +30,8 @@ import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.showAlertDialog
+import com.teamwable.ui.extensions.statusBarColorOf
+import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
@@ -130,6 +132,7 @@ class MainActivity : AppCompatActivity(), Navigation {
         initBottomNavigationChangedListener(navController)
         initBottomNaviSelectedListener(navController)
         initBottomNaviReSelectedListener(navController)
+        updateStatusBarColor(navController)
     }
 
     private fun initBottomNavigationChangedListener(navController: NavController) {
@@ -157,6 +160,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.ui.R.id.navigation_two_button_dialog,
                     com.teamwable.profile.R.id.navigation_profile_edit,
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
+                    com.teamwable.news.R.id.navigation_news_detail,
                 ),
         )
     }
@@ -217,6 +221,22 @@ class MainActivity : AppCompatActivity(), Navigation {
                 }
             }
             it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun updateStatusBarColor(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news -> {
+                    statusBarColorOf(com.teamwable.ui.R.color.black)
+                    statusBarModeOf(false)
+                }
+
+                else -> {
+                    statusBarColorOf(com.teamwable.ui.R.color.white)
+                    statusBarModeOf()
+                }
+            }
         }
     }
 

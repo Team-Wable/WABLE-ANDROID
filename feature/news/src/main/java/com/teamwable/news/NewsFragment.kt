@@ -10,17 +10,12 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.news.databinding.FragmentNewsBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
-import com.teamwable.ui.extensions.statusBarColorOf
-import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.stringOf
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
     override fun initView() {
-        statusBarColorOf(com.teamwable.ui.R.color.black)
-        statusBarModeOf(false)
-
         initNewsViewPagerAdapter()
         initTabClickListener()
 
@@ -72,11 +67,5 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        statusBarColorOf(com.teamwable.ui.R.color.white)
-        statusBarModeOf()
     }
 }
