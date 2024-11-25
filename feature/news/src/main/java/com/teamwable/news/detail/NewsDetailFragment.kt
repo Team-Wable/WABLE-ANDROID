@@ -9,6 +9,7 @@ import com.teamwable.news.NewsTabType
 import com.teamwable.news.databinding.FragmentNewsDetailBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.FeedImageDialog
+import com.teamwable.ui.extensions.openUri
 import java.net.URLEncoder
 
 class NewsDetailFragment : BindingFragment<FragmentNewsDetailBinding>(FragmentNewsDetailBinding::inflate) {
@@ -21,11 +22,12 @@ class NewsDetailFragment : BindingFragment<FragmentNewsDetailBinding>(FragmentNe
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
-                    NewsDetailRoute(
+                    NewsDetailScreen(
                         newsInfoModel = notice,
                         type = newsTabType,
                         navigateToImageDetail = ::navigateToImageDetail,
                         navigateToBack = ::navigateToBack,
+                        navigateToGoogleForm = ::navigateToGoogleForm,
                     )
                 }
             }
@@ -40,5 +42,9 @@ class NewsDetailFragment : BindingFragment<FragmentNewsDetailBinding>(FragmentNe
 
     private fun navigateToBack() {
         findNavController().popBackStack()
+    }
+
+    private fun navigateToGoogleForm() {
+        openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
     }
 }
