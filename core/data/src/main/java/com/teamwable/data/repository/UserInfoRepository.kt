@@ -19,6 +19,10 @@ interface UserInfoRepository {
 
     fun getIsAdmin(): Flow<Boolean>
 
+    fun getNewsNumber(): Flow<Int>
+
+    fun getNoticeNumber(): Flow<Int>
+
     suspend fun saveAccessToken(accessToken: String)
 
     suspend fun saveRefreshToken(refreshToken: String)
@@ -34,6 +38,10 @@ interface UserInfoRepository {
     suspend fun saveIsPushAlarmAllowed(isPushAlarmAllowed: Boolean)
 
     suspend fun saveIsAdmin(isAdmin: Boolean)
+
+    suspend fun saveNewsNumber(newsNumber: Int)
+
+    suspend fun saveNoticeNumber(noticeNumber: Int)
 
     suspend fun clearAll()
 
