@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwable.common.uistate.UiState
 import com.teamwable.data.repository.NewsRepository
-import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.model.news.NewsRankModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,17 +23,6 @@ class NewsViewModel
 
     private val _rankUiState = MutableStateFlow<UiState<List<NewsRankModel>>>(UiState.Loading)
     val rankUiState = _rankUiState.asStateFlow()
-
-    val dummyNotice = listOf(
-        NewsInfoModel(1, "와블 커뮤니티 업데이트 안내", "본문입니다 본문입니다 본문입니다 본문입니다 본문입니다 본문입니다 본문입니다 본문입니다 본문입니다", "www.11", "2024-01-10 11:47:18"),
-        NewsInfoModel(2, "제목2", "내용2", null, "2024-06-12 20:00:37"),
-        NewsInfoModel(3, "제목3", "내용3", "www.33", "2024-11-22 04:50:26"),
-        NewsInfoModel(4, "제목4", "내용4", "www.33", "2024-11-22 04:50:26"),
-        NewsInfoModel(5, "제목5", "내용5", "www.33", "2024-11-22 04:50:26"),
-        NewsInfoModel(6, "제목6", "내용6", "www.33", "2024-11-22 04:50:26"),
-        NewsInfoModel(7, "제목7", "내용7", "www.33", "2024-11-22 04:50:26"),
-        NewsInfoModel(8, "제목8", "내용8", "www.33", "2024-11-22 04:50:26"),
-    )
 
     init {
         getGameType()
