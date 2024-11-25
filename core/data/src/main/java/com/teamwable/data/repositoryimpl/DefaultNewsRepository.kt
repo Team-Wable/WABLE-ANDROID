@@ -61,4 +61,13 @@ internal class DefaultNewsRepository @Inject constructor(
             pagingData.map { it.toNoticeInfoModel() }
         }
     }
+
+    override suspend fun getNumber(): Result<Map<String, Int>> {
+        return runCatching {
+            mapOf(
+                "news" to newsService.getNumber().data.newsNumber,
+                "notice" to newsService.getNumber().data.noticeNumber
+            )
+        }.onFailure { return it.handleThrowable() }
+    }
 }
