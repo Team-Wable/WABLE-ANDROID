@@ -105,7 +105,7 @@
                 android:textAppearance="@style/TextAppearance.Wable.Body4"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_700"
-                android:textCursorDrawable="@color/purple_50"
+                android:textCursorDrawable="@drawable/shape_purple_50_cursor"
                 tools:text="ddddd\ndfdfd\ndfdfdfdfd\ndfdf" />
 
         </ScrollView>
