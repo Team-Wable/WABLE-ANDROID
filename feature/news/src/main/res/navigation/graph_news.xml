@@ -22,6 +22,6 @@
         tools:layout="@layout/fragment_news_detail">
         <argument
             android:name="newsInfoModel"
-            app:argType="com.teamwable.news.model.NewsInfoModel" />
+            app:argType="com.teamwable.model.news.NewsInfoModel" />
     </fragment>
 </navigation>

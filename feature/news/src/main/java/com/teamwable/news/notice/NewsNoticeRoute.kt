@@ -3,24 +3,20 @@ package com.teamwable.news.notice
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsViewModel
 import com.teamwable.news.R
-import com.teamwable.news.model.NewsInfoModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -54,17 +50,5 @@ fun NewsNoticeScreen(
                 color = WableTheme.colors.gray200,
             )
         }
-    }
-}
-
-@Composable
-fun NewsNoticeEmptyScreen(@StringRes emptyTxt: Int) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = stringResource(emptyTxt),
-            color = WableTheme.colors.gray500,
-            style = WableTheme.typography.body02
-        )
     }
 }

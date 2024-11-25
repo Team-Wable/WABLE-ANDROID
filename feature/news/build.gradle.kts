@@ -20,4 +20,7 @@ dependencies {
     // Third Party
     implementation(libs.coil.core)
     implementation(libs.lottie)
+    implementation(libs.bundles.landscapist.glide)
+    implementation(libs.paging)
+    implementation(libs.androidx.paging.compose)
 }
