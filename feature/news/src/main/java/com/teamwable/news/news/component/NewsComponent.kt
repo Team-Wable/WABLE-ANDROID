@@ -57,7 +57,10 @@ fun WableNewsItems(
             .clickable { onClick(newsItem) },
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
+                vertical = 12.dp,
+            ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NewsImage(
