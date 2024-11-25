@@ -20,11 +20,15 @@ import com.teamwable.ui.extensions.stringOf
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
     private val viewModel: NewsViewModel by viewModels()
+
+    private var serverNewsNumber = -1
+    private var serverNoticeNumber = -1
 
     override fun initView() {
         statusBarColorOf(com.teamwable.ui.R.color.black)
@@ -40,10 +44,10 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         viewModel.newsNumberUiState.flowWithLifecycle(lifecycle).onEach { state ->
             when (state) {
                 is UiState.Success -> {
-                    saveNumberFromServerToLocal(
-                        state.data["news"]?.takeIf { it >= 0 } ?: 0,
-                        state.data["notice"]?.takeIf { it >= 0 } ?: 0
-                    )
+                    serverNewsNumber = state.data["news"]?.takeIf { it >= 0 } ?: 0
+                    serverNoticeNumber = state.data["notice"]?.takeIf { it >= 0 } ?: 0
+
+                    saveNumberFromServerToLocal()
                 }
 
                 else -> Unit
@@ -51,7 +55,7 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         }.launchIn(lifecycleScope)
     }
 
-    private suspend fun saveNumberFromServerToLocal(serverNewsNumber: Int, serverNoticeNumber: Int) {
+    private suspend fun saveNumberFromServerToLocal() {
 //        viewModel.saveNewsNumber(1)
 //        viewModel.saveNoticeNumber(2)
 
@@ -61,7 +65,6 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         if (serverNewsNumber > localNewsNumber) {
             Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
             setBadgeOnNews(NewsTabType.NEWS.idx, true)
-            viewModel.saveNewsNumber(serverNewsNumber)
         } else {
             Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
         }
@@ -69,7 +72,6 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         if (serverNoticeNumber > localNoticeNumber) {
             Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
             setBadgeOnNews(NewsTabType.NOTICE.idx, true)
-            viewModel.saveNoticeNumber(serverNoticeNumber)
         } else {
             Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
         }
@@ -106,11 +108,13 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                     NewsTabType.NEWS.idx -> {
                         trackEvent(CLICK_NEWS)
                         setBadgeOnNews(NewsTabType.NEWS.idx, false)
+                        lifecycleScope.launch { viewModel.saveNewsNumber(serverNewsNumber) }
                     }
 
                     NewsTabType.NOTICE.idx -> {
                         trackEvent(CLICK_NOTICE)
                         setBadgeOnNews(NewsTabType.NOTICE.idx, false)
+                        lifecycleScope.launch { viewModel.saveNoticeNumber(serverNoticeNumber) }
                     }
                 }
             }
