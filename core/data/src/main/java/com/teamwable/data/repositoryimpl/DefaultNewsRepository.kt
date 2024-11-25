@@ -7,6 +7,7 @@ import androidx.paging.map
 import com.teamwable.data.mapper.toModel.toNewsInfoModel
 import com.teamwable.data.mapper.toModel.toNewsMatchModel
 import com.teamwable.data.mapper.toModel.toNewsRankModel
+import com.teamwable.data.mapper.toModel.toNoticeInfoModel
 import com.teamwable.data.repository.NewsRepository
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
@@ -47,6 +48,17 @@ internal class DefaultNewsRepository @Inject constructor(
             )
         }.flow.map { pagingData ->
             pagingData.map { it.toNewsInfoModel() }
+        }
+    }
+
+    override fun getNoticeInfo(): Flow<PagingData<NewsInfoModel>> {
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
+            GenericPagingSource(
+                apiCall = { cursor -> newsService.getNoticeInfo(cursor).data },
+                getNextCursor = { feeds -> feeds.lastOrNull()?.noticeId },
+            )
+        }.flow.map { pagingData ->
+            pagingData.map { it.toNoticeInfoModel() }
         }
     }
 }
