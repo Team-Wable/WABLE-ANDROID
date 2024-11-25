@@ -32,6 +32,12 @@ internal class DefaultUserInfoRepository @Inject constructor(
     override fun getIsAdmin(): Flow<Boolean> =
         wablePreferencesDataSource.isAdmin
 
+    override fun getNewsNumber(): Flow<Int> =
+        wablePreferencesDataSource.newsNumber
+
+    override fun getNoticeNumber(): Flow<Int> =
+        wablePreferencesDataSource.noticeNumber
+
     override suspend fun saveAccessToken(accessToken: String) {
         wablePreferencesDataSource.updateAccessToken(accessToken)
     }
@@ -62,6 +68,14 @@ internal class DefaultUserInfoRepository @Inject constructor(
 
     override suspend fun saveIsAdmin(isAdmin: Boolean) {
         wablePreferencesDataSource.updateIsAdmin(isAdmin)
+    }
+
+    override suspend fun saveNewsNumber(newsNumber: Int) {
+        wablePreferencesDataSource.updateNewsNumber(newsNumber)
+    }
+
+    override suspend fun saveNoticeNumber(noticeNumber: Int) {
+        wablePreferencesDataSource.updateNoticeNumber(noticeNumber)
     }
 
     override suspend fun clearAll() {
