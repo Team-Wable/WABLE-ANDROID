@@ -64,6 +64,7 @@ fun NewsDetailScreen(
             NewsDetailContent(
                 newsInfoModel = newsInfoModel,
                 onClick = navigateToImageDetail,
+                type = type,
             )
             HorizontalDivider(
                 color = WableTheme.colors.gray200,
@@ -76,6 +77,7 @@ fun NewsDetailScreen(
 @Composable
 fun NewsDetailContent(
     newsInfoModel: NewsInfoModel,
+    type: NewsTabType,
     onClick: () -> Unit,
 ) {
     Column(
@@ -104,6 +106,7 @@ fun NewsDetailContent(
         }
         NewsImage(
             imageUrl = newsInfoModel.newsImage,
+            type = type,
             modifier = Modifier
                 .padding(top = 10.dp)
                 .fillMaxWidth()
@@ -118,6 +121,10 @@ fun NewsDetailContent(
             modifier = Modifier.padding(top = 10.dp),
         )
     }
+}
+
+@Composable
+fun NoticeDetailButton() {
 }
 
 @Preview(showBackground = true)
