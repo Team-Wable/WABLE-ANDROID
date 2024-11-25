@@ -75,5 +75,5 @@ class NewsViewModel
 
     suspend fun getNoticeNumberFromLocal() = userInfoRepository.getNoticeNumber().first()
 
-    suspend fun saveNoticeNumber(notice: Int) = userInfoRepository.saveNoticeNumber(notice)
+    suspend fun saveNoticeNumber(noticeNumber: Int) = userInfoRepository.saveNoticeNumber(noticeNumber)
 }
