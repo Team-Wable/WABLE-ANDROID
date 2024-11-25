@@ -6,6 +6,7 @@ import com.teamwable.model.news.NewsMatchScoreModel
 import com.teamwable.model.news.NewsRankModel
 import com.teamwable.network.dto.response.news.ResponseGameDto
 import com.teamwable.network.dto.response.news.ResponseNewsInfoDto
+import com.teamwable.network.dto.response.news.ResponseNoticeInfoDto
 import com.teamwable.network.dto.response.news.ResponseRankDto
 import com.teamwable.network.dto.response.news.ResponseScheduleDto
 
@@ -42,4 +43,13 @@ internal fun ResponseNewsInfoDto.toNewsInfoModel(): NewsInfoModel =
         newsImage = newsImage,
         newsText = newsText,
         time = time,
+    )
+
+internal fun ResponseNoticeInfoDto.toNoticeInfoModel(): NewsInfoModel =
+    NewsInfoModel(
+        newsId = noticeId,
+        newsTitle = noticeTitle,
+        newsImage = noticeImage,
+        newsText = noticeText,
+        time = time
     )

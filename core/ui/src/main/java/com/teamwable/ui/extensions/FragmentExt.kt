@@ -2,13 +2,13 @@ package com.teamwable.ui.extensions
 
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -54,4 +54,10 @@ fun Fragment.statusBarColorOf(
 
 fun Fragment.openUri(uri: String) {
     Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
+}
+
+fun Fragment.statusBarModeOf(isLightStatusBar: Boolean = true) {
+    requireActivity().window.apply {
+        WindowInsetsControllerCompat(this, decorView).isAppearanceLightStatusBars = isLightStatusBar
+    }
 }
