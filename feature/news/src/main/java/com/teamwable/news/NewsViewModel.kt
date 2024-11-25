@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwable.common.uistate.UiState
 import com.teamwable.data.repository.NewsRepository
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.model.news.NewsRankModel
-import com.teamwable.news.model.NewsInfoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
