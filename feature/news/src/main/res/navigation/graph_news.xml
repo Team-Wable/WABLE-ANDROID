@@ -23,5 +23,8 @@
         <argument
             android:name="newsInfoModel"
             app:argType="com.teamwable.model.news.NewsInfoModel" />
+        <argument
+            android:name="newsTabType"
+            app:argType="com.teamwable.news.NewsTabType" />
     </fragment>
 </navigation>
