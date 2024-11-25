@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_COMMENT
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.R
@@ -63,13 +64,15 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private val commentAdapter: CommentAdapter by lazy { CommentAdapter(onClickCommentItem()) }
     private val args: HomeDetailFragmentArgs by navArgs()
     private val viewModel: HomeDetailViewModel by viewModels()
+
     private lateinit var commentActionHandler: CommentActionHandler
     private lateinit var feedActionHandler: FeedActionHandler
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
+    private lateinit var commentAdapterObserver: AdapterDataObserver
+
     private var isCommentNull = true
     private var totalCommentLength = 0
-    private var isCommentAdded = false
 
     override fun initView() {
         commentActionHandler = CommentActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -79,6 +82,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         viewModel.updateHomeDetailToNetwork(args.feedId)
         collect(commentSnackbar, childCommentSnackbar)
         initBackBtnClickListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (::commentAdapterObserver.isInitialized) commentAdapter.unregisterAdapterDataObserver(commentAdapterObserver)
     }
 
     private fun collect(commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
@@ -104,14 +112,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 when (sideEffect) {
                     is HomeDetailSideEffect.ShowCommentSnackBar -> {
                         commentSnackbar.updateToCommentComplete(SnackbarType.COMMENT_COMPLETE)
-                        isCommentAdded = true
                         commentAdapter.refresh()
                     }
 
                     is HomeDetailSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeDetailSideEffect.ShowChildCommentSnackBar -> {
                         childCommentSnackbar.updateToCommentComplete(SnackbarType.CHILD_COMMENT_COMPLETE)
-                        isCommentAdded = true
                         commentAdapter.refresh()
                     }
 
@@ -312,19 +318,11 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun scrollToBottomOnCommentAdded() {
-        var isFirstLoad = true
-
-        viewLifeCycleScope.launch {
-            // 답글 아래로 스크롤
-            commentAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.source.append is LoadState.NotLoading && isCommentAdded) {
-                    binding.rvHomeDetail.smoothScrollToPosition(commentAdapter.itemCount)
-                    if (loadStates.append.endOfPaginationReached) isCommentAdded = false
-                }
-
-                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) isFirstLoad = false
+        commentAdapterObserver = object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                binding.rvHomeDetail.smoothScrollToPosition(positionStart + 1)
             }
-        }
+        }.apply { commentAdapter.registerAdapterDataObserver(this) }
     }
 
     private fun concatAdapter() {
