@@ -9,5 +9,19 @@
         android:id="@+id/navigation_news"
         android:name="com.teamwable.news.NewsFragment"
         android:label="NewsFragment"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news">
+        <action
+            android:id="@+id/action_navigation_news_to_navigation_news_detail"
+            app:destination="@id/navigation_news_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_news_detail"
+        android:name="com.teamwable.news.NewsDetailFragment"
+        android:label="NewsDetailFragment"
+        tools:layout="@layout/fragment_news_detail">
+        <argument
+            android:name="newsInfoModel"
+            app:argType="com.teamwable.model.news.NewsInfoModel" />
+    </fragment>
 </navigation>

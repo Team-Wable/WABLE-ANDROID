@@ -9,7 +9,7 @@ import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.R as r
 
 object FeedTransformer {
-    private val time = CalculateTime()
+    val time = CalculateTime()
     private val transparent = Transparent()
 
     @SuppressLint("NewApi")

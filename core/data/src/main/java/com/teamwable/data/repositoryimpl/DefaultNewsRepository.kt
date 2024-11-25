@@ -1,12 +1,21 @@
 package com.teamwable.data.repositoryimpl
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.teamwable.data.mapper.toModel.toNewsInfoModel
 import com.teamwable.data.mapper.toModel.toNewsMatchModel
 import com.teamwable.data.mapper.toModel.toNewsRankModel
 import com.teamwable.data.repository.NewsRepository
+import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.model.news.NewsRankModel
 import com.teamwable.network.datasource.NewsService
+import com.teamwable.network.util.GenericPagingSource
 import com.teamwable.network.util.handleThrowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class DefaultNewsRepository @Inject constructor(
@@ -28,5 +37,16 @@ internal class DefaultNewsRepository @Inject constructor(
         return runCatching {
             newsService.getRank().data.map { it.toNewsRankModel() }
         }.onFailure { return it.handleThrowable() }
+    }
+
+    override fun getNewsInfo(): Flow<PagingData<NewsInfoModel>> {
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
+            GenericPagingSource(
+                apiCall = { cursor -> newsService.getNewsInfo(cursor).data },
+                getNextCursor = { feeds -> feeds.lastOrNull()?.newsId },
+            )
+        }.flow.map { pagingData ->
+            pagingData.map { it.toNewsInfoModel() }
+        }
     }
 }
