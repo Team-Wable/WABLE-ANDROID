@@ -11,6 +11,7 @@ import com.teamwable.news.databinding.FragmentNewsBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.statusBarColorOf
+import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.stringOf
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
     override fun initView() {
         statusBarColorOf(com.teamwable.ui.R.color.black)
+        statusBarModeOf(false)
+
         initNewsViewPagerAdapter()
         initTabClickListener()
 
@@ -74,5 +77,6 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
     override fun onDestroyView() {
         super.onDestroyView()
         statusBarColorOf(com.teamwable.ui.R.color.white)
+        statusBarModeOf()
     }
 }
