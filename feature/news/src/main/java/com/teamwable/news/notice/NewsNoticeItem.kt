@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
@@ -35,5 +36,16 @@ fun NewsNoticeItem(
         }
         Spacer(modifier = Modifier.height(2.dp))
         Text(text = data.newsText, color = WableTheme.colors.gray600, maxLines = 2, style = WableTheme.typography.body04)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NewsNoticeItemPreview() {
+    WableTheme {
+        NewsNoticeItem(
+            data = NewsInfoModel(1, "제목", "내용", null, "2024-01-10 11:47:18"),
+            onItemClick = {}
+        )
     }
 }

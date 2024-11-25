@@ -98,7 +98,7 @@ fun NewsNoticeScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun NewsNoticeScreenPreview() {
     WableTheme {
         NewsNoticeScreen(
             onItemClick = {},
