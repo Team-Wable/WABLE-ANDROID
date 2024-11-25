@@ -1,7 +1,11 @@
 package com.teamwable.news
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.teamwable.common.uistate.UiState
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_GAMESCHEDULE
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_NEWS
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_NOTICE
@@ -14,9 +18,14 @@ import com.teamwable.ui.extensions.statusBarColorOf
 import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.stringOf
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
+    private val viewModel: NewsViewModel by viewModels()
+
     override fun initView() {
         statusBarColorOf(com.teamwable.ui.R.color.black)
         statusBarModeOf(false)
@@ -24,8 +33,39 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         initNewsViewPagerAdapter()
         initTabClickListener()
 
-        setBadgeOnNews(NewsTabType.NEWS.idx, true)
-        setBadgeOnNews(NewsTabType.NOTICE.idx, true)
+        setupNumberObserve()
+    }
+
+    private fun setupNumberObserve() {
+        viewModel.newsNumberUiState.flowWithLifecycle(lifecycle).onEach { state ->
+            when (state) {
+                is UiState.Success -> {
+                    val localNewsNumber = viewModel.getNewsNumberFromLocal()
+                    val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
+
+                    val serverNewsNumber = state.data["news"]?.takeIf { it >= 0 } ?: 0
+                    val serverNoticeNumber = state.data["notice"]?.takeIf { it >= 0 } ?: 0
+
+                    if (serverNewsNumber != localNewsNumber) {
+                        Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
+                        setBadgeOnNews(NewsTabType.NEWS.idx, true)
+                        viewModel.saveNewsNumber(serverNewsNumber)
+                    } else {
+                        Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
+                    }
+
+                    if (serverNoticeNumber != localNoticeNumber) {
+                        Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
+                        setBadgeOnNews(NewsTabType.NOTICE.idx, true)
+                        viewModel.saveNoticeNumber(serverNoticeNumber)
+                    } else {
+                        Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
+                    }
+                }
+
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
     }
 
     private fun setBadgeOnNews(idx: Int, isVisible: Boolean) {
