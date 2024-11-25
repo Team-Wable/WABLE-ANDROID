@@ -14,4 +14,6 @@ interface NewsRepository {
     suspend fun getRank(): Result<List<NewsRankModel>>
 
     fun getNewsInfo(): Flow<PagingData<NewsInfoModel>>
+
+    fun getNoticeInfo(): Flow<PagingData<NewsInfoModel>>
 }
