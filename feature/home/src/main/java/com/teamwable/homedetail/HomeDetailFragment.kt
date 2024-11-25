@@ -9,6 +9,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ import com.teamwable.ui.extensions.showKeyboard
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
+import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.CommentAdapter
 import com.teamwable.ui.shareAdapter.CommentAdapter.Companion.PARENT_COMMENT_DEFAULT
 import com.teamwable.ui.shareAdapter.CommentClickListener
@@ -102,7 +104,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                     }
 
                     is HomeDetailUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-                    is HomeDetailUiState.Loading -> Unit
+                    is HomeDetailUiState.Loading -> binding.pbHomeDetailLoading.visible(true)
                 }
             }
         }
@@ -130,6 +132,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     private fun setLayout(feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         submitFeedList(feed)
         submitCommentList(feed)
+        handleCommentLoadingState()
         concatAdapter()
         scrollToBottomOnCommentAdded()
         initEditTextHint(feed.postAuthorNickname, CommentType.PARENT)
@@ -323,6 +326,12 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
                 binding.rvHomeDetail.smoothScrollToPosition(positionStart + 1)
             }
         }.apply { commentAdapter.registerAdapterDataObserver(this) }
+    }
+
+    private fun handleCommentLoadingState() = viewLifeCycleScope.launch {
+        commentAdapter.loadStateFlow.collectLatest { loadStates ->
+            binding.pbHomeDetailLoading.visible(loadStates.refresh is LoadState.Loading)
+        }
     }
 
     private fun concatAdapter() {

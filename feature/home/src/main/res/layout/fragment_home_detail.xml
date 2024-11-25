@@ -46,6 +46,19 @@
             tools:listitem="@layout/item_comment" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_home_detail_loading"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="50dp"
+        android:indeterminateDrawable="@anim/spinner_rotate"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/cl_home_detail_comment_input"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar_home_detail" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_home_detail_comment_input"
         android:layout_width="0dp"
