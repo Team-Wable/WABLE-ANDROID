@@ -36,7 +36,10 @@ internal fun NewsNoticeRoute(
     navigateToDetail: (NewsInfoModel) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val newsItems = viewModel.noticePagingFlow.collectAsLazyPagingItems()
+    val noticeItems = viewModel.noticePagingFlow.collectAsLazyPagingItems()
+
+    val isLoading = noticeItems.loadState.refresh is LoadState.Loading
+    val isEmpty = noticeItems.itemCount == 0 && !isLoading
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -47,10 +50,15 @@ internal fun NewsNoticeRoute(
                 }
             }
     }
-    NewsNoticeScreen(
-        noticeItems = newsItems,
-        onItemClick = viewModel::onItemClick
-    )
+
+    when {
+        isLoading -> LoadingScreen()
+        isEmpty -> NewsNoticeEmptyScreen(emptyTxt = R.string.tv_news_notice_empty)
+        else -> NewsNoticeScreen(
+            noticeItems = noticeItems,
+            onItemClick = viewModel::onItemClick
+        )
+    }
 }
 
 @Composable
@@ -58,39 +66,30 @@ fun NewsNoticeScreen(
     noticeItems: LazyPagingItems<NewsInfoModel>,
     onItemClick: (NewsInfoModel) -> Unit
 ) {
-    val isLoading = noticeItems.loadState.refresh is LoadState.Loading
-    val isEmpty = noticeItems.itemCount == 0 && !isLoading
-
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        when {
-            isLoading -> item { LoadingScreen() }
-            isEmpty -> item { NewsNoticeEmptyScreen(emptyTxt = R.string.tv_news_notice_empty) }
-            else -> {
-                items(
-                    count = noticeItems.itemCount,
-                    key = noticeItems.itemKey { it.newsId },
-                    contentType = noticeItems.itemContentType { ContentType.Item.name },
-                ) { idx ->
-                    noticeItems[idx]?.let {
-                        NewsNoticeItem(it, onItemClick)
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = WableTheme.colors.gray200,
-                        )
-                    }
-                }
-                item(
-                    key = ContentType.Spinner.name,
-                    contentType = noticeItems.itemContentType { ContentType.Spinner.name },
-                ) {
-                    if (noticeItems.loadState.append is LoadState.Loading) {
-                        WablePagingSpinner(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp),
-                        )
-                    }
-                }
+        items(
+            count = noticeItems.itemCount,
+            key = noticeItems.itemKey { it.newsId },
+            contentType = noticeItems.itemContentType { ContentType.Item.name },
+        ) { idx ->
+            noticeItems[idx]?.let {
+                NewsNoticeItem(it, onItemClick)
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = WableTheme.colors.gray200,
+                )
+            }
+        }
+        item(
+            key = ContentType.Spinner.name,
+            contentType = noticeItems.itemContentType { ContentType.Spinner.name },
+        ) {
+            if (noticeItems.loadState.append is LoadState.Loading) {
+                WablePagingSpinner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                )
             }
         }
     }
