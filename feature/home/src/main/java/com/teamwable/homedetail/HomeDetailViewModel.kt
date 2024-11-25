@@ -52,6 +52,7 @@ class HomeDetailViewModel @Inject constructor(
 
     private var authId: Long = -1
     private var isAdmin = false
+
     private var _parentCommentIds = Pair(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
     val parentCommentIds get() = _parentCommentIds
 
@@ -128,9 +129,12 @@ class HomeDetailViewModel @Inject constructor(
     fun addComment(contentId: Long, commentText: String) = viewModelScope.launch {
         commentRepository.postComment(contentId, Triple(commentText, _parentCommentIds.first, _parentCommentIds.second))
             .onSuccess {
-                if (_parentCommentIds.first == PARENT_COMMENT_DEFAULT)
+                if (_parentCommentIds.first == PARENT_COMMENT_DEFAULT) {
                     _event.emit(HomeDetailSideEffect.ShowCommentSnackBar)
-                else _event.emit(HomeDetailSideEffect.ShowChildCommentSnackBar)
+                } else {
+                    _event.emit(HomeDetailSideEffect.ShowChildCommentSnackBar)
+                    setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
+                }
             }
             .onFailure { _uiState.value = HomeDetailUiState.Error(it.message.toString()) }
     }

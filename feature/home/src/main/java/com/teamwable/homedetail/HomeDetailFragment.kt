@@ -9,7 +9,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -184,15 +183,8 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
             trackEvent(CLICK_WRITE_COMMENT)
             viewModel.addComment(feed.feedId, binding.etHomeDetailCommentInput.text.toString())
-            if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) {
-                commentSnackbar.show()
-            } else {
-                childCommentSnackbar.show()
-                initEditTextHint(feed.postAuthorNickname, CommentType.PARENT)
-                viewModel.setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
-            }
-            binding.etHomeDetailCommentInput.text.clear()
-            requireActivity().hideKeyboard(binding.root)
+            if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
+            handleCommentBtnClick(feed.postAuthorNickname, CommentType.PARENT)
         }
     }
 
