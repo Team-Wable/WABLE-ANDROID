@@ -1,8 +1,10 @@
 package com.teamwable.news
 
-enum class NewsTabType {
+import androidx.annotation.StringRes
+
+enum class NewsTabType(@StringRes val title: Int = R.string.tv_news_tab_news) {
     MATCH,
     RANK,
-    NEWS,
-    NOTICE,
+    NEWS(title = R.string.tv_news_tab_news),
+    NOTICE(title = R.string.tv_news_tab_notice),
 }

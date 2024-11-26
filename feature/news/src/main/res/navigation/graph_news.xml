@@ -17,11 +17,14 @@
 
     <fragment
         android:id="@+id/navigation_news_detail"
-        android:name="com.teamwable.news.NewsDetailFragment"
+        android:name="com.teamwable.news.detail.NewsDetailFragment"
         android:label="NewsDetailFragment"
         tools:layout="@layout/fragment_news_detail">
         <argument
             android:name="newsInfoModel"
             app:argType="com.teamwable.model.news.NewsInfoModel" />
+        <argument
+            android:name="newsTabType"
+            app:argType="com.teamwable.news.NewsTabType" />
     </fragment>
 </navigation>

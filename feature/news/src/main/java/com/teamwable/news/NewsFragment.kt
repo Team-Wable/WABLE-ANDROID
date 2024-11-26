@@ -13,8 +13,6 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.news.databinding.FragmentNewsBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.colorOf
-import com.teamwable.ui.extensions.statusBarColorOf
-import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -31,9 +29,6 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
     private var serverNoticeNumber = -1
 
     override fun initView() {
-        statusBarColorOf(com.teamwable.ui.R.color.black)
-        statusBarModeOf(false)
-
         initNewsViewPagerAdapter()
         initTabClickListener()
 
@@ -127,11 +122,5 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        statusBarColorOf(com.teamwable.ui.R.color.white)
-        statusBarModeOf()
     }
 }

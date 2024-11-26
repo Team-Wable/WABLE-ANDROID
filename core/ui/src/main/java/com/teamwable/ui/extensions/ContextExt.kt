@@ -19,6 +19,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -102,6 +103,14 @@ fun Context.statusBarColorOf(
 ) {
     if (this is Activity) {
         window?.statusBarColor = colorOf(resId)
+    }
+}
+
+fun Context.statusBarModeOf(isLightStatusBar: Boolean = true) {
+    if (this is Activity) {
+        window.apply {
+            WindowInsetsControllerCompat(this, decorView).isAppearanceLightStatusBars = isLightStatusBar
+        }
     }
 }
 

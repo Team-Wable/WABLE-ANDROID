@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsFragmentDirections
+import com.teamwable.news.NewsTabType
 import com.teamwable.news.databinding.FragmentNewsNewsBinding
 import com.teamwable.ui.base.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +26,7 @@ class NewsNewsFragment : BindingFragment<FragmentNewsNewsBinding>(FragmentNewsNe
     }
 
     private fun navigateToDetail(notice: NewsInfoModel) {
-        val action = NewsFragmentDirections.actionNavigationNewsToNavigationNewsDetail(notice)
+        val action = NewsFragmentDirections.actionNavigationNewsToNavigationNewsDetail(notice, NewsTabType.NEWS)
         requireParentFragment().findNavController().navigate(action)
     }
 }

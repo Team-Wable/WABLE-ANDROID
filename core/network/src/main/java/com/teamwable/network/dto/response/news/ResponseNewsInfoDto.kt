@@ -12,7 +12,7 @@ data class ResponseNewsInfoDto(
     @SerialName("newsText")
     val newsText: String,
     @SerialName("newsImage")
-    val newsImage: String,
+    val newsImage: String?,
     @SerialName("time")
     val time: String,
 )
