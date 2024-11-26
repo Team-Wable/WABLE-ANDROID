@@ -66,12 +66,12 @@ fun WableNewsItems(
             NewsImage(
                 imageUrl = newsItem.newsImage,
                 modifier = Modifier
+                    .padding(end = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal))
                     .widthIn(max = 100.dp)
                     .aspectRatio(1.43f),
             )
             Column(
                 modifier = Modifier.padding(
-                    start = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
                     top = 4.dp,
                     bottom = 4.dp,
                 ),
