@@ -228,10 +228,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) {
-        when (it) {
-            true -> handlePushAlarmPermissionGranted()
-            false -> handlePushAlarmPermissionDenied()
+    ) { isGranted ->
+        when {
+            isGranted -> handlePushAlarmPermissionGranted()
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                handlePushAlarmPermissionDenied()
+            }
         }
     }
 
