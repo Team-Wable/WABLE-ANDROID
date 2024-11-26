@@ -13,10 +13,10 @@ class NewsViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            NewsTabType.MATCH.idx -> NewsMatchFragment()
-            NewsTabType.RANK.idx -> NewsRankFragment()
-            NewsTabType.NEWS.idx -> NewsNewsFragment()
-            NewsTabType.NOTICE.idx -> NewsNoticeFragment()
+            NewsTabType.MATCH.ordinal -> NewsMatchFragment()
+            NewsTabType.RANK.ordinal -> NewsRankFragment()
+            NewsTabType.NEWS.ordinal -> NewsNewsFragment()
+            NewsTabType.NOTICE.ordinal -> NewsNoticeFragment()
             else -> NewsMatchFragment()
         }
     }
