@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RequestPostCommentDto(
     @SerialName("commentText") val commentText: String,
-    @SerialName("notificationTriggerType") val notificationTriggerType: String,
+    @SerialName("parentCommentId") val parentCommentId: Long,
+    @SerialName("parentCommentWriterId") val parentCommentWriterId: Long,
 )

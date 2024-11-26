@@ -13,10 +13,10 @@ import com.teamwable.ui.extensions.visible
 class CommentViewHolder private constructor(
     private val binding: ItemCommentBinding,
     commentClickListener: CommentClickListener,
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root), LikeableViewHolder {
     private lateinit var item: Comment
-    val likeBtn = binding.btnCommentLike
-    val likeCountTv = binding.tvCommentLikeCount
+    override val likeBtn = binding.btnCommentLike
+    override val likeCountTv = binding.tvCommentLikeCount
 
     init {
         setupClickListener(itemView, binding.tvCommentContent) { commentClickListener.onItemClick(item.feedId ?: return@setupClickListener) }
@@ -24,6 +24,7 @@ class CommentViewHolder private constructor(
         setupClickListener(binding.btnCommentLike) { commentClickListener.onLikeBtnClick(this, item) }
         setupClickListener(binding.ivCommentProfileImg, binding.tvCommentNickname) { commentClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.btnCommentMore) { commentClickListener.onKebabBtnClick(item) }
+        setupClickListener(binding.btnCommentWriteChildComment, binding.tvCommentWriteChildCommentLabel) { commentClickListener.onChildCommentClick(item) }
     }
 
     private fun setupClickListener(vararg views: View, action: () -> Unit) {
@@ -50,6 +51,7 @@ class CommentViewHolder private constructor(
             btnCommentGhost.visible(!comment.isAuth)
             spacerComment.visible(!comment.isAuth)
             setBlindVisible(comment.isBlind)
+            groupCommentWriteChildComment.visible(comment.parentCommentId != null)
         }
     }
 

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="54dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end"
@@ -21,10 +21,10 @@
         app:layout_constraintGuide_end="16dp" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_comment_profile_img"
+        android:id="@+id/iv_child_comment_profile_img"
         android:layout_width="48dp"
         android:layout_height="0dp"
-        android:layout_marginStart="7dp"
+        android:layout_marginStart="45dp"
         android:padding="@dimen/padding_touch_30"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1"
@@ -34,15 +34,15 @@
         tools:src="@color/gray_700" />
 
     <TextView
-        android:id="@+id/tv_comment_nickname"
+        android:id="@+id/tv_child_comment_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:maxLength="10"
         android:textAppearance="@style/TextAppearance.Wable.Body3"
-        app:layout_constraintBottom_toTopOf="@id/tv_comment_ghost_level"
-        app:layout_constraintStart_toEndOf="@id/iv_comment_profile_img"
-        app:layout_constraintTop_toTopOf="@id/iv_comment_profile_img"
+        app:layout_constraintBottom_toTopOf="@id/tv_child_comment_ghost_level"
+        app:layout_constraintStart_toEndOf="@id/iv_child_comment_profile_img"
+        app:layout_constraintTop_toTopOf="@id/iv_child_comment_profile_img"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@string/dummy" />
 
@@ -51,48 +51,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_comment_nickname"
-        app:layout_constraintStart_toEndOf="@id/tv_comment_nickname"
-        app:layout_constraintTop_toTopOf="@id/tv_comment_nickname" />
+        app:layout_constraintBottom_toBottomOf="@id/tv_child_comment_nickname"
+        app:layout_constraintStart_toEndOf="@id/tv_child_comment_nickname"
+        app:layout_constraintTop_toTopOf="@id/tv_child_comment_nickname" />
 
     <TextView
-        android:id="@+id/tv_comment_ghost_level"
+        android:id="@+id/tv_child_comment_ghost_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:textAppearance="@style/TextAppearance.Wable.Caption4"
         android:textColor="@color/gray_700"
-        app:layout_constraintBottom_toBottomOf="@id/iv_comment_profile_img"
-        app:layout_constraintStart_toStartOf="@id/tv_comment_nickname"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_nickname"
+        app:layout_constraintBottom_toBottomOf="@id/iv_child_comment_profile_img"
+        app:layout_constraintStart_toStartOf="@id/tv_child_comment_nickname"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_comment_nickname"
         tools:text="@string/label_feed_ghost_level" />
 
     <TextView
-        android:id="@+id/tv_comment_upload_time"
+        android:id="@+id/tv_child_comment_upload_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:text="@string/label_feed_upload_time"
         android:textAppearance="@style/TextAppearance.Wable.Caption4"
         android:textColor="@color/gray_500"
-        app:layout_constraintBottom_toBottomOf="@id/tv_comment_ghost_level"
-        app:layout_constraintStart_toEndOf="@id/tv_comment_ghost_level"
-        app:layout_constraintTop_toTopOf="@id/tv_comment_ghost_level" />
+        app:layout_constraintBottom_toBottomOf="@id/tv_child_comment_ghost_level"
+        app:layout_constraintStart_toEndOf="@id/tv_child_comment_ghost_level"
+        app:layout_constraintTop_toTopOf="@id/tv_child_comment_ghost_level" />
 
     <TextView
-        android:id="@+id/tv_comment_content"
+        android:id="@+id/tv_child_comment_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textAppearance="@style/TextAppearance.Wable.Body4"
         android:textColor="@color/gray_800"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_blind"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_comment_blind"
         tools:text="@string/dummy" />
 
     <View
-        android:id="@+id/view_comment_transparent_bg"
+        android:id="@+id/view_child_comment_transparent_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,7 +102,7 @@
         tools:backgroundTint="#0FFCFCFD" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_comment_more"
+        android:id="@+id/btn_child_comment_more"
         style="@style/Wable.Icon.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_comment_ghost"
+        android:id="@+id/btn_child_comment_ghost"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginTop="12dp"
@@ -122,30 +122,30 @@
         app:backgroundTint="@null"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_comment_content"
         app:rippleColor="@color/white" />
 
     <Space
-        android:id="@+id/spacer_comment"
+        android:id="@+id/spacer_child_comment"
         android:layout_width="16dp"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toStartOf="@id/btn_comment_ghost"
-        app:layout_constraintTop_toTopOf="@id/btn_comment_ghost" />
+        app:layout_constraintEnd_toStartOf="@id/btn_child_comment_ghost"
+        app:layout_constraintTop_toTopOf="@id/btn_child_comment_ghost" />
 
     <TextView
-        android:id="@+id/tv_comment_like_count"
+        android:id="@+id/tv_child_comment_like_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:textAppearance="@style/TextAppearance.Wable.Caption1"
         android:textColor="@color/gray_600"
-        app:layout_constraintBottom_toBottomOf="@id/btn_comment_like"
-        app:layout_constraintStart_toEndOf="@id/btn_comment_like"
-        app:layout_constraintTop_toTopOf="@id/btn_comment_like"
+        app:layout_constraintBottom_toBottomOf="@id/btn_child_comment_like"
+        app:layout_constraintStart_toEndOf="@id/btn_child_comment_like"
+        app:layout_constraintTop_toTopOf="@id/btn_child_comment_like"
         tools:text="00" />
 
     <CheckBox
-        android:id="@+id/btn_comment_like"
+        android:id="@+id/btn_child_comment_like"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
@@ -153,42 +153,11 @@
         android:backgroundTint="@color/sel_share_comment_like_color"
         android:button="@null"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_content" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_comment_write_child_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="btn_comment_write_child_comment, tv_comment_write_child_comment_label" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_comment_write_child_comment"
-        style="@style/Wable.Icon.Button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        app:icon="@drawable/ic_home_detail_child_comment"
-        app:iconSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/btn_comment_like"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintStart_toEndOf="@id/tv_comment_like_count"
-        app:layout_constraintTop_toTopOf="@id/btn_comment_like" />
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_comment_content" />
 
     <TextView
-        android:id="@+id/tv_comment_write_child_comment_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:text="@string/label_comment_write_child_comment"
-        android:textAppearance="@style/TextAppearance.Wable.Caption3"
-        android:textColor="@color/gray_600"
-        app:layout_constraintBottom_toBottomOf="@id/btn_comment_write_child_comment"
-        app:layout_constraintStart_toEndOf="@id/btn_comment_write_child_comment"
-        app:layout_constraintTop_toTopOf="@id/btn_comment_write_child_comment" />
-
-    <TextView
-        android:id="@+id/tv_comment_blind"
+        android:id="@+id/tv_child_comment_blind"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
@@ -201,6 +170,6 @@
         android:visibility="gone"
         app:layout_constraintDimensionRatio="290:50"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/tv_comment_ghost_level"
-        app:layout_constraintTop_toBottomOf="@id/tv_comment_ghost_level" />
+        app:layout_constraintStart_toStartOf="@id/tv_child_comment_ghost_level"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_comment_ghost_level" />
 </androidx.constraintlayout.widget.ConstraintLayout>

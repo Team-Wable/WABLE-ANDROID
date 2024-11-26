@@ -63,8 +63,8 @@ class Snackbar(private val view: View, private val type: SnackbarType) {
         }, duration)
     }
 
-    fun updateToCommentComplete() {
-        initLayout(SnackbarType.COMMENT_COMPLETE)
+    fun updateToCommentComplete(type: SnackbarType) {
+        initLayout(type)
         dismissSnackbar(1000)
     }
 
