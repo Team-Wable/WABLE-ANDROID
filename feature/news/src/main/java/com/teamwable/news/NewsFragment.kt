@@ -2,7 +2,6 @@ package com.teamwable.news
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.common.uistate.UiState
@@ -17,10 +16,11 @@ import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.statusBarColorOf
 import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.stringOf
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -41,19 +41,23 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
     }
 
     private fun setupNumberObserve() {
-        viewModel.newsNumberUiState.flowWithLifecycle(lifecycle).onEach { state ->
+        viewModel.newsNumberUiState.flowWithLifecycle(viewLifeCycle).onEach { state ->
             when (state) {
                 is UiState.Success -> {
-                    serverNewsNumber = state.data["news"]?.takeIf { it >= 0 } ?: 0
-                    serverNoticeNumber = state.data["notice"]?.takeIf { it >= 0 } ?: 0
+                    serverNewsNumber = getServerNumber(state, "news")
+                    serverNoticeNumber = getServerNumber(state, "notice")
 
                     saveNumberFromServerToLocal()
                 }
 
                 else -> Unit
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifeCycleScope)
     }
+
+    private fun getServerNumber(state: UiState.Success<Map<String, Int>>, idx: String) =
+        state.data[idx]?.takeIf { it >= 0 } ?: 0
+
 
     private suspend fun saveNumberFromServerToLocal() {
 //        viewModel.saveNewsNumber(1)
@@ -64,14 +68,14 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
 
         if (serverNewsNumber > localNewsNumber) {
             Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
-            setBadgeOnNews(NewsTabType.NEWS.idx, true)
+            setBadgeOnNews(NewsTabType.NEWS.ordinal, true)
         } else {
             Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
         }
 
         if (serverNoticeNumber > localNoticeNumber) {
             Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
-            setBadgeOnNews(NewsTabType.NOTICE.idx, true)
+            setBadgeOnNews(NewsTabType.NOTICE.ordinal, true)
         } else {
             Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
         }
@@ -90,10 +94,10 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
             vpNews.adapter = NewsViewPagerAdapter(this@NewsFragment)
             TabLayoutMediator(tlNews, vpNews) { tab, position ->
                 when (position) {
-                    NewsTabType.MATCH.idx -> tab.text = stringOf(R.string.tv_news_tab_match)
-                    NewsTabType.RANK.idx -> tab.text = stringOf(R.string.tv_news_tab_rank)
-                    NewsTabType.NEWS.idx -> tab.text = stringOf(R.string.tv_news_tab_news)
-                    NewsTabType.NOTICE.idx -> tab.text = stringOf(R.string.tv_news_tab_notice)
+                    NewsTabType.MATCH.ordinal -> tab.text = stringOf(R.string.tv_news_tab_match)
+                    NewsTabType.RANK.ordinal -> tab.text = stringOf(R.string.tv_news_tab_rank)
+                    NewsTabType.NEWS.ordinal -> tab.text = stringOf(R.string.tv_news_tab_news)
+                    NewsTabType.NOTICE.ordinal -> tab.text = stringOf(R.string.tv_news_tab_notice)
                 }
             }.attach()
         }
@@ -103,18 +107,18 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         binding.tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    NewsTabType.MATCH.idx -> trackEvent(CLICK_GAMESCHEDULE)
-                    NewsTabType.RANK.idx -> trackEvent(CLICK_RANKING)
-                    NewsTabType.NEWS.idx -> {
+                    NewsTabType.MATCH.ordinal -> trackEvent(CLICK_GAMESCHEDULE)
+                    NewsTabType.RANK.ordinal -> trackEvent(CLICK_RANKING)
+                    NewsTabType.NEWS.ordinal -> {
                         trackEvent(CLICK_NEWS)
-                        setBadgeOnNews(NewsTabType.NEWS.idx, false)
-                        lifecycleScope.launch { viewModel.saveNewsNumber(serverNewsNumber) }
+                        setBadgeOnNews(NewsTabType.NEWS.ordinal, false)
+                        viewModel.saveNewsNumber(serverNewsNumber)
                     }
 
-                    NewsTabType.NOTICE.idx -> {
+                    NewsTabType.NOTICE.ordinal -> {
                         trackEvent(CLICK_NOTICE)
-                        setBadgeOnNews(NewsTabType.NOTICE.idx, false)
-                        lifecycleScope.launch { viewModel.saveNoticeNumber(serverNoticeNumber) }
+                        setBadgeOnNews(NewsTabType.NOTICE.ordinal, false)
+                        viewModel.saveNoticeNumber(serverNoticeNumber)
                     }
                 }
             }
