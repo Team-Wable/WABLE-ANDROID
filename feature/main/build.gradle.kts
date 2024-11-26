@@ -5,6 +5,15 @@ plugins {
 }
 android {
     namespace = "com.teamwable.main"
+
+    defaultConfig {
+        val versionCode = libs.versions.versionCode.get().toInt()
+        buildConfigField("Integer", "VERSION_CODE", "$versionCode")
+    }
+
+    buildFeatures.apply {
+        buildConfig = true
+    }
 }
 
 dependencies {

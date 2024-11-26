@@ -19,10 +19,17 @@ class AppUpdateHandler(private val appUpdateManager: AppUpdateManager) {
     }
 
     fun startUpdate(appUpdateInfo: AppUpdateInfo, activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>) {
+        val appUpdateType = if (checkIsImmediate(appUpdateInfo)) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE
         appUpdateManager.startUpdateFlowForResult(
             appUpdateInfo,
             activityResultLauncher,
-            AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
+            AppUpdateOptions.newBuilder(appUpdateType).build(),
         )
+    }
+
+    fun checkIsImmediate(appUpdateInfo: AppUpdateInfo): Boolean {
+        val isFirstCodeDifferent = (BuildConfig.VERSION_CODE / 100) != (appUpdateInfo.availableVersionCode() / 100)
+        val isSecondCodeDifferent = ((BuildConfig.VERSION_CODE % 100) / 10) != ((appUpdateInfo.availableVersionCode() % 100) / 10)
+        return isFirstCodeDifferent || isSecondCodeDifferent
     }
 }

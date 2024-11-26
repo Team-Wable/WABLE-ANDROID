@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), Navigation {
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             Timber.i("Download Complete")
             lifecycleScope.launch {
-                delay(5000)
+                delay(1000)
                 appUpdateManager.completeUpdate()
             }
         }
@@ -90,13 +90,16 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
     }
 
-    private fun showUpdateDialog(appUpdateInfo: AppUpdateInfo) = showAlertDialog(
-        title = getString(R.string.label_in_app_update_title),
-        message = getString(R.string.label_in_app_update_content),
-        positiveButtonText = getString(R.string.label_in_app_update_yes),
-        negativeButtonText = getString(R.string.label_in_app_update_next),
-        onPositiveClick = { appUpdateHelper.startUpdate(appUpdateInfo, activityResultLauncher) },
-    )
+    private fun showUpdateDialog(appUpdateInfo: AppUpdateInfo) {
+        val negativeText = if (appUpdateHelper.checkIsImmediate(appUpdateInfo)) "" else getString(R.string.label_in_app_update_next)
+        showAlertDialog(
+            title = getString(R.string.label_in_app_update_title),
+            message = getString(R.string.label_in_app_update_content),
+            positiveButtonText = getString(R.string.label_in_app_update_yes),
+            negativeButtonText = negativeText,
+            onPositiveClick = { appUpdateHelper.startUpdate(appUpdateInfo, activityResultLauncher) },
+        )
+    }
 
     private fun initView() {
         setBottomNavigation()

@@ -134,7 +134,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             )
         }
 
-        override fun onCommentBtnClick(postAuthorNickname: String) {}
+        override fun onCommentBtnClick(postAuthorNickname: String, feedId: Long) {
+            navigateToHomeDetailFragment(feedId)
+        }
     }
 
     private fun handleProfileNavigation(id: Long) {
@@ -226,10 +228,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) {
-        when (it) {
-            true -> handlePushAlarmPermissionGranted()
-            false -> handlePushAlarmPermissionDenied()
+    ) { isGranted ->
+        when {
+            isGranted -> handlePushAlarmPermissionGranted()
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                handlePushAlarmPermissionDenied()
+            }
         }
     }
 
