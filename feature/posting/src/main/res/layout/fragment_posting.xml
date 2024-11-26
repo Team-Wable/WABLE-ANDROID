@@ -78,6 +78,7 @@
                 android:textAppearance="@style/TextAppearance.Wable.Head1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_700"
+                android:textCursorDrawable="@drawable/shape_purple_50_cursor"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/dummy" />
 
@@ -125,6 +126,7 @@
                 android:textColor="@color/gray_800"
                 android:textColorHint="@color/gray_500"
                 android:textColorLink="@color/gray_800"
+                android:textCursorDrawable="@drawable/shape_purple_50_cursor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_posting_photo"
                 tools:text="@string/dummy" />

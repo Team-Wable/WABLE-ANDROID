@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CommentService {
-    @GET("api/v2/content/{contentId}/comments")
+    @GET("api/v3/content/{contentId}/comments")
     suspend fun getHomeDetailComments(
         @Path(value = "contentId") contentId: Long,
         @Query(value = "cursor") cursor: Long = -1,
@@ -31,7 +31,7 @@ interface CommentService {
         @Path(value = "commentId") commentId: Long,
     ): BaseUnitResponse<Unit>
 
-    @POST("api/v1/content/{contentId}/comment")
+    @POST("api/v3/content/{contentId}/comment")
     suspend fun postComment(
         @Path(value = "contentId") contentId: Long,
         @Body request: RequestPostCommentDto,

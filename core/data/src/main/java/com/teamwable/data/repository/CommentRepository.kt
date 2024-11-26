@@ -12,7 +12,7 @@ interface CommentRepository {
 
     suspend fun deleteComment(commentId: Long): Result<Unit>
 
-    suspend fun postComment(contentId: Long, commentText: String): Result<Unit>
+    suspend fun postComment(contentId: Long, commentInfo: Triple<String, Long, Long>): Result<Unit>
 
     suspend fun postGhost(request: Ghost): Result<Unit>
 

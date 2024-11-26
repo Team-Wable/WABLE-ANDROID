@@ -12,7 +12,7 @@ import com.teamwable.model.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.component.TwoLabelBottomSheet
-import com.teamwable.ui.shareAdapter.CommentViewHolder
+import com.teamwable.ui.shareAdapter.LikeableViewHolder
 import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
@@ -70,7 +70,7 @@ class CommentActionHandler(
         }
     }
 
-    fun onLikeBtnClick(viewHolder: CommentViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
+    fun onLikeBtnClick(viewHolder: LikeableViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
         val likeCount = viewHolder.likeCountTv.text.toString().toInt()
         val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
             trackEvent(CLICK_LIKE_COMMENT)

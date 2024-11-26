@@ -134,7 +134,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
             )
         }
 
-        override fun onCommentBtnClick(feedId: Long) {}
+        override fun onCommentBtnClick(postAuthorNickname: String) {}
     }
 
     private fun handleProfileNavigation(id: Long) {

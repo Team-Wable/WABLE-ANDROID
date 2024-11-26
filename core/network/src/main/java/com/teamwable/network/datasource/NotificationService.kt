@@ -2,7 +2,7 @@ package com.teamwable.network.datasource
 
 import com.teamwable.network.dto.response.notification.ResponseInformationDto
 import com.teamwable.network.dto.response.notification.ResponseNotificationsDto
-import com.teamwable.network.dto.response.notification.ResponseNumberDto
+import com.teamwable.network.dto.response.notification.ResponseNotificationNumberDto
 import com.teamwable.network.util.BaseResponse
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface NotificationService {
     @GET("api/v1/notification/number")
-    suspend fun getNumber(): BaseResponse<ResponseNumberDto>
+    suspend fun getNumber(): BaseResponse<ResponseNotificationNumberDto>
 
     @PATCH("api/v1/notification-check")
     suspend fun patchCheck(): BaseResponse<Unit>

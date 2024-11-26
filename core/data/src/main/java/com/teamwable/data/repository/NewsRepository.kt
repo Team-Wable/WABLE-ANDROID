@@ -16,4 +16,6 @@ interface NewsRepository {
     fun getNewsInfo(): Flow<PagingData<NewsInfoModel>>
 
     fun getNoticeInfo(): Flow<PagingData<NewsInfoModel>>
+
+    suspend fun getNumber(): Result<Map<String, Int>>
 }
