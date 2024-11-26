@@ -146,7 +146,12 @@ fun Context.showAlertDialog(
             dialog.dismiss()
             onPositiveClick()
         }
-        .setNegativeButton(negativeButtonText) { dialog, _ -> dialog.dismiss() }
+    val isFlexibleUpdate = negativeButtonText.isNotEmpty()
+    if (isFlexibleUpdate) builder.setNegativeButton(negativeButtonText) { dialog, _ -> dialog.dismiss() }
 
-    builder.create().show()
+    builder.create().apply {
+        setCancelable(isFlexibleUpdate)
+        setCanceledOnTouchOutside(isFlexibleUpdate)
+        show()
+    }
 }
