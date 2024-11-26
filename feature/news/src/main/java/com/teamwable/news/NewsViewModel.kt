@@ -71,9 +71,17 @@ class NewsViewModel
 
     suspend fun getNewsNumberFromLocal() = userInfoRepository.getNewsNumber().first()
 
-    suspend fun saveNewsNumber(newsNumber: Int) = userInfoRepository.saveNewsNumber(newsNumber)
+    fun saveNewsNumber(newsNumber: Int) {
+        viewModelScope.launch {
+            userInfoRepository.saveNewsNumber(newsNumber)
+        }
+    }
 
     suspend fun getNoticeNumberFromLocal() = userInfoRepository.getNoticeNumber().first()
 
-    suspend fun saveNoticeNumber(noticeNumber: Int) = userInfoRepository.saveNoticeNumber(noticeNumber)
+    fun saveNoticeNumber(noticeNumber: Int) {
+        viewModelScope.launch {
+            userInfoRepository.saveNoticeNumber(noticeNumber)
+        }
+    }
 }
