@@ -120,7 +120,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
             )
         }
 
-        override fun onCommentBtnClick(postAuthorNickname: String) {}
+        override fun onCommentBtnClick(postAuthorNickname: String, feedId: Long) {}
     }
 
     private fun setAdapter() {

@@ -234,7 +234,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             )
         }
 
-        override fun onCommentBtnClick(postAuthorNickname: String) {
+        override fun onCommentBtnClick(postAuthorNickname: String, feedId: Long) {
             handleCommentBtnClick(postAuthorNickname, CommentType.PARENT)
             viewModel.setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
         }
