@@ -113,7 +113,6 @@ fun NewsDetailContent(
             }
             NewsImage(
                 imageUrl = newsInfoModel.newsImage,
-                type = type,
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .fillMaxWidth()
