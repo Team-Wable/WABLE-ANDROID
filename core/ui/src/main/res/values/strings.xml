@@ -15,6 +15,8 @@
     <string name="label_dialog_report_yes">신고하기</string>
     <string name="label_dialog_delete_feed_title">게시글을 삭제하시겠어요?</string>
     <string name="label_dialog_delete_feed_description">게시글이 영구히 삭제됩니다.</string>
+    <string name="label_dialog_delete_comment_title">댓글을 삭제하시겠어요?</string>
+    <string name="label_dialog_delete_comment_description">댓글이 영구히 삭제됩니다.</string>
     <string name="label_dialog_delete_yes">삭제하기</string>
     <string name="label_dialog_delete_account_title">계정을 삭제하시겠어요?</string>
     <string name="label_dialog_logout_title">로그아웃하시겠어요?</string>
