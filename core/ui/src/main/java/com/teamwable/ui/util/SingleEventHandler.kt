@@ -1,27 +1,21 @@
 package com.teamwable.ui.util
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 class SingleEventHandler private constructor() {
-    private lateinit var debounceJob: Job
+    private val lastCalls = mutableMapOf<String, Long>()
 
-    fun debounce(
-        delayTime: Long = DEBOUNCE_DELAY,
-        coroutineScope: CoroutineScope,
-        event: () -> Unit,
-    ) {
-        if (::debounceJob.isInitialized) debounceJob.cancel()
-        debounceJob = coroutineScope.launch {
-            delay(delayTime)
-            event()
+    fun canProceed(key: String): Boolean {
+        val currentTime = System.currentTimeMillis()
+        val lastCallTime = lastCalls[key] ?: 0L
+        return if (currentTime - lastCallTime >= THROTTLE_DELAY) {
+            lastCalls[key] = currentTime
+            true
+        } else {
+            false
         }
     }
 
     companion object {
-        private const val DEBOUNCE_DELAY = 200L
+        private const val THROTTLE_DELAY = 2000L
 
         fun from(): SingleEventHandler = SingleEventHandler()
     }
