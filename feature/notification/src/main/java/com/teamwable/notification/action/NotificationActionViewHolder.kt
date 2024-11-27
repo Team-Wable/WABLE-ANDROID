@@ -116,6 +116,20 @@ class NotificationActionViewHolder(
                         data = data
                     )
 
+                root.context.stringOf(NotificationActionType.CHILD_COMMENT.title) ->
+                    getSpannableStyle(
+                        data.triggerMemberNickname,
+                        NotificationActionType.CHILD_COMMENT.content,
+                        data = data
+                    )
+
+                root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title) ->
+                    getSpannableStyle(
+                        data.triggerMemberNickname,
+                        NotificationActionType.CHILD_COMMENT_LIKED.content,
+                        data = data
+                    )
+
                 else -> {
                     Timber.tag("notification_action").e("등록되지 않은 노티가 감지되었습니다 : ${data.notificationTriggerType}")
                     SpannableString("")
@@ -214,7 +228,8 @@ class NotificationActionViewHolder(
     ): String {
         val resourceString = if (data.notificationTriggerType in listOf(
                 binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
-                binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title)
+                binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title)
             )
         ) {
             binding.root.context.getString(
@@ -228,7 +243,9 @@ class NotificationActionViewHolder(
         return if ((data.notificationTriggerType in listOf(
                 binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
                 binding.root.context.stringOf(NotificationActionType.COMMENT.title),
+                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT.title),
                 binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title),
                 binding.root.context.stringOf(NotificationActionType.POPULAR_WRITER.title)
             )) && data.notificationText.isNotBlank()
         ) {
