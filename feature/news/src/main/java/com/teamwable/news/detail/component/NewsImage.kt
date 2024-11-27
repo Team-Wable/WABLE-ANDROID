@@ -10,15 +10,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import com.teamwable.news.NewsTabType
 
 @Composable
 fun NewsImage(
     imageUrl: String?,
-    type: NewsTabType = NewsTabType.NEWS,
     modifier: Modifier = Modifier,
 ) {
-    if (!imageUrl.isNullOrBlank() && type == NewsTabType.NEWS) {
+    if (!imageUrl.isNullOrBlank()) {
         GlideImage(
             imageModel = { imageUrl },
             imageOptions = ImageOptions(
