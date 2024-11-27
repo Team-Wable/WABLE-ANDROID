@@ -123,6 +123,7 @@
                 android:hint="@string/hint_posting_content"
                 android:importantForAutofill="no"
                 android:maxLength="500"
+                android:textAppearance="@style/TextAppearance.Wable.Body2"
                 android:textColor="@color/gray_800"
                 android:textColorHint="@color/gray_500"
                 android:textColorLink="@color/gray_800"
