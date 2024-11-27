@@ -195,6 +195,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             viewModel.addComment(feed.feedId, binding.etHomeDetailCommentInput.text.toString())
             if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
             handleCommentBtnClick(feed.postAuthorNickname, CommentType.PARENT)
+            binding.root.context.hideKeyboard(it)
         }
     }
 
