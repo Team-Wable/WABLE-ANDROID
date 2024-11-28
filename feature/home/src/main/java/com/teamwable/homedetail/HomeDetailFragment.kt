@@ -13,7 +13,9 @@ import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_UPLOAD_COMMENT
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_COMMENT
+import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_RECOMMENT
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
@@ -191,7 +193,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private fun initUploadingActivateBtnClickListener(feed: Feed, commentSnackbar: Snackbar, childCommentSnackbar: Snackbar) {
         binding.ibHomeDetailCommentInputUpload.setOnDuplicateBlockClick {
-            trackEvent(CLICK_WRITE_COMMENT)
+            trackEvent(CLICK_UPLOAD_COMMENT)
             viewModel.addComment(feed.feedId, binding.etHomeDetailCommentInput.text.toString())
             if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
             handleCommentBtnClick(feed.postAuthorNickname, CommentType.PARENT)
@@ -237,6 +239,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onCommentBtnClick(postAuthorNickname: String, feedId: Long) {
+            trackEvent(CLICK_WRITE_COMMENT)
             handleCommentBtnClick(postAuthorNickname, CommentType.PARENT)
             viewModel.setParentCommentIds(PARENT_COMMENT_DEFAULT, PARENT_COMMENT_DEFAULT)
         }
@@ -282,6 +285,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onChildCommentClick(comment: Comment) {
+            trackEvent(CLICK_WRITE_RECOMMENT)
             handleCommentBtnClick(comment.postAuthorNickname, CommentType.CHILD)
             viewModel.setParentCommentIds(comment.commentId, comment.postAuthorId)
         }
