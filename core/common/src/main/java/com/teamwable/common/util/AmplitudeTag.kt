@@ -31,6 +31,8 @@ object AmplitudeHomeTag {
     const val CLICK_GHOST_COMMENT = "click_ghost_comment"
     const val CLICK_WRITE_COMMENT = "click_write_comment"
     const val CLICK_GOBACK_HOME = "click_goback_home"
+    const val CLICK_UPLOAD_COMMENT = "click_upload_comment"
+    const val CLICK_WRITE_RECOMMENT = "click_write_recomment"
 }
 
 object AmplitudePostTag {
@@ -42,7 +44,7 @@ object AmplitudeNewsTag {
     const val CLICK_GAMESCHEDULE = "click_gameschedule"
     const val CLICK_RANKING = "click_ranking"
     const val CLICK_NEWS = "click_news"
-    const val CLICK_NOTICE = "click_notice"
+    const val CLICK_NOTICE = "click_announcement"
 }
 
 object AmplitudeNotiTag {
