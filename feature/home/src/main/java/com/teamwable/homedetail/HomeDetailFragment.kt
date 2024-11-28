@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
@@ -56,6 +55,8 @@ import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
+import com.teamwable.ui.util.ThrottleKey.COMMENT_LIKE
+import com.teamwable.ui.util.ThrottleKey.FEED_LIKE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -194,6 +195,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
             viewModel.addComment(feed.feedId, binding.etHomeDetailCommentInput.text.toString())
             if (viewModel.parentCommentIds.first == PARENT_COMMENT_DEFAULT) commentSnackbar.show() else childCommentSnackbar.show()
             handleCommentBtnClick(feed.postAuthorNickname, CommentType.PARENT)
+            binding.root.context.hideKeyboard(it)
         }
     }
 
@@ -210,7 +212,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
         override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
             feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                if (singleEventHandler.canProceed(FEED_LIKE)) {
                     if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateFeedLike(feedId, likeState)
                 }
             }
@@ -255,7 +257,7 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
         override fun onLikeBtnClick(viewHolder: LikeableViewHolder, comment: Comment) {
             commentActionHandler.onLikeBtnClick(viewHolder, comment.commentId) { commentId, likeState ->
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                if (singleEventHandler.canProceed(COMMENT_LIKE)) {
                     if (comment.isLiked != viewHolder.likeBtn.isChecked) viewModel.updateCommentLike(commentId, comment.content, likeState)
                 }
             }

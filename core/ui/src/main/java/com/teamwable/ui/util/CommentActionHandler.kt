@@ -43,7 +43,7 @@ class CommentActionHandler(
         }
         handleDialogResult { dialogType ->
             when (dialogType) {
-                DialogType.DELETE_FEED -> removeComment(comment.commentId)
+                DialogType.DELETE_COMMENT -> removeComment(comment.commentId)
                 DialogType.REPORT -> {
                     navController.popBackStack()
                     reportUser(comment.postAuthorNickname, comment.content)
@@ -96,7 +96,7 @@ class CommentActionHandler(
     private fun handleBottomSheetResult() {
         fragmentManager.setFragmentResultListener(BOTTOM_SHEET_RESULT, lifecycleOwner) { _, bundle ->
             when (bundle.getString(BOTTOM_SHEET_TYPE)) {
-                BottomSheetType.DELETE_FEED.name -> navigateToDialog(DialogType.DELETE_FEED)
+                BottomSheetType.DELETE_FEED.name -> navigateToDialog(DialogType.DELETE_COMMENT)
                 BottomSheetType.REPORT.name -> navigateToDialog(DialogType.REPORT)
                 BottomSheetType.BAN.name -> navigateToDialog(DialogType.BAN)
             }

@@ -38,3 +38,8 @@ object FcmTag {
     const val NOTIFICATION_TITLE = "gcm.notification.title"
     const val NOTIFICATION_BODY = "gcm.notification.body"
 }
+
+object ThrottleKey {
+    const val FEED_LIKE = "feedLike"
+    const val COMMENT_LIKE = "commentLike"
+}

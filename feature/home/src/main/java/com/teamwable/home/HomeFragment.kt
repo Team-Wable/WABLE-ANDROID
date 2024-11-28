@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
@@ -46,6 +45,7 @@ import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
+import com.teamwable.ui.util.ThrottleKey.FEED_LIKE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -110,7 +110,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
         override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
             feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                if (singleEventHandler.canProceed(FEED_LIKE)) {
                     if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
                 }
             }
