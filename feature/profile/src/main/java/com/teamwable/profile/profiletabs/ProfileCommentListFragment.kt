@@ -3,7 +3,6 @@ package com.teamwable.profile.profiletabs
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
@@ -34,6 +33,7 @@ import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedTransformer
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
+import com.teamwable.ui.util.ThrottleKey.COMMENT_LIKE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -92,7 +92,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
         override fun onLikeBtnClick(viewHolder: LikeableViewHolder, comment: Comment) {
             commentActionHandler.onLikeBtnClick(viewHolder, comment.commentId) { commentId, likeState ->
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                if (singleEventHandler.canProceed(COMMENT_LIKE)) {
                     if (comment.isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(commentId, comment.content, likeState)
                 }
             }

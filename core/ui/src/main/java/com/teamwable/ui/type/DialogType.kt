@@ -28,6 +28,11 @@ enum class DialogType(
         description = R.string.label_dialog_delete_feed_description,
         titleTypo = R.style.TextAppearance_Wable_Head1,
     ),
+    DELETE_COMMENT(
+        title = R.string.label_dialog_delete_comment_title,
+        description = R.string.label_dialog_delete_comment_description,
+        titleTypo = R.style.TextAppearance_Wable_Head1,
+    ),
     DELETE_ACCOUNT(
         title = R.string.label_dialog_delete_account_title,
     ),

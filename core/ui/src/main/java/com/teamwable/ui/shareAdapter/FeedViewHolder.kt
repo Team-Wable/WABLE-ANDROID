@@ -25,7 +25,7 @@ class FeedViewHolder private constructor(
         setupClickListener(binding.ivFeedProfileImg, binding.tvFeedNickname) { feedClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.ivFeedImg) { feedClickListener.onFeedImageClick(item.image) }
         setupClickListener(binding.btnFeedMore) { feedClickListener.onKebabBtnClick(item) }
-        setupClickListener(binding.btnFeedComment) { feedClickListener.onCommentBtnClick(item.postAuthorNickname) }
+        setupClickListener(binding.btnFeedComment) { feedClickListener.onCommentBtnClick(item.postAuthorNickname, item.feedId) }
     }
 
     private fun setupClickListener(vararg views: View, action: () -> Unit) {

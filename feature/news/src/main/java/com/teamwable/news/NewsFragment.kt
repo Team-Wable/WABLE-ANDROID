@@ -19,7 +19,6 @@ import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
@@ -55,25 +54,14 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
 
 
     private suspend fun saveNumberFromServerToLocal() {
-//        viewModel.saveNewsNumber(1)
-//        viewModel.saveNoticeNumber(2)
-
         val localNewsNumber = viewModel.getNewsNumberFromLocal()
         val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
 
-        if (serverNewsNumber > localNewsNumber) {
-            Timber.tag("here").d("news server: $serverNewsNumber, local: $localNewsNumber")
+        if (serverNewsNumber > localNewsNumber)
             setBadgeOnNews(NewsTabType.NEWS.ordinal, true)
-        } else {
-            Timber.tag("here").d("equal news server: $serverNewsNumber, local: $localNewsNumber")
-        }
 
-        if (serverNoticeNumber > localNoticeNumber) {
-            Timber.tag("here").d("notice server: $serverNoticeNumber, local: $localNoticeNumber")
+        if (serverNoticeNumber > localNoticeNumber)
             setBadgeOnNews(NewsTabType.NOTICE.ordinal, true)
-        } else {
-            Timber.tag("here").d("equal notice server: $serverNoticeNumber, local: $localNoticeNumber")
-        }
     }
 
     private fun setBadgeOnNews(idx: Int, isVisible: Boolean) {
