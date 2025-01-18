@@ -1,6 +1,7 @@
 package com.teamwable.onboarding.profile
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -79,15 +83,31 @@ internal fun ProfileRoute(
             Timber.e(e)
         }
     }
+    val permission = when {
+        Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
+        else -> "" // Api 34 이상 권한 필요 없음
+    }
 
-    LaunchedEffect(Unit) { // todo : 생명주기 확인 요망
-        val permission = when {
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
-            else -> return@LaunchedEffect
+    LaunchedEffect(Unit) {
+        if (permission.isNotBlank()) permissionLauncher.launch(permission)
+        else viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
+    }
+
+    if (permission.isNotBlank() && !profileState.isPermissionGranted) {
+        DisposableEffect(Unit) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+                        viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
+                    }
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
         }
-
-        permissionLauncher.launch(permission)
     }
 
     val galleryLauncher = rememberGalleryLauncher { uri ->
@@ -120,7 +140,6 @@ internal fun ProfileRoute(
             onClick = {
                 viewModel.onIntent(ProfileIntent.OpenDialog(false))
                 context.navigateToAppSettings()
-                viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true)) // todo : 확인 요망
             },
             onDismissRequest = { viewModel.onIntent(ProfileIntent.OpenDialog(false)) },
         )
