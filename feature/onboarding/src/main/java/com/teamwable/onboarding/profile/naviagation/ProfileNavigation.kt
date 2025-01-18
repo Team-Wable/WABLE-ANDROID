@@ -3,7 +3,6 @@ package com.teamwable.onboarding.profile.naviagation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.navigation.parcelableNavType
@@ -19,15 +18,17 @@ fun NavGraphBuilder.profileNavGraph(
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     composable<Route.Profile>(
-        typeMap = mapOf(
-            typeOf<MemberInfoEditModel>() to parcelableNavType<MemberInfoEditModel>(),
-        ),
-    ) { backStackEntry ->
-        val args = backStackEntry.toRoute<Route.Profile>()
+        typeMap = ProfileTypeMap.typeMap,
+    ) {
         ProfileRoute(
             navigateToAgreeTerms = navigateToAgreeTerms,
             onShowErrorSnackBar = onShowErrorSnackBar,
-            args = args,
         )
     }
+}
+
+object ProfileTypeMap {
+    val typeMap = mapOf(
+        typeOf<MemberInfoEditModel>() to parcelableNavType<MemberInfoEditModel>(),
+    )
 }

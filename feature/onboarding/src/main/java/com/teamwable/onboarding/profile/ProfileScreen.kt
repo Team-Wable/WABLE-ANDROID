@@ -17,9 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -49,7 +46,6 @@ import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.profile.MemberInfoEditModel
-import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
 import com.teamwable.onboarding.profile.model.ProfileIntent
@@ -63,15 +59,12 @@ import timber.log.Timber
 @Composable
 internal fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
-    args: Route.Profile,
     navigateToAgreeTerms: (MemberInfoEditModel, String?) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val profileState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -122,7 +115,10 @@ internal fun ProfileRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(memberInfoEditModel, profileState.selectedImageUri)
+                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(
+                        sideEffect.memberInfoEditModel,
+                        profileState.selectedImageUri,
+                    )
 
                     is ProfileSideEffect.ShowPermissionDeniedDialog -> viewModel.onIntent(ProfileIntent.OpenDialog(true))
 
@@ -149,11 +145,7 @@ internal fun ProfileRoute(
         profileState = profileState,
         profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            memberInfoEditModel = memberInfoEditModel.copy(
-                nickname = nickname,
-                memberDefaultProfileImage = defaultImage.orEmpty(),
-            )
-            viewModel.navigateToAgreeTerms()
+            viewModel.navigateToAgreeTerms(nickname, defaultImage.orEmpty())
             trackEvent(CLICK_NEXT_PROFILE_SIGNUP)
         },
         onProfilePlusBtnClick = {

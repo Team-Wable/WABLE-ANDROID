@@ -1,14 +1,18 @@
 package com.teamwable.onboarding.profile
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.network.Error
+import com.teamwable.navigation.Route
 import com.teamwable.onboarding.profile.model.ProfileIntent
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
+import com.teamwable.onboarding.profile.naviagation.ProfileTypeMap
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,9 +22,14 @@ import javax.inject.Inject
 internal class ProfileViewModel @Inject constructor(
     private val nicknameValidationUseCase: NicknameValidationUseCase,
     private val profileRepository: ProfileRepository,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ProfileIntent, ProfileState, ProfileSideEffect>(
         initialState = ProfileState(),
     ) {
+    private val args = savedStateHandle.toRoute<Route.Profile>(
+        typeMap = ProfileTypeMap.typeMap,
+    )
+
     override fun onIntent(intent: ProfileIntent) {
         when (intent) {
             is ProfileIntent.UpdatePhotoPermission -> updatePhotoPermissionState(intent.isGranted)
@@ -72,8 +81,15 @@ internal class ProfileViewModel @Inject constructor(
         intent { copy(openDialog = isOpened) }
     }
 
-    fun navigateToAgreeTerms() {
-        postSideEffect(ProfileSideEffect.NavigateToAgreeTerms)
+    fun navigateToAgreeTerms(nickName: String, defaultImage: String?) {
+        postSideEffect(
+            ProfileSideEffect.NavigateToAgreeTerms(
+                args.memberInfoEditModel.copy(
+                    nickname = nickName,
+                    memberDefaultProfileImage = defaultImage,
+                ),
+            ),
+        )
     }
 
     fun requestImagePicker() {
