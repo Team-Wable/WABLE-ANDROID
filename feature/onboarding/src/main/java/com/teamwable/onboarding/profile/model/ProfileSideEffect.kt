@@ -1,6 +1,8 @@
 package com.teamwable.onboarding.profile.model
 
-sealed interface ProfileSideEffect {
+import com.teamwable.common.base.SideEffect
+
+sealed interface ProfileSideEffect : SideEffect {
     data object RequestImagePicker : ProfileSideEffect
 
     data object ShowPermissionDeniedDialog : ProfileSideEffect
