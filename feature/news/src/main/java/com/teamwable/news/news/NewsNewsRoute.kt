@@ -33,7 +33,8 @@ import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.R
 import com.teamwable.news.news.component.WableNewsItems
 import com.teamwable.news.news.component.WableNewsTopBanner
-import com.teamwable.news.news.model.NewsInfoSideEffect
+import com.teamwable.news.news.contract.NewsInfoIntent
+import com.teamwable.news.news.contract.NewsInfoSideEffect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 
@@ -57,7 +58,9 @@ fun NewsNewsRoute(
 
     NewsNewsScreen(
         newsItems = newsItems,
-        onItemClick = viewModel::onItemClick,
+        onItemClick = { item ->
+            viewModel.onIntent(NewsInfoIntent.ItemClick(item))
+        },
     )
 }
 
