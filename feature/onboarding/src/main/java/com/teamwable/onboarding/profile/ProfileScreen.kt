@@ -48,6 +48,7 @@ import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
+import com.teamwable.onboarding.profile.model.ProfileIntent
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.permission.launchImagePicker
@@ -64,7 +65,7 @@ internal fun ProfileRoute(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val profileState by viewModel.profileState.collectAsStateWithLifecycle()
+    val profileState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
     var openDialog by remember { mutableStateOf(false) }
@@ -73,14 +74,14 @@ internal fun ProfileRoute(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         try {
-            if (isGranted) viewModel.updatePhotoPermissionState(true)
+            if (isGranted) viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
             else openDialog = true
         } catch (e: Exception) {
             Timber.e(e)
         }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) { // todo : 생명주기 확인 요망
         val permission = when {
             Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
@@ -91,11 +92,11 @@ internal fun ProfileRoute(
     }
 
     val galleryLauncher = rememberGalleryLauncher { uri ->
-        viewModel.onImageSelected(uri.toString())
+        viewModel.onIntent(ProfileIntent.OnImageSelected(uri.toString()))
     }
 
     val photoPickerLauncher = rememberPhotoPickerLauncher { uri ->
-        viewModel.onImageSelected(uri.toString())
+        viewModel.onIntent(ProfileIntent.OnImageSelected(uri.toString()))
     }
 
     LaunchedEffect(lifecycleOwner) {
@@ -108,6 +109,8 @@ internal fun ProfileRoute(
 
                     is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
 
+                    is ProfileSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
+
                     else -> Unit
                 }
             }
@@ -118,7 +121,7 @@ internal fun ProfileRoute(
             onClick = {
                 openDialog = false
                 context.navigateToAppSettings()
-                viewModel.updatePhotoPermissionState(true) // Todo: 추후에 callback으로 변경할게요
+                viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true)) // todo : 확인 요망
             },
             onDismissRequest = { openDialog = false },
         )
@@ -139,14 +142,14 @@ internal fun ProfileRoute(
             viewModel.requestImagePicker()
             trackEvent(CLICK_ADD_PICTURE_PROFILE_SIGNUP)
         },
-        onDuplicateBtnClick = { viewModel.getNickNameValidation() },
+        onDuplicateBtnClick = { viewModel.onIntent(ProfileIntent.GetNickNameValidation) },
         onRandomImageChange = { newImage ->
-            viewModel.onRandomImageChange(newImage)
-            viewModel.onImageSelected(null)
+            viewModel.onIntent(ProfileIntent.OnRandomImageChange(newImage))
+            viewModel.onIntent(ProfileIntent.OnImageSelected(null))
             trackEvent(CLICK_CHANGE_PICTURE_PROFILE_SIGNUP)
         },
         onNicknameChange = { newNickname ->
-            viewModel.onNicknameChanged(newNickname)
+            viewModel.onIntent(ProfileIntent.OnNicknameChanged(newNickname))
         },
     )
 }
