@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.teamwable.data.repository.NewsRepository
 import com.teamwable.model.news.NewsInfoModel
-import com.teamwable.news.news.model.NewsInfoSideEffect
+import com.teamwable.news.news.contract.NewsInfoSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

@@ -26,7 +26,7 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.R
-import com.teamwable.news.news.model.NewsInfoSideEffect
+import com.teamwable.news.news.contract.NewsInfoSideEffect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 
