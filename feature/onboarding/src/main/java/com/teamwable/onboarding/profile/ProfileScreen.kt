@@ -68,14 +68,13 @@ internal fun ProfileRoute(
     val profileState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
-    var openDialog by remember { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         try {
             if (isGranted) viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
-            else openDialog = true
+            else viewModel.onIntent(ProfileIntent.OpenDialog(true))
         } catch (e: Exception) {
             Timber.e(e)
         }
@@ -105,7 +104,7 @@ internal fun ProfileRoute(
                 when (sideEffect) {
                     is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(memberInfoEditModel, profileState.selectedImageUri)
 
-                    is ProfileSideEffect.ShowPermissionDeniedDialog -> openDialog = true
+                    is ProfileSideEffect.ShowPermissionDeniedDialog -> viewModel.onIntent(ProfileIntent.OpenDialog(true))
 
                     is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
 
@@ -116,14 +115,14 @@ internal fun ProfileRoute(
             }
     }
 
-    if (openDialog) {
+    if (profileState.openDialog) {
         PermissionAppSettingsDialog(
             onClick = {
-                openDialog = false
+                viewModel.onIntent(ProfileIntent.OpenDialog(false))
                 context.navigateToAppSettings()
                 viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true)) // todo : 확인 요망
             },
-            onDismissRequest = { openDialog = false },
+            onDismissRequest = { viewModel.onIntent(ProfileIntent.OpenDialog(false)) },
         )
     }
 

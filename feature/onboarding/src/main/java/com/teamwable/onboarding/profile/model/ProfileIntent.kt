@@ -13,4 +13,6 @@ sealed interface ProfileIntent : BaseIntent {
     data object GetNickNameValidation : ProfileIntent
 
     data class OnRandomImageChange(val newImage: ProfileImageType) : ProfileIntent
+
+    data class OpenDialog(val isOpened: Boolean) : ProfileIntent
 }

@@ -28,6 +28,7 @@ internal class ProfileViewModel @Inject constructor(
             is ProfileIntent.OnNicknameChanged -> onNicknameChanged(intent.newNickname)
             is ProfileIntent.GetNickNameValidation -> getNickNameValidation()
             is ProfileIntent.OnRandomImageChange -> onRandomImageChange(intent.newImage)
+            is ProfileIntent.OpenDialog -> openDialog(intent.isOpened)
         }
     }
 
@@ -65,6 +66,10 @@ internal class ProfileViewModel @Inject constructor(
 
     private fun onRandomImageChange(newImage: ProfileImageType) {
         intent { copy(currentImage = newImage) }
+    }
+
+    private fun openDialog(isOpened: Boolean) {
+        intent { copy(openDialog = isOpened) }
     }
 
     fun navigateToAgreeTerms() {
