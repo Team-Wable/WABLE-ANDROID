@@ -21,13 +21,13 @@ abstract class BaseViewModel<UI_INTENT : BaseIntent, UI_STATE : BaseState, SIDE_
     protected val currentState: UI_STATE
         get() = _uiState.value
 
-    abstract fun onIntent(intent: UI_INTENT)
+    abstract fun onIntent(intent: UI_INTENT) // handle event from ui
 
-    protected fun intent(reduce: UI_STATE.() -> UI_STATE) {
+    protected fun intent(reduce: UI_STATE.() -> UI_STATE) { // set state
         _uiState.update { currentState.reduce() }
     }
 
-    protected fun postSideEffect(vararg effects: SIDE_EFFECT) {
+    protected fun postSideEffect(vararg effects: SIDE_EFFECT) { // post side effect
         viewModelScope.launch {
             effects.forEach { effect ->
                 _sideEffect.send(effect)
