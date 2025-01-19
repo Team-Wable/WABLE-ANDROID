@@ -6,8 +6,8 @@ import com.teamwable.common.base.BaseViewModel
 import com.teamwable.common.base.EmptyState
 import com.teamwable.data.repository.NewsRepository
 import com.teamwable.model.news.NewsInfoModel
-import com.teamwable.news.news.contract.NewsInfoIntent
-import com.teamwable.news.news.contract.NewsInfoSideEffect
+import com.teamwable.news.news.model.NewsInfoIntent
+import com.teamwable.news.news.model.NewsInfoSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject

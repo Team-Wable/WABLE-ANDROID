@@ -1,4 +1,4 @@
-package com.teamwable.news.news.contract
+package com.teamwable.news.news.model
 
 import com.teamwable.common.base.BaseIntent
 import com.teamwable.model.news.NewsInfoModel
