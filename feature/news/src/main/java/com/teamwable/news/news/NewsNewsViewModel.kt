@@ -9,6 +9,7 @@ import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.news.contract.NewsInfoIntent
 import com.teamwable.news.news.contract.NewsInfoSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +18,11 @@ class NewsNewsViewModel @Inject constructor(
 ) : BaseViewModel<NewsInfoIntent, EmptyState, NewsInfoSideEffect>(
         initialState = EmptyState,
     ) {
-    val newsPagingFlow = newsRepository.getNewsInfo().cachedIn(viewModelScope)
+    val newsPagingFlow = newsRepository.getNewsInfo()
+        .cachedIn(viewModelScope)
+        .catch {
+            postSideEffect(NewsInfoSideEffect.ShowSnackBar(it.message.orEmpty()))
+        }
 
     override fun onIntent(intent: NewsInfoIntent) {
         when (intent) {
