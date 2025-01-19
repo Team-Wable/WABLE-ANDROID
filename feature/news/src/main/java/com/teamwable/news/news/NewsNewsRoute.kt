@@ -117,11 +117,11 @@ fun NewsNewsScreen(
                         )
                     }
                 }
-                item(
-                    key = ContentType.Spinner.name,
-                    contentType = newsItems.itemContentType { ContentType.Spinner.name },
-                ) {
-                    if (newsItems.loadState.append is LoadState.Loading) {
+                if (newsItems.loadState.append is LoadState.Loading) {
+                    item(
+                        key = ContentType.Spinner.name,
+                        contentType = newsItems.itemContentType { ContentType.Spinner.name },
+                    ) {
                         WablePagingSpinner(
                             modifier = Modifier
                                 .fillMaxWidth()
