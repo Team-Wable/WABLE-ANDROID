@@ -15,4 +15,8 @@ sealed interface ProfileIntent : BaseIntent {
     data class OnRandomImageChange(val newImage: ProfileImageType) : ProfileIntent
 
     data class OpenDialog(val isOpened: Boolean) : ProfileIntent
+
+    data object RequestImagePicker : ProfileIntent
+
+    data class OnNextBtnClick(val nickName: String, val defaultImage: String?) : ProfileIntent
 }

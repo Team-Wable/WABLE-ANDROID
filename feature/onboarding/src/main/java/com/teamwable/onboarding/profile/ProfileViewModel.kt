@@ -38,6 +38,8 @@ internal class ProfileViewModel @Inject constructor(
             is ProfileIntent.GetNickNameValidation -> getNickNameValidation()
             is ProfileIntent.OnRandomImageChange -> onRandomImageChange(intent.newImage)
             is ProfileIntent.OpenDialog -> openDialog(intent.isOpened)
+            is ProfileIntent.RequestImagePicker -> requestImagePicker()
+            is ProfileIntent.OnNextBtnClick -> navigateToAgreeTerms(intent.nickName, intent.defaultImage)
         }
     }
 
@@ -81,7 +83,7 @@ internal class ProfileViewModel @Inject constructor(
         intent { copy(openDialog = isOpened) }
     }
 
-    fun navigateToAgreeTerms(nickName: String, defaultImage: String?) {
+    private fun navigateToAgreeTerms(nickName: String, defaultImage: String?) {
         postSideEffect(
             ProfileSideEffect.NavigateToAgreeTerms(
                 args.memberInfoEditModel.copy(
@@ -92,8 +94,8 @@ internal class ProfileViewModel @Inject constructor(
         )
     }
 
-    fun requestImagePicker() {
+    private fun requestImagePicker() {
         if (currentState.isPermissionGranted) postSideEffect(ProfileSideEffect.RequestImagePicker)
-        else postSideEffect(ProfileSideEffect.ShowPermissionDeniedDialog)
+        else intent { copy(openDialog = true) }
     }
 }

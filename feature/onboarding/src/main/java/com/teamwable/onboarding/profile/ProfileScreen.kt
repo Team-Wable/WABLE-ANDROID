@@ -120,8 +120,6 @@ internal fun ProfileRoute(
                         profileState.selectedImageUri,
                     )
 
-                    is ProfileSideEffect.ShowPermissionDeniedDialog -> viewModel.onIntent(ProfileIntent.OpenDialog(true))
-
                     is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
 
                     is ProfileSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
@@ -145,11 +143,11 @@ internal fun ProfileRoute(
         profileState = profileState,
         profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            viewModel.navigateToAgreeTerms(nickname, defaultImage.orEmpty())
+            viewModel.onIntent(ProfileIntent.OnNextBtnClick(nickname, defaultImage.orEmpty()))
             trackEvent(CLICK_NEXT_PROFILE_SIGNUP)
         },
         onProfilePlusBtnClick = {
-            viewModel.requestImagePicker()
+            viewModel.onIntent(ProfileIntent.RequestImagePicker)
             trackEvent(CLICK_ADD_PICTURE_PROFILE_SIGNUP)
         },
         onDuplicateBtnClick = { viewModel.onIntent(ProfileIntent.GetNickNameValidation) },
