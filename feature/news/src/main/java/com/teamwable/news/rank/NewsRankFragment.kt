@@ -35,8 +35,7 @@ class NewsRankFragment : BindingFragment<FragmentNewsRankBinding>(FragmentNewsRa
     private fun setupGameTypeObserve() {
         viewModel.gameTypeUiState.flowWithLifecycle(viewLifeCycle).onEach {
             when (it) {
-                // 임시 하드 코딩
-                is UiState.Success -> setSeasonText("2024 LCK Summer")
+                is UiState.Success -> setSeasonText(it.data)
                 else -> Unit
             }
         }.launchIn(viewLifeCycleScope)
