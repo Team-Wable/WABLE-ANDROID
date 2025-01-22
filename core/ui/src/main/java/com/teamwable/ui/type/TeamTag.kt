@@ -18,9 +18,9 @@ enum class TeamTag(
     DRX(r.string.label_team_drx, R.color.drx_10, R.color.drx_50),
     DK(r.string.label_team_dk, R.color.dk_10, R.color.dk_50),
     KT(r.string.label_team_kt, R.color.kt_10, R.color.kt_50),
-    FOX(r.string.label_team_fox, R.color.fox_10, R.color.fox_50),
+    BFX(r.string.label_team_bfx, R.color.bfx_10, R.color.bfx_50),
     NS(r.string.label_team_ns, R.color.ns_10, R.color.ns_50),
-    KDF(r.string.label_team_kdf, R.color.kdf_10, R.color.kdf_50),
+    DNF(r.string.label_team_dnf, R.color.dnf_10, R.color.dnf_50),
     HLE(r.string.label_team_hle, R.color.hle_10, R.color.hle_50),
     LCK(r.string.label_team_lck, R.color.white, R.color.white),
     ;

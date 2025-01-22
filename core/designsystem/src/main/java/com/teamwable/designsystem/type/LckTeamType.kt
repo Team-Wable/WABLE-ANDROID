@@ -14,8 +14,8 @@ enum class LckTeamType(
     DRX(r.string.label_team_drx, com.teamwable.common.R.drawable.ic_news_team_profile_drx),
     DK(r.string.label_team_dk, com.teamwable.common.R.drawable.ic_news_team_profile_dk),
     KT(r.string.label_team_kt, com.teamwable.common.R.drawable.ic_news_team_profile_kt),
-    FOX(r.string.label_team_fox, com.teamwable.common.R.drawable.ic_news_team_profile_fox),
+    BFX(r.string.label_team_bfx, com.teamwable.common.R.drawable.ic_news_team_profile_bfx),
     NS(r.string.label_team_ns, com.teamwable.common.R.drawable.ic_news_team_profile_ns),
-    KDF(r.string.label_team_kdf, com.teamwable.common.R.drawable.ic_news_team_profile_kdf),
+    DNF(r.string.label_team_dnf, com.teamwable.common.R.drawable.ic_news_team_profile_dnf),
     HLE(r.string.label_team_hle, com.teamwable.common.R.drawable.ic_news_team_profile_hle),
 }

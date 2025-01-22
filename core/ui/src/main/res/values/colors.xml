@@ -37,12 +37,12 @@
     <color name="dk_10">#FFE0F7E7</color>
     <color name="kt_50">#FFFF0A09</color>
     <color name="kt_10">#FFFCE4E4</color>
-    <color name="fox_50">#FFD31F28</color>
-    <color name="fox_10">#FFFBF8DB</color>
+    <color name="bfx_50">#FFD31F28</color>
+    <color name="bfx_10">#FFFBF8DB</color>
     <color name="ns_50">#FFEC1C24</color>
     <color name="ns_10">#FFE3E3E3</color>
-    <color name="kdf_50">#FFE63312</color>
-    <color name="kdf_10">#FFFAE8E5</color>
+    <color name="dnf_50">#FFE63312</color>
+    <color name="dnf_10">#FFFAE8E5</color>
     <color name="hle_50">#FFF47320</color>
     <color name="hle_10">#FFFBEEE6</color>
 </resources>

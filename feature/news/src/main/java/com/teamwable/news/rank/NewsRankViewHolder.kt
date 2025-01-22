@@ -6,7 +6,7 @@ import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.databinding.ItemNewsRankBinding
 
 class NewsRankViewHolder(
-    private val binding: ItemNewsRankBinding
+    private val binding: ItemNewsRankBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(data: NewsRankModel) {
         with(binding) {
@@ -28,9 +28,9 @@ class NewsRankViewHolder(
             "DRX" -> com.teamwable.common.R.drawable.ic_news_team_profile_drx
             "DK" -> com.teamwable.common.R.drawable.ic_news_team_profile_dk
             "KT" -> com.teamwable.common.R.drawable.ic_news_team_profile_kt
-            "FOX" -> com.teamwable.common.R.drawable.ic_news_team_profile_fox
+            "BFX" -> com.teamwable.common.R.drawable.ic_news_team_profile_bfx
             "NS" -> com.teamwable.common.R.drawable.ic_news_team_profile_ns
-            "KDF" -> com.teamwable.common.R.drawable.ic_news_team_profile_kdf
+            "DNF" -> com.teamwable.common.R.drawable.ic_news_team_profile_dnf
             "HLE" -> com.teamwable.common.R.drawable.ic_news_team_profile_hle
             else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
         }
