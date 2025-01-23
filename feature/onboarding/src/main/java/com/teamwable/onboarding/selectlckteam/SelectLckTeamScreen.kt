@@ -33,7 +33,7 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.LckTeamType
+import com.teamwable.common.type.LckTeamType
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
