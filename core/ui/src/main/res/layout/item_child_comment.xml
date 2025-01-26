@@ -75,6 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:autoLink="web"
         android:textAppearance="@style/TextAppearance.Wable.Body4"
         android:textColor="@color/gray_800"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
