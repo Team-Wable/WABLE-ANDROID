@@ -33,6 +33,7 @@ import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.R
 import com.teamwable.news.news.component.WableNewsItems
 import com.teamwable.news.news.component.WableNewsTopBanner
+import com.teamwable.news.news.model.NewsInfoIntent
 import com.teamwable.news.news.model.NewsInfoSideEffect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
@@ -57,7 +58,9 @@ fun NewsNewsRoute(
 
     NewsNewsScreen(
         newsItems = newsItems,
-        onItemClick = viewModel::onItemClick,
+        onItemClick = { item ->
+            viewModel.onIntent(NewsInfoIntent.ItemClick(item))
+        },
     )
 }
 
@@ -114,11 +117,11 @@ fun NewsNewsScreen(
                         )
                     }
                 }
-                item(
-                    key = ContentType.Spinner.name,
-                    contentType = newsItems.itemContentType { ContentType.Spinner.name },
-                ) {
-                    if (newsItems.loadState.append is LoadState.Loading) {
+                if (newsItems.loadState.append is LoadState.Loading) {
+                    item(
+                        key = ContentType.Spinner.name,
+                        contentType = newsItems.itemContentType { ContentType.Spinner.name },
+                    ) {
                         WablePagingSpinner(
                             modifier = Modifier
                                 .fillMaxWidth()

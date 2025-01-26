@@ -1,20 +1,20 @@
 package com.teamwable.onboarding.profile
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
+import com.teamwable.model.network.Error
+import com.teamwable.navigation.Route
+import com.teamwable.onboarding.profile.model.ProfileIntent
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
+import com.teamwable.onboarding.profile.naviagation.ProfileTypeMap
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,62 +22,80 @@ import javax.inject.Inject
 internal class ProfileViewModel @Inject constructor(
     private val nicknameValidationUseCase: NicknameValidationUseCase,
     private val profileRepository: ProfileRepository,
-) : ViewModel() {
-    private val _sideEffect = MutableSharedFlow<ProfileSideEffect>()
-    val sideEffect: SharedFlow<ProfileSideEffect> = _sideEffect.asSharedFlow()
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<ProfileIntent, ProfileState, ProfileSideEffect>(
+        initialState = ProfileState(),
+    ) {
+    private val args = savedStateHandle.toRoute<Route.Profile>(
+        typeMap = ProfileTypeMap.typeMap,
+    )
 
-    private val _profileState = MutableStateFlow(ProfileState())
-    val profileState: StateFlow<ProfileState> = _profileState
-
-    fun updatePhotoPermissionState(isGranted: Boolean) {
-        viewModelScope.launch {
-            _profileState.update { it.copy(isPermissionGranted = isGranted) }
+    override fun onIntent(intent: ProfileIntent) {
+        when (intent) {
+            is ProfileIntent.UpdatePhotoPermission -> updatePhotoPermissionState(intent.isGranted)
+            is ProfileIntent.OnImageSelected -> selectImage(intent.imageUri)
+            is ProfileIntent.OnNicknameChanged -> onNicknameChanged(intent.newNickname)
+            is ProfileIntent.GetNickNameValidation -> getNickNameValidation()
+            is ProfileIntent.OnRandomImageChange -> onRandomImageChange(intent.newImage)
+            is ProfileIntent.OpenDialog -> openDialog(intent.isOpened)
+            is ProfileIntent.RequestImagePicker -> requestImagePicker()
+            is ProfileIntent.OnNextBtnClick -> navigateToAgreeTerms(intent.nickName, intent.defaultImage)
         }
     }
 
-    fun navigateToAgreeTerms() {
-        viewModelScope.launch {
-            _sideEffect.emit(ProfileSideEffect.NavigateToAgreeTerms)
+    private fun updatePhotoPermissionState(isGranted: Boolean) {
+        intent { copy(isPermissionGranted = isGranted) }
+    }
+
+    private fun selectImage(imageUri: String?) {
+        intent { copy(selectedImageUri = imageUri) }
+    }
+
+    private fun onNicknameChanged(newNickname: String) {
+        intent {
+            copy(
+                nickname = newNickname,
+                textFieldType = nicknameValidationUseCase(newNickname),
+            )
         }
     }
 
-    fun requestImagePicker() {
+    private fun getNickNameValidation() {
         viewModelScope.launch {
-            if (_profileState.value.isPermissionGranted) _sideEffect.emit(ProfileSideEffect.RequestImagePicker)
-            else _sideEffect.emit(ProfileSideEffect.ShowPermissionDeniedDialog)
-        }
-    }
-
-    fun onImageSelected(imageUri: String?) {
-        viewModelScope.launch {
-            _profileState.update { it.copy(selectedImageUri = imageUri) }
-        }
-    }
-
-    fun onNicknameChanged(newNickname: String) {
-        _profileState.update { it.copy(nickname = newNickname) }
-        validateNickname(newNickname)
-    }
-
-    fun onRandomImageChange(newImage: ProfileImageType) {
-        _profileState.update { it.copy(currentImage = newImage) }
-    }
-
-    private fun validateNickname(nickname: String) {
-        viewModelScope.launch {
-            _profileState.update { it.copy(textFieldType = nicknameValidationUseCase(nickname)) }
-        }
-    }
-
-    fun getNickNameValidation() {
-        viewModelScope.launch {
-            profileRepository.getNickNameDoubleCheck(_profileState.value.nickname)
+            profileRepository.getNickNameDoubleCheck(currentState.nickname)
                 .onSuccess {
-                    _profileState.update { it.copy(textFieldType = NicknameType.CORRECT) }
+                    intent { copy(textFieldType = NicknameType.CORRECT) }
                 }
                 .onFailure {
-                    _profileState.update { it.copy(textFieldType = NicknameType.DUPLICATE) }
+                    when (it) {
+                        is Error.ApiError -> intent { copy(textFieldType = NicknameType.DUPLICATE) }
+                        else -> postSideEffect(ProfileSideEffect.ShowSnackBar(it))
+                    }
                 }
         }
+    }
+
+    private fun onRandomImageChange(newImage: ProfileImageType) {
+        intent { copy(currentImage = newImage) }
+    }
+
+    private fun openDialog(isOpened: Boolean) {
+        intent { copy(openDialog = isOpened) }
+    }
+
+    private fun navigateToAgreeTerms(nickName: String, defaultImage: String?) {
+        postSideEffect(
+            ProfileSideEffect.NavigateToAgreeTerms(
+                args.memberInfoEditModel.copy(
+                    nickname = nickName,
+                    memberDefaultProfileImage = defaultImage,
+                ),
+            ),
+        )
+    }
+
+    private fun requestImagePicker() {
+        if (currentState.isPermissionGranted) postSideEffect(ProfileSideEffect.RequestImagePicker)
+        else intent { copy(openDialog = true) }
     }
 }

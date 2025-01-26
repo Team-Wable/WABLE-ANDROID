@@ -57,7 +57,7 @@ fun WableBasicTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    buttonContent: @Composable (() -> Unit)? = null, // 버튼 콘텐츠를 받는 파라미터 추가
+    buttonContent: @Composable () -> Unit = {}, // 버튼 콘텐츠를 받는 파라미터 추가
 ) {
     BasicTextField(
         modifier = modifier.fillMaxWidth(),
@@ -105,13 +105,7 @@ fun WableBasicTextField(
                         innerText()
                     }
                     // 버튼이 있으면 Row에 배치
-                    if (buttonContent != null) {
-                        Box(
-                            modifier = Modifier,
-                        ) {
-                            buttonContent()
-                        }
-                    }
+                    buttonContent()
                 }
                 Box(
                     modifier = Modifier

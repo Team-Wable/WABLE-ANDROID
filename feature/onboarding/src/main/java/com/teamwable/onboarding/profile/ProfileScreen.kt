@@ -1,6 +1,7 @@
 package com.teamwable.onboarding.profile
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,11 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -28,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -45,9 +46,9 @@ import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileEditType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.profile.MemberInfoEditModel
-import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
 import com.teamwable.onboarding.profile.component.ProfileImagePicker
+import com.teamwable.onboarding.profile.model.ProfileIntent
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
 import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.permission.launchImagePicker
@@ -58,69 +59,83 @@ import timber.log.Timber
 @Composable
 internal fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
-    args: Route.Profile,
     navigateToAgreeTerms: (MemberInfoEditModel, String?) -> Unit,
     onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val profileState by viewModel.profileState.collectAsStateWithLifecycle()
-
-    var memberInfoEditModel by remember { mutableStateOf(args.memberInfoEditModel) }
-    var openDialog by remember { mutableStateOf(false) }
+    val profileState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { isGranted ->
         try {
-            if (isGranted) viewModel.updatePhotoPermissionState(true)
-            else openDialog = true
+            if (isGranted) viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
+            else viewModel.onIntent(ProfileIntent.OpenDialog(true))
         } catch (e: Exception) {
             Timber.e(e)
         }
     }
+    val permission = when {
+        Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
+        else -> "" // Api 34 이상 권한 필요 없음
+    }
 
     LaunchedEffect(Unit) {
-        val permission = when {
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_MEDIA_IMAGES
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> Manifest.permission.READ_EXTERNAL_STORAGE
-            else -> return@LaunchedEffect
-        }
+        if (permission.isNotBlank()) permissionLauncher.launch(permission)
+        else viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
+    }
 
-        permissionLauncher.launch(permission)
+    if (permission.isNotBlank() && !profileState.isPermissionGranted) {
+        DisposableEffect(Unit) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+                        viewModel.onIntent(ProfileIntent.UpdatePhotoPermission(true))
+                    }
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
     }
 
     val galleryLauncher = rememberGalleryLauncher { uri ->
-        viewModel.onImageSelected(uri.toString())
+        viewModel.onIntent(ProfileIntent.OnImageSelected(uri.toString()))
     }
 
     val photoPickerLauncher = rememberPhotoPickerLauncher { uri ->
-        viewModel.onImageSelected(uri.toString())
+        viewModel.onIntent(ProfileIntent.OnImageSelected(uri.toString()))
     }
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(memberInfoEditModel, profileState.selectedImageUri)
-
-                    is ProfileSideEffect.ShowPermissionDeniedDialog -> openDialog = true
+                    is ProfileSideEffect.NavigateToAgreeTerms -> navigateToAgreeTerms(
+                        sideEffect.memberInfoEditModel,
+                        profileState.selectedImageUri,
+                    )
 
                     is ProfileSideEffect.RequestImagePicker -> context.launchImagePicker(galleryLauncher, photoPickerLauncher)
+
+                    is ProfileSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
 
                     else -> Unit
                 }
             }
     }
 
-    if (openDialog) {
+    if (profileState.openDialog) {
         PermissionAppSettingsDialog(
             onClick = {
-                openDialog = false
+                viewModel.onIntent(ProfileIntent.OpenDialog(false))
                 context.navigateToAppSettings()
-                viewModel.updatePhotoPermissionState(true) // Todo: 추후에 callback으로 변경할게요
             },
-            onDismissRequest = { openDialog = false },
+            onDismissRequest = { viewModel.onIntent(ProfileIntent.OpenDialog(false)) },
         )
     }
 
@@ -128,25 +143,21 @@ internal fun ProfileRoute(
         profileState = profileState,
         profileEditType = ProfileEditType.ONBOARDING,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            memberInfoEditModel = memberInfoEditModel.copy(
-                nickname = nickname,
-                memberDefaultProfileImage = defaultImage.orEmpty(),
-            )
-            viewModel.navigateToAgreeTerms()
+            viewModel.onIntent(ProfileIntent.OnNextBtnClick(nickname, defaultImage.orEmpty()))
             trackEvent(CLICK_NEXT_PROFILE_SIGNUP)
         },
         onProfilePlusBtnClick = {
-            viewModel.requestImagePicker()
+            viewModel.onIntent(ProfileIntent.RequestImagePicker)
             trackEvent(CLICK_ADD_PICTURE_PROFILE_SIGNUP)
         },
-        onDuplicateBtnClick = { viewModel.getNickNameValidation() },
+        onDuplicateBtnClick = { viewModel.onIntent(ProfileIntent.GetNickNameValidation) },
         onRandomImageChange = { newImage ->
-            viewModel.onRandomImageChange(newImage)
-            viewModel.onImageSelected(null)
+            viewModel.onIntent(ProfileIntent.OnRandomImageChange(newImage))
+            viewModel.onIntent(ProfileIntent.OnImageSelected(null))
             trackEvent(CLICK_CHANGE_PICTURE_PROFILE_SIGNUP)
         },
         onNicknameChange = { newNickname ->
-            viewModel.onNicknameChanged(newNickname)
+            viewModel.onIntent(ProfileIntent.OnNicknameChanged(newNickname))
         },
     )
 }
