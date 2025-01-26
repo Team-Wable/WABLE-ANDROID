@@ -44,7 +44,6 @@ class ChildCommentViewHolder private constructor(
             tvChildCommentContent.text = comment.content
             btnChildCommentLike.isChecked = comment.isLiked
             tvChildCommentLikeCount.text = comment.likedNumber
-            tvTeamTag.teamName = comment.postAuthorTeamTag
             btnChildCommentGhost.isEnabled = !comment.isPostAuthorGhost
             viewChildCommentTransparentBg.setBackgroundColor(Color.parseColor(comment.ghostColor))
             btnChildCommentGhost.visible(!comment.isAuth)

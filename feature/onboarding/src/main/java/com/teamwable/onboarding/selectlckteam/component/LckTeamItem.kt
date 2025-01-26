@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.component.card.WableCustomCardWithStroke
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.LckTeamType
+import com.teamwable.common.type.LckTeamType
 
 @Composable
 fun LckTeamItem(

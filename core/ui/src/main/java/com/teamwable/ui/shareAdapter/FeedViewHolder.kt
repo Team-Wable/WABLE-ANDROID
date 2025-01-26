@@ -57,7 +57,6 @@ class FeedViewHolder private constructor(
             btnFeedLike.isChecked = feed.isLiked
             tvFeedLikeCount.text = feed.likedNumber
             tvFeedCommentCount.text = feed.commentNumber
-            tvTeamTag.teamName = feed.postAuthorTeamTag
             btnFeedGhost.isEnabled = !feed.isPostAuthorGhost
             viewFeedTransparentBg.setBackgroundColor(Color.parseColor(feed.ghostColor))
             btnFeedGhost.visible(!feed.isAuth)

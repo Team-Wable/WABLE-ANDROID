@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- team color -->
+    <color name="t_50">#FFE2012D</color>
+    <color name="t_10">#FFF9E3E7</color>
+    <color name="gen_50">#FFAA8B30</color>
+    <color name="gen_10">#FFF4F1E8</color>
+    <color name="bro_50">#FF01492B</color>
+    <color name="bro_10">#FFE3EAE7</color>
+    <color name="drx_50">#FF1004A4</color>
+    <color name="drx_10">#FFE4E3F3</color>
+    <color name="dk_50">#FF4F5551</color>
+    <color name="dk_10">#FFE0F7E7</color>
+    <color name="kt_50">#FFFF0A09</color>
+    <color name="kt_10">#FFFCE4E4</color>
+    <color name="bfx_50">#FFD31F28</color>
+    <color name="bfx_10">#FFFBF8DB</color>
+    <color name="ns_50">#FFEC1C24</color>
+    <color name="ns_10">#FFE3E3E3</color>
+    <color name="dnf_50">#FFE63312</color>
+    <color name="dnf_10">#FFFAE8E5</color>
+    <color name="hle_50">#FFF47320</color>
+    <color name="hle_10">#FFFBEEE6</color>
+</resources>

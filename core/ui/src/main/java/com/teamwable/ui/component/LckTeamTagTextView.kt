@@ -5,10 +5,10 @@ import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.teamwable.common.type.LckTeamType
 import com.teamwable.ui.databinding.TextLckTeamTagBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.stringOf
-import com.teamwable.ui.type.TeamTag
 
 class LckTeamTagTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0,
@@ -27,11 +27,12 @@ class LckTeamTagTextView @JvmOverloads constructor(
     }
 
     private fun updateTeamTagStyle() {
-        val tag = if (teamName.isNullOrBlank()) TeamTag.LCK else TeamTag.toTeamTag(context, teamName!!)
+        if (teamName.isNullOrBlank()) return
+        val tag = LckTeamType.toTeamTag(context, teamName!!) ?: return
         applyTeamTagStyle(tag)
     }
 
-    private fun applyTeamTagStyle(teamTag: TeamTag) {
+    private fun applyTeamTagStyle(teamTag: LckTeamType) {
         binding.apply {
             tvTeamTag.backgroundTintList = ColorStateList.valueOf(context.colorOf(teamTag.backgroundColorRes))
             tvTeamTag.setTextColor(context.colorOf(teamTag.textColorRes))

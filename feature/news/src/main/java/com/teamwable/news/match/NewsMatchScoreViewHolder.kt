@@ -13,7 +13,7 @@ import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.util.CalculateTime
 
 class NewsMatchScoreViewHolder(
-    private val binding: ItemNewsMatchScoreBinding
+    private val binding: ItemNewsMatchScoreBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun bind(data: NewsMatchScoreModel) {
@@ -56,9 +56,9 @@ class NewsMatchScoreViewHolder(
             "DRX" -> com.teamwable.common.R.drawable.ic_news_team_profile_drx
             "DK" -> com.teamwable.common.R.drawable.ic_news_team_profile_dk
             "KT" -> com.teamwable.common.R.drawable.ic_news_team_profile_kt
-            "FOX" -> com.teamwable.common.R.drawable.ic_news_team_profile_fox
+            "BFX" -> com.teamwable.common.R.drawable.ic_news_team_profile_bfx
             "NS" -> com.teamwable.common.R.drawable.ic_news_team_profile_ns
-            "KDF" -> com.teamwable.common.R.drawable.ic_news_team_profile_kdf
+            "DNF" -> com.teamwable.common.R.drawable.ic_news_team_profile_dnf
             "HLE" -> com.teamwable.common.R.drawable.ic_news_team_profile_hle
             else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
         }
