@@ -4,6 +4,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwable.model.news.NewsRankModel
 import com.teamwable.news.databinding.ItemNewsRankBinding
+import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.type.LckCupGroup
 
 class NewsRankViewHolder(
     private val binding: ItemNewsRankBinding,
@@ -17,6 +19,9 @@ class NewsRankViewHolder(
             tvNewsRankLoss.text = data.teamDefeat.toString()
             tvNewsRankWinPercentage.text = "${data.winningRate}%"
             tvNewsRankPointDifference.text = data.scoreDiff.toString()
+            if (data.teamName in listOf("T1", "HLE", "DNF", "BRO", "BFX"))
+                setRankColor(LckCupGroup.BARON)
+            else setRankColor(LckCupGroup.ELDER)
         }
     }
 
@@ -35,5 +40,9 @@ class NewsRankViewHolder(
             else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
         }
         imageView.setImageResource(resourceId)
+    }
+
+    private fun setRankColor(type: LckCupGroup) {
+        binding.tvNewsRankRank.setTextColor(itemView.context.colorOf(type.teamColor))
     }
 }
