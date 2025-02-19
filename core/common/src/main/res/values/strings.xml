@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">와블</string>
+    <string name="rel_app_name">와블</string>
+    <string name="dev_app_name">블와</string>
 
     <!-- team tag -->
     <string name="label_team_t1">T1</string>

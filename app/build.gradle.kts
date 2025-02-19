@@ -50,9 +50,16 @@ android {
     buildTypes {
         debug {
             signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["appName"] = "@string/dev_app_name"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_dev_round"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
         }
         release {
             signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["appName"] = "@string/rel_app_name"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
             // TO DO: 추후 난독화 설정하겠습니다.
             isMinifyEnabled = false
             proguardFiles(
