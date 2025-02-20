@@ -35,10 +35,20 @@ jobs:
           echo wable.dev.base.url=$WABLE_DEV_BASE_URL >> ./local.properties
           echo wable.rel.base.url=$WABLE_REL_BASE_URL >> ./local.properties
 
-      - name: Access Google Services JSON
+      - name: Access Google Services JSON (Debug)
+        env:
+          GOOGLE_SERVICES_JSON_DEV: ${{ secrets.GOOGLE_SERVICES_JSON_DEV }}
+        run: echo $GOOGLE_SERVICES_JSON_DEV | base64 -di > ./app/src/debug/google-services.json
+
+      - name: Access Google Services JSON (Release)
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $GOOGLE_SERVICES_JSON | base64 -di > ./app/google-services.json
+        run: echo $GOOGLE_SERVICES_JSON | base64 -di > ./app/src/release/google-services.json
+
+      - name: Verify google-services.json files
+        run: |
+          ls -l ./app/src/debug/google-services.json
+          ls -l ./app/src/release/google-services.json
 
       - name: Access Keystore
         env:
