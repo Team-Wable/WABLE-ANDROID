@@ -79,7 +79,7 @@
     </style>
 
     <style name="TextAppearance.Wable.Caption5">
-        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
         <item name="android:textSize">11sp</item>
         <item name="lineHeight">15dp</item>
     </style>
