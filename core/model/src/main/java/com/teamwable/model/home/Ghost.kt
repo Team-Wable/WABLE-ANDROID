@@ -1,4 +1,4 @@
-package com.teamwable.model
+package com.teamwable.model.home
 
 data class Ghost(
     val alarmTriggerType: String,

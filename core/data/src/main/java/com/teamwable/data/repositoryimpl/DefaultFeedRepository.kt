@@ -8,8 +8,8 @@ import com.teamwable.data.mapper.toData.toPostFeedLikeDto
 import com.teamwable.data.mapper.toData.toPostGhostDto
 import com.teamwable.data.mapper.toModel.toFeed
 import com.teamwable.data.repository.FeedRepository
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.util.GenericPagingSource
 import com.teamwable.network.util.handleThrowable

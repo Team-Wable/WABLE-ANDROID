@@ -6,8 +6,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
-import com.teamwable.model.Comment
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Comment
+import com.teamwable.model.home.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileCommentBinding
 import com.teamwable.ui.base.BindingFragment

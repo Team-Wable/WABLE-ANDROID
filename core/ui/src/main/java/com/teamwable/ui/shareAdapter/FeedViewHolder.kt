@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.Feed
+import com.teamwable.model.home.Feed
 import com.teamwable.ui.databinding.ItemFeedBinding
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.visible

@@ -13,9 +13,9 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_POST
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.databinding.FragmentHomeBinding
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
-import com.teamwable.model.LikeState
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
+import com.teamwable.model.home.LikeState
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar

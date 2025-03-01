@@ -19,9 +19,9 @@ import com.teamwable.common.util.AmplitudeHomeTag.CLICK_WRITE_RECOMMENT
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.R
 import com.teamwable.home.databinding.FragmentHomeDetailBinding
-import com.teamwable.model.Comment
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Comment
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination

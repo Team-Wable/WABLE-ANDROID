@@ -8,8 +8,8 @@ import com.teamwable.common.util.AmplitudeHomeTag.CLICK_DELETE_POST
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_GHOST_POST
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_LIKE_POST
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
-import com.teamwable.model.Feed
-import com.teamwable.model.LikeState
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.TwoButtonDialog

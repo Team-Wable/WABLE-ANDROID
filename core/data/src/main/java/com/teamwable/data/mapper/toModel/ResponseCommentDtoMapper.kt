@@ -1,6 +1,6 @@
 package com.teamwable.data.mapper.toModel
 
-import com.teamwable.model.Comment
+import com.teamwable.model.home.Comment
 import com.teamwable.network.dto.response.ResponseCommentDto
 
 internal fun ResponseCommentDto.toComment(): Comment =

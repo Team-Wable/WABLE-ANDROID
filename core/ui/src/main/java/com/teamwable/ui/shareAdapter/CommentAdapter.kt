@@ -3,7 +3,7 @@ package com.teamwable.ui.shareAdapter
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.teamwable.model.Comment
+import com.teamwable.model.home.Comment
 import com.teamwable.ui.extensions.ItemDiffCallback
 import com.teamwable.ui.type.CommentType
 

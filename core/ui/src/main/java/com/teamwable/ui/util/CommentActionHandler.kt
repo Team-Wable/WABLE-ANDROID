@@ -7,8 +7,8 @@ import androidx.navigation.NavController
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_GHOST_COMMENT
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_LIKE_COMMENT
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
-import com.teamwable.model.Comment
-import com.teamwable.model.LikeState
+import com.teamwable.model.home.Comment
+import com.teamwable.model.home.LikeState
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.component.TwoLabelBottomSheet

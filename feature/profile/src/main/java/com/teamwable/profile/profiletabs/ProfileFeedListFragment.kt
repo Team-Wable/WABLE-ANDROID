@@ -8,8 +8,8 @@ import androidx.paging.LoadState
 import androidx.paging.map
 import com.teamwable.common.util.AmplitudeProfileTag.CLICK_WRITE_FIRSTPOST
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
