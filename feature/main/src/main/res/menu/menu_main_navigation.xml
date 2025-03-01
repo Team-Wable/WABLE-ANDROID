@@ -5,13 +5,17 @@
         android:icon="@drawable/sel_main_bnv_home"
         android:title="@string/label_bnv_home" />
     <item
+        android:id="@+id/graph_community"
+        android:icon="@drawable/sel_main_bnv_community"
+        android:title="@string/label_bnv_community" />
+    <item
         android:id="@+id/graph_news"
         android:icon="@drawable/sel_main_bnv_news"
         android:title="@string/label_bnv_news" />
     <item
-        android:id="@+id/graph_notification"
-        android:icon="@drawable/sel_main_bnv_notification"
-        android:title="@string/label_bnv_notification" />
+        android:id="@+id/graph_view_it"
+        android:icon="@drawable/sel_main_bnv_viewit"
+        android:title="@string/label_bnv_view_it" />
     <item
         android:id="@+id/graph_profile"
         android:icon="@drawable/sel_main_bnv_profile"
