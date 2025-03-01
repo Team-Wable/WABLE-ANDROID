@@ -8,7 +8,6 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -20,15 +19,12 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.InstallStatus
-import com.teamwable.common.uistate.UiState
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_HOME_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_MYPROFILE_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NEWS_BOTNAVI
-import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NOTI_BOTNAVI
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
-import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.showAlertDialog
 import com.teamwable.ui.extensions.statusBarColorOf
 import com.teamwable.ui.extensions.statusBarModeOf
@@ -37,8 +33,6 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -103,24 +97,24 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     private fun initView() {
         setBottomNavigation()
-        setupNumberObserve()
+//        setupNumberObserve()
     }
 
-    private fun setupNumberObserve() {
-        viewModel.notificationNumberUiState.flowWithLifecycle(lifecycle).onEach {
-            when (it) {
-                is UiState.Success -> {
-                    if (it.data > 0) {
-                        setBadgeOnNotification(true)
-                    } else if (it.data < 0) {
-                        Timber.tag("main").e("알맞지 않은 notification number get : ${it.data}")
-                    }
-                }
+    /*  private fun setupNumberObserve() {
+          viewModel.notificationNumberUiState.flowWithLifecycle(lifecycle).onEach {
+              when (it) {
+                  is UiState.Success -> {
+                      if (it.data > 0) {
+                          setBadgeOnNotification(true)
+                      } else if (it.data < 0) {
+                          Timber.tag("main").e("알맞지 않은 notification number get : ${it.data}")
+                      }
+                  }
 
-                else -> Unit
-            }
-        }.launchIn(lifecycleScope)
-    }
+                  else -> Unit
+              }
+          }.launchIn(lifecycleScope)
+      }*/
 
     private fun setBottomNavigation() {
         val navHostFragment =
@@ -141,7 +135,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     private fun initBottomNavigationChangedListener(navController: NavController) {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             handleBottomNavigationVisibility(destination)
-            if (destination.id == com.teamwable.notification.R.id.navigation_notification) setBadgeOnNotification(false)
+//            if (destination.id == com.teamwable.notification.R.id.navigation_notification) setBadgeOnNotification(false)
         }
     }
 
@@ -168,13 +162,14 @@ class MainActivity : AppCompatActivity(), Navigation {
         )
     }
 
-    private fun setBadgeOnNotification(isVisible: Boolean) {
-        binding.bnvMain.getOrCreateBadge(R.id.graph_notification).apply {
-            this.isVisible = isVisible
-            horizontalOffset = 1
-            if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
-        }
-    }
+    /* private fun setBadgeOnNotification(isVisible: Boolean) {
+         binding.bnvMain.getOrCreateBadge(R.id.graph_notification).apply {
+             this.isVisible = isVisible
+             horizontalOffset = 1
+             if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
+         }
+     }*/
+    // 일단 주석 처리 했습니다.
 
     override fun navigateToProfileAuthFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_profile
@@ -204,7 +199,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                 }
 
                 R.id.graph_news -> trackEvent(CLICK_NEWS_BOTNAVI)
-                R.id.graph_notification -> trackEvent(CLICK_NOTI_BOTNAVI)
+//                R.id.graph_notification -> trackEvent(CLICK_NOTI_BOTNAVI)
                 R.id.graph_profile -> trackEvent(CLICK_MYPROFILE_BOTNAVI)
             }
             lifecycleScope.launch {
