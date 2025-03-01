@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- view it -->
+    <string name="label_view_it_app_bar">뷰잇</string>
+    <string name="content_description_view_it_app_bar">뷰잇 상단바</string>
+    <string name="content_description_view_it_link_img">링크 썸네일입니다.</string>
+    <string name="content_description_view_it_posting_link">링크 추가하기 버튼입니다.</string>
+</resources>
