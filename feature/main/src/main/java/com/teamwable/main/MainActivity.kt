@@ -223,17 +223,19 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     private fun updateStatusBarColor(navController: NavController) {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.black)
-                    statusBarModeOf(false)
-                }
+        val darkStatusBarDestinations = setOf(
+            com.teamwable.news.R.id.navigation_news_detail,
+            com.teamwable.news.R.id.navigation_news,
+            com.teamwable.community.R.id.navigation_community,
+        )
 
-                else -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.white)
-                    statusBarModeOf()
-                }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in darkStatusBarDestinations) {
+                statusBarColorOf(com.teamwable.ui.R.color.black)
+                statusBarModeOf(false)
+            } else {
+                statusBarColorOf(com.teamwable.ui.R.color.white)
+                statusBarModeOf()
             }
         }
     }
