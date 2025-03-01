@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graph_view_it"
+    app:startDestination="@id/navigation_view_it">
+
+    <fragment
+        android:id="@+id/navigation_view_it"
+        android:name="com.teamwable.viewit.ViewItFragment"
+        android:label="ViewItFragment" />
+</navigation>
