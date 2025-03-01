@@ -1,5 +1,6 @@
 package com.teamwable.viewit
 
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
@@ -18,6 +19,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     override fun initView() {
         setAdapter()
         if (this::viewItAdapter.isInitialized) submitList()
+        setOnPostingBtnClickListener()
     }
 
     override fun onDestroyView() {
@@ -38,6 +40,12 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
             dummyPagingData.collectLatest { pagingData ->
                 viewItAdapter.submitData(pagingData)
             }
+        }
+    }
+
+    private fun setOnPostingBtnClickListener() {
+        binding.fabViewItPosting.setOnClickListener {
+            findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
         }
     }
 

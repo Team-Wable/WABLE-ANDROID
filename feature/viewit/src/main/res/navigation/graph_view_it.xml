@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_view_it"
     app:startDestination="@id/navigation_view_it">
 
     <fragment
         android:id="@+id/navigation_view_it"
         android:name="com.teamwable.viewit.ViewItFragment"
-        android:label="ViewItFragment" />
+        android:label="ViewItFragment"
+        tools:layout="@layout/fragment_view_it">
+        <action
+            android:id="@+id/action_view_it_to_posting"
+            app:destination="@id/navigation_view_it_posting" />
+    </fragment>
+    <dialog
+        android:id="@+id/navigation_view_it_posting"
+        android:name="com.teamwable.viewit.ViewItPostingBottomSheet"
+        android:label="ViewItPostingBottomSheet"
+        tools:layout="@layout/bottom_sheet_view_it_posting" />
 </navigation>
