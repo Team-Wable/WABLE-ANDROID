@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingTop="10dp">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_view_it_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="et_view_it_link_input, ib_view_it_link_input_upload" />
+
+    <EditText
+        android:id="@+id/et_view_it_link_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="12dp"
+        android:autoLink="web"
+        android:background="@drawable/shape_gray300_line_16_rect"
+        android:backgroundTint="@color/gray_100"
+        android:hint="공유하고 싶은 동영상 링크를 입력해주세요."
+        android:linksClickable="false"
+        android:maxLength="60"
+        android:padding="15dp"
+        android:textAppearance="@style/TextAppearance.Wable.Body4"
+        android:textColor="@color/blue_50"
+        android:textColorHint="@color/gray_700"
+        android:textCursorDrawable="@drawable/shape_purple_50_cursor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ib_view_it_link_input_upload"
+        app:layout_constraintStart_toEndOf="@id/ib_view_it_link_complete"
+        tools:text="@string/dummy" />
+
+    <ImageButton
+        android:id="@+id/ib_view_it_link_input_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sel_view_it_link_upload"
+        app:layout_constraintBottom_toBottomOf="@id/et_view_it_link_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_view_it_link_input" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_view_it_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="et_view_it_link_input_complete, ib_view_it_link_complete, lottie_view_it_content_input, cl_view_it_content_input" />
+
+    <EditText
+        android:id="@+id/et_view_it_link_input_complete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="12dp"
+        android:autoLink="web"
+        android:background="@drawable/shape_gray300_line_16_rect"
+        android:backgroundTint="@color/blue_10"
+        android:hint="공유하고 싶은 동영상 링크를 입력해주세요."
+        android:maxLength="60"
+        android:padding="15dp"
+        android:textAppearance="@style/TextAppearance.Wable.Body3"
+        android:textColor="@color/blue_50"
+        android:textColorHint="@color/gray_700"
+        android:textCursorDrawable="@drawable/shape_purple_50_cursor"
+        app:layout_constraintBottom_toTopOf="@id/lottie_view_it_content_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ib_view_it_link_complete"
+        tools:text="@string/dummy" />
+
+    <ImageButton
+        android:id="@+id/ib_view_it_link_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_view_it_link_complete"
+        app:layout_constraintBottom_toBottomOf="@id/et_view_it_link_input_complete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_view_it_link_input_complete" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_view_it_content_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/cl_view_it_content_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/tab_lottie" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_view_it_content_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingHorizontal="@dimen/padding_horizontal"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ScrollView
+            android:id="@+id/sv_view_it_content_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ib_view_it_content_input_upload"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/et_view_it_content_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_gray300_line_16_rect"
+                android:backgroundTint="@color/gray_100"
+                android:hint="어떤 내용의 링크인가요?"
+                android:maxLength="500"
+                android:maxLines="3"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Wable.Body4"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_700"
+                android:textCursorDrawable="@drawable/shape_purple_50_cursor"
+                tools:text="ddddd\ndfdfd\ndfdfdfdfd\ndfdf" />
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/ib_view_it_content_input_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_home_comment_upload_btn_inactive"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sv_view_it_content_input"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
