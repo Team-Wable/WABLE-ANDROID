@@ -71,6 +71,7 @@
         tools:text="@string/dummy" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_view_it_link"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
@@ -92,6 +93,7 @@
                 android:layout_width="128dp"
                 android:layout_height="0dp"
                 android:contentDescription="@string/content_description_view_it_link_img"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="128:78"
                 app:layout_constraintStart_toStartOf="parent"
