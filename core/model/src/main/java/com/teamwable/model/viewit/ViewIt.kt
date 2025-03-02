@@ -9,7 +9,6 @@ data class ViewIt(
     val linkName: String,
     val linkTitle: String,
     val viewItContent: String,
-    val uploadTime: String,
     val isLiked: Boolean,
     val likedNumber: String,
     val isBlind: Boolean,

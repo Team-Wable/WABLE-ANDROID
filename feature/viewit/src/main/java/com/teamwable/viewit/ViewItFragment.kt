@@ -92,7 +92,6 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
             linkName = "www.naver.com",
             linkTitle = "링크 제목 링크 제목 링크 제목 링크 제목 링크 제목 링크 제목 링크 제목",
             viewItContent = "뷰잇 멘트는 최대 50자만 가능해요. 뷰잇 멘트는뷰잇멘트는 최대 50자만 가능해요. 뷰잇 멘트는 50자만",
-            uploadTime = "2025-03-01T12:00:00Z",
             isLiked = false,
             likedNumber = "100",
             isBlind = false,
