@@ -158,6 +158,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.profile.R.id.navigation_profile_edit,
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                     com.teamwable.news.R.id.navigation_news_detail,
+                    com.teamwable.viewit.R.id.navigation_view_it_posting,
                 ),
         )
     }
@@ -225,7 +226,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     private fun updateStatusBarColor(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news -> {
+                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news, com.teamwable.viewit.R.id.navigation_view_it -> {
                     statusBarColorOf(com.teamwable.ui.R.color.black)
                     statusBarModeOf(false)
                 }
