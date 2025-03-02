@@ -1,6 +1,6 @@
 package com.teamwable.ui.shareAdapter
 
-import com.teamwable.model.Feed
+import com.teamwable.model.home.Feed
 
 interface FeedClickListener {
     fun onItemClick(feed: Feed)

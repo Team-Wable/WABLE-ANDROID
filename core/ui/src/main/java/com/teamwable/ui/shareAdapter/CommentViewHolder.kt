@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwable.model.Comment
+import com.teamwable.model.home.Comment
 import com.teamwable.ui.databinding.ItemCommentBinding
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.visible

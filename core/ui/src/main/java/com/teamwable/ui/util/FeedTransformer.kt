@@ -2,9 +2,9 @@ package com.teamwable.ui.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.teamwable.model.Comment
-import com.teamwable.model.Feed
-import com.teamwable.model.GhostColor
+import com.teamwable.model.home.Comment
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.GhostColor
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.R as r
 

@@ -2,14 +2,16 @@ package com.teamwable.profile.profiletabs
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
 import com.teamwable.common.util.AmplitudeProfileTag.CLICK_WRITE_FIRSTPOST
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileFeedBinding
 import com.teamwable.ui.base.BindingFragment
@@ -133,20 +135,24 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
 
     private fun submitList() {
         viewLifeCycleScope.launch {
-            viewModel.updateFeeds(userId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map {
-                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
-                    val isAuth = userType == ProfileUserType.AUTH
-                    transformedFeed.copy(isAuth = isAuth)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateFeeds(userId).collectLatest { pagingData ->
+                    val transformedPagingData = pagingData.map {
+                        val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                        val isAuth = userType == ProfileUserType.AUTH
+                        transformedFeed.copy(isAuth = isAuth)
+                    }
+                    feedAdapter.submitData(transformedPagingData)
                 }
-                feedAdapter.submitData(transformedPagingData)
             }
         }
 
         viewLifeCycleScope.launch {
-            feedAdapter.loadStateFlow.collectLatest { loadStates ->
-                val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
-                setEmptyView(isEmptyList)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                    val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
+                    setEmptyView(isEmptyList)
+                }
             }
         }
     }

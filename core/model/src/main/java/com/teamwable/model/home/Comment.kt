@@ -1,4 +1,4 @@
-package com.teamwable.model
+package com.teamwable.model.home
 
 data class Comment(
     val commentId: Long,

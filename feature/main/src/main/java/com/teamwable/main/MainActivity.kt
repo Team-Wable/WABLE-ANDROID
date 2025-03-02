@@ -35,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import com.teamwable.viewit.R as viewitR
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), Navigation {
@@ -158,6 +159,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.profile.R.id.navigation_profile_edit,
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                     com.teamwable.news.R.id.navigation_news_detail,
+                    viewitR.id.navigation_view_it_posting,
                 ),
         )
     }
@@ -225,7 +227,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     private fun updateStatusBarColor(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news -> {
+                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news, viewitR.id.navigation_view_it, viewitR.id.navigation_view_it_posting -> {
                     statusBarColorOf(com.teamwable.ui.R.color.black)
                     statusBarModeOf(false)
                 }

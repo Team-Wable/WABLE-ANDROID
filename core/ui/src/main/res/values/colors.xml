@@ -7,6 +7,8 @@
     <!-- secondary -->
     <color name="sky_50">#FF05E8D1</color>
     <color name="sky_10">#FFE4FAF8</color>
+    <color name="blue_50">#FF4699FF</color>
+    <color name="blue_10">#FFEFF5FD</color>
     <!-- system -->
     <color name="success">#FF0DBE61</color>
     <color name="info">#FF127CF4</color>

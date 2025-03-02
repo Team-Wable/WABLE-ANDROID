@@ -9,9 +9,9 @@ import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
-import com.teamwable.model.LikeState
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
+import com.teamwable.model.home.LikeState
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType

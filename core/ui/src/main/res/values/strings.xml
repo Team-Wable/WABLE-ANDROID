@@ -58,4 +58,9 @@
 
     <!-- content description -->
     <string name="content_description_loading_spinner">로딩 스피너입니다.</string>
+
+    <!-- app bar -->
+    <string name="label_app_bar_news">소식</string>
+    <string name="label_app_bar_view_it">뷰잇</string>
+    <string name="label_app_bar_community">커뮤니티</string>
 </resources>
