@@ -37,4 +37,5 @@ fun miniButtonStyle() = defaultButtonStyle().copy(
     paddingVertical = 6.dp,
     paddingHorizontal = 14.dp,
     radius = 20.dp,
+    textColor = { WableTheme.colors.white },
 )
