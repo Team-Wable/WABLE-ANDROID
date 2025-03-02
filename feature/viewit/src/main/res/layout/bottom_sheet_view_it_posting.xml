@@ -23,7 +23,7 @@
         android:autoLink="web"
         android:background="@drawable/shape_gray300_line_16_rect"
         android:backgroundTint="@color/gray_100"
-        android:hint="공유하고 싶은 동영상 링크를 입력해주세요."
+        android:hint="@string/label_view_it_link_hint"
         android:linksClickable="false"
         android:maxLength="60"
         android:padding="15dp"
@@ -64,7 +64,7 @@
         android:autoLink="web"
         android:background="@drawable/shape_gray300_line_16_rect"
         android:backgroundTint="@color/blue_10"
-        android:hint="공유하고 싶은 동영상 링크를 입력해주세요."
+        android:hint="@string/label_view_it_link_hint"
         android:maxLength="60"
         android:padding="15dp"
         android:textAppearance="@style/TextAppearance.Wable.Body3"
@@ -124,10 +124,10 @@
             <EditText
                 android:id="@+id/et_view_it_content_input"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/shape_gray300_line_16_rect"
                 android:backgroundTint="@color/gray_100"
-                android:hint="어떤 내용의 링크인가요?"
+                android:hint="@string/label_view_it_content_hint"
                 android:maxLength="500"
                 android:maxLines="3"
                 android:padding="10dp"
@@ -135,7 +135,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_700"
                 android:textCursorDrawable="@drawable/shape_purple_50_cursor"
-                tools:text="ddddd\ndfdfd\ndfdfdfdfd\ndfdf" />
+                tools:text="@string/dummy" />
         </ScrollView>
 
         <ImageButton
