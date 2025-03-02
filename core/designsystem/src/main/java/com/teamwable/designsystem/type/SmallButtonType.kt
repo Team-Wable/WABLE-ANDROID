@@ -1,6 +1,7 @@
 package com.teamwable.designsystem.type
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -20,6 +21,7 @@ data class SmallButtonStyle(
 )
 
 @Composable
+@ReadOnlyComposable
 fun defaultButtonStyle() = SmallButtonStyle(
     paddingVertical = 13.dp,
     paddingHorizontal = 16.dp,
@@ -30,6 +32,7 @@ fun defaultButtonStyle() = SmallButtonStyle(
 )
 
 @Composable
+@ReadOnlyComposable
 fun miniButtonStyle() = defaultButtonStyle().copy(
     paddingVertical = 6.dp,
     paddingHorizontal = 14.dp,
