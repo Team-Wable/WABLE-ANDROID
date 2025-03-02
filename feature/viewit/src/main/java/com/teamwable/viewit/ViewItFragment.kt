@@ -5,8 +5,10 @@ import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDividerWithPadding
+import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
+import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.viewit.databinding.FragmentViewItBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -15,8 +17,10 @@ import kotlinx.coroutines.launch
 
 class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBinding::inflate) {
     private lateinit var viewItAdapter: ViewItAdapter
+    private lateinit var feedActionHandler: FeedActionHandler
 
     override fun initView() {
+        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         setAdapter()
         if (this::viewItAdapter.isInitialized) submitList()
         setOnPostingBtnClickListener()
@@ -29,10 +33,28 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     }
 
     private fun setAdapter() {
-        viewItAdapter = ViewItAdapter()
+        viewItAdapter = ViewItAdapter(onClickViewItItem())
         binding.rvViewIt.apply {
             adapter = viewItAdapter.withLoadStateFooter(PagingLoadingAdapter())
             if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
+        }
+    }
+
+    private fun onClickViewItItem() = object : ViewItClickListener {
+        override fun onItemClick(link: String) {
+            toast("link")
+        }
+
+        override fun onLikeBtnClick(viewHolder: ViewItViewHolder, id: Long, isLiked: Boolean) {
+            toast("좋아요")
+        }
+
+        override fun onPostAuthorProfileClick(id: Long) {
+            toast("프로필")
+        }
+
+        override fun onKebabBtnClick(viewIt: ViewIt) {
+            toast("kebab")
         }
     }
 
@@ -60,7 +82,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     private val dummyList = List(20) {
         ViewIt(
             postAuthorId = 12345L,
-            postAuthorProfile = "",
+            postAuthorProfile = "BLUE",
             postAuthorNickname = "페이커",
             viewItId = it.toLong(),
             linkImage = "https://github.com/user-attachments/assets/fa1fac23-5126-4037-9050-cb80481d98c3",
