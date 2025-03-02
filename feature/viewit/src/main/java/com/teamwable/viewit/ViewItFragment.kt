@@ -9,6 +9,9 @@ import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.viewit.adapter.ViewItAdapter
+import com.teamwable.viewit.adapter.ViewItClickListener
+import com.teamwable.viewit.adapter.ViewItViewHolder
 import com.teamwable.viewit.databinding.FragmentViewItBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest

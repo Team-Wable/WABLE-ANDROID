@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.adapter
 
 import com.teamwable.model.viewit.ViewIt
 

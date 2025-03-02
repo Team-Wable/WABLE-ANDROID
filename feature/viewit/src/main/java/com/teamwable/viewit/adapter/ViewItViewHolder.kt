@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.adapter
 
 import android.view.LayoutInflater
 import android.view.View
