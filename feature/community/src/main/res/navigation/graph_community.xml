@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/navigation_community"
-    android:id="@+id/graph_community">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_community"
+    app:startDestination="@id/navigation_community">
 
     <fragment
         android:id="@+id/navigation_community"
