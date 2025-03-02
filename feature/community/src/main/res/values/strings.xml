@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="str_community_lck_sub_title">" ZONE"</string>
+    <string name="str_community_btn_text">사전 신청하기</string>
+</resources>
