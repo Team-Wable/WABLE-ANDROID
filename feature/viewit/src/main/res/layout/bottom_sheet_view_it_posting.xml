@@ -11,7 +11,7 @@
         android:id="@+id/group_view_it_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="et_view_it_link_input, ib_view_it_link_input_upload" />
+        app:constraint_referenced_ids="et_view_it_link_input, btn_view_it_link_input_upload" />
 
     <EditText
         android:id="@+id/et_view_it_link_input"
@@ -26,23 +26,26 @@
         android:hint="@string/label_view_it_link_hint"
         android:linksClickable="false"
         android:maxLength="60"
+        android:maxLines="1"
         android:padding="15dp"
         android:textAppearance="@style/TextAppearance.Wable.Body4"
         android:textColor="@color/blue_50"
         android:textColorHint="@color/gray_700"
         android:textCursorDrawable="@drawable/shape_purple_50_cursor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ib_view_it_link_input_upload"
-        app:layout_constraintStart_toEndOf="@id/ib_view_it_link_complete"
+        app:layout_constraintEnd_toStartOf="@+id/btn_view_it_link_input_upload"
+        app:layout_constraintStart_toEndOf="@id/btn_view_it_link_complete"
         tools:text="@string/dummy" />
 
-    <ImageButton
-        android:id="@+id/ib_view_it_link_input_upload"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_view_it_link_input_upload"
+        style="@style/Wable.Icon.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/sel_view_it_link_upload"
+        android:enabled="false"
+        app:icon="@drawable/sel_view_it_link_upload"
+        app:iconSize="32dp"
         app:layout_constraintBottom_toBottomOf="@id/et_view_it_link_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/et_view_it_link_input" />
@@ -52,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="et_view_it_link_input_complete, ib_view_it_link_complete, lottie_view_it_content_input, cl_view_it_content_input" />
+        app:constraint_referenced_ids="et_view_it_link_input_complete, btn_view_it_link_complete, et_view_it_content_input, btn_view_it_content_input_upload, lottie_view_it_content_input" />
 
     <EditText
         android:id="@+id/et_view_it_link_input_complete"
@@ -66,6 +69,7 @@
         android:backgroundTint="@color/blue_10"
         android:hint="@string/label_view_it_link_hint"
         android:maxLength="60"
+        android:maxLines="1"
         android:padding="15dp"
         android:textAppearance="@style/TextAppearance.Wable.Body3"
         android:textColor="@color/blue_50"
@@ -73,17 +77,19 @@
         android:textCursorDrawable="@drawable/shape_purple_50_cursor"
         app:layout_constraintBottom_toTopOf="@id/lottie_view_it_content_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ib_view_it_link_complete"
+        app:layout_constraintStart_toEndOf="@id/btn_view_it_link_complete"
         tools:text="@string/dummy" />
 
-    <ImageButton
-        android:id="@+id/ib_view_it_link_complete"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_view_it_link_complete"
+        style="@style/Wable.Icon.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_view_it_link_complete"
+        android:enabled="false"
+        app:icon="@drawable/ic_view_it_link_complete"
+        app:iconSize="32dp"
         app:layout_constraintBottom_toBottomOf="@id/et_view_it_link_input_complete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/et_view_it_link_input_complete" />
@@ -92,62 +98,47 @@
         android:id="@+id/lottie_view_it_content_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@id/cl_view_it_content_input"
+        app:layout_constraintBottom_toTopOf="@id/et_view_it_content_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/tab_lottie" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_view_it_content_input"
+    <EditText
+        android:id="@+id/et_view_it_content_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingHorizontal="@dimen/padding_horizontal"
-        android:paddingVertical="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/shape_gray300_line_16_rect"
+        android:backgroundTint="@color/gray_100"
+        android:hint="@string/label_view_it_content_hint"
+        android:maxLength="50"
+        android:maxLines="3"
+        android:padding="10dp"
+        android:textAppearance="@style/TextAppearance.Wable.Body4"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_700"
+        android:textCursorDrawable="@drawable/shape_purple_50_cursor"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_view_it_content_input_upload"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/dummy" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_view_it_content_input_upload"
+        style="@style/Wable.Icon.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:enabled="false"
+        app:icon="@drawable/sel_view_it_content_upload"
+        app:iconSize="32dp"
+        app:layout_constraintBottom_toBottomOf="@id/et_view_it_content_input"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ScrollView
-            android:id="@+id/sv_view_it_content_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ib_view_it_content_input_upload"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <EditText
-                android:id="@+id/et_view_it_content_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_gray300_line_16_rect"
-                android:backgroundTint="@color/gray_100"
-                android:hint="@string/label_view_it_content_hint"
-                android:maxLength="500"
-                android:maxLines="3"
-                android:padding="10dp"
-                android:textAppearance="@style/TextAppearance.Wable.Body4"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_700"
-                android:textCursorDrawable="@drawable/shape_purple_50_cursor"
-                tools:text="@string/dummy" />
-        </ScrollView>
-
-        <ImageButton
-            android:id="@+id/ib_view_it_content_input_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_home_comment_upload_btn_inactive"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/sv_view_it_content_input"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="@id/et_view_it_content_input" />
 </androidx.constraintlayout.widget.ConstraintLayout>
