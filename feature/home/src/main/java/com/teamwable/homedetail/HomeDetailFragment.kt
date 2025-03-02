@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.MotionEvent
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
@@ -301,27 +303,31 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
 
     private fun submitFeedList(feed: Feed) {
         viewLifeCycleScope.launch {
-            viewModel.updateHomeDetailToFlow(feed).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map {
-                    saveFeedStateResult(it)
-                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
-                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
-                    transformedFeed.copy(isAuth = isAuth)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateHomeDetailToFlow(feed).collectLatest { pagingData ->
+                    val transformedPagingData = pagingData.map {
+                        saveFeedStateResult(it)
+                        val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                        val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                        transformedFeed.copy(isAuth = isAuth)
+                    }
+                    feedAdapter.submitData(transformedPagingData)
                 }
-                feedAdapter.submitData(transformedPagingData)
             }
         }
     }
 
     private fun submitCommentList(feed: Feed) {
         viewLifeCycleScope.launch {
-            viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map {
-                    val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
-                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
-                    transformedFeed.copy(isAuth = isAuth, feedId = feed.feedId)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateComments(feed.feedId).collectLatest { pagingData ->
+                    val transformedPagingData = pagingData.map {
+                        val transformedFeed = FeedTransformer.handleCommentsData(it, binding.root.context)
+                        val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                        transformedFeed.copy(isAuth = isAuth, feedId = feed.feedId)
+                    }
+                    commentAdapter.submitData(transformedPagingData)
                 }
-                commentAdapter.submitData(transformedPagingData)
             }
         }
     }
@@ -335,8 +341,10 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
     }
 
     private fun handleCommentLoadingState() = viewLifeCycleScope.launch {
-        commentAdapter.loadStateFlow.collectLatest { loadStates ->
-            binding.pbHomeDetailLoading.visible(loadStates.refresh is LoadState.Loading)
+        viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            commentAdapter.loadStateFlow.collectLatest { loadStates ->
+                binding.pbHomeDetailLoading.visible(loadStates.refresh is LoadState.Loading)
+            }
         }
     }
 

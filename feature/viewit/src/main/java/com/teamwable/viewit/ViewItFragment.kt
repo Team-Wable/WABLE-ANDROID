@@ -1,11 +1,14 @@
 package com.teamwable.viewit
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.toast
+import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.util.FeedActionHandler
@@ -63,8 +66,10 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
 
     private fun submitList() {
         viewLifeCycleScope.launch {
-            dummyPagingData.collectLatest { pagingData ->
-                viewItAdapter.submitData(pagingData)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dummyPagingData.collectLatest { pagingData ->
+                    viewItAdapter.submitData(pagingData)
+                }
             }
         }
     }

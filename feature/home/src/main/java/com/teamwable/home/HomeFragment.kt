@@ -4,7 +4,9 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.map
@@ -159,13 +161,15 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun submitList() {
         viewLifeCycleScope.launch {
-            viewModel.updateFeeds().collectLatest { pagingData ->
-                val transformedPagingData = pagingData.map {
-                    val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
-                    val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
-                    transformedFeed.copy(isAuth = isAuth)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.updateFeeds().collectLatest { pagingData ->
+                    val transformedPagingData = pagingData.map {
+                        val transformedFeed = FeedTransformer.handleFeedsData(it, binding.root.context)
+                        val isAuth = viewModel.fetchUserType(transformedFeed.postAuthorId) == ProfileUserType.AUTH
+                        transformedFeed.copy(isAuth = isAuth)
+                    }
+                    feedAdapter.submitData(transformedPagingData)
                 }
-                feedAdapter.submitData(transformedPagingData)
             }
         }
     }
@@ -174,20 +178,24 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         var isFirstLoad = true
 
         viewLifeCycleScope.launch {
-            feedAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                    if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
 
-                if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
-                    binding.rvHome.scrollToPosition(0)
-                    isFirstLoad = true
+                    if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
+                        binding.rvHome.scrollToPosition(0)
+                        isFirstLoad = true
+                    }
                 }
             }
         }
 
         viewLifeCycleScope.launch {
-            feedAdapter.loadStateFlow.collectLatest { loadStates ->
-                val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
-                binding.tvEmpty.visible(isEmptyList)
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedAdapter.loadStateFlow.collectLatest { loadStates ->
+                    val isEmptyList = loadStates.refresh is LoadState.NotLoading && feedAdapter.itemCount == 0
+                    binding.tvEmpty.visible(isEmptyList)
+                }
             }
         }
     }
