@@ -20,6 +20,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         setAdapter()
         if (this::viewItAdapter.isInitialized) submitList()
         setOnPostingBtnClickListener()
+        setSwipeLayout()
     }
 
     override fun onDestroyView() {
@@ -46,6 +47,13 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     private fun setOnPostingBtnClickListener() {
         binding.fabViewItPosting.setOnClickListener {
             findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
+        }
+    }
+
+    private fun setSwipeLayout() {
+        binding.layoutViewItSwipe.setOnRefreshListener {
+            binding.layoutViewItSwipe.isRefreshing = false
+            viewItAdapter.refresh()
         }
     }
 
