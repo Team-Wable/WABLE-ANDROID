@@ -13,29 +13,36 @@ import com.teamwable.viewit.databinding.BottomSheetViewItPostingBinding
 class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPostingBinding>(BottomSheetViewItPostingBinding::inflate) {
     override fun initView() {
         binding.root.context.showKeyboard(binding.etViewItLinkInput)
-        validateLinkInput()
+        setupTextWatchers()
         setOnLinkInputBtnClickListener()
     }
 
-    private fun validateLinkInput() = with(binding.etViewItLinkInput) {
-        doAfterTextChanged {
-            binding.btnViewItLinkInputUpload.isEnabled = validateLinkUrl(text.toString()) && text.isNotEmpty() && text.length < 60
-            val color = if (text.isNotEmpty()) ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.blue_10))
-            else ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.gray_100))
-            setEditTextBgColor(this, color)
-        }
+    private fun setupTextWatchers() {
+        binding.etViewItLinkInput.doAfterTextChanged { updateLinkInputState() }
+        binding.etViewItContentInput.doAfterTextChanged { updateContentInputState() }
+        binding.etViewItLinkInputComplete.doAfterTextChanged { updateContentInputState() }
     }
 
-    private fun validateLinkUrl(url: String): Boolean {
-        val isLinkValid = Patterns.WEB_URL.matcher(url.trim()).matches()
-        return isLinkValid
+    private fun updateLinkInputState() {
+        val linkText = binding.etViewItLinkInput.text.toString()
+        binding.btnViewItLinkInputUpload.isEnabled = validateLinkUrl(linkText)
+        updateEditTextBackground(binding.etViewItLinkInput, ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.blue_10)))
     }
 
-    private fun setEditTextBgColor(
-        view: EditText,
-        backgroundTintResId: ColorStateList,
-    ) {
-        view.backgroundTintList = backgroundTintResId
+    private fun updateContentInputState() {
+        val contentText = binding.etViewItContentInput.text.toString()
+        val linkText = binding.etViewItLinkInputComplete.text.toString()
+
+        binding.btnViewItContentInputUpload.isEnabled = contentText.isNotEmpty() && validateLinkUrl(linkText)
+        updateEditTextBackground(binding.etViewItContentInput, null)
+    }
+
+    private fun validateLinkUrl(url: String) = Patterns.WEB_URL.matcher(url.trim()).matches()
+
+    private fun updateEditTextBackground(view: EditText, activeColor: ColorStateList?) {
+        val color = if (view.text.isNullOrEmpty()) ColorStateList.valueOf(colorOf(com.teamwable.ui.R.color.gray_100))
+        else activeColor
+        view.backgroundTintList = color
     }
 
     private fun setOnLinkInputBtnClickListener() = with(binding) {
