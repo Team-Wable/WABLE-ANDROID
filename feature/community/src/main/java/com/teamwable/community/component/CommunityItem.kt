@@ -24,6 +24,8 @@ import com.teamwable.designsystem.type.miniButtonStyle
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
 ) {
+    val isEnabled = true
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -52,6 +54,15 @@ fun CommunityItem(
             text = stringResource(R.string.str_community_btn_text),
             buttonStyle = miniButtonStyle(),
             onClick = {},
+            imageContent = {
+                if (isEnabled) {
+                    Image(
+                        imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.padding(start = 2.dp))
+                }
+            },
         )
     }
 }
