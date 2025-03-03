@@ -1,6 +1,9 @@
 package com.teamwable.community
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.common.type.LckTeamType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
+import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 
@@ -28,34 +33,47 @@ fun CommunityRoute() {
 private fun CommunityScreen() {
     var selectedTeam by rememberSaveable { mutableStateOf<LckTeamType?>(null) }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal)),
-    ) {
-        item(
-            contentType = ContentType.Banner.name,
-        ) {
-            CommunityHeader(
-                modifier = Modifier.padding(
-                    top = 10.dp,
-                    bottom = 8.dp,
+    WableFloatingButtonLayout(
+        buttonContent = { modifier ->
+            WableButton(
+                text = "dsfdsfsdf",
+                onClick = {},
+                modifier = modifier.padding(
+                    horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
+                    vertical = 14.dp,
                 ),
             )
-        }
-        items(
-            items = LckTeamType.entries,
-            key = { items -> items.name },
-            contentType = { ContentType.Item.name },
-        ) { item ->
-            val isSelected = item == selectedTeam
-            CommunityItem(
-                lckTeamType = item,
-                isCommunity = item == selectedTeam,
-                onClick = {
-                    selectedTeam = if (isSelected) null else item
-                },
-            )
+        },
+    ) {
+        LazyColumn(
+            contentPadding = PaddingValues(
+                start = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
+                end = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
+                top = 10.dp,
+                bottom = 64.dp,
+            ),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            item(
+                contentType = ContentType.Banner.name,
+            ) {
+                CommunityHeader()
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            items(
+                items = LckTeamType.entries,
+                key = { items -> items.name },
+                contentType = { ContentType.Item.name },
+            ) { item ->
+                val isSelected = item == selectedTeam
+                CommunityItem(
+                    lckTeamType = item,
+                    isCommunity = item == selectedTeam,
+                    onClick = {
+                        selectedTeam = if (isSelected) null else item
+                    },
+                )
+            }
         }
     }
 }
