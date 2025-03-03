@@ -8,6 +8,7 @@ import com.teamwable.data.repository.NotificationRepository
 import com.teamwable.data.repository.PostingRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.data.repository.ViewItRepository
 import com.teamwable.data.repositoryimpl.DefaultAuthRepository
 import com.teamwable.data.repositoryimpl.DefaultCommentRepository
 import com.teamwable.data.repositoryimpl.DefaultFeedRepository
@@ -16,6 +17,7 @@ import com.teamwable.data.repositoryimpl.DefaultNotificationRepository
 import com.teamwable.data.repositoryimpl.DefaultPostingRepository
 import com.teamwable.data.repositoryimpl.DefaultProfileRepository
 import com.teamwable.data.repositoryimpl.DefaultUserInfoRepository
+import com.teamwable.data.repositoryimpl.DefaultViewItRepository
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
 import com.teamwable.datastore.datasource.WablePreferencesDataSource
 import dagger.Binds
@@ -76,4 +78,10 @@ internal abstract class RepositoryModule {
     abstract fun bindsPostingRepository(
         repositoryImpl: DefaultPostingRepository,
     ): PostingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsViewItRepository(
+        repositoryImpl: DefaultViewItRepository,
+    ): ViewItRepository
 }

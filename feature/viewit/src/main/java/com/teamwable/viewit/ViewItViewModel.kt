@@ -2,21 +2,26 @@ package com.teamwable.viewit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.data.repository.ViewItRepository
+import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ViewItViewModel @Inject constructor(
     private val userInfoRepository: UserInfoRepository,
+    private val viewItRepository: ViewItRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewItUiState>(ViewItUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -34,7 +39,6 @@ class ViewItViewModel @Inject constructor(
             userInfoRepository.getMemberId()
                 .map { it.toLong() }
                 .collectLatest { id ->
-                    Timber.e(id.toString())
                     authId.update { id }
                     if (id == -1L) _uiState.value = ViewItUiState.Error("auth id is empty")
                 }
@@ -53,6 +57,8 @@ class ViewItViewModel @Inject constructor(
             else -> ProfileUserType.MEMBER
         }
     }
+
+    fun updateViewIts(): Flow<PagingData<ViewIt>> = viewItRepository.getViewIts().cachedIn(viewModelScope)
 }
 
 sealed interface ViewItUiState {

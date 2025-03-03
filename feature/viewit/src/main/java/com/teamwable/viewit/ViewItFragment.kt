@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
@@ -14,6 +15,7 @@ import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
+import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
@@ -28,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBinding::inflate) {
@@ -40,9 +41,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         collect()
         setAdapter()
-        if (this::viewItAdapter.isInitialized) submitList()
         setOnPostingBtnClickListener()
-        setSwipeLayout()
     }
 
     override fun onDestroyView() {
@@ -67,6 +66,9 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
             adapter = viewItAdapter.withLoadStateFooter(PagingLoadingAdapter())
             if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
         }
+        if (this::viewItAdapter.isInitialized) submitList()
+        setSwipeLayout()
+        setEmptyView()
     }
 
     private fun onClickViewItItem() = object : ViewItClickListener {
@@ -88,7 +90,6 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     }
 
     private fun handleProfileNavigation(id: Long) {
-        Timber.e(viewModel.fetchUserType(id).toString())
         when (viewModel.fetchUserType(id)) {
             ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
             in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
@@ -99,8 +100,8 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     private fun submitList() {
         viewLifeCycleScope.launch {
             viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dummyPagingData.collectLatest { pagingData ->
-                    viewItAdapter.submitData(pagingData)
+                viewModel.updateViewIts().collectLatest {
+                    viewItAdapter.submitData(it)
                 }
             }
         }
@@ -116,6 +117,17 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         binding.layoutViewItSwipe.setOnRefreshListener {
             binding.layoutViewItSwipe.isRefreshing = false
             viewItAdapter.refresh()
+        }
+    }
+
+    private fun setEmptyView() {
+        viewLifeCycleScope.launch {
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewItAdapter.loadStateFlow.collectLatest { loadStates ->
+                    val isEmptyList = loadStates.refresh is LoadState.NotLoading && viewItAdapter.itemCount == 0
+                    binding.tvEmpty.visible(isEmptyList)
+                }
+            }
         }
     }
 
