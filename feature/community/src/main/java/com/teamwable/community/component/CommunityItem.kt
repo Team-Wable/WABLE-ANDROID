@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,16 +25,16 @@ import com.teamwable.designsystem.type.miniButtonStyle
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
 ) {
-    val isEnabled = true
+    val isEnabled = false
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(vertical = 16.dp),
     ) {
         Image(
-            imageVector = toImageVector(id = lckTeamType.teamProfileImage),
+            painter = painterResource(id = lckTeamType.teamProfileImage),
             modifier = Modifier
                 .size(64.dp),
             contentDescription = null,
@@ -44,7 +45,7 @@ fun CommunityItem(
                 append(lckTeamType.name)
                 append(stringResource(R.string.str_community_lck_sub_title))
             },
-            style = WableTheme.typography.body01,
+            style = WableTheme.typography.head02,
             color = WableTheme.colors.black,
             modifier = Modifier
                 .align(Alignment.CenterVertically),
