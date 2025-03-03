@@ -1,8 +1,8 @@
 package com.teamwable.data.repository
 
 import androidx.paging.PagingData
-import com.teamwable.model.Feed
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Feed
+import com.teamwable.model.home.Ghost
 import kotlinx.coroutines.flow.Flow
 
 interface FeedRepository {

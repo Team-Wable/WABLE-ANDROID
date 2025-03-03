@@ -11,8 +11,8 @@ import com.teamwable.data.mapper.toData.toPostGhostDto
 import com.teamwable.data.mapper.toModel.toComment
 import com.teamwable.data.mapper.toModel.toComments
 import com.teamwable.data.repository.CommentRepository
-import com.teamwable.model.Comment
-import com.teamwable.model.Ghost
+import com.teamwable.model.home.Comment
+import com.teamwable.model.home.Ghost
 import com.teamwable.network.datasource.CommentService
 import com.teamwable.network.util.GenericPagingSource
 import com.teamwable.network.util.handleThrowable

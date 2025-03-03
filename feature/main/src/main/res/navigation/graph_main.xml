@@ -11,6 +11,7 @@
     <include app:graph="@navigation/graph_profile" />
     <include app:graph="@navigation/graph_posting" />
     <include app:graph="@navigation/graph_ui" />
+    <include app:graph="@navigation/graph_view_it" />
     <include app:graph="@navigation/graph_community" />
     <fragment
         android:id="@+id/navigation_error"

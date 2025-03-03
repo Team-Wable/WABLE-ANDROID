@@ -1,6 +1,6 @@
 package com.teamwable.data.mapper.toModel
 
-import com.teamwable.model.Feed
+import com.teamwable.model.home.Feed
 import com.teamwable.network.dto.response.ResponseFeedDto
 
 internal fun ResponseFeedDto.toFeed(): Feed =

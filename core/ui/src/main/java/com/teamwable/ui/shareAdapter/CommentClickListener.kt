@@ -2,7 +2,7 @@ package com.teamwable.ui.shareAdapter
 
 import android.widget.CheckBox
 import android.widget.TextView
-import com.teamwable.model.Comment
+import com.teamwable.model.home.Comment
 
 interface CommentClickListener {
     fun onGhostBtnClick(postAuthorId: Long, commentId: Long)

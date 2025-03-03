@@ -1,4 +1,4 @@
-package com.teamwable.model
+package com.teamwable.model.home
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
