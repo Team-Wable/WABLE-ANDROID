@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
@@ -53,26 +53,25 @@ fun NewsDetailScreen(
             )
         },
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-        ) {
-            NewsDetailContent(
-                newsInfoModel = newsInfoModel,
-                onClick = navigateToImageDetail,
-                type = type,
-                scrollState = scrollState,
-            )
-            NoticeDetailButton(
-                text = stringResource(R.string.tv_notice_detail_button),
-                type = type,
-                onClick = navigateToGoogleForm,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.BottomCenter),
-            )
-        }
+        WableFloatingButtonLayout(
+            modifier = Modifier.padding(innerPadding),
+            content = {
+                NewsDetailContent(
+                    newsInfoModel = newsInfoModel,
+                    onClick = navigateToImageDetail,
+                    type = type,
+                    scrollState = scrollState,
+                )
+            },
+            buttonContent = { modifier ->
+                NoticeDetailButton(
+                    text = stringResource(R.string.tv_notice_detail_button),
+                    type = type,
+                    onClick = navigateToGoogleForm,
+                    modifier = modifier.padding(16.dp),
+                )
+            },
+        )
     }
 }
 
@@ -152,7 +151,7 @@ fun GreetingPreview() {
                 newsText = "어떤 순간에도 너를 찾을 수 있게 반대가 끌리는 천만번째 이유를 내일의 우리는 알지도 몰라 오늘따라 왠지 말이 꼬여 성을 빼고 부르는 건 아직 어색해 (지훈아..!) ",
                 time = "2024-01-10 11:47:18",
             ),
-            type = NewsTabType.NEWS,
+            type = NewsTabType.NOTICE,
             navigateToBack = {},
         )
     }
