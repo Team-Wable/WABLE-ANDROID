@@ -6,7 +6,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.DeepLinkDestination
@@ -26,9 +25,7 @@ import com.teamwable.viewit.adapter.ViewItClickListener
 import com.teamwable.viewit.adapter.ViewItViewHolder
 import com.teamwable.viewit.databinding.FragmentViewItBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -130,22 +127,4 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
             }
         }
     }
-
-    private val dummyList = List(20) {
-        ViewIt(
-            postAuthorId = 104,
-            postAuthorProfile = "BLUE",
-            postAuthorNickname = "페이커",
-            viewItId = it.toLong(),
-            linkImage = "https://github.com/user-attachments/assets/fa1fac23-5126-4037-9050-cb80481d98c3",
-            linkName = "www.naver.com",
-            linkTitle = "링크 제목 링크 제목 링크 제목 링크 제목 링크 제목 링크 제목 링크 제목",
-            viewItContent = "뷰잇 멘트는 최대 50자만 가능해요. 뷰잇 멘트는뷰잇멘트는 최대 50자만 가능해요. 뷰잇 멘트는 50자만",
-            isLiked = false,
-            likedNumber = "100",
-            isBlind = false,
-        )
-    }
-
-    private val dummyPagingData: Flow<PagingData<ViewIt>> = flowOf(PagingData.from(dummyList))
 }
