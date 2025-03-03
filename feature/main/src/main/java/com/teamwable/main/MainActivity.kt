@@ -225,6 +225,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     private fun updateStatusBarColor(navController: NavController) {
+        // dark status bar 부분을 set에 넣어 주시면 됩니다!
         val darkStatusBarDestinations = setOf(
             com.teamwable.news.R.id.navigation_news_detail,
             com.teamwable.news.R.id.navigation_news,
