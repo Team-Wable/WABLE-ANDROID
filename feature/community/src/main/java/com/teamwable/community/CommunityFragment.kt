@@ -15,6 +15,7 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(FragmentComm
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
+                    CommunityRoute()
                 }
             }
         }
