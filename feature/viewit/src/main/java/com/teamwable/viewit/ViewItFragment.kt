@@ -1,32 +1,44 @@
 package com.teamwable.viewit
 
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.DeepLinkDestination
+import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
+import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.Navigation
 import com.teamwable.viewit.adapter.ViewItAdapter
 import com.teamwable.viewit.adapter.ViewItClickListener
 import com.teamwable.viewit.adapter.ViewItViewHolder
 import com.teamwable.viewit.databinding.FragmentViewItBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+@AndroidEntryPoint
 class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBinding::inflate) {
+    private val viewModel: ViewItViewModel by viewModels()
     private lateinit var viewItAdapter: ViewItAdapter
     private lateinit var feedActionHandler: FeedActionHandler
 
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
+        collect()
         setAdapter()
         if (this::viewItAdapter.isInitialized) submitList()
         setOnPostingBtnClickListener()
@@ -36,6 +48,17 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     override fun onDestroyView() {
         binding.rvViewIt.adapter = null
         super.onDestroyView()
+    }
+
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is ViewItUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    else -> Unit
+                }
+            }
+        }
     }
 
     private fun setAdapter() {
@@ -56,11 +79,20 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
-            toast("프로필")
+            handleProfileNavigation(id)
         }
 
         override fun onKebabBtnClick(viewIt: ViewIt) {
             toast("kebab")
+        }
+    }
+
+    private fun handleProfileNavigation(id: Long) {
+        Timber.e(viewModel.fetchUserType(id).toString())
+        when (viewModel.fetchUserType(id)) {
+            ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
+            in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+            else -> return
         }
     }
 
@@ -89,7 +121,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
 
     private val dummyList = List(20) {
         ViewIt(
-            postAuthorId = 12345L,
+            postAuthorId = 104,
             postAuthorProfile = "BLUE",
             postAuthorNickname = "페이커",
             viewItId = it.toLong(),
