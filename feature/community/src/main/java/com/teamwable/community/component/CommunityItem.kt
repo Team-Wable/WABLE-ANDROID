@@ -27,9 +27,9 @@ import com.teamwable.designsystem.type.miniButtonStyle
 @Composable
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
+    isCommunity: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
-    val isEnabled = true
-
     Column(
         modifier = Modifier.padding(vertical = 16.dp),
     ) {
@@ -58,9 +58,9 @@ fun CommunityItem(
             WableSmallButton(
                 text = stringResource(R.string.str_community_btn_text),
                 buttonStyle = miniButtonStyle(),
-                onClick = {},
+                onClick = onClick,
                 imageContent = {
-                    if (isEnabled) {
+                    if (isCommunity) {
                         Image(
                             imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
                             contentDescription = null,
@@ -70,7 +70,7 @@ fun CommunityItem(
                 },
             )
         }
-        if (isEnabled) {
+        if (isCommunity) {
             Spacer(Modifier.padding(top = 10.dp))
             WableLinearProgressBar(
                 progress = { 0.3f },

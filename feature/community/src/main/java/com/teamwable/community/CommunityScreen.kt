@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +26,8 @@ fun CommunityRoute() {
 
 @Composable
 private fun CommunityScreen() {
+    var selectedTeam by rememberSaveable { mutableStateOf<LckTeamType?>(null) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,7 +48,14 @@ private fun CommunityScreen() {
             key = { items -> items.name },
             contentType = { ContentType.Item.name },
         ) { item ->
-            CommunityItem(item)
+            val isSelected = item == selectedTeam
+            CommunityItem(
+                lckTeamType = item,
+                isCommunity = item == selectedTeam,
+                onClick = {
+                    selectedTeam = if (isSelected) null else item
+                },
+            )
         }
     }
 }
