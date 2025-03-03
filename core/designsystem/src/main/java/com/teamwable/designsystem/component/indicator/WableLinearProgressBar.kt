@@ -4,11 +4,14 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
@@ -26,6 +29,7 @@ fun WableLinearProgressBar(
     modifier: Modifier = Modifier,
     progressStyle: ProgressStyle = defaultProgressStyle(),
     progress: () -> Float = { 0f },
+    content: @Composable () -> Unit = {},
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress(),
@@ -33,19 +37,22 @@ fun WableLinearProgressBar(
         label = "",
     )
 
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(progressStyle.cornerRadius))
-            .fillMaxWidth()
-            .background(color = progressStyle.backgroundColor),
-    ) {
+    Column {
+        content()
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .clip(RoundedCornerShape(progressStyle.cornerRadius))
-                .fillMaxWidth(animatedProgress)
-                .background(color = progressStyle.progressColor)
-                .height(progressStyle.height),
-        )
+                .fillMaxWidth()
+                .background(color = progressStyle.backgroundColor),
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(progressStyle.cornerRadius))
+                    .fillMaxWidth(animatedProgress)
+                    .background(color = progressStyle.progressColor)
+                    .height(progressStyle.height),
+            )
+        }
     }
 }
 
@@ -77,7 +84,10 @@ private fun WableLinearProgressBarPreview() {
                 modifier = Modifier.fillMaxWidth(),
                 progressStyle = defaultProgressStyle(),
                 progress = { 0.7f },
-            )
+            ) {
+                Text("asdfdsfsf")
+                Spacer(modifier = Modifier.padding(bottom = 4.dp))
+            }
         }
     }
 }
