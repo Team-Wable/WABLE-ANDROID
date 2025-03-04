@@ -4,13 +4,16 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.teamwable.data.mapper.toData.toPostViewItDto
 import com.teamwable.data.mapper.toModel.toViewIt
 import com.teamwable.data.repository.ViewItRepository
 import com.teamwable.model.network.Error
+import com.teamwable.model.viewit.LinkInfo
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.network.datasource.ViewItService
 import com.teamwable.network.util.GenericPagingSource
 import com.teamwable.network.util.formatUrl
+import com.teamwable.network.util.handleThrowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -33,20 +36,25 @@ class DefaultViewItRepository @Inject constructor(
         }
     }
 
-    override suspend fun getLinkInfo(link: String): Result<Unit> = runCatching {
+    override suspend fun postViewIt(link: String, viewItContent: String): Result<LinkInfo> = runCatching {
         val document = withContext(Dispatchers.IO) {
             val formattedUrl = formatUrl(link)
             Jsoup.connect(formattedUrl).get()
         }
 
+        val imageUrl = document.select("meta[property=og:image]").attr("content")
         val title = document.select("meta[property=og:title]").attr("content").ifEmpty {
             document.title()
         }
-        val imageUrl = document.select("meta[property=og:image]").attr("content")
-        val siteName = document.select("meta[property=og:site_name]").attr("content").ifEmpty {
+        val linkName = document.select("meta[property=og:site_name]").attr("content").ifEmpty {
             URL(link).host
         }
+        LinkInfo(imageUrl, link, title, viewItContent, linkName)
     }.recoverCatching {
         return Result.failure(Error.UnknownError("잘못된 링크입니다"))
+    }.onSuccess {
+        apiService.postViewIt(it.toPostViewItDto())
+    }.onFailure {
+        return it.handleThrowable()
     }
 }
