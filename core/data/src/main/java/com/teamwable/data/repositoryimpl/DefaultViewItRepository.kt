@@ -54,6 +54,20 @@ class DefaultViewItRepository @Inject constructor(
         return it.handleThrowable()
     }
 
+    override suspend fun postViewItLike(viewItId: Long): Result<Unit> = runCatching {
+        apiService.postViewItLike(viewItId)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
+    override suspend fun deleteViewItLike(viewItId: Long): Result<Unit> = runCatching {
+        apiService.deleteViewItLike(viewItId)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
     companion object {
         const val DEFAULT_VIEW_IT = "DEFAULT"
         private const val META_OG_IMAGE = "meta[property=og:image]"
