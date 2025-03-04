@@ -1,5 +1,7 @@
 package com.teamwable.viewit
 
+import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -74,7 +76,9 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
 
     private fun onClickViewItItem() = object : ViewItClickListener {
         override fun onItemClick(link: String) {
-            toast("link")
+            Intent(Intent.ACTION_VIEW, Uri.parse(link)).apply {
+                startActivity(this)
+            }
         }
 
         override fun onLikeBtnClick(viewHolder: ViewItViewHolder, id: Long, isLiked: Boolean) {
