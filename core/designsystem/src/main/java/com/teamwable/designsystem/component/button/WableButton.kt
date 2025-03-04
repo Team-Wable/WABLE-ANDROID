@@ -114,8 +114,10 @@ private fun calculateAspectRatio(width: Int, height: Int): Float = String.format
 ).toFloat()
 
 object BigButtonDefaults {
-    private const val DIALOG_BUTTON_WIDTH = 264
-    private const val DIALOG_BUTTON_HEIGHT = 48
+    private const val DEFAULT_BUTTON_WIDTH = 328
+    private const val DEFAULT_BUTTON_HEIGHT = 56
+    private const val DIALOG_BUTTON_WIDTH_264 = 264
+    private const val DIALOG_BUTTON_HEIGHT_48 = 48
 
     /**
      * 기본 Big 버튼 스타일을 반환합니다.
@@ -139,6 +141,8 @@ object BigButtonDefaults {
     @ReadOnlyComposable
     fun defaultBigButtonStyle() = BigButtonStyle(
         radius = dimensionResource(id = R.dimen.radius_12),
+        width = DEFAULT_BUTTON_WIDTH,
+        height = DEFAULT_BUTTON_HEIGHT,
         textStyle = WableTheme.typography.head02,
         backgroundColor = { enabled -> if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray200 },
         textColor = { enabled -> if (enabled) WableTheme.colors.white else WableTheme.colors.gray600 },
@@ -157,14 +161,16 @@ object BigButtonDefaults {
     @Composable
     @ReadOnlyComposable
     fun blackBigButtonStyle() = defaultBigButtonStyle().copy(
+        height = DIALOG_BUTTON_HEIGHT_48,
+        textStyle = WableTheme.typography.body03,
         backgroundColor = { WableTheme.colors.black },
     )
 
     @Composable
     @ReadOnlyComposable
     fun dialogButtonStyle() = defaultBigButtonStyle().copy(
-        width = DIALOG_BUTTON_WIDTH,
-        height = DIALOG_BUTTON_HEIGHT,
+        width = DIALOG_BUTTON_WIDTH_264,
+        height = DIALOG_BUTTON_HEIGHT_48,
         textStyle = WableTheme.typography.body01,
     )
 }
@@ -181,7 +187,7 @@ private fun WableButtonPreview() {
             WableButton(
                 text = "zzzzzzzzzzzz",
                 onClick = {},
-                buttonStyle = BigButtonDefaults.dialogButtonStyle(),
+                buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
             )
         }
     }

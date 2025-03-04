@@ -20,6 +20,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teamwable.designsystem.component.button.BigButtonDefaults
+import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
@@ -28,7 +30,6 @@ import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsTabType
 import com.teamwable.news.R
 import com.teamwable.news.detail.component.NewsImage
-import com.teamwable.news.detail.component.NoticeDetailButton
 import com.teamwable.news.news.component.WableNewsTimeText
 
 @Composable
@@ -64,12 +65,16 @@ fun NewsDetailScreen(
                 )
             },
             buttonContent = { modifier ->
-                NoticeDetailButton(
-                    text = stringResource(R.string.tv_notice_detail_button),
-                    type = type,
-                    onClick = navigateToGoogleForm,
-                    modifier = modifier.padding(16.dp),
-                )
+                if (type == NewsTabType.NOTICE) {
+                    WableButton(
+                        text = stringResource(R.string.tv_notice_detail_button),
+                        onClick = navigateToGoogleForm,
+                        buttonStyle = BigButtonDefaults.blackBigButtonStyle().copy(
+                            textColor = { WableTheme.colors.sky50 },
+                        ),
+                        modifier = modifier.padding(16.dp),
+                    )
+                }
             },
         )
     }
