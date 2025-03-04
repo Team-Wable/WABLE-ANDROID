@@ -17,4 +17,6 @@ enum class SnackbarType(
     REPORT(R.string.label_snack_bar_report),
     BAN(R.string.label_snack_bar_ban),
     ERROR(icon = com.teamwable.common.R.drawable.ic_home_toast_error),
+    VIEW_IT_ING(R.string.label_snack_bar_view_it_ing),
+    VIEW_IT_COMPLETE(R.string.label_snack_bar_view_it_complete),
 }

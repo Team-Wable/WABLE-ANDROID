@@ -32,7 +32,7 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
 
     private fun initView() {
         setSnackbarView()
-        initLayout(type)
+        initLayout(type, message)
         snackbarView.addView(binding.root)
     }
 
@@ -45,7 +45,7 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
         clipToPadding = false
     }
 
-    private fun initLayout(type: SnackbarType) = binding.tvSnackbarMessage.apply {
+    private fun initLayout(type: SnackbarType, message: String) = binding.tvSnackbarMessage.apply {
         text = message.ifEmpty { context.stringOf(type.message) }
         setCompoundDrawablesWithIntrinsicBounds(context.drawableOf(type.icon), null, null, null)
         background = ContextCompat.getDrawable(context, R.drawable.shape_white_fill_8_rect)
@@ -69,8 +69,8 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
         }, duration)
     }
 
-    fun updateToCommentComplete(type: SnackbarType) {
-        initLayout(type)
+    fun updateToCommentComplete(type: SnackbarType, message: String = "") {
+        initLayout(type, message)
         dismissSnackbar(1000)
     }
 
