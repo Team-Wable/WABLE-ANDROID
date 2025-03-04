@@ -23,16 +23,18 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.R
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
+import java.util.Locale
 
 /**
  * [WableButton]은 Wable 디자인 시스템의 버튼을 나타내는 컴포저블 함수입니다.
  *
- * 이 함수는 버튼의 텍스트, 스타일, 활성화 상태 등을 설정할 수 있으며, 클릭 이벤트를 처리할 수 있습니다.
- * - [modifier] 버튼의 Modifier를 설정합니다.
- * - [text] 버튼에 표시될 텍스트입니다.
- * - [enabled] 버튼의 활성화 상태를 설정합니다. 기본값은 true입니다.
- * - [buttonStyle] 버튼의 스타일을 설정합니다. 기본값은 `defaultBigButtonStyle()`입니다.
- * - [onClick] 버튼 클릭 시 호출될 콜백 함수입니다.
+ * 이 버튼은 텍스트, 스타일, 활성화 상태 등을 설정할 수 있으며, 클릭 이벤트를 처리할 수 있습니다.
+ *
+ * @param modifier 버튼의 크기 및 레이아웃을 조정하는 Modifier입니다.
+ * @param text 버튼에 표시될 텍스트입니다.
+ * @param enabled 버튼의 활성화 상태를 설정합니다. 기본값은 `true`입니다.
+ * @param buttonStyle 버튼의 스타일을 지정합니다. 기본값은 [BigButtonDefaults.defaultBigButtonStyle] 입니다.
+ * @param onClick 버튼 클릭 시 실행할 콜백 함수입니다.
  */
 @Composable
 fun WableButton(
@@ -80,13 +82,17 @@ interface ButtonDefault {
 }
 
 /**
- * [BigButtonStyle]은 Wable 디자인 시스템의 버튼 스타일을 정의하는 데이터 클래스입니다.
+ * [BigButtonStyle]은 Wable 디자인 시스템에서 사용되는 버튼 스타일을 정의하는 데이터 클래스입니다.
+ *
+ * 가로, 세로 비율을 지정할 수 있으며, 다양한 버튼 스타일을 생성하는 데 사용할 수 있습니다.
  *
  * @property radius 버튼의 모서리 둥글기 (Corner Radius)
- * @property textStyle 버튼의 텍스트 스타일 (Typography)
- * @property backgroundColor 버튼의 활성화 상태에 따라 변하는 배경 색상
- * @property textColor 버튼의 활성화 상태에 따라 변하는 텍스트 색상
- * @property aspectRatio 버튼의 가로 세로 비율 (예: 1.5f → 가로가 세로의 1.5배)
+ * @property textStyle 버튼의 텍스트 스타일
+ * @property backgroundColor 버튼의 활성화 상태에 따른 배경 색상
+ * @property textColor 버튼의 활성화 상태에 따른 텍스트 색상
+ * @property width 버튼의 가로 길이 (선택적, 기본값: 0)
+ * @property height 버튼의 세로 길이 (선택적, 기본값: 0)
+ * @property aspectRatio 버튼의 가로 세로 비율 (가로 / 세로). 기본값은 `5.86f`
  */
 @Stable
 data class BigButtonStyle(
@@ -94,27 +100,39 @@ data class BigButtonStyle(
     override val textStyle: TextStyle,
     override val backgroundColor: @Composable (Boolean) -> Color,
     override val textColor: @Composable (Boolean) -> Color,
-    val aspectRatio: Float = 5.86f,
-) : ButtonDefault
+    val width: Int = 0,
+    val height: Int = 0,
+) : ButtonDefault {
+    val aspectRatio: Float
+        get() = calculateAspectRatio(width, height)
+}
+
+private fun calculateAspectRatio(width: Int, height: Int): Float = String.format(
+    locale = Locale.US,
+    format = "%.2f",
+    if (width > 0 && height > 0) width.toFloat() / height else 5.86f,
+).toFloat()
 
 object BigButtonDefaults {
+    private const val DIALOG_BUTTON_WIDTH = 264
+    private const val DIALOG_BUTTON_HEIGHT = 48
+
     /**
-     * 1.[defaultBigButtonStyle] 함수는
-     * 기본 big버튼(가로 세로 비율로 크기를 결정) 스타일을 반환하는 컴포저블 함수입니다.
+     * 기본 Big 버튼 스타일을 반환합니다.
      *
-     * 이 함수는 [BigButtonStyle] 인스턴스를 생성하여 반환하며, 버튼의 반경은
-     * [R.dimen.radius_12]에서 가져온 값을 사용합니다. 또한, 버튼의 텍스트 스타일은
-     * [WableTheme.typography.head02]로 설정되며, 활성화 상태에 따라 배경 및 텍스트 색상이 달라집니다.
+     * @return 기본 [BigButtonStyle] 인스턴스.
      *
-     * @return Wable 디자인 시스템의 빅 버튼 스타일을 나타내는 [BigButtonStyle] 인스턴스.
+     * ### 사용 예시
+     * ```kotlin
+     * val buttonStyle = BigButtonDefaults.defaultBigButtonStyle()
+     * ```
      *
-     * 2.버튼 스타일을 UI단에서 직접 사용자 정의하려면 `copy()`를 사용하여 기존 스타일을 수정하세요.
-     * 예시:
-     * buttonStyle = BigButtonDefaults.defaultBigButtonStyle().copy(
+     * 기본 스타일을 유지하면서 일부 속성만 직접 변경하고 싶다면 `copy()`를 사용할 수 있습니다.
+     * ```kotlin
+     * val customStyle = BigButtonDefaults.defaultBigButtonStyle().copy(
      *     backgroundColor = { WableTheme.colors.red200 }
      * )
-     *
-     * 3.새로운 버튼 디자인 시스템을 추가하려면 아래의 [blackBigButtonStyle] 컴포저블 메소드를 참고해주세요.
+     * ```
      */
 
     @Composable
@@ -127,7 +145,14 @@ object BigButtonDefaults {
     )
 
     /**
-     * 기본 빅 버튼 스타일을 기반으로 배경색을 검정색으로 변경한 스타일을 반환하는 함수입니다.
+     * 기본 Big 버튼 스타일에서 **배경색을 검정색**으로 변경한 스타일을 반환합니다.
+     *
+     * @return 배경이 검정색인 [BigButtonStyle] 인스턴스.
+     *
+     * ### 사용 예시
+     * ```kotlin
+     * val blackStyle = BigButtonDefaults.blackBigButtonStyle()
+     * ```
      */
     @Composable
     @ReadOnlyComposable
@@ -138,7 +163,8 @@ object BigButtonDefaults {
     @Composable
     @ReadOnlyComposable
     fun dialogButtonStyle() = defaultBigButtonStyle().copy(
-        aspectRatio = 5.5f,
+        width = DIALOG_BUTTON_WIDTH,
+        height = DIALOG_BUTTON_HEIGHT,
         textStyle = WableTheme.typography.body01,
     )
 }
@@ -152,7 +178,11 @@ private fun WableButtonPreview() {
         ) {
             WableButton(text = "ㅎㅇㅎㅇ", onClick = {}, enabled = true)
             WableButton(text = "zzzzzzzzzzzz", onClick = {}, enabled = false)
-            WableButton(text = "zzzzzzzzzzzz", onClick = {}, buttonStyle = BigButtonDefaults.blackBigButtonStyle())
+            WableButton(
+                text = "zzzzzzzzzzzz",
+                onClick = {},
+                buttonStyle = BigButtonDefaults.dialogButtonStyle(),
+            )
         }
     }
 }
