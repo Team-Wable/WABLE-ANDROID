@@ -13,6 +13,7 @@ data class ResponseViewItDto(
     @SerialName("viewitLink") val viewitLink: String,
     @SerialName("viewitTitle") val viewitTitle: String,
     @SerialName("viewitText") val viewitText: String,
+    @SerialName("viewitName") val viewitName: String,
     @SerialName("time") val time: String,
     @SerialName("isLiked") val isLiked: Boolean,
     @SerialName("likedNumber") val likedNumber: Int,

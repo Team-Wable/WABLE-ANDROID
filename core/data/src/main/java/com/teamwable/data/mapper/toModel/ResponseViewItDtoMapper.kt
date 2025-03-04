@@ -12,6 +12,7 @@ internal fun ResponseViewItDto.toViewIt(): ViewIt = ViewIt(
     this.viewitLink,
     this.viewitTitle,
     this.viewitText,
+    this.viewitName,
     this.isLiked,
     this.likedNumber.toString(),
     this.isBlind,
