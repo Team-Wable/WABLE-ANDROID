@@ -17,7 +17,7 @@ import com.teamwable.ui.extensions.drawableOf
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.type.SnackbarType
 
-class Snackbar(private val view: View, private val type: SnackbarType) {
+class Snackbar(private val view: View, private val type: SnackbarType, private val message: String = "") {
     private val context = view.context
     private val snackbar = Snackbar.make(view, "", 10000)
     private val snackbarView = snackbar.view as ViewGroup
@@ -46,7 +46,7 @@ class Snackbar(private val view: View, private val type: SnackbarType) {
     }
 
     private fun initLayout(type: SnackbarType) = binding.tvSnackbarMessage.apply {
-        text = context.stringOf(type.message)
+        text = message.ifEmpty { context.stringOf(type.message) }
         setCompoundDrawablesWithIntrinsicBounds(context.drawableOf(type.icon), null, null, null)
         background = ContextCompat.getDrawable(context, R.drawable.shape_white_fill_8_rect)
         backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E6F7F7F7"))
@@ -54,7 +54,13 @@ class Snackbar(private val view: View, private val type: SnackbarType) {
 
     fun show() {
         snackbar.show()
-        if (type in listOf(SnackbarType.GHOST, SnackbarType.REPORT, SnackbarType.BAN)) dismissSnackbar(2000)
+        if (type in listOf(
+                SnackbarType.GHOST,
+                SnackbarType.REPORT,
+                SnackbarType.BAN,
+                SnackbarType.ERROR,
+            )
+        ) dismissSnackbar(2000)
     }
 
     private fun dismissSnackbar(duration: Long) {
@@ -69,6 +75,6 @@ class Snackbar(private val view: View, private val type: SnackbarType) {
     }
 
     companion object {
-        fun make(view: View, type: SnackbarType) = Snackbar(view, type)
+        fun make(view: View, type: SnackbarType, message: String = "") = Snackbar(view, type, message)
     }
 }
