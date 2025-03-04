@@ -27,7 +27,8 @@ import com.teamwable.designsystem.type.SmallButtonDefaults
 @Composable
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
-    isCommunity: Boolean = false,
+    type: CommunityButtonType = CommunityButtonType.DEFAULT,
+    enabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Column(
@@ -56,11 +57,12 @@ fun CommunityItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             WableSmallButton(
-                text = stringResource(R.string.str_community_btn_text),
+                text = stringResource(type.message),
+                enabled = enabled,
                 buttonStyle = SmallButtonDefaults.miniButtonStyle(),
                 onClick = onClick,
                 imageContent = {
-                    if (isCommunity) {
+                    if (type == CommunityButtonType.COMPLETED) {
                         Image(
                             imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
                             contentDescription = null,
@@ -70,7 +72,7 @@ fun CommunityItem(
                 },
             )
         }
-        if (isCommunity) {
+        if (type != CommunityButtonType.DEFAULT) {
             Spacer(Modifier.padding(top = 10.dp))
             WableLinearProgressBar(
                 progress = { 0.3f },

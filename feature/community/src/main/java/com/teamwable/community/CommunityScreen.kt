@@ -17,6 +17,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.common.type.LckTeamType
+import com.teamwable.community.component.CommunityButtonType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
 import com.teamwable.designsystem.component.button.BigButtonDefaults
@@ -33,6 +34,7 @@ fun CommunityRoute() {
 @Composable
 private fun CommunityScreen() {
     var selectedTeam by rememberSaveable { mutableStateOf<LckTeamType?>(null) }
+    var selectedState by rememberSaveable { mutableStateOf(CommunityButtonType.DEFAULT) }
 
     WableFloatingButtonLayout(
         buttonContent = { modifier ->
@@ -70,9 +72,22 @@ private fun CommunityScreen() {
                 val isSelected = item == selectedTeam
                 CommunityItem(
                     lckTeamType = item,
-                    isCommunity = item == selectedTeam,
+                    type = if (isSelected) selectedState else CommunityButtonType.DEFAULT,
+                    enabled = selectedTeam == null || isSelected,
                     onClick = {
-                        selectedTeam = if (isSelected) null else item
+                        when {
+                            selectedTeam == null -> {
+                                selectedTeam = item
+                                selectedState = CommunityButtonType.FAN
+                            }
+
+                            isSelected -> {
+                                selectedState = when (selectedState) {
+                                    CommunityButtonType.FAN -> CommunityButtonType.COMPLETED
+                                    else -> selectedState
+                                }
+                            }
+                        }
                     },
                 )
             }
