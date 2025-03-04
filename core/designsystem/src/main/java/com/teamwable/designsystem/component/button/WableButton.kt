@@ -1,11 +1,15 @@
 package com.teamwable.designsystem.component.button
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -173,6 +177,44 @@ object BigButtonDefaults {
         height = DIALOG_BUTTON_HEIGHT_48,
         textStyle = WableTheme.typography.body01,
     )
+
+    @Composable
+    @ReadOnlyComposable
+    fun dialogTwoButtonStyle() = dialogButtonStyle().copy(
+        width = 128,
+    )
+}
+
+@Composable
+fun TwoWableButtons(
+    modifier: Modifier = Modifier,
+    startButtonText: String = "취소",
+    endButtonText: String = "신청하기",
+    onStartButtonClick: () -> Unit = {},
+    onEndButtonClick: () -> Unit = {},
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        WableButton(
+            modifier = Modifier.weight(1f),
+            text = startButtonText,
+            buttonStyle = BigButtonDefaults.dialogTwoButtonStyle().copy(
+                backgroundColor = { WableTheme.colors.gray200 },
+                textColor = { WableTheme.colors.gray600 },
+            ),
+            onClick = onStartButtonClick,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        WableButton(
+            modifier = Modifier.weight(1f),
+            text = endButtonText,
+            buttonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
+            onClick = onEndButtonClick,
+        )
+    }
 }
 
 @Preview
@@ -181,6 +223,7 @@ private fun WableButtonPreview() {
     WableTheme {
         Column(
             modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             WableButton(text = "ㅎㅇㅎㅇ", onClick = {}, enabled = true)
             WableButton(text = "zzzzzzzzzzzz", onClick = {}, enabled = false)
@@ -189,6 +232,7 @@ private fun WableButtonPreview() {
                 onClick = {},
                 buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
             )
+            TwoWableButtons()
         }
     }
 }
