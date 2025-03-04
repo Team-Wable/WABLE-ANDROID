@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repository.ViewItRepository
+import com.teamwable.model.home.LikeState
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.type.ProfileUserType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -59,6 +60,11 @@ class ViewItViewModel @Inject constructor(
     }
 
     fun updateViewIts(): Flow<PagingData<ViewIt>> = viewItRepository.getViewIts().cachedIn(viewModelScope)
+
+    fun updateLike(viewItId: Long, likeState: LikeState) = viewModelScope.launch {
+        val result = if (likeState.isLiked) viewItRepository.postViewItLike(viewItId) else viewItRepository.deleteViewItLike(viewItId)
+        result.onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+    }
 }
 
 sealed interface ViewItUiState {

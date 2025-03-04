@@ -23,7 +23,10 @@ import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
+import com.teamwable.ui.util.LikeInfo
 import com.teamwable.ui.util.Navigation
+import com.teamwable.ui.util.SingleEventHandler
+import com.teamwable.ui.util.ThrottleKey.FEED_LIKE
 import com.teamwable.viewit.adapter.ViewItAdapter
 import com.teamwable.viewit.adapter.ViewItClickListener
 import com.teamwable.viewit.adapter.ViewItViewHolder
@@ -37,6 +40,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
     private val viewModel: ViewItViewModel by viewModels()
     private lateinit var viewItAdapter: ViewItAdapter
     private lateinit var feedActionHandler: FeedActionHandler
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
@@ -82,7 +86,13 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         }
 
         override fun onLikeBtnClick(viewHolder: ViewItViewHolder, id: Long, isLiked: Boolean) {
-            toast("좋아요")
+            feedActionHandler.onLikeBtnClick(
+                LikeInfo(viewHolder.likeBtn, viewHolder.likeCountTv, id) { feedId, likeState ->
+                    if (singleEventHandler.canProceed(FEED_LIKE)) {
+                        if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                    }
+                },
+            )
         }
 
         override fun onPostAuthorProfileClick(id: Long) {

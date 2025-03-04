@@ -15,6 +15,8 @@ class ViewItViewHolder private constructor(
     viewItClickListener: ViewItClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private lateinit var item: ViewIt
+    val likeBtn = binding.btnViewItLike
+    val likeCountTv = binding.tvViewItLikeCount
 
     init {
         setupClickListener(binding.cvViewItLink) { viewItClickListener.onItemClick(item.link) }
