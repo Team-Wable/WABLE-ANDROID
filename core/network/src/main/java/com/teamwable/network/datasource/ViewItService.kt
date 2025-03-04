@@ -31,4 +31,9 @@ interface ViewItService {
     suspend fun deleteViewItLike(
         @Path(value = "viewitId") viewitId: Long,
     ): BaseUnitResponse<Unit>
+
+    @DELETE("api/v1/viewit/{viewitId}")
+    suspend fun deleteViewIt(
+        @Path(value = "viewitId") viewitId: Long,
+    ): BaseUnitResponse<Unit>
 }

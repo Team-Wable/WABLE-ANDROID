@@ -13,4 +13,6 @@ interface ViewItRepository {
     suspend fun postViewItLike(viewItId: Long): Result<Unit>
 
     suspend fun deleteViewItLike(viewItId: Long): Result<Unit>
+
+    suspend fun deleteViewIt(viewItId: Long): Result<Unit>
 }

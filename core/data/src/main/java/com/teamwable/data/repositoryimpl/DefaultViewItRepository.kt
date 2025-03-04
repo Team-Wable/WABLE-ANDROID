@@ -68,6 +68,13 @@ class DefaultViewItRepository @Inject constructor(
         return it.handleThrowable()
     }
 
+    override suspend fun deleteViewIt(viewItId: Long): Result<Unit> = runCatching {
+        apiService.deleteViewIt(viewItId)
+        Unit
+    }.onFailure {
+        return it.handleThrowable()
+    }
+
     companion object {
         const val DEFAULT_VIEW_IT = "DEFAULT"
         private const val META_OG_IMAGE = "meta[property=og:image]"
