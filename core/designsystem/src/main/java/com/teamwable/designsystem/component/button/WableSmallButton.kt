@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,7 +58,7 @@ fun WableSmallButton(
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-fun WableSmallButtonPreview() {
+private fun WableSmallButtonPreview() {
     WableTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -74,18 +73,16 @@ fun WableSmallButtonPreview() {
                 enabled = false,
             )
             WableSmallButton(
+                buttonStyle = miniButtonStyle(),
                 imageContent = {
                     Image(
-                        imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_share_profile_img_blue),
-                        modifier = Modifier
-                            .size(64.dp),
+                        imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
                         contentDescription = null,
                     )
-                    Spacer(modifier = Modifier.padding(start = 8.dp))
+                    Spacer(modifier = Modifier.padding(start = 2.dp))
                 },
                 text = "사전 신청하기",
                 onClick = {},
-                buttonStyle = miniButtonStyle(),
             )
         }
     }
