@@ -41,19 +41,24 @@ class DefaultViewItRepository @Inject constructor(
             val formattedUrl = formatUrl(link)
             Jsoup.connect(formattedUrl).get()
         }
-        val imageUrl = document.select("meta[property=og:image]").attr("content").ifEmpty { "DEFALUT" }
-        val title = document.select("meta[property=og:title]").attr("content").ifEmpty {
-            document.title()
-        }
-        val linkName = document.select("meta[property=og:site_name]").attr("content").ifEmpty {
-            URL(link).host
-        }
+        val imageUrl = document.select(META_OG_IMAGE).attr("content").ifEmpty { DEFAULT_VIEW_IT }
+        val title = document.select(META_OG_TITLE).attr("content").ifEmpty { document.title() }
+        val linkName = document.select(META_OG_SITE_NAME).attr("content").ifEmpty { URL(link).host }
+
         LinkInfo(imageUrl, link, title, viewItContent, linkName)
     }.recoverCatching {
-        return Result.failure(Error.UnknownError("잘못된 링크입니다"))
+        return Result.failure(Error.UnknownError(ERROR_INVALID_LINK))
     }.onSuccess {
         apiService.postViewIt(it.toPostViewItDto())
     }.onFailure {
         return it.handleThrowable()
+    }
+
+    companion object {
+        const val DEFAULT_VIEW_IT = "DEFAULT"
+        private const val META_OG_IMAGE = "meta[property=og:image]"
+        private const val META_OG_TITLE = "meta[property=og:title]"
+        private const val META_OG_SITE_NAME = "meta[property=og:site_name]"
+        private const val ERROR_INVALID_LINK = "잘못된 링크입니다"
     }
 }
