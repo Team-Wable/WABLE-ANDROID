@@ -19,16 +19,15 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.SmallButtonDefaults
 import com.teamwable.designsystem.type.SmallButtonStyle
-import com.teamwable.designsystem.type.defaultButtonStyle
-import com.teamwable.designsystem.type.miniButtonStyle
 
 @Composable
 fun WableSmallButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
-    buttonStyle: SmallButtonStyle = defaultButtonStyle(),
+    buttonStyle: SmallButtonStyle = SmallButtonDefaults.defaultSmallButtonStyle(),
     onClick: () -> Unit,
     imageContent: @Composable () -> Unit = {},
 ) {
@@ -73,7 +72,7 @@ private fun WableSmallButtonPreview() {
                 enabled = false,
             )
             WableSmallButton(
-                buttonStyle = miniButtonStyle(),
+                buttonStyle = SmallButtonDefaults.miniButtonStyle(),
                 imageContent = {
                     Image(
                         imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),

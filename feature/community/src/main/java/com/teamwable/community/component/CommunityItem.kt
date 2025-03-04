@@ -22,7 +22,7 @@ import com.teamwable.designsystem.component.button.WableSmallButton
 import com.teamwable.designsystem.component.indicator.WableLinearProgressBar
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.miniButtonStyle
+import com.teamwable.designsystem.type.SmallButtonDefaults
 
 @Composable
 fun CommunityItem(
@@ -57,7 +57,7 @@ fun CommunityItem(
             Spacer(modifier = Modifier.weight(1f))
             WableSmallButton(
                 text = stringResource(R.string.str_community_btn_text),
-                buttonStyle = miniButtonStyle(),
+                buttonStyle = SmallButtonDefaults.miniButtonStyle(),
                 onClick = onClick,
                 imageContent = {
                     if (isCommunity) {
