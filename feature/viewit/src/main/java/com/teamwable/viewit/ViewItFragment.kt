@@ -10,14 +10,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.setDividerWithPadding
-import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
+import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
@@ -27,6 +28,7 @@ import com.teamwable.ui.util.LikeInfo
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
 import com.teamwable.ui.util.ThrottleKey.FEED_LIKE
+import com.teamwable.viewit.FeedMapper.toFeed
 import com.teamwable.viewit.adapter.ViewItAdapter
 import com.teamwable.viewit.adapter.ViewItClickListener
 import com.teamwable.viewit.adapter.ViewItViewHolder
@@ -65,6 +67,15 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
                 }
             }
         }
+
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is ViewItSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
+                    is ViewItSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                }
+            }
+        }
     }
 
     private fun setAdapter() {
@@ -100,7 +111,13 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         }
 
         override fun onKebabBtnClick(viewIt: ViewIt) {
-            toast("kebab")
+            feedActionHandler.onKebabBtnClick(
+                viewIt.toFeed(),
+                fetchUserType = { viewModel.fetchUserType(it) },
+                removeFeed = { viewModel.removeViewIt(viewIt.viewItId) },
+                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
+                banUser = { trigger, _ -> viewModel.banUser(Triple(trigger.postAuthorId, BanTriggerType.VIEWIT.name.lowercase(), trigger.feedId)) },
+            )
         }
     }
 
