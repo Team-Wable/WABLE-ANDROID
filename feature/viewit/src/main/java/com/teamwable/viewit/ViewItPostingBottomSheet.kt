@@ -4,17 +4,42 @@ import android.content.res.ColorStateList
 import android.util.Patterns
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.ui.base.BindingBottomSheetFragment
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.showKeyboard
+import com.teamwable.ui.extensions.viewLifeCycle
+import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.viewit.databinding.BottomSheetViewItPostingBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPostingBinding>(BottomSheetViewItPostingBinding::inflate) {
+    private val viewModel: ViewItPostingViewModel by viewModels()
+
     override fun initView() {
         binding.root.context.showKeyboard(binding.etViewItLinkInput)
+        collect()
         setupTextWatchers()
         setOnLinkInputBtnClickListener()
+        setOnViewItUploadBtnClickListener()
+    }
+
+    private fun collect() {
+        viewLifeCycleScope.launch {
+            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
+                when (sideEffect) {
+                    is ViewItPostingSideEffect.ShowErrorMessage -> {
+                        Snackbar.make(parentFragment?.view ?: return@collect, SnackbarType.ERROR, sideEffect.message).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupTextWatchers() {
@@ -51,6 +76,12 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
             groupViewItContent.visible(true)
             etViewItLinkInputComplete.text = binding.etViewItLinkInput.text
             etViewItContentInput.requestFocus()
+        }
+    }
+
+    private fun setOnViewItUploadBtnClickListener() = with(binding) {
+        btnViewItContentInputUpload.setOnClickListener {
+            viewModel.getLinkInfo(etViewItLinkInputComplete.text.toString())
         }
     }
 }
