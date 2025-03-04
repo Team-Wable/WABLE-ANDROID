@@ -1,6 +1,8 @@
 package com.teamwable.ui.util
 
 import android.content.Context
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
@@ -14,7 +16,6 @@ import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.component.TwoLabelBottomSheet
-import com.teamwable.ui.shareAdapter.FeedViewHolder
 import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
@@ -82,17 +83,17 @@ class FeedActionHandler(
         FeedImageDialog.show(context, navController, encodedUrl)
     }
 
-    fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, saveLike: (Long, LikeState) -> Unit) {
-        val likeCount = viewHolder.likeCountTv.text.toString().toInt()
-        val updatedLikeCount = if (viewHolder.likeBtn.isChecked) {
+    fun onLikeBtnClick(likeInfo: LikeInfo) {
+        val likeCount = likeInfo.likeCountTv.text.toString().toInt()
+        val updatedLikeCount = if (likeInfo.likeBtn.isChecked) {
             trackEvent(CLICK_LIKE_POST)
             likeCount + 1
         } else {
             if (likeCount > 0) likeCount - 1 else 0
         }
 
-        viewHolder.likeCountTv.text = updatedLikeCount.toString()
-        saveLike(id, LikeState(viewHolder.likeBtn.isChecked, updatedLikeCount.toString()))
+        likeInfo.likeCountTv.text = updatedLikeCount.toString()
+        likeInfo.saveLike(likeInfo.id, LikeState(likeInfo.likeBtn.isChecked, updatedLikeCount.toString()))
     }
 
     private fun navigateToBottomSheet(type: BottomSheetType) {
@@ -126,3 +127,10 @@ class FeedActionHandler(
         }
     }
 }
+
+data class LikeInfo(
+    val likeBtn: CheckBox,
+    val likeCountTv: TextView,
+    val id: Long,
+    val saveLike: (Long, LikeState) -> Unit,
+)
