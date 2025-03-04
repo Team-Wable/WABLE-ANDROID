@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ViewItRepository {
     fun getViewIts(): Flow<PagingData<ViewIt>>
+
+    suspend fun getLinkInfo(link: String): Result<Unit>
 }
