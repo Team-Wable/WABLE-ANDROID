@@ -1,6 +1,7 @@
 package com.teamwable.viewit
 
 import android.content.res.ColorStateList
+import android.os.Bundle
 import android.util.Patterns
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
@@ -9,11 +10,14 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.ui.base.BindingBottomSheetFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.showKeyboard
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.util.BundleKey.IS_UPLOADED
+import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.viewit.databinding.BottomSheetViewItPostingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,10 +36,26 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
 
     private fun collect() {
         viewLifeCycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
+                when (uiState) {
+                    is ViewItPostingUiState.Success -> {
+                        parentFragmentManager.setFragmentResult(
+                            POSTING_RESULT,
+                            Bundle().apply { putBoolean(IS_UPLOADED, true) },
+                        )
+                    }
+
+                    is ViewItPostingUiState.Loading -> Unit
+                }
+            }
+        }
+
+        viewLifeCycleScope.launch {
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ViewItPostingSideEffect.ShowErrorMessage -> {
                         Snackbar.make(parentFragment?.view ?: return@collect, SnackbarType.ERROR, sideEffect.message).show()
+                        dismiss()
                     }
                 }
             }
@@ -80,8 +100,8 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
     }
 
     private fun setOnViewItUploadBtnClickListener() = with(binding) {
-        btnViewItContentInputUpload.setOnClickListener {
-            viewModel.getLinkInfo(etViewItLinkInputComplete.text.toString())
+        btnViewItContentInputUpload.setOnDuplicateBlockClick {
+            viewModel.postViewIt(etViewItLinkInputComplete.text.toString(), etViewItContentInput.text.toString())
         }
     }
 }

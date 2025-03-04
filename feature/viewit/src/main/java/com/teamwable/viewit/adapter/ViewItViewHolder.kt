@@ -15,7 +15,7 @@ class ViewItViewHolder private constructor(
     private lateinit var item: ViewIt
 
     init {
-        setupClickListener(binding.cvViewItLink) { viewItClickListener.onItemClick(item.linkName) }
+        setupClickListener(binding.cvViewItLink) { viewItClickListener.onItemClick(item.link) }
         setupClickListener(binding.btnViewItLike) { viewItClickListener.onLikeBtnClick(this, item.viewItId, item.isLiked) }
         setupClickListener(binding.ivViewItProfileImg, binding.tvViewItNickname) { viewItClickListener.onPostAuthorProfileClick(item.postAuthorId) }
         setupClickListener(binding.btnViewItMore) { viewItClickListener.onKebabBtnClick(item) }

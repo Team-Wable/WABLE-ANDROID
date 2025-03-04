@@ -18,6 +18,8 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.IS_UPLOADED
+import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.Navigation
 import com.teamwable.viewit.adapter.ViewItAdapter
@@ -39,6 +41,8 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         collect()
         setAdapter()
         setOnPostingBtnClickListener()
+        fetchViewItUploaded()
+        scrollToTopOnRefresh()
     }
 
     override fun onDestroyView() {
@@ -123,6 +127,30 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
                 viewItAdapter.loadStateFlow.collectLatest { loadStates ->
                     val isEmptyList = loadStates.refresh is LoadState.NotLoading && viewItAdapter.itemCount == 0
                     binding.tvEmpty.visible(isEmptyList)
+                }
+            }
+        }
+    }
+
+    private fun fetchViewItUploaded() {
+        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
+            val isUploaded = result.getBoolean(IS_UPLOADED, false)
+            if (isUploaded) viewItAdapter.refresh()
+        }
+    }
+
+    private fun scrollToTopOnRefresh() {
+        var isFirstLoad = true
+
+        viewLifeCycleScope.launch {
+            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewItAdapter.loadStateFlow.collectLatest { loadStates ->
+                    if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
+
+                    if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
+                        binding.rvViewIt.scrollToPosition(0)
+                        isFirstLoad = true
+                    }
                 }
             }
         }

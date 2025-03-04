@@ -41,8 +41,7 @@ class DefaultViewItRepository @Inject constructor(
             val formattedUrl = formatUrl(link)
             Jsoup.connect(formattedUrl).get()
         }
-
-        val imageUrl = document.select("meta[property=og:image]").attr("content")
+        val imageUrl = document.select("meta[property=og:image]").attr("content").ifEmpty { "DEFALUT" }
         val title = document.select("meta[property=og:title]").attr("content").ifEmpty {
             document.title()
         }
