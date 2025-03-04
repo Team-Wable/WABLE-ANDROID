@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.teamwable.designsystem.R
+import com.teamwable.designsystem.component.button.BigButtonDefaults
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
@@ -74,8 +75,7 @@ fun WableButtonDialog(
                     text = stringResource(id = dialogType.buttonText),
                     onClick = onClick,
                     enabled = true,
-                    aspectRatio = 5.5f,
-                    textStyle = WableTheme.typography.body01,
+                    buttonStyle = BigButtonDefaults.dialogButtonStyle(),
                 )
                 Spacer(modifier = Modifier.height(18.dp))
             }

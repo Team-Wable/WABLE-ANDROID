@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.teamwable.common.type.LckTeamType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
+import com.teamwable.designsystem.component.button.BigButtonDefaults
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
 import com.teamwable.designsystem.theme.WableTheme
@@ -42,6 +43,7 @@ private fun CommunityScreen() {
                     horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
                     vertical = 14.dp,
                 ),
+                buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
             )
         },
     ) {
