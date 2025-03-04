@@ -99,6 +99,7 @@ data class BigButtonStyle(
 
 object BigButtonDefaults {
     /**
+     * 1.[defaultBigButtonStyle] 함수는
      * 기본 big버튼(가로 세로 비율로 크기를 결정) 스타일을 반환하는 컴포저블 함수입니다.
      *
      * 이 함수는 [BigButtonStyle] 인스턴스를 생성하여 반환하며, 버튼의 반경은
@@ -106,6 +107,14 @@ object BigButtonDefaults {
      * [WableTheme.typography.head02]로 설정되며, 활성화 상태에 따라 배경 및 텍스트 색상이 달라집니다.
      *
      * @return Wable 디자인 시스템의 빅 버튼 스타일을 나타내는 [BigButtonStyle] 인스턴스.
+     *
+     * 2.버튼 스타일을 UI단에서 직접 사용자 정의하려면 `copy()`를 사용하여 기존 스타일을 수정하세요.
+     * 예시:
+     * buttonStyle = BigButtonDefaults.defaultBigButtonStyle().copy(
+     *     backgroundColor = { WableTheme.colors.red200 }
+     * )
+     *
+     * 3.새로운 버튼 디자인 시스템을 추가하려면 아래의 [blackBigButtonStyle] 컴포저블 메소드를 참고해주세요.
      */
 
     @Composable
