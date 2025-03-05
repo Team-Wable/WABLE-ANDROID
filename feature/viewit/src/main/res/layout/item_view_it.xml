@@ -156,14 +156,14 @@
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_feed_blind"
+        android:id="@+id/group_view_it_blind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="view_feed_blind_bg,tv_feed_blind_label, iv_feed_blind" />
+        app:constraint_referenced_ids="view_view_it_blind_bg,tv_view_it_blind_label, iv_view_it_blind" />
 
     <View
-        android:id="@+id/view_feed_blind_bg"
+        android:id="@+id/view_view_it_blind_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/shape_white_fill_8_rect"
@@ -174,26 +174,26 @@
         app:layout_constraintTop_toTopOf="@id/tv_view_it_content" />
 
     <ImageView
-        android:id="@+id/iv_feed_blind"
+        android:id="@+id/iv_view_it_blind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:src="@drawable/ic_share_blind"
-        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
-        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
-        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
-        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
+        app:layout_constraintBottom_toBottomOf="@id/view_view_it_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_view_it_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_view_it_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_view_it_blind_bg" />
 
     <TextView
-        android:id="@+id/tv_feed_blind_label"
+        android:id="@+id/tv_view_it_blind_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/gray_200"
         android:text="@string/label_feed_blind"
         android:textAppearance="@style/TextAppearance.Wable.Body1"
         android:textColor="@color/gray_600"
-        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
-        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
-        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
-        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
+        app:layout_constraintBottom_toBottomOf="@id/view_view_it_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_view_it_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_view_it_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_view_it_blind_bg" />
 </androidx.constraintlayout.widget.ConstraintLayout>
