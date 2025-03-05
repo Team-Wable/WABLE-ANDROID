@@ -68,7 +68,7 @@ private fun DialogButtonContent(
     onDismissRequest: () -> Unit,
 ) {
     when (dialogType) {
-        DialogType.WELLCOME, DialogType.LOGIN -> {
+        DialogType.WELLCOME, DialogType.LOGIN, DialogType.COPY_COMPLETED -> {
             WableButton(
                 text = stringResource(id = dialogType.buttonText),
                 onClick = onClick,
@@ -76,12 +76,12 @@ private fun DialogButtonContent(
             )
         }
 
-        DialogType.RRE_REGISTER, DialogType.PUSH_NOTIFICATION -> {
+        DialogType.PRE_REGISTER, DialogType.PUSH_NOTIFICATION -> {
             WableTwoButtons(
-                startButtonText = stringResource(id = dialogType.cancelButtonText),
-                endButtonText = stringResource(id = dialogType.buttonText),
-                onStartButtonClick = onDismissRequest,
-                onEndButtonClick = onClick,
+                cancelButtonText = stringResource(id = dialogType.cancelButtonText),
+                buttonText = stringResource(id = dialogType.buttonText),
+                onCancel = onDismissRequest,
+                onClick = onClick,
             )
         }
 
