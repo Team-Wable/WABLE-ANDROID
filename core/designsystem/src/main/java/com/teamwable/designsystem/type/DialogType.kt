@@ -25,7 +25,7 @@ enum class DialogType(
         buttonText = R.string.dialog_pre_register_btn_text,
         cancelButtonText = R.string.dialog_pre_register_cancel_btn_text,
     ),
-    REGISTER_COMPLETED(
+    PRE_REGISTER_COMPLETED(
         title = R.string.dialog_register_completed_title,
         description = R.string.dialog_register_completed_description,
     ),

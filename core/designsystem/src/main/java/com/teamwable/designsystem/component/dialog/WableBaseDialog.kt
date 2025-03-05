@@ -74,7 +74,7 @@ private fun DialogContent(
             String.format(rawDescription, contentName)
         }
 
-        DialogType.REGISTER_COMPLETED -> {
+        DialogType.PRE_REGISTER_COMPLETED -> {
             val rawDescription = stringResource(id = R.string.dialog_register_completed_description)
             String.format(rawDescription, contentName)
         }
