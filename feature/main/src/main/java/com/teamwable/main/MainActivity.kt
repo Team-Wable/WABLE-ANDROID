@@ -86,7 +86,8 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     private fun showUpdateDialog(appUpdateInfo: AppUpdateInfo) {
-        val negativeText = if (appUpdateHelper.checkIsImmediate(appUpdateInfo)) "" else getString(R.string.label_in_app_update_next)
+        val updateType = appUpdateHelper.checkUpdateType(appUpdateInfo)
+        val negativeText = if (updateType == UpdateType.MAJOR) "" else getString(R.string.label_in_app_update_next)
         showAlertDialog(
             title = getString(R.string.label_in_app_update_title),
             message = getString(R.string.label_in_app_update_content),
@@ -94,6 +95,7 @@ class MainActivity : AppCompatActivity(), Navigation {
             negativeButtonText = negativeText,
             onPositiveClick = { appUpdateHelper.startUpdate(appUpdateInfo, activityResultLauncher) },
         )
+        // TODO : 업데이트 type이 patch일 때 datastore에 안내했음 여부 값 저장
     }
 
     private fun initView() {
