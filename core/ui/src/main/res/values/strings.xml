@@ -50,6 +50,9 @@
     <string name="label_snack_bar_ghost">덕분에 와블이 더 온화해지고 있어요!</string>
     <string name="label_snack_bar_report">신고 접수가 완료되었어요.\n24시간 내에 조치할 예정이에요.</string>
     <string name="label_snack_bar_ban">밴 ! 완 ! 료 !</string>
+    <string name="label_snack_bar_link_error">잘못된 링크입니다.</string>
+    <string name="label_snack_bar_view_it_ing">뷰잇 남기는 중</string>
+    <string name="label_snack_bar_view_it_complete">뷰잇을 남겼어요</string>
 
     <!-- ghost -->
     <string name="label_ghost_comment_type">commentGhost</string>
