@@ -19,6 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.teamwable.designsystem.R
+import com.teamwable.designsystem.component.button.BigButtonDefaults
+import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.component.button.WableTwoButtons
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
@@ -27,9 +30,8 @@ import com.teamwable.designsystem.type.DialogType
 fun WableButtonDialog(
     dialogType: DialogType,
     name: String = "",
+    onClick: () -> Unit = {},
     onDismissRequest: () -> Unit = {},
-    imageContent: @Composable () -> Unit = {},
-    buttonContent: @Composable () -> Unit = {},
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(
@@ -46,15 +48,44 @@ fun WableButtonDialog(
                 DialogContent(
                     dialogType = dialogType,
                     contentName = name,
-                    imageContent = imageContent,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                buttonContent()
-                if (buttonContent != {}) {
-                    Spacer(modifier = Modifier.height(18.dp))
-                }
+                DialogButtonContent(
+                    dialogType = dialogType,
+                    onClick = onClick,
+                    onDismissRequest = onDismissRequest,
+                )
+                Spacer(modifier = Modifier.height(18.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun DialogButtonContent(
+    dialogType: DialogType,
+    onClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogType) {
+        DialogType.WELLCOME, DialogType.LOGIN -> {
+            WableButton(
+                text = stringResource(id = dialogType.buttonText),
+                onClick = onClick,
+                buttonStyle = BigButtonDefaults.dialogButtonStyle(),
+            )
+        }
+
+        DialogType.RRE_REGISTER, DialogType.PUSH_NOTIFICATION -> {
+            WableTwoButtons(
+                startButtonText = stringResource(id = dialogType.cancelButtonText),
+                endButtonText = stringResource(id = dialogType.buttonText),
+                onStartButtonClick = onDismissRequest,
+                onEndButtonClick = onClick,
+            )
+        }
+
+        else -> Unit
     }
 }
 
@@ -62,10 +93,16 @@ fun WableButtonDialog(
 fun DialogContent(
     dialogType: DialogType,
     contentName: String,
-    imageContent: @Composable () -> Unit = {},
 ) {
     Spacer(modifier = Modifier.height(32.dp))
-    imageContent()
+
+    if (dialogType == DialogType.REGISTER_COMPLETED) {
+        Image(
+            imageVector = toImageVector(com.teamwable.common.R.drawable.ic_commnity_dialog_check),
+            contentDescription = null,
+        )
+        Spacer(Modifier.height(32.dp))
+    }
 
     Text(
         text = stringResource(id = dialogType.title),
@@ -105,13 +142,6 @@ private fun WableButtonDialogPreview() {
         WableButtonDialog(
             dialogType = DialogType.REGISTER_COMPLETED,
             name = "T1",
-            imageContent = {
-                Image(
-                    imageVector = toImageVector(com.teamwable.common.R.drawable.ic_commnity_dialog_check),
-                    contentDescription = null,
-                )
-                Spacer(Modifier.height(32.dp))
-            },
         )
     }
 }
