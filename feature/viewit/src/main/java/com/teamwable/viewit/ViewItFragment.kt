@@ -1,7 +1,5 @@
 package com.teamwable.viewit
 
-import android.content.Intent
-import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -13,6 +11,7 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
@@ -91,9 +90,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
 
     private fun onClickViewItItem() = object : ViewItClickListener {
         override fun onItemClick(link: String) {
-            Intent(Intent.ACTION_VIEW, Uri.parse(link)).apply {
-                startActivity(this)
-            }
+            openUri(link)
         }
 
         override fun onLikeBtnClick(viewHolder: ViewItViewHolder, id: Long, isLiked: Boolean) {
