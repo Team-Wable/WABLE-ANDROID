@@ -30,6 +30,7 @@ fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
     type: CommunityButtonType = CommunityButtonType.DEFAULT,
     enabled: Boolean = true,
+    progress: Float = 0.0f,
     onClick: () -> Unit = {},
 ) {
     val backgroundColor = if (type == CommunityButtonType.DEFAULT) {
@@ -83,7 +84,7 @@ fun CommunityItem(
         if (type != CommunityButtonType.DEFAULT) {
             Spacer(Modifier.padding(top = 10.dp))
             WableLinearProgressBar(
-                progress = { 0.3f },
+                progress = { progress / 100 },
                 content = {
                     CommunityProgressTitle()
                     Spacer(Modifier.padding(bottom = 4.dp))
