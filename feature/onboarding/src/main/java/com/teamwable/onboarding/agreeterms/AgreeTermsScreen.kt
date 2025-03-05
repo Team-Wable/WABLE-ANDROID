@@ -27,7 +27,7 @@ import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_JOIN_POPUP_SIGNUP
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
-import com.teamwable.designsystem.component.dialog.WableButtonDialog
+import com.teamwable.designsystem.component.dialog.WableOneButtonDialog
 import com.teamwable.designsystem.component.snackbar.WableSnackBarPopUp
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
@@ -76,7 +76,7 @@ fun AgreeTermsRoute(
     )
 
     if (showDialog) {
-        WableButtonDialog(
+        WableOneButtonDialog(
             name = memberInfoEditModel.nickname.orEmpty(),
             dialogType = DialogType.WELLCOME,
             onDismissRequest = { viewModel.showLoginDialog(false) },
