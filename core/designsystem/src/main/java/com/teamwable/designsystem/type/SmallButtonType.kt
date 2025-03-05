@@ -40,5 +40,6 @@ object SmallButtonDefaults {
         paddingHorizontal = 14.dp,
         radius = 20.dp,
         textColor = { WableTheme.colors.white },
+        backgroundColor = { WableTheme.colors.gray900 },
     )
 }
