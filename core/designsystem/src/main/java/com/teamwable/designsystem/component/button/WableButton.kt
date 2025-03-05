@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -40,6 +41,7 @@ import java.util.Locale
  * @param buttonStyle 버튼의 스타일을 지정합니다. 기본값은 [BigButtonDefaults.defaultBigButtonStyle] 입니다.
  * @param onClick 버튼 클릭 시 실행할 콜백 함수입니다.
  */
+
 @Composable
 fun WableButton(
     modifier: Modifier = Modifier,
@@ -47,6 +49,28 @@ fun WableButton(
     enabled: Boolean = true,
     buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
     onClick: () -> Unit,
+) {
+    WableButtonBase(
+        modifier = modifier,
+        enabled = enabled,
+        buttonStyle = buttonStyle,
+        onClick = onClick,
+    ) {
+        Text(
+            text = text,
+            style = buttonStyle.textStyle,
+            color = buttonStyle.textColor(enabled),
+        )
+    }
+}
+
+@Composable
+fun WableButtonBase(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -59,6 +83,24 @@ fun WableButton(
             }
             .clip(RoundedCornerShape(buttonStyle.radius))
             .background(buttonStyle.backgroundColor(enabled)),
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun WableAnnotatedTextButton(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    enabled: Boolean = true,
+    buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
+    onClick: () -> Unit,
+) {
+    WableButtonBase(
+        modifier = modifier,
+        enabled = enabled,
+        buttonStyle = buttonStyle,
+        onClick = onClick,
     ) {
         Text(
             text = text,
