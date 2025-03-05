@@ -15,8 +15,8 @@ fun WableOneButtonDialog(
     dialogType: DialogType = DialogType.LOGIN,
     name: String = "",
     buttonStyle: BigButtonStyle = BigButtonDefaults.dialogButtonStyle(),
-    onDismissRequest: () -> Unit,
-    onClick: () -> Unit,
+    onDismissRequest: () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     WableBaseDialog(
         dialogType = dialogType,
