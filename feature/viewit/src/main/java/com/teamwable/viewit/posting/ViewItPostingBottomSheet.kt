@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.posting
 
 import android.content.res.ColorStateList
 import android.os.Bundle

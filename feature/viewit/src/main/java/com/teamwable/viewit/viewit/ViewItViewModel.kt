@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.viewit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

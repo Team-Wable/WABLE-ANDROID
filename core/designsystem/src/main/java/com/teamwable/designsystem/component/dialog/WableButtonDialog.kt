@@ -1,5 +1,6 @@
 package com.teamwable.designsystem.component.dialog
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,16 +19,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.teamwable.designsystem.R
-import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
 @Composable
 fun WableButtonDialog(
     dialogType: DialogType,
-    userName: String = "",
-    onClick: () -> Unit,
+    name: String = "",
     onDismissRequest: () -> Unit = {},
+    imageContent: @Composable () -> Unit = {},
+    buttonContent: @Composable () -> Unit = {},
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(
@@ -41,56 +43,75 @@ fun WableButtonDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Text(
-                    text = stringResource(id = dialogType.title),
-                    style = WableTheme.typography.head01,
-                    color = WableTheme.colors.black,
-                    textAlign = TextAlign.Center,
+                DialogContent(
+                    dialogType = dialogType,
+                    contentName = name,
+                    imageContent = imageContent,
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                val descriptionText = when (dialogType) {
-                    DialogType.WELLCOME -> {
-                        val rawDescription = stringResource(id = R.string.dialog_wellcome_description)
-                        String.format(rawDescription, userName)
-                    }
-
-                    else -> stringResource(id = dialogType.description)
+                Spacer(modifier = Modifier.height(32.dp))
+                buttonContent()
+                if (buttonContent != {}) {
+                    Spacer(modifier = Modifier.height(18.dp))
                 }
-
-                Text(
-                    text = descriptionText,
-                    style = WableTheme.typography.body02,
-                    color = WableTheme.colors.gray700,
-                    textAlign = TextAlign.Center,
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                WableButton(
-                    text = stringResource(id = dialogType.buttonText),
-                    onClick = onClick,
-                    enabled = true,
-                    aspectRatio = 5.5f,
-                    textStyle = WableTheme.typography.body01,
-                )
-                Spacer(modifier = Modifier.height(18.dp))
             }
         }
     }
 }
 
+@Composable
+fun DialogContent(
+    dialogType: DialogType,
+    contentName: String,
+    imageContent: @Composable () -> Unit = {},
+) {
+    Spacer(modifier = Modifier.height(32.dp))
+    imageContent()
+
+    Text(
+        text = stringResource(id = dialogType.title),
+        style = WableTheme.typography.head01,
+        color = WableTheme.colors.black,
+        textAlign = TextAlign.Center,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    val descriptionText = when (dialogType) {
+        DialogType.WELLCOME -> {
+            val rawDescription = stringResource(id = R.string.dialog_wellcome_description)
+            String.format(rawDescription, contentName)
+        }
+
+        DialogType.REGISTER_COMPLETED -> {
+            val rawDescription = stringResource(id = R.string.dialog_register_completed_description)
+            String.format(rawDescription, contentName)
+        }
+
+        else -> stringResource(id = dialogType.description)
+    }
+
+    Text(
+        text = descriptionText,
+        style = WableTheme.typography.body02,
+        color = WableTheme.colors.gray700,
+        textAlign = TextAlign.Center,
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-fun WableButtonDialogPreview() {
+private fun WableButtonDialogPreview() {
     WableTheme {
         WableButtonDialog(
-            dialogType = DialogType.LOGIN,
-            userName = "홍길동",
-            onClick = {},
+            dialogType = DialogType.REGISTER_COMPLETED,
+            name = "T1",
+            imageContent = {
+                Image(
+                    imageVector = toImageVector(com.teamwable.common.R.drawable.ic_commnity_dialog_check),
+                    contentDescription = null,
+                )
+                Spacer(Modifier.height(32.dp))
+            },
         )
     }
 }

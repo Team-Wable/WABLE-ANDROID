@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="str_community_lck_sub_title">" ZONE"</string>
+    <string name="str_community_btn_default">사전 신청하기</string>
+    <string name="str_community_header">팀별 커뮤니티 공간을 준비중이에요. 팀별로 일정 이상의 팬이 모여야 팀별 공간이 열립니다.\n*계정 1개당 1개의 팀별 공간에만 참여 가능해요!</string>
+    <string name="str_community_progress_title">진행도</string>
+    <string name="str_community_btn_fan_more">팬 더 데려오기</string>
+</resources>

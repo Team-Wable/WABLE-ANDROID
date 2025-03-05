@@ -35,6 +35,8 @@ import com.teamwable.auth.model.LoginSideEffect
 import com.teamwable.common.util.AmplitudeSignInTag.CLICK_AGREE_POPUP_SIGNUP
 import com.teamwable.common.util.AmplitudeSignInTag.CLICK_SIGNIN_KAKAO
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
+import com.teamwable.designsystem.component.button.BigButtonDefaults
+import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.extension.system.SetStatusBarColor
@@ -68,12 +70,17 @@ fun LoginRoute(
     if (showDialog) {
         WableButtonDialog(
             dialogType = DialogType.LOGIN,
-            onClick = {
-                viewModel.startKaKaoLogin(context)
-                trackEvent(CLICK_AGREE_POPUP_SIGNUP)
-            },
             onDismissRequest = { viewModel.showLoginDialog(false) },
-        )
+        ){
+            WableButton(
+                text = stringResource(id = DialogType.LOGIN.buttonText),
+                buttonStyle = BigButtonDefaults.dialogButtonStyle(),
+                onClick = {
+                    viewModel.startKaKaoLogin(context)
+                    trackEvent(CLICK_AGREE_POPUP_SIGNUP)
+                },
+            )
+        }
     }
 
     LoginScreen(

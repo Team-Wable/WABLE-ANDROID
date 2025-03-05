@@ -33,4 +33,19 @@
     <string name="snackbar_text_loading">회원가입이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
     <string name="snackbar_text_profile_loading">프로필 수정이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
 
+    <!--    사전 신청-->
+    <string name="dialog_pre_register_title">사전 신청하시겠어요?</string>
+    <string name="dialog_pre_register_description">1개의 팀별 공간에만 참여가 가능하다는\n점 꼭 기억해주세요!</string>
+    <string name="dialog_pre_register_btn_text">신청하기</string>
+    <string name="dialog_pre_register_cancel_btn_text">취소</string>
+
+    <!--    신청 완료-->
+    <string name="dialog_register_completed_title">신청을 완료했어요</string>
+    <string name="dialog_register_completed_description">%1$s팀을 응원하는 팬분들이 더 모여야\n%1$s 라운지가 오픈돼요!\n팬 더 데려오기를 통해 링크를 복사하여\n함께 응원할 팬을 데려와주세요! </string>
+
+    <!--    푸시 알림 안내-->
+    <string name="dialog_push_notification_title">푸시 알림 안내</string>
+    <string name="dialog_push_notification_description">푸시 알림을 켜두면 팀별 커뮤니티가\n오픈됐을 때 알림으로 안내드려요!</string>
+    <string name="dialog_push_notification_btn_text">푸시알림 설정</string>
+    <string name="dialog_push_notification_cancel_btn_text">나중에</string>
 </resources>
