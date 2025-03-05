@@ -186,7 +186,7 @@ object BigButtonDefaults {
 }
 
 @Composable
-fun TwoWableButtons(
+fun WableTwoButtons(
     modifier: Modifier = Modifier,
     startButtonText: String = "취소",
     endButtonText: String = "신청하기",
@@ -232,7 +232,7 @@ private fun WableButtonPreview() {
                 onClick = {},
                 buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
             )
-            TwoWableButtons()
+            WableTwoButtons()
         }
     }
 }
