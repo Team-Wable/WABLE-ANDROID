@@ -1,5 +1,6 @@
 package com.teamwable.network.datasource
 
+import com.teamwable.network.dto.request.RequestCommunityDto
 import com.teamwable.network.dto.response.community.ResponseCommunityInfoDto
 import com.teamwable.network.dto.response.community.ResponseJoinedCommunityDto
 import com.teamwable.network.util.BaseResponse
@@ -17,6 +18,6 @@ interface CommunityService {
 
     @PATCH("api/v1/community/prein")
     suspend fun patchPreinCommunity(
-        @Body communityName: String,
+        @Body requestCommunityDto: RequestCommunityDto,
     ): BaseUnitResponse<Unit>
 }
