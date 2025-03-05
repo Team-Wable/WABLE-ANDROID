@@ -188,10 +188,11 @@ object BigButtonDefaults {
 @Composable
 fun WableTwoButtons(
     modifier: Modifier = Modifier,
-    startButtonText: String = "취소",
-    endButtonText: String = "신청하기",
-    onStartButtonClick: () -> Unit = {},
-    onEndButtonClick: () -> Unit = {},
+    cancelButtonText: String = "취소",
+    buttonText: String = "신청하기",
+    buttonStyle: BigButtonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
+    onCancel: () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -200,19 +201,19 @@ fun WableTwoButtons(
     ) {
         WableButton(
             modifier = Modifier.weight(1f),
-            text = startButtonText,
+            text = cancelButtonText,
             buttonStyle = BigButtonDefaults.dialogTwoButtonStyle().copy(
                 backgroundColor = { WableTheme.colors.gray200 },
                 textColor = { WableTheme.colors.gray600 },
             ),
-            onClick = onStartButtonClick,
+            onClick = onCancel,
         )
         Spacer(modifier = Modifier.width(8.dp))
         WableButton(
             modifier = Modifier.weight(1f),
-            text = endButtonText,
-            buttonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
-            onClick = onEndButtonClick,
+            text = buttonText,
+            buttonStyle = buttonStyle,
+            onClick = onClick,
         )
     }
 }
