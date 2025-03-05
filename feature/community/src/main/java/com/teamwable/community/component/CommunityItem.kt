@@ -29,7 +29,7 @@ import com.teamwable.designsystem.type.SmallButtonDefaults
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
     type: CommunityButtonType = CommunityButtonType.DEFAULT,
-    enabled: Boolean = true,
+    enabled: Boolean = false,
     progress: Float = 0.0f,
     onClick: () -> Unit = {},
 ) {
