@@ -2,6 +2,7 @@ package com.teamwable.designsystem.extension.modifier
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -9,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -38,23 +38,26 @@ inline fun Modifier.noRippleClickable(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Modifier.noRippleDebounceClickable(
     onClick: () -> Unit,
 ): Modifier = composed {
     var clickable by remember { mutableStateOf(true) }
 
-    pointerInteropFilter {
-        if (clickable) {
-            onClick()
-            clickable = false
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(500) // 500밀리초 딜레이
-                clickable = true
-            }
-        }
-        true
+    pointerInput(Unit) {
+        detectTapGestures(
+            onTap = {
+                if (clickable) {
+                    onClick()
+                    clickable = false
+                    // 딜레이 후 클릭 허용
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(500) // 500 밀리초 딜레이
+                        clickable = true
+                    }
+                }
+            },
+        )
     }
 }
 
