@@ -225,17 +225,22 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     private fun updateStatusBarColor(navController: NavController) {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                com.teamwable.news.R.id.navigation_news_detail, com.teamwable.news.R.id.navigation_news, viewitR.id.navigation_view_it, viewitR.id.navigation_view_it_posting -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.black)
-                    statusBarModeOf(false)
-                }
+        // dark status bar 부분을 set에 넣어 주시면 됩니다!
+        val darkStatusBarDestinations = setOf(
+            com.teamwable.news.R.id.navigation_news_detail,
+            com.teamwable.news.R.id.navigation_news,
+            com.teamwable.community.R.id.navigation_community,
+            viewitR.id.navigation_view_it,
+            viewitR.id.navigation_view_it_posting,
+        )
 
-                else -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.white)
-                    statusBarModeOf()
-                }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in darkStatusBarDestinations) {
+                statusBarColorOf(com.teamwable.ui.R.color.black)
+                statusBarModeOf(false)
+            } else {
+                statusBarColorOf(com.teamwable.ui.R.color.white)
+                statusBarModeOf()
             }
         }
     }

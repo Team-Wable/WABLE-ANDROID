@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":feature:notification"))
     implementation(project(":feature:posting"))
     implementation(project(":feature:profile"))
+    implementation(project(":feature:community"))
     implementation(project(":feature:viewit"))
 
     // AndroidX

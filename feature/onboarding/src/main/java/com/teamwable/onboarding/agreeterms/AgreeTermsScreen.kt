@@ -25,6 +25,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_COMPLETE_TNC_SIGNUP
 import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_JOIN_POPUP_SIGNUP
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
+import com.teamwable.designsystem.component.button.BigButtonDefaults
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.checkbox.WableCheckBoxWithText
 import com.teamwable.designsystem.component.dialog.WableButtonDialog
@@ -77,13 +78,19 @@ fun AgreeTermsRoute(
 
     if (showDialog) {
         WableButtonDialog(
-            userName = memberInfoEditModel.nickname.orEmpty(),
+            name = memberInfoEditModel.nickname.orEmpty(),
             dialogType = DialogType.WELLCOME,
-            onClick = {
-                viewModel.navigateToHome()
-                trackEvent(CLICK_JOIN_POPUP_SIGNUP)
-            },
             onDismissRequest = { viewModel.showLoginDialog(false) },
+            buttonContent = {
+                WableButton(
+                    text = stringResource(id = DialogType.WELLCOME.buttonText),
+                    buttonStyle = BigButtonDefaults.dialogButtonStyle(),
+                    onClick = {
+                        viewModel.navigateToHome()
+                        trackEvent(CLICK_JOIN_POPUP_SIGNUP)
+                    },
+                )
+            },
         )
     }
 
