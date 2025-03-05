@@ -35,6 +35,7 @@ import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.BundleKey
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.LikeInfo
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
 import com.teamwable.ui.util.ThrottleKey.FEED_LIKE
@@ -99,11 +100,13 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
 
         override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
-            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
-                if (singleEventHandler.canProceed(FEED_LIKE)) {
-                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
-                }
-            }
+            feedActionHandler.onLikeBtnClick(
+                LikeInfo(viewHolder.likeBtn, viewHolder.likeCountTv, id) { feedId, likeState ->
+                    if (singleEventHandler.canProceed(FEED_LIKE)) {
+                        if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
+                    }
+                },
+            )
         }
 
         override fun onPostAuthorProfileClick(id: Long) {}

@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.paging)
     implementation(libs.okhttp)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.jsoup)
 }

@@ -24,3 +24,9 @@ fun ImageView.load(url: String?) {
         setImageResource(com.teamwable.common.R.drawable.img_empty)
     }
 }
+
+fun ImageView.viewItEmptyLoad() {
+    Glide.with(this)
+        .load(com.teamwable.common.R.drawable.img_view_it_empty)
+        .into(this)
+}

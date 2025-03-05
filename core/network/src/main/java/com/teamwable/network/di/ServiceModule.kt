@@ -7,6 +7,7 @@ import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.NotificationService
 import com.teamwable.network.datasource.PostingService
 import com.teamwable.network.datasource.ProfileService
+import com.teamwable.network.datasource.ViewItService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,4 +59,10 @@ internal object ServiceModule {
     fun providePostingService(
         @WableRetrofit retrofit: Retrofit,
     ): PostingService = retrofit.create(PostingService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideViewItService(
+        @WableRetrofit retrofit: Retrofit,
+    ): ViewItService = retrofit.create(ViewItService::class.java)
 }

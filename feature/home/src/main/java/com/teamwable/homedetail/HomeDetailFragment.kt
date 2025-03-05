@@ -57,6 +57,7 @@ import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.CommentActionHandler
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
+import com.teamwable.ui.util.LikeInfo
 import com.teamwable.ui.util.Navigation
 import com.teamwable.ui.util.SingleEventHandler
 import com.teamwable.ui.util.ThrottleKey.COMMENT_LIKE
@@ -215,11 +216,13 @@ class HomeDetailFragment : BindingFragment<FragmentHomeDetailBinding>(FragmentHo
         }
 
         override fun onLikeBtnClick(viewHolder: FeedViewHolder, id: Long, isLiked: Boolean) {
-            feedActionHandler.onLikeBtnClick(viewHolder, id) { feedId, likeState ->
-                if (singleEventHandler.canProceed(FEED_LIKE)) {
-                    if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateFeedLike(feedId, likeState)
-                }
-            }
+            feedActionHandler.onLikeBtnClick(
+                LikeInfo(viewHolder.likeBtn, viewHolder.likeCountTv, id) { feedId, likeState ->
+                    if (singleEventHandler.canProceed(FEED_LIKE)) {
+                        if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateFeedLike(feedId, likeState)
+                    }
+                },
+            )
         }
 
         override fun onPostAuthorProfileClick(id: Long) {
