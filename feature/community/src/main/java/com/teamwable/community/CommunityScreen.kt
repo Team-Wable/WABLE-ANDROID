@@ -51,8 +51,6 @@ private fun CommunityScreen() {
     ) {
         LazyColumn(
             contentPadding = PaddingValues(
-                start = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
-                end = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
                 top = 10.dp,
                 bottom = 64.dp,
             ),
@@ -61,7 +59,11 @@ private fun CommunityScreen() {
             item(
                 contentType = ContentType.Banner.name,
             ) {
-                CommunityHeader()
+                CommunityHeader(
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(com.teamwable.common.R.dimen.padding_horizontal),
+                    ),
+                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
             items(

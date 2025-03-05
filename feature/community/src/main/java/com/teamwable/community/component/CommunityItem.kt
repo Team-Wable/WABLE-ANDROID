@@ -1,6 +1,7 @@
 package com.teamwable.community.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,8 +32,15 @@ fun CommunityItem(
     enabled: Boolean = true,
     onClick: () -> Unit = {},
 ) {
+    val backgroundColor = if (type == CommunityButtonType.DEFAULT) {
+        WableTheme.colors.white
+    } else {
+        WableTheme.colors.gray100
+    }
     Column(
-        modifier = Modifier.padding(vertical = 16.dp),
+        modifier = Modifier
+            .background(backgroundColor)
+            .padding(16.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
