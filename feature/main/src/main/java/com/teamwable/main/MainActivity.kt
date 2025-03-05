@@ -160,6 +160,7 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                     com.teamwable.news.R.id.navigation_news_detail,
                     viewitR.id.navigation_view_it_posting,
+                    com.teamwable.notification.R.id.navigation_notification,
                 ),
         )
     }
@@ -186,6 +187,10 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     override fun navigateToNewsFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_news
+    }
+
+    override fun navigateToViewItFragment() {
+        binding.bnvMain.selectedItemId = R.id.graph_view_it
     }
 
     private fun initBottomNaviSelectedListener(navController: NavController) {

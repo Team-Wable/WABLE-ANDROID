@@ -9,4 +9,6 @@ interface Navigation {
     fun navigateToErrorFragment()
 
     fun navigateToNewsFragment()
+
+    fun navigateToViewItFragment()
 }
