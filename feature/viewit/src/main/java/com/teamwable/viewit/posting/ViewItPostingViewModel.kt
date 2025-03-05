@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.posting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +28,13 @@ class ViewItPostingViewModel @Inject constructor(
                 Timber.e(it.toString())
                 _uiState.value = ViewItPostingUiState.Success
             }
-            .onFailure { _event.emit(ViewItPostingSideEffect.ShowErrorMessage(it.message ?: return@launch)) }
+            .onFailure {
+                _event.emit(
+                    ViewItPostingSideEffect.ShowErrorMessage(
+                        it.message ?: return@launch,
+                    ),
+                )
+            }
     }
 }
 

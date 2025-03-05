@@ -1,4 +1,4 @@
-package com.teamwable.viewit
+package com.teamwable.viewit.viewit
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
