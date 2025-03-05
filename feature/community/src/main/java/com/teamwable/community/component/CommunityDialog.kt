@@ -28,7 +28,7 @@ fun PreRegisterDialog(
 @Composable
 fun PreRegisterCompletedDialog(
     name: String,
-    onDismissRequest: () -> Unit,
+    onDismissRequest: () -> Unit = {},
 ) {
     WableBaseDialog(
         dialogType = DialogType.PRE_REGISTER_COMPLETED,
@@ -72,15 +72,6 @@ fun CopyCompletedDialog(
 @Preview(showBackground = true)
 private fun CommunityDialogPreview() {
     WableTheme {
-//        PreRegisterCompletedDialog(
-//            name = "김팀장",
-//            onDismissRequest = {},
-//        )
-//        PreRegisterCompletedDialog()
-//        PushNotificationDialog(
-//            onClick = {},
-//            onDismissRequest = {},
-//        )
         CopyCompletedDialog(
             onClick = {},
             onDismissRequest = {},
