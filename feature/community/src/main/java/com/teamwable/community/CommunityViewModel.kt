@@ -47,7 +47,7 @@ class CommunityViewModel @Inject constructor(
     private suspend fun getJoinedCommunity() {
         communityRepository.getJoinedCommunity()
             .onSuccess { joinedCommunity ->
-//                intent { copy(preRegisterTeamName = joinedCommunity) }
+                intent { copy(preRegisterTeamName = joinedCommunity) }
             }.onFailure {
                 postSideEffect(CommunitySideEffect.ShowSnackBar(it.message.orEmpty()))
             }
