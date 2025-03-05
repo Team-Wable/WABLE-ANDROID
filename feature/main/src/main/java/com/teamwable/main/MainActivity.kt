@@ -100,24 +100,7 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     private fun initView() {
         setBottomNavigation()
-//        setupNumberObserve()
     }
-
-    /*  private fun setupNumberObserve() {
-          viewModel.notificationNumberUiState.flowWithLifecycle(lifecycle).onEach {
-              when (it) {
-                  is UiState.Success -> {
-                      if (it.data > 0) {
-                          setBadgeOnNotification(true)
-                      } else if (it.data < 0) {
-                          Timber.tag("main").e("알맞지 않은 notification number get : ${it.data}")
-                      }
-                  }
-
-                  else -> Unit
-              }
-          }.launchIn(lifecycleScope)
-      }*/
 
     private fun setBottomNavigation() {
         val navHostFragment =
@@ -138,7 +121,6 @@ class MainActivity : AppCompatActivity(), Navigation {
     private fun initBottomNavigationChangedListener(navController: NavController) {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             handleBottomNavigationVisibility(destination)
-//            if (destination.id == com.teamwable.notification.R.id.navigation_notification) setBadgeOnNotification(false)
         }
     }
 
@@ -166,15 +148,6 @@ class MainActivity : AppCompatActivity(), Navigation {
                 ),
         )
     }
-
-    /* private fun setBadgeOnNotification(isVisible: Boolean) {
-         binding.bnvMain.getOrCreateBadge(R.id.graph_notification).apply {
-             this.isVisible = isVisible
-             horizontalOffset = 1
-             if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
-         }
-     }*/
-    // 일단 주석 처리 했습니다.
 
     override fun navigateToProfileAuthFragment() {
         binding.bnvMain.selectedItemId = R.id.graph_profile
@@ -208,7 +181,6 @@ class MainActivity : AppCompatActivity(), Navigation {
                 }
 
                 R.id.graph_news -> trackEvent(CLICK_NEWS_BOTNAVI)
-//                R.id.graph_notification -> trackEvent(CLICK_NOTI_BOTNAVI)
                 R.id.graph_profile -> trackEvent(CLICK_MYPROFILE_BOTNAVI)
             }
             lifecycleScope.launch {
