@@ -65,21 +65,22 @@ fun CommunityItem(
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.weight(1f))
-            WableSmallButton(
-                text = stringResource(type.message),
-                enabled = enabled,
-                buttonStyle = SmallButtonDefaults.miniButtonStyle(),
-                onClick = onClick,
-                imageContent = {
-                    if (type == CommunityButtonType.COMPLETED) {
-                        Image(
-                            imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.padding(start = 2.dp))
-                    }
-                },
-            )
+            if (enabled) {
+                WableSmallButton(
+                    text = stringResource(type.message),
+                    buttonStyle = SmallButtonDefaults.miniButtonStyle(),
+                    onClick = onClick,
+                    imageContent = {
+                        if (type == CommunityButtonType.COPY_COMPLETED) {
+                            Image(
+                                imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
+                                contentDescription = null,
+                            )
+                            Spacer(modifier = Modifier.padding(start = 2.dp))
+                        }
+                    },
+                )
+            }
         }
         if (type != CommunityButtonType.DEFAULT) {
             Spacer(Modifier.padding(top = 10.dp))
