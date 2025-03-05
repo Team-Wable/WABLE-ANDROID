@@ -19,7 +19,5 @@ sealed interface CommunityIntent : BaseIntent {
 
     data object ClickMoreFanItemBtn : CommunityIntent
 
-    data object OpenPushNotiDialog : CommunityIntent
-
     data class UpdatePhotoPermission(val isGranted: Boolean) : CommunityIntent
 }

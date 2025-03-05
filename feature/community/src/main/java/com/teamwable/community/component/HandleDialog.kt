@@ -75,8 +75,6 @@ private fun CheckSelfPushPermission(
 
             if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
                 onIntent(CommunityIntent.UpdatePhotoPermission(true))
-            } else {
-                onIntent(CommunityIntent.OpenPushNotiDialog)
             }
         }
     }

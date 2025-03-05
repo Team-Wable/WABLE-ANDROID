@@ -33,7 +33,6 @@ class CommunityViewModel @Inject constructor(
             CommunityIntent.ClickPushBtn -> navigateToPushAlarm()
             CommunityIntent.ClickFloatingBtn -> postSideEffect(CommunitySideEffect.NavigateToGoogleForm)
             CommunityIntent.ClickMoreFanItemBtn -> showCopyCompletedDialog()
-            CommunityIntent.OpenPushNotiDialog -> showPushNotificationDialog()
             is CommunityIntent.UpdatePhotoPermission -> intent { copy(isPushPermission = intent.isGranted) }
         }
     }
@@ -48,7 +47,7 @@ class CommunityViewModel @Inject constructor(
     private suspend fun getJoinedCommunity() {
         communityRepository.getJoinedCommunity()
             .onSuccess { joinedCommunity ->
-                intent { copy(preRegisterTeamName = joinedCommunity) }
+//                intent { copy(preRegisterTeamName = joinedCommunity) }
             }.onFailure {
                 postSideEffect(CommunitySideEffect.ShowSnackBar(it.message.orEmpty()))
             }
@@ -80,6 +79,7 @@ class CommunityViewModel @Inject constructor(
                             dialogType = DialogType.PRE_REGISTER_COMPLETED,
                         )
                     }
+                    showPushNotificationDialog()
                     getCommunityList()
                 }.onFailure {
                     dismissDialog()
@@ -103,9 +103,10 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun showPushNotificationDialog() {
-        if (!currentState.isPushPermission) {
-            viewModelScope.launch {
-                delay(3000L)
+        viewModelScope.launch {
+            delay(3000L)
+            dismissDialog()
+            if (!currentState.isPushPermission) {
                 intent { copy(dialogType = DialogType.PUSH_NOTIFICATION) }
             }
         }
