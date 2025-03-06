@@ -2,6 +2,7 @@ package com.teamwable.ui.component
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Animatable
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
@@ -46,10 +47,13 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
     }
 
     private fun initLayout(type: SnackbarType, message: String) = binding.tvSnackbarMessage.apply {
+        val iconDrawable = context.drawableOf(type.icon)
         text = message.ifEmpty { context.stringOf(type.message) }
-        setCompoundDrawablesWithIntrinsicBounds(context.drawableOf(type.icon), null, null, null)
         background = ContextCompat.getDrawable(context, R.drawable.shape_white_fill_8_rect)
         backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E6F7F7F7"))
+
+        setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null)
+        if (iconDrawable is Animatable) iconDrawable.start()
     }
 
     fun show() {
