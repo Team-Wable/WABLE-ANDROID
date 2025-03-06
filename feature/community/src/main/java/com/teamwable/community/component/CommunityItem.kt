@@ -29,7 +29,8 @@ import com.teamwable.designsystem.type.SmallButtonDefaults
 fun CommunityItem(
     lckTeamType: LckTeamType = LckTeamType.T1,
     type: CommunityButtonType = CommunityButtonType.DEFAULT,
-    enabled: Boolean = true,
+    enabled: Boolean = false,
+    progress: Float = 0.0f,
     onClick: () -> Unit = {},
 ) {
     val backgroundColor = if (type == CommunityButtonType.DEFAULT) {
@@ -64,26 +65,27 @@ fun CommunityItem(
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.weight(1f))
-            WableSmallButton(
-                text = stringResource(type.message),
-                enabled = enabled,
-                buttonStyle = SmallButtonDefaults.miniButtonStyle(),
-                onClick = onClick,
-                imageContent = {
-                    if (type == CommunityButtonType.COMPLETED) {
-                        Image(
-                            imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.padding(start = 2.dp))
-                    }
-                },
-            )
+            if (enabled) {
+                WableSmallButton(
+                    text = stringResource(type.message),
+                    buttonStyle = SmallButtonDefaults.miniButtonStyle(),
+                    onClick = onClick,
+                    imageContent = {
+                        if (type == CommunityButtonType.COPY_COMPLETED) {
+                            Image(
+                                imageVector = toImageVector(id = com.teamwable.common.R.drawable.ic_community_check),
+                                contentDescription = null,
+                            )
+                            Spacer(modifier = Modifier.padding(start = 2.dp))
+                        }
+                    },
+                )
+            }
         }
         if (type != CommunityButtonType.DEFAULT) {
             Spacer(Modifier.padding(top = 10.dp))
             WableLinearProgressBar(
-                progress = { 0.3f },
+                progress = { progress / 100 },
                 content = {
                     CommunityProgressTitle()
                     Spacer(Modifier.padding(bottom = 4.dp))

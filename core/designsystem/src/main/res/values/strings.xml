@@ -48,4 +48,9 @@
     <string name="dialog_push_notification_description">푸시 알림을 켜두면 팀별 커뮤니티가\n오픈됐을 때 알림으로 안내드려요!</string>
     <string name="dialog_push_notification_btn_text">푸시알림 설정</string>
     <string name="dialog_push_notification_cancel_btn_text">나중에</string>
+
+    <!--    링크 복사 완료-->
+    <string name="dialog_copy_completed_title">링크가 복사되었어요</string>
+    <string name="dialog_copy_completed_description">복사된 링크를 널리널리 퍼뜨려\n함께 응원할 팬을 더 많이 데려와주세요! </string>
+    <string name="dialog_copy_completed_btn_text">좋아요!</string>
 </resources>

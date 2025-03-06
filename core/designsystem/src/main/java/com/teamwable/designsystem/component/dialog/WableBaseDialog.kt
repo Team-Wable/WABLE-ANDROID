@@ -8,23 +8,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.teamwable.designsystem.component.button.WableTwoButtons
+import com.teamwable.designsystem.R
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
 @Composable
-fun WableTwoButtonDialog(
+fun WableBaseDialog(
     dialogType: DialogType,
     name: String = "",
-    onClick: () -> Unit,
     onDismissRequest: () -> Unit = {},
+    imageContent: @Composable () -> Unit = {},
+    buttonContent: @Composable () -> Unit = {},
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(
@@ -38,31 +40,52 @@ fun WableTwoButtonDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(32.dp))
+                imageContent()
                 DialogContent(
                     dialogType = dialogType,
                     contentName = name,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                WableTwoButtons(
-                    startButtonText = stringResource(id = dialogType.cancelButtonText),
-                    endButtonText = stringResource(id = dialogType.buttonText),
-                    onStartButtonClick = onDismissRequest,
-                    onEndButtonClick = onClick,
-                )
-                Spacer(modifier = Modifier.height(18.dp))
+                buttonContent()
+                if (buttonContent != {}) Spacer(modifier = Modifier.height(18.dp))
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun WableTwoButtonDialogPreview() {
-    WableTheme {
-        WableTwoButtonDialog(
-            dialogType = DialogType.PUSH_NOTIFICATION,
-            name = "홍길동",
-            onClick = {},
-        )
+private fun DialogContent(
+    dialogType: DialogType,
+    contentName: String,
+) {
+    Text(
+        text = stringResource(id = dialogType.title),
+        style = WableTheme.typography.head01,
+        color = WableTheme.colors.black,
+        textAlign = TextAlign.Center,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    val descriptionText = when (dialogType) {
+        DialogType.WELLCOME -> {
+            val rawDescription = stringResource(id = R.string.dialog_wellcome_description)
+            String.format(rawDescription, contentName)
+        }
+
+        DialogType.PRE_REGISTER_COMPLETED -> {
+            val rawDescription = stringResource(id = R.string.dialog_register_completed_description)
+            String.format(rawDescription, contentName)
+        }
+
+        else -> stringResource(id = dialogType.description)
     }
+
+    Text(
+        text = descriptionText,
+        style = WableTheme.typography.body02,
+        color = WableTheme.colors.gray700,
+        textAlign = TextAlign.Center,
+    )
 }

@@ -9,10 +9,10 @@ enum class CommunityButtonType(
     DEFAULT(
         message = R.string.str_community_btn_default,
     ),
-    FAN(
+    FAN_MORE(
         message = R.string.str_community_btn_fan_more,
     ),
-    COMPLETED(
-        message = R.string.str_community_btn_fan_more,
+    COPY_COMPLETED(
+        message = R.string.str_community_btn_copy_completed,
     ),
 }

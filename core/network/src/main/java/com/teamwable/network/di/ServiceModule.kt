@@ -2,6 +2,7 @@ package com.teamwable.network.di
 
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.datasource.CommentService
+import com.teamwable.network.datasource.CommunityService
 import com.teamwable.network.datasource.FeedService
 import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.NotificationService
@@ -65,4 +66,10 @@ internal object ServiceModule {
     fun provideViewItService(
         @WableRetrofit retrofit: Retrofit,
     ): ViewItService = retrofit.create(ViewItService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCommunityService(
+        @WableRetrofit retrofit: Retrofit,
+    ): CommunityService = retrofit.create(CommunityService::class.java)
 }

@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.extension.composable.toImageVector
-import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
+import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.SmallButtonDefaults
 import com.teamwable.designsystem.type.SmallButtonStyle
@@ -36,7 +36,7 @@ fun WableSmallButton(
         modifier = modifier
             .heightIn(buttonStyle.minHeight)
             .run {
-                if (enabled) noRippleDebounceClickable(onClick = onClick)
+                if (enabled) noRippleClickable(onClick = onClick)
                 else this
             }
             .clip(RoundedCornerShape(buttonStyle.radius))
