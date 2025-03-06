@@ -28,6 +28,8 @@ object BundleKey {
     const val HOME_DETAIL_RESULT = "homeDetailResult"
     const val FEED_STATE = "feedState"
     const val IS_FEED_REMOVED = "isFeedRemoved"
+    const val VIEW_IT_LINK = "viewItLink"
+    const val VIEW_IT_CONTENT = "viewItContent"
 }
 
 object FcmTag {

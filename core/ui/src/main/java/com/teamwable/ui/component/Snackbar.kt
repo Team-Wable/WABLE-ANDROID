@@ -54,11 +54,11 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
 
     fun show() {
         snackbar.show()
-        if (type in listOf(
-                SnackbarType.GHOST,
-                SnackbarType.REPORT,
-                SnackbarType.BAN,
-                SnackbarType.ERROR,
+        if (type !in listOf(
+                SnackbarType.COMMENT_ING,
+                SnackbarType.COMMENT_COMPLETE,
+                SnackbarType.CHILD_COMMENT_ING,
+                SnackbarType.CHILD_COMMENT_COMPLETE,
             )
         ) dismissSnackbar(2000)
     }
