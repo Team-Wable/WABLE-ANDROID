@@ -62,12 +62,14 @@
         android:id="@+id/navigation_push_notification"
         android:name="com.teamwable.profile.hamburger.PushAlarmFragment"
         android:label="PushNotificationFragment"
-        tools:layout="@layout/fragment_push_alarm" />
+        tools:layout="@layout/fragment_push_alarm">
+        <deepLink app:uri="@string/deeplink_url_push_alarm" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_profile_edit"
         android:name="com.teamwable.profile.profile.edit.ProfileEditFragment"
         android:label="ProfileEditFragment"
-        tools:layout="@layout/fragment_profile_edit" >
+        tools:layout="@layout/fragment_profile_edit">
         <argument
             android:name="memberProfileModel"
             app:argType="com.teamwable.model.profile.MemberInfoEditModel" />
