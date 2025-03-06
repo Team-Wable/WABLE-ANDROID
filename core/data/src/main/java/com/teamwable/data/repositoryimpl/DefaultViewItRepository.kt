@@ -7,19 +7,16 @@ import androidx.paging.map
 import com.teamwable.data.mapper.toData.toPostViewItDto
 import com.teamwable.data.mapper.toModel.toViewIt
 import com.teamwable.data.repository.ViewItRepository
-import com.teamwable.model.network.Error
+import com.teamwable.data.util.JsoupParser
 import com.teamwable.model.viewit.LinkInfo
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.network.datasource.ViewItService
 import com.teamwable.network.util.GenericPagingSource
-import com.teamwable.network.util.formatUrl
 import com.teamwable.network.util.handleThrowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
-import java.net.URL
 import javax.inject.Inject
 
 class DefaultViewItRepository @Inject constructor(
@@ -36,22 +33,29 @@ class DefaultViewItRepository @Inject constructor(
         }
     }
 
-    override suspend fun postViewIt(link: String, viewItContent: String): Result<LinkInfo> = runCatching {
-        val document = withContext(Dispatchers.IO) {
-            val formattedUrl = formatUrl(link)
-            Jsoup.connect(formattedUrl).get()
+    override suspend fun postViewIt(link: String, viewItContent: String): Result<LinkInfo> {
+        return runCatching {
+            withContext(Dispatchers.IO) {
+                JsoupParser.parseMetadata(link).copy(viewItText = viewItContent)
+            }
+        }.recoverCatching {
+            handleJsoupFailure(link, viewItContent)
+        }.onSuccess { linkInfo ->
+            apiService.postViewIt(linkInfo.toPostViewItDto())
+        }.onFailure {
+            return it.handleThrowable()
         }
-        val imageUrl = document.select(META_OG_IMAGE).attr("content").ifEmpty { DEFAULT_VIEW_IT }
-        val title = document.select(META_OG_TITLE).attr("content").ifEmpty { document.title() }
-        val linkName = document.select(META_OG_SITE_NAME).attr("content").ifEmpty { URL(link).host }
+    }
 
-        LinkInfo(imageUrl, link, title, viewItContent, linkName)
-    }.recoverCatching {
-        return Result.failure(Error.UnknownError(ERROR_INVALID_LINK))
-    }.onSuccess {
-        apiService.postViewIt(it.toPostViewItDto())
-    }.onFailure {
-        return it.handleThrowable()
+    private fun handleJsoupFailure(link: String, viewItContent: String): LinkInfo {
+        val fallbackLinkInfo = LinkInfo(
+            linkImage = DEFAULT_VIEW_IT,
+            link = link,
+            linkTitle = INVALID_LINK_TITLE,
+            viewItText = viewItContent,
+            linkName = link,
+        )
+        return fallbackLinkInfo
     }
 
     override suspend fun postViewItLike(viewItId: Long): Result<Unit> = runCatching {
@@ -77,9 +81,7 @@ class DefaultViewItRepository @Inject constructor(
 
     companion object {
         const val DEFAULT_VIEW_IT = "DEFAULT"
-        private const val META_OG_IMAGE = "meta[property=og:image]"
-        private const val META_OG_TITLE = "meta[property=og:title]"
-        private const val META_OG_SITE_NAME = "meta[property=og:site_name]"
         private const val ERROR_INVALID_LINK = "잘못된 링크입니다"
+        private const val INVALID_LINK_TITLE = "불러올 수 없는 링크입니다."
     }
 }
