@@ -11,13 +11,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.teamwable.common.util.getThrowableMessage
 import com.teamwable.ui.R
 import com.teamwable.ui.databinding.SnackbarBinding
 import com.teamwable.ui.extensions.drawableOf
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.type.SnackbarType
 
-class Snackbar(private val view: View, private val type: SnackbarType, private val message: String = "") {
+class Snackbar(private val view: View, private val type: SnackbarType, private val throwable: Throwable? = null) {
     private val context = view.context
     private val snackbar = Snackbar.make(view, "", 10000)
     private val snackbarView = snackbar.view as ViewGroup
@@ -32,7 +33,7 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
 
     private fun initView() {
         setSnackbarView()
-        initLayout(type, message)
+        initLayout(type, throwable)
         snackbarView.addView(binding.root)
     }
 
@@ -45,8 +46,8 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
         clipToPadding = false
     }
 
-    private fun initLayout(type: SnackbarType, message: String) = binding.tvSnackbarMessage.apply {
-        text = message.ifEmpty { context.stringOf(type.message) }
+    private fun initLayout(type: SnackbarType, throwable: Throwable?) = binding.tvSnackbarMessage.apply {
+        text = throwable?.getThrowableMessage() ?: context.stringOf(type.message)
         setCompoundDrawablesWithIntrinsicBounds(context.drawableOf(type.icon), null, null, null)
         background = ContextCompat.getDrawable(context, R.drawable.shape_white_fill_8_rect)
         backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E6F7F7F7"))
@@ -69,12 +70,12 @@ class Snackbar(private val view: View, private val type: SnackbarType, private v
         }, duration)
     }
 
-    fun updateToCommentComplete(type: SnackbarType, message: String = "") {
-        initLayout(type, message)
+    fun updateToCommentComplete(type: SnackbarType, throwable: Throwable? = null) {
+        initLayout(type, throwable)
         dismissSnackbar(1000)
     }
 
     companion object {
-        fun make(view: View, type: SnackbarType, message: String = "") = Snackbar(view, type, message)
+        fun make(view: View, type: SnackbarType, throwable: Throwable? = null) = Snackbar(view, type, throwable)
     }
 }
