@@ -7,7 +7,7 @@ import androidx.paging.map
 import com.teamwable.data.mapper.toData.toPostViewItDto
 import com.teamwable.data.mapper.toModel.toViewIt
 import com.teamwable.data.repository.ViewItRepository
-import com.teamwable.model.network.Error
+import com.teamwable.model.network.WableError
 import com.teamwable.model.viewit.LinkInfo
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.network.datasource.ViewItService
@@ -47,7 +47,7 @@ class DefaultViewItRepository @Inject constructor(
 
         LinkInfo(imageUrl, link, title, viewItContent, linkName)
     }.recoverCatching {
-        return Result.failure(Error.CustomError(ERROR_INVALID_LINK))
+        return Result.failure(WableError.CustomError(ERROR_INVALID_LINK))
     }.onSuccess {
         apiService.postViewIt(it.toPostViewItDto())
     }.onFailure {

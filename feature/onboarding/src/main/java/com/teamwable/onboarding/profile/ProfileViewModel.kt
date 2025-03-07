@@ -7,7 +7,7 @@ import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
-import com.teamwable.model.network.Error
+import com.teamwable.model.network.WableError
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.profile.model.ProfileIntent
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
@@ -68,7 +68,7 @@ internal class ProfileViewModel @Inject constructor(
                 }
                 .onFailure {
                     when (it) {
-                        is Error.ApiError -> intent { copy(textFieldType = NicknameType.DUPLICATE) }
+                        is WableError.ApiError -> intent { copy(textFieldType = NicknameType.DUPLICATE) }
                         else -> postSideEffect(ProfileSideEffect.ShowSnackBar(it))
                     }
                 }

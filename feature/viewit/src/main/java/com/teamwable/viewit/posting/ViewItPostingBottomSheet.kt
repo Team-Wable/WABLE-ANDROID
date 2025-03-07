@@ -7,6 +7,7 @@ import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.model.network.WableError
 import com.teamwable.ui.base.BindingBottomSheetFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
@@ -56,7 +57,7 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
                     is ViewItPostingSideEffect.ShowErrorMessage -> {
-                        snackbar.updateToCommentComplete(SnackbarType.ERROR, sideEffect.message)
+                        snackbar.updateToCommentComplete(SnackbarType.ERROR, WableError.CustomError(sideEffect.message))
                     }
                 }
             }

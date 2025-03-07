@@ -1,9 +1,10 @@
 package com.teamwable.network.util
 
-import com.teamwable.model.network.Error
+import com.teamwable.model.network.WableError
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.ConnectException
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -23,11 +24,12 @@ private fun parseErrorMessage(errorBody: String): String {
 }
 
 fun Throwable.toCustomError(): Throwable = when (this) {
-    is HttpException -> Error.ApiError(this.getErrorMessage())
-    is UnknownHostException -> Error.NetWorkConnectError("네트워크 연결이 원활하지 않습니다")
-    is ConnectException -> Error.NetWorkConnectError("인터넷에 연결해 주세요")
-    is SocketTimeoutException -> Error.TimeOutError("서버가 응답하지 않습니다")
-    else -> Error.UnknownError(this.message ?: UNKNOWN_ERROR_MESSAGE)
+    is HttpException -> WableError.ApiError(this.getErrorMessage())
+    is UnknownHostException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+    is ConnectException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+    is SocketException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+    is SocketTimeoutException -> WableError.TimeOutError(SERVER_TIMEOUT_ERROR_MESSAGE)
+    else -> this
 }
 
 fun <T> Throwable.handleThrowable(): Result<T> {
