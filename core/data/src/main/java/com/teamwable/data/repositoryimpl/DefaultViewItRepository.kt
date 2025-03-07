@@ -47,7 +47,7 @@ class DefaultViewItRepository @Inject constructor(
 
         LinkInfo(imageUrl, link, title, viewItContent, linkName)
     }.recoverCatching {
-        return Result.failure(Error.UnknownError(ERROR_INVALID_LINK))
+        return Result.failure(Error.CustomError(ERROR_INVALID_LINK))
     }.onSuccess {
         apiService.postViewIt(it.toPostViewItDto())
     }.onFailure {

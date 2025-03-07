@@ -13,7 +13,7 @@ sealed class Error(message: String?) : Exception(message) {
         val errorMessage: String,
     ) : Error(errorMessage)
 
-    data class UnknownError(
+    data class CustomError(
         val errorMessage: String,
     ) : Error(errorMessage)
 }
