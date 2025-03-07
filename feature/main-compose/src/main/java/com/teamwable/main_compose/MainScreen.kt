@@ -43,11 +43,10 @@ internal fun MainScreen(
     val intent = intentProvider.getIntent()
 
     val coroutineScope = rememberCoroutineScope()
-    val localContextResource = LocalContext.current.resources
     val onShowErrorSnackBar: (throwable: Throwable?) -> Unit = { throwable ->
         coroutineScope.launch {
             val job = launch {
-                snackBarHostState.showSnackbar(message = getThrowableMessage(throwable, localContextResource))
+                snackBarHostState.showSnackbar(message = throwable.getThrowableMessage())
             }
             delay(SNACK_BAR_DURATION)
             job.cancel()
