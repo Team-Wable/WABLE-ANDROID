@@ -24,7 +24,7 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(FragmentComm
                     CommunityRoute(
                         navigateToGoogleForm = ::navigateToGoogleForm,
                         navigateToPushAlarm = ::navigateToPushAlarm,
-                        onShowErrorSnackBar = ::showSnackBar
+                        onShowErrorSnackBar = ::showSnackBar,
                     )
                 }
             }
@@ -39,7 +39,7 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(FragmentComm
         findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.PushAlarm)
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, SnackbarType.ERROR, message).show()
+    private fun showSnackBar(throwable: Throwable) {
+        Snackbar.make(binding.root, SnackbarType.ERROR, throwable).show()
     }
 }
