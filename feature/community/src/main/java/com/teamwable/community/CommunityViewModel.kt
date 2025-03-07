@@ -49,7 +49,7 @@ class CommunityViewModel @Inject constructor(
             .onSuccess { joinedCommunity ->
                 intent { copy(preRegisterTeamName = joinedCommunity) }
             }.onFailure {
-                postSideEffect(CommunitySideEffect.ShowSnackBar(it.message.orEmpty()))
+                postSideEffect(CommunitySideEffect.ShowSnackBar(it))
             }
     }
 
@@ -63,7 +63,7 @@ class CommunityViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                postSideEffect(CommunitySideEffect.ShowSnackBar(it.message.orEmpty()))
+                postSideEffect(CommunitySideEffect.ShowSnackBar(it))
             }
     }
 
@@ -83,7 +83,7 @@ class CommunityViewModel @Inject constructor(
                     getCommunityList()
                 }.onFailure {
                     dismissDialog()
-                    postSideEffect(CommunitySideEffect.ShowSnackBar(it.message.orEmpty()))
+                    postSideEffect(CommunitySideEffect.ShowSnackBar(it))
                 }
         }
     }
