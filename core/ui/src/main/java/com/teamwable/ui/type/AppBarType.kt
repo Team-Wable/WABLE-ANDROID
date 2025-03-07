@@ -16,7 +16,7 @@ enum class AppBarType(
     ),
     VIEW_IT(
         title = R.string.label_app_bar_view_it,
-        icon = com.teamwable.common.R.drawable.ic_news_appbar,
+        icon = com.teamwable.common.R.drawable.ic_viewit_appbar,
         isBeta = false,
     ),
     COMMUNITY(
