@@ -8,7 +8,9 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
+private const val UNKNOWN_ERROR_MESSAGE = "Unknown error"
+private const val NETWORK_CONNECT_ERROR_MESSAGE = "네트워크 연결이 원활하지 않습니다"
+private const val SERVER_TIMEOUT_ERROR_MESSAGE = "서버가 응답하지 않습니다"
 
 private fun HttpException.getErrorMessage(): String {
     val errorBody = response()?.errorBody()?.string() ?: return UNKNOWN_ERROR_MESSAGE
