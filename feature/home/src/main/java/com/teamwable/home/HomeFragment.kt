@@ -23,6 +23,7 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.drawableOf
 import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
@@ -65,6 +66,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         collect()
+        viewModel.getNotificationNumber()
         setAdapter()
         initNavigatePostingFabClickListener()
         fetchFeedUploaded()
@@ -82,7 +84,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> handleFcmNavigation()
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
-                    is HomeUiState.AddNotificationBadge -> setNotificationBadge(uiState.notiCount)
                 }
             }
         }
@@ -92,19 +93,18 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    is HomeSideEffect.AddNotificationBadge -> setNotificationBadge(sideEffect.notiCount)
                 }
             }
         }
     }
 
     private fun setNotificationBadge(notiCount: Int) {
-        Timber.e("ttttt")
-        binding.btnHomeNoti.setIconResource(com.teamwable.common.R.drawable.ic_home_notification_badge)
-//        binding.btnHomeNoti.icon = when {
-//            notiCount > 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification_badge)
-//            notiCount == 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification)
-//            else -> return
-//        }
+        binding.btnHomeNoti.icon = when {
+            notiCount > 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification_badge)
+            notiCount <= 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification)
+            else -> return
+        }
     }
 
     private fun handleFcmNavigation() {
