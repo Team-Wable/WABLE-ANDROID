@@ -82,6 +82,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> handleFcmNavigation()
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
+                    is HomeUiState.AddNotificationBadge -> setNotificationBadge(uiState.notiCount)
                 }
             }
         }
@@ -94,6 +95,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 }
             }
         }
+    }
+
+    private fun setNotificationBadge(notiCount: Int) {
+        Timber.e("ttttt")
+        binding.btnHomeNoti.setIconResource(com.teamwable.common.R.drawable.ic_home_notification_badge)
+//        binding.btnHomeNoti.icon = when {
+//            notiCount > 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification_badge)
+//            notiCount == 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification)
+//            else -> return
+//        }
     }
 
     private fun handleFcmNavigation() {
