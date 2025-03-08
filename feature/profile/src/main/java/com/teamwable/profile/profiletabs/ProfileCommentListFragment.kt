@@ -153,7 +153,7 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
     private fun setEmptyView(isEmpty: Boolean) = with(binding) {
         when (userType) {
-            ProfileUserType.AUTH -> tvProfileCommentAuthEmptyLabel.visible(isEmpty)
+            ProfileUserType.AUTH, ProfileUserType.ADMIN -> tvProfileCommentAuthEmptyLabel.visible(isEmpty)
 
             ProfileUserType.MEMBER -> {
                 tvProfileCommentMemberEmptyLabel.text = getString(R.string.label_profile_comment_member_empty, userNickname)

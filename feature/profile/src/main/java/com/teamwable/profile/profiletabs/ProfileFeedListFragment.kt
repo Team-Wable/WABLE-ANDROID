@@ -162,7 +162,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
 
     private fun setEmptyView(isEmpty: Boolean) = with(binding) {
         when (userType) {
-            ProfileUserType.AUTH -> {
+            ProfileUserType.AUTH, ProfileUserType.ADMIN -> {
                 tvProfileFeedAuthEmptyLabel.text = getString(R.string.label_profile_feed_auth_empty, userNickname)
                 groupAuthEmpty.visible(isEmpty)
                 initNavigateToPostingBtnClickListener()
