@@ -10,6 +10,7 @@ object FeedMapper {
             postAuthorNickname = this.postAuthorNickname,
             title = this.linkTitle,
             content = this.viewItContent,
+            feedId = viewItId,
         )
     }
 }
