@@ -62,7 +62,7 @@ class ViewItViewModel @Inject constructor(
 
     private fun fetchIsAdmin() = viewModelScope.launch {
         userInfoRepository.getIsAdmin()
-            .collectLatest { isAdmin.update { it } }
+            .collectLatest { value -> isAdmin.update { value } }
     }
 
     fun fetchUserType(userId: Long): ProfileUserType {
