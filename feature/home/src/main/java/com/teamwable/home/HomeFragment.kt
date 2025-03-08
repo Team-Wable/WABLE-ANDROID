@@ -84,6 +84,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> handleFcmNavigation()
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
+                    is HomeUiState.AddNotificationBadge -> setNotificationBadge(uiState.notiCount)
                 }
             }
         }
@@ -93,7 +94,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (sideEffect) {
                     is HomeSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
                     is HomeSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is HomeSideEffect.AddNotificationBadge -> setNotificationBadge(sideEffect.notiCount)
                 }
             }
         }

@@ -202,7 +202,7 @@ class HomeViewModel @Inject constructor(
     fun getNotificationNumber() {
         viewModelScope.launch {
             notificationRepository.getNumber()
-                .onSuccess { _event.emit(HomeSideEffect.AddNotificationBadge(it)) }
+                .onSuccess { _uiState.value = HomeUiState.AddNotificationBadge(it) }
         }
     }
 }
@@ -215,12 +215,12 @@ sealed interface HomeUiState {
     data class Error(val errorMessage: String) : HomeUiState
 
     data object AddPushAlarmPermission : HomeUiState
+
+    data class AddNotificationBadge(val notiCount: Int) : HomeUiState
 }
 
 sealed interface HomeSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : HomeSideEffect
 
     data object DismissBottomSheet : HomeSideEffect
-
-    data class AddNotificationBadge(val notiCount: Int) : HomeSideEffect
 }
