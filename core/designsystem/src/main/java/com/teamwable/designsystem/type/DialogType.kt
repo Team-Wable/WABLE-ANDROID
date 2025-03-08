@@ -19,13 +19,13 @@ enum class DialogType(
         description = R.string.dialog_wellcome_description,
         buttonText = R.string.dialog_wellcome_btn_text,
     ),
-    RRE_REGISTER(
+    PRE_REGISTER(
         title = R.string.dialog_pre_register_title,
         description = R.string.dialog_pre_register_description,
         buttonText = R.string.dialog_pre_register_btn_text,
         cancelButtonText = R.string.dialog_pre_register_cancel_btn_text,
     ),
-    REGISTER_COMPLETED(
+    PRE_REGISTER_COMPLETED(
         title = R.string.dialog_register_completed_title,
         description = R.string.dialog_register_completed_description,
     ),
@@ -34,5 +34,10 @@ enum class DialogType(
         description = R.string.dialog_push_notification_description,
         buttonText = R.string.dialog_push_notification_btn_text,
         cancelButtonText = R.string.dialog_push_notification_cancel_btn_text,
+    ),
+    COPY_COMPLETED(
+        title = R.string.dialog_copy_completed_title,
+        description = R.string.dialog_copy_completed_description,
+        buttonText = R.string.dialog_copy_completed_btn_text,
     ),
 }

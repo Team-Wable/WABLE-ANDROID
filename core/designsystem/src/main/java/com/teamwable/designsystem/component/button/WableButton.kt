@@ -20,12 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.R
-import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
+import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
 import java.util.Locale
 
@@ -40,6 +41,7 @@ import java.util.Locale
  * @param buttonStyle 버튼의 스타일을 지정합니다. 기본값은 [BigButtonDefaults.defaultBigButtonStyle] 입니다.
  * @param onClick 버튼 클릭 시 실행할 콜백 함수입니다.
  */
+
 @Composable
 fun WableButton(
     modifier: Modifier = Modifier,
@@ -48,17 +50,57 @@ fun WableButton(
     buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
     onClick: () -> Unit,
 ) {
+    WableButtonBase(
+        modifier = modifier,
+        enabled = enabled,
+        buttonStyle = buttonStyle,
+        onClick = onClick,
+    ) {
+        Text(
+            text = text,
+            style = buttonStyle.textStyle,
+            color = buttonStyle.textColor(enabled),
+        )
+    }
+}
+
+@Composable
+fun WableButtonBase(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(buttonStyle.aspectRatio)
             .run {
-                if (enabled) noRippleDebounceClickable(onClick = onClick)
+                if (enabled) noRippleClickable(onClick = onClick)
                 else this
             }
             .clip(RoundedCornerShape(buttonStyle.radius))
             .background(buttonStyle.backgroundColor(enabled)),
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun WableAnnotatedTextButton(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    enabled: Boolean = true,
+    buttonStyle: BigButtonStyle = BigButtonDefaults.defaultBigButtonStyle(),
+    onClick: () -> Unit,
+) {
+    WableButtonBase(
+        modifier = modifier,
+        enabled = enabled,
+        buttonStyle = buttonStyle,
+        onClick = onClick,
     ) {
         Text(
             text = text,
@@ -188,10 +230,11 @@ object BigButtonDefaults {
 @Composable
 fun WableTwoButtons(
     modifier: Modifier = Modifier,
-    startButtonText: String = "취소",
-    endButtonText: String = "신청하기",
-    onStartButtonClick: () -> Unit = {},
-    onEndButtonClick: () -> Unit = {},
+    cancelButtonText: String = "취소",
+    buttonText: String = "신청하기",
+    buttonStyle: BigButtonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
+    onCancel: () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -200,19 +243,19 @@ fun WableTwoButtons(
     ) {
         WableButton(
             modifier = Modifier.weight(1f),
-            text = startButtonText,
+            text = cancelButtonText,
             buttonStyle = BigButtonDefaults.dialogTwoButtonStyle().copy(
                 backgroundColor = { WableTheme.colors.gray200 },
                 textColor = { WableTheme.colors.gray600 },
             ),
-            onClick = onStartButtonClick,
+            onClick = onCancel,
         )
         Spacer(modifier = Modifier.width(8.dp))
         WableButton(
             modifier = Modifier.weight(1f),
-            text = endButtonText,
-            buttonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
-            onClick = onEndButtonClick,
+            text = buttonText,
+            buttonStyle = buttonStyle,
+            onClick = onClick,
         )
     }
 }

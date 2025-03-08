@@ -1,100 +1,56 @@
 package com.teamwable.designsystem.component.dialog
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import com.teamwable.designsystem.R
-import com.teamwable.designsystem.extension.composable.toImageVector
+import com.teamwable.designsystem.component.button.BigButtonDefaults
+import com.teamwable.designsystem.component.button.BigButtonStyle
+import com.teamwable.designsystem.component.button.WableButton
+import com.teamwable.designsystem.component.button.WableTwoButtons
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
 @Composable
-fun WableButtonDialog(
-    dialogType: DialogType,
+fun WableOneButtonDialog(
+    dialogType: DialogType = DialogType.LOGIN,
     name: String = "",
+    buttonStyle: BigButtonStyle = BigButtonDefaults.dialogButtonStyle(),
     onDismissRequest: () -> Unit = {},
-    imageContent: @Composable () -> Unit = {},
-    buttonContent: @Composable () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
-    Dialog(onDismissRequest = onDismissRequest) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = WableTheme.colors.white,
-            ),
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 18.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                DialogContent(
-                    dialogType = dialogType,
-                    contentName = name,
-                    imageContent = imageContent,
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                buttonContent()
-                if (buttonContent != {}) {
-                    Spacer(modifier = Modifier.height(18.dp))
-                }
-            }
-        }
-    }
+    WableBaseDialog(
+        dialogType = dialogType,
+        name = name,
+        onDismissRequest = onDismissRequest,
+        buttonContent = {
+            WableButton(
+                text = stringResource(id = dialogType.buttonText),
+                buttonStyle = buttonStyle,
+                onClick = onClick,
+            )
+        },
+    )
 }
 
 @Composable
-fun DialogContent(
-    dialogType: DialogType,
-    contentName: String,
-    imageContent: @Composable () -> Unit = {},
+fun WableTwoButtonDialog(
+    dialogType: DialogType = DialogType.PRE_REGISTER,
+    buttonStyle: BigButtonStyle = BigButtonDefaults.dialogTwoButtonStyle(),
+    onDismissRequest: () -> Unit,
+    onClick: () -> Unit,
 ) {
-    Spacer(modifier = Modifier.height(32.dp))
-    imageContent()
-
-    Text(
-        text = stringResource(id = dialogType.title),
-        style = WableTheme.typography.head01,
-        color = WableTheme.colors.black,
-        textAlign = TextAlign.Center,
-    )
-
-    Spacer(modifier = Modifier.height(8.dp))
-
-    val descriptionText = when (dialogType) {
-        DialogType.WELLCOME -> {
-            val rawDescription = stringResource(id = R.string.dialog_wellcome_description)
-            String.format(rawDescription, contentName)
-        }
-
-        DialogType.REGISTER_COMPLETED -> {
-            val rawDescription = stringResource(id = R.string.dialog_register_completed_description)
-            String.format(rawDescription, contentName)
-        }
-
-        else -> stringResource(id = dialogType.description)
-    }
-
-    Text(
-        text = descriptionText,
-        style = WableTheme.typography.body02,
-        color = WableTheme.colors.gray700,
-        textAlign = TextAlign.Center,
+    WableBaseDialog(
+        dialogType = dialogType,
+        onDismissRequest = onDismissRequest,
+        buttonContent = {
+            WableTwoButtons(
+                cancelButtonText = stringResource(id = dialogType.cancelButtonText),
+                buttonText = stringResource(id = dialogType.buttonText),
+                buttonStyle = buttonStyle,
+                onCancel = onDismissRequest,
+                onClick = onClick,
+            )
+        },
     )
 }
 
@@ -102,16 +58,9 @@ fun DialogContent(
 @Composable
 private fun WableButtonDialogPreview() {
     WableTheme {
-        WableButtonDialog(
-            dialogType = DialogType.REGISTER_COMPLETED,
-            name = "T1",
-            imageContent = {
-                Image(
-                    imageVector = toImageVector(com.teamwable.common.R.drawable.ic_commnity_dialog_check),
-                    contentDescription = null,
-                )
-                Spacer(Modifier.height(32.dp))
-            },
+        WableTwoButtonDialog(
+            onClick = {},
+            onDismissRequest = {},
         )
     }
 }

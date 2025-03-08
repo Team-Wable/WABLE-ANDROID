@@ -22,6 +22,8 @@ sealed class DeepLinkDestination(val addressRes: Int) {
 
     data object HomeDetail : DeepLinkDestination(R.string.deeplink_url_home_detail)
 
+    data object PushAlarm : DeepLinkDestination(R.string.deeplink_url_push_alarm)
+
     data object Notification : DeepLinkDestination(R.string.deeplink_url_notification)
 }
 
