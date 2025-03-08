@@ -112,7 +112,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         val contentId = activity.intent.getStringExtra(RELATED_CONTENT_ID) ?: return
 
         when (contentId) {
-            NOTIFICATION_VIEWIT_LIKE -> (activity as Navigation).navigateToProfileAuthFragment()
+            NOTIFICATION_VIEWIT_LIKE -> (activity as Navigation).navigateToViewItFragment()
             else -> navigateToHomeDetailFragment(contentId.toLongOrNull() ?: return)
         }
 
