@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repository.ViewItRepository
@@ -43,6 +44,7 @@ class ViewItViewModel @Inject constructor(
 
     private val viewItsFlow = viewItRepository.getViewIts().cachedIn(viewModelScope)
     private val removedViewItsFlow = MutableStateFlow(setOf<Long>())
+    private val banViewItFlow = MutableStateFlow(setOf<Long>())
 
     init {
         fetchAuthId()
@@ -74,9 +76,12 @@ class ViewItViewModel @Inject constructor(
     }
 
     fun updateViewIts(): Flow<PagingData<ViewIt>> {
-        return combine(viewItsFlow, removedViewItsFlow) { viewItsFlow, removedViewItIds ->
+        return combine(viewItsFlow, removedViewItsFlow, banViewItFlow) { viewItsFlow, removedViewItIds, banState ->
             viewItsFlow
                 .filter { removedViewItIds.contains(it.viewItId).not() }
+                .map { data ->
+                    if (banState.contains(data.viewItId)) data.copy(isBlind = true) else data
+                }
         }
     }
 
@@ -108,8 +113,15 @@ class ViewItViewModel @Inject constructor(
 
     fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
         profileRepository.postBan(banInfo)
-            .onSuccess { _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN)) }
+            .onSuccess {
+                updateViewItBanState(viewItId = banInfo.third, isBan = true)
+                _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
             .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+    }
+
+    private fun updateViewItBanState(viewItId: Long, isBan: Boolean) {
+        banViewItFlow.update { it.toMutableSet().apply { if (isBan) add(viewItId) } }
     }
 
     fun postViewIt(link: String, content: String) = viewModelScope.launch {
