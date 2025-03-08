@@ -19,7 +19,12 @@ class AppUpdateHandler(private val appUpdateManager: AppUpdateManager) {
     }
 
     fun startUpdate(appUpdateInfo: AppUpdateInfo, activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>) {
-        val appUpdateType = if (checkIsImmediate(appUpdateInfo)) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE
+        val appUpdateType = when (checkUpdateType(appUpdateInfo)) {
+            UpdateType.MAJOR -> AppUpdateType.IMMEDIATE
+            UpdateType.MINOR, UpdateType.PATCH -> AppUpdateType.FLEXIBLE
+            UpdateType.NONE -> return
+        }
+
         appUpdateManager.startUpdateFlowForResult(
             appUpdateInfo,
             activityResultLauncher,
@@ -27,9 +32,30 @@ class AppUpdateHandler(private val appUpdateManager: AppUpdateManager) {
         )
     }
 
-    fun checkIsImmediate(appUpdateInfo: AppUpdateInfo): Boolean {
-        val isFirstCodeDifferent = (BuildConfig.VERSION_CODE / 100) != (appUpdateInfo.availableVersionCode() / 100)
-        val isSecondCodeDifferent = ((BuildConfig.VERSION_CODE % 100) / 10) != ((appUpdateInfo.availableVersionCode() % 100) / 10)
-        return isFirstCodeDifferent || isSecondCodeDifferent
+    fun checkUpdateType(appUpdateInfo: AppUpdateInfo): UpdateType {
+        val currentVersion = BuildConfig.VERSION_CODE
+        val availableVersion = appUpdateInfo.availableVersionCode()
+
+        val currentMajor = currentVersion / 10000
+        val currentMinor = (currentVersion % 10000) / 100
+        val currentPatch = currentVersion % 100
+
+        val availableMajor = availableVersion / 10000
+        val availableMinor = (availableVersion % 10000) / 100
+        val availablePatch = availableVersion % 100
+
+        return when {
+            currentMajor != availableMajor -> UpdateType.MAJOR
+            currentMinor != availableMinor -> UpdateType.MINOR
+            currentPatch != availablePatch -> UpdateType.PATCH
+            else -> UpdateType.NONE
+        }
     }
+}
+
+enum class UpdateType {
+    MAJOR, // 버전 첫 번째 자리수 변경
+    MINOR, // 버전 두 번째 자리수 변경
+    PATCH, // 버전 세 번째 자리수 변경
+    NONE,
 }

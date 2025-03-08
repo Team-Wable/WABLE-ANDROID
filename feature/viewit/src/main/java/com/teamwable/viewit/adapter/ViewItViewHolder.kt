@@ -8,6 +8,7 @@ import com.teamwable.data.repositoryimpl.DefaultViewItRepository.Companion.DEFAU
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.extensions.load
 import com.teamwable.ui.extensions.viewItEmptyLoad
+import com.teamwable.ui.extensions.visible
 import com.teamwable.viewit.databinding.ItemViewItBinding
 
 class ViewItViewHolder private constructor(
@@ -46,6 +47,12 @@ class ViewItViewHolder private constructor(
         tvViewItLinkName.text = item.linkName
         btnViewItLike.isChecked = item.isLiked
         tvViewItLikeCount.text = item.likedNumber
+        setBlindVisible(item.isBlind)
+    }
+
+    private fun setBlindVisible(isBlind: Boolean) = with(binding) {
+        groupViewItBlind.visible(isBlind)
+        cvViewItLink.visible(!isBlind)
     }
 
     companion object {

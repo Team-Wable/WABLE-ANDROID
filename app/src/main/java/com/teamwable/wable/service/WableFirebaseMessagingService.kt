@@ -14,8 +14,10 @@ import com.google.firebase.messaging.RemoteMessage
 import com.teamwable.main.MainActivity
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.util.FcmTag.CHANNEL_ID
+import com.teamwable.ui.util.FcmTag.NAME
 import com.teamwable.ui.util.FcmTag.NOTIFICATION_BODY
 import com.teamwable.ui.util.FcmTag.NOTIFICATION_TITLE
+import com.teamwable.ui.util.FcmTag.NOTIFICATION_VIEWIT_LIKE
 import com.teamwable.ui.util.FcmTag.RELATED_CONTENT_ID
 import timber.log.Timber
 
@@ -34,14 +36,21 @@ class WableFirebaseMessagingService : FirebaseMessagingService() {
             title = if (::title.isInitialized) title else "",
             body = if (::body.isInitialized) body else "",
             contentId = message.data[RELATED_CONTENT_ID] ?: return,
+            type = message.data[NAME] ?: return,
         )
     }
 
-    private fun sendPushAlarm(title: String, body: String, contentId: String) {
+    private fun sendPushAlarm(title: String, body: String, contentId: String, type: String) {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-        val notification = buildNotification(title, body, contentId)
-        notificationManager?.notify((System.currentTimeMillis()).toInt(), notification)
+
+        val notificationType = when (type) {
+            NOTIFICATION_VIEWIT_LIKE -> type
+            else -> contentId
+        }
+
+        val notification = buildNotification(title, body, notificationType)
+        notificationManager?.notify((contentId.hashCode()), notification)
     }
 
     override fun handleIntent(intent: Intent?) {

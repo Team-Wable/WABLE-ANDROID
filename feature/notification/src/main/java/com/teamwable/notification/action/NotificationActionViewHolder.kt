@@ -44,27 +44,26 @@ class NotificationActionViewHolder(
         item = data
 
         with(binding) {
-
             val spannableText = when (data.notificationTriggerType) {
                 root.context.stringOf(NotificationActionType.CONTENT_LIKED.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         NotificationActionType.CONTENT_LIKED.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.COMMENT.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         NotificationActionType.COMMENT.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.COMMENT_LIKED.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         NotificationActionType.COMMENT_LIKED.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.ACTING_CONTINUE.title) ->
@@ -72,62 +71,69 @@ class NotificationActionViewHolder(
                         data.memberNickname,
                         NotificationActionType.ACTING_CONTINUE.content,
                         ACTING_CONTINUE_LEN,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.BE_GHOST.title) ->
                     getSpannableStyle(
                         data.memberNickname,
                         NotificationActionType.BE_GHOST.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.CONTENT_GHOST.title) ->
                     getSpannableStyle(
                         data.memberNickname,
                         NotificationActionType.CONTENT_GHOST.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.COMMENT_GHOST.title) ->
                     getSpannableStyle(
                         data.memberNickname,
                         NotificationActionType.COMMENT_GHOST.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.USER_BAN.title) ->
                     getSpannableStyle(
                         data.memberNickname,
                         NotificationActionType.USER_BAN.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.POPULAR_WRITER.title) ->
                     getSpannableStyle(
                         data.memberNickname,
                         NotificationActionType.POPULAR_WRITER.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.POPULAR_CONTENT.title) ->
                     getSpannablePopularText(
                         root.context.getString(NotificationActionType.POPULAR_CONTENT.content),
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.CHILD_COMMENT.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         NotificationActionType.CHILD_COMMENT.content,
-                        data = data
+                        data = data,
                     )
 
                 root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title) ->
                     getSpannableStyle(
                         data.triggerMemberNickname,
                         NotificationActionType.CHILD_COMMENT_LIKED.content,
-                        data = data
+                        data = data,
+                    )
+
+                root.context.stringOf(NotificationActionType.VIEW_IT_LIKED.title) ->
+                    getSpannableStyle(
+                        data.triggerMemberNickname,
+                        NotificationActionType.VIEW_IT_LIKED.content,
+                        data = data,
                     )
 
                 else -> {
@@ -166,7 +172,7 @@ class NotificationActionViewHolder(
             StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
             0,
             name.length - 1,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
         return spannablePopularText
     }
@@ -189,20 +195,20 @@ class NotificationActionViewHolder(
         data: NotificationActionModel,
         spannableText: SpannableStringBuilder,
         name: String,
-        endIndex: Int
+        endIndex: Int,
     ) {
         if (data.notificationTriggerType != binding.root.context.stringOf(NotificationActionType.POPULAR_CONTENT.title)) {
             spannableText.setSpan(
                 clickableSpan(data, true),
                 0,
                 name.length + endIndex + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
             )
             spannableText.setSpan(
                 clickableSpan(data, false),
                 data.triggerMemberNickname.length + endIndex + 2,
                 spannableText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
             )
             binding.tvNotificationVpContent.movementMethod = LinkMovementMethod.getInstance()
         }
@@ -211,7 +217,7 @@ class NotificationActionViewHolder(
     private fun getBoldSpannableStyle(
         spannableText: SpannableStringBuilder,
         name: String,
-        endIndex: Int
+        endIndex: Int,
     ) {
         spannableText.setSpan(
             StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
@@ -224,30 +230,35 @@ class NotificationActionViewHolder(
     private fun getSpannableText(
         data: NotificationActionModel,
         name: String,
-        resId: Int
+        resId: Int,
     ): String {
         val resourceString = if (data.notificationTriggerType in listOf(
                 binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
                 binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
-                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title)
+                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title),
+                binding.root.context.stringOf(NotificationActionType.VIEW_IT_LIKED.title),
             )
         ) {
             binding.root.context.getString(
                 resId,
-                data.memberNickname
+                data.memberNickname,
             )
         } else {
             binding.root.context.getString(resId)
         }
 
-        return if ((data.notificationTriggerType in listOf(
-                binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
-                binding.root.context.stringOf(NotificationActionType.COMMENT.title),
-                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT.title),
-                binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
-                binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title),
-                binding.root.context.stringOf(NotificationActionType.POPULAR_WRITER.title)
-            )) && data.notificationText.isNotBlank()
+        return if ((
+                data.notificationTriggerType in listOf(
+                    binding.root.context.stringOf(NotificationActionType.CONTENT_LIKED.title),
+                    binding.root.context.stringOf(NotificationActionType.COMMENT.title),
+                    binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT.title),
+                    binding.root.context.stringOf(NotificationActionType.COMMENT_LIKED.title),
+                    binding.root.context.stringOf(NotificationActionType.CHILD_COMMENT_LIKED.title),
+                    binding.root.context.stringOf(NotificationActionType.POPULAR_WRITER.title),
+                    binding.root.context.stringOf(NotificationActionType.VIEW_IT_LIKED.title),
+                )
+            ) &&
+            data.notificationText.isNotBlank()
         ) {
             "$name$resourceString\n: ${cutContentMaxLen(data.notificationText)}"
         } else {
@@ -270,7 +281,7 @@ class NotificationActionViewHolder(
         fun from(
             parent: ViewGroup,
             onNotificationClick: (NotificationActionModel, Int) -> Unit,
-            onProfileClick: (Int) -> Unit
+            onProfileClick: (Int) -> Unit,
         ): NotificationActionViewHolder =
             NotificationActionViewHolder(
                 ItemNotificationVpBinding.inflate(
@@ -279,7 +290,7 @@ class NotificationActionViewHolder(
                     false,
                 ),
                 onNotificationClick,
-                onProfileClick
+                onProfileClick,
             )
     }
 }

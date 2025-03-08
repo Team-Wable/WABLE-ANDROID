@@ -10,12 +10,14 @@ import com.teamwable.notification.databinding.FragmentNotificationVpBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.util.Arg.FEED_ID
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -46,7 +48,10 @@ class NotificationActionFragment : BindingFragment<FragmentNotificationVpBinding
     private fun initNotificationActionAdapter() = with(binding) {
         notificationAdapter = NotificationActionAdapter(
             onNotificationClick = { notificationActionData, position ->
-                findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to notificationActionData.notificationTriggerId))
+                if (notificationActionData.notificationTriggerType == stringOf(NotificationActionType.VIEW_IT_LIKED.title))
+                    (activity as Navigation).navigateToViewItFragment()
+                else
+                    findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.HomeDetail, mapOf(FEED_ID to notificationActionData.notificationTriggerId))
             },
             onProfileClick = { userId ->
                 if (userId != -1) findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to userId))

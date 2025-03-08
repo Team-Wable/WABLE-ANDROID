@@ -45,7 +45,7 @@ abstract class BindingProfileFragment : Fragment() {
         viewProfileAppbar.tvProfileAppbarTitle.text = data.nickName
         ivProfileImg.load(data.profileImg)
         tvProfileNickname.text = data.nickName
-        tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag.ifBlank { com.teamwable.common.R.string.label_team_lck }, data.lckYears)
+        tvProfileInfo.text = getString(R.string.label_profile_info, data.teamTag.ifBlank { getString(com.teamwable.common.R.string.label_team_lck) }, data.lckYears)
         tvProfileGhostPercentage.text = getString(R.string.label_ghost_percentage, data.ghost)
         tvProfileLevel.text = getString(R.string.label_profile_level, data.level)
         setSwipeLayout()
