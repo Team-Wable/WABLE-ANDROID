@@ -7,6 +7,6 @@
     <string name="deeplink_url_profile">wable://feature:profile/profile/{user_id}</string>
     <string name="deeplink_url_image_dialog">wable://common:ui/img/{img_url}</string>
     <string name="deeplink_url_home_detail">wable://feature:home/detail/{content}/{feed_id}</string>
-    <string name="deeplink_url_notification">wable://feature:notification/notification</string>
     <string name="deeplink_url_push_alarm">wable://feature:profile/hamburger/push</string>
+    <string name="deeplink_url_notification">wable://feature:notification/notification</string>
 </resources>
