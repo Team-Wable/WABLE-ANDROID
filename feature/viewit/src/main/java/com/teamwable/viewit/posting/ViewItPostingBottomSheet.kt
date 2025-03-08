@@ -3,13 +3,19 @@ package com.teamwable.viewit.posting
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwable.ui.base.BindingBottomSheetFragment
+import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.showKeyboard
 import com.teamwable.ui.extensions.visible
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
 import com.teamwable.ui.util.BundleKey.VIEW_IT_CONTENT
 import com.teamwable.ui.util.BundleKey.VIEW_IT_LINK
@@ -23,6 +29,8 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
         setupTextWatchers()
         setOnLinkInputBtnClickListener()
         setOnViewItUploadBtnClickListener()
+        initOutSideTouchClickListener()
+        initDialogExitBtnClickListener()
     }
 
     private fun setupTextWatchers() {
@@ -81,5 +89,23 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
                 putString(VIEW_IT_CONTENT, etViewItContentInput.text.toString())
             },
         )
+    }
+
+    private fun initOutSideTouchClickListener() {
+        val bottomSheetDialog = dialog as BottomSheetDialog
+        val touchOutsideView = bottomSheetDialog.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
+
+        touchOutsideView?.setOnClickListener { handleShowCancelDialog() }
+    }
+
+    private fun handleShowCancelDialog() {
+        if (binding.etViewItLinkInput.text.isEmpty()) dismiss()
+        else TwoButtonDialog.show(requireContext(), findNavController(), DialogType.CANCEL_POSTING)
+    }
+
+    private fun initDialogExitBtnClickListener() {
+        parentFragmentManager.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { _, _ ->
+            findNavController().popBackStack()
+        }
     }
 }
