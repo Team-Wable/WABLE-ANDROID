@@ -1,5 +1,6 @@
 package com.teamwable.viewit.viewit
 
+import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -19,9 +20,11 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.shareAdapter.PagingLoadingAdapter
 import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.ProfileUserType
+import com.teamwable.ui.type.SnackbarType
 import com.teamwable.ui.util.Arg.PROFILE_USER_ID
-import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_CONTENT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_LINK
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.LikeInfo
 import com.teamwable.ui.util.Navigation
@@ -62,6 +65,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
             viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
                 when (uiState) {
                     is ViewItUiState.Error -> (activity as Navigation).navigateToErrorFragment()
+                    is ViewItUiState.Success -> viewItAdapter.refresh()
                     else -> Unit
                 }
             }
@@ -70,8 +74,9 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         viewLifeCycleScope.launch {
             viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
                 when (sideEffect) {
-                    is ViewItSideEffect.ShowSnackBar -> Snackbar.make(binding.root, sideEffect.type).show()
+                    is ViewItSideEffect.ShowSnackBar -> showSnackBar(sideEffect.type)
                     is ViewItSideEffect.DismissBottomSheet -> findNavController().popBackStack()
+                    is ViewItSideEffect.ShowErrorMessage -> showSnackBar(SnackbarType.ERROR, sideEffect.message)
                 }
             }
         }
@@ -162,9 +167,19 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
 
     private fun fetchViewItUploaded() {
         parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
-            val isUploaded = result.getBoolean(IS_UPLOADED, false)
-            if (isUploaded) viewItAdapter.refresh()
+            val (link, content) = result.extractViewItData()
+
+            if (link.isNotBlank() && content.isNotBlank()) {
+                showSnackBar(SnackbarType.VIEW_IT_ING)
+                viewModel.postViewIt(link, content)
+            }
         }
+    }
+
+    private fun Bundle.extractViewItData(): Pair<String, String> {
+        val link = getString(VIEW_IT_LINK).orEmpty()
+        val content = getString(VIEW_IT_CONTENT).orEmpty()
+        return link to content
     }
 
     private fun scrollToTopOnRefresh() {
@@ -182,5 +197,9 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
                 }
             }
         }
+    }
+
+    private fun showSnackBar(snackbarType: SnackbarType, message: String = "") {
+        Snackbar.make(binding.root, snackbarType, message).show()
     }
 }
