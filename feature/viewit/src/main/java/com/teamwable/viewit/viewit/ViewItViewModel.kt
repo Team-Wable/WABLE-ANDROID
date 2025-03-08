@@ -45,6 +45,7 @@ class ViewItViewModel @Inject constructor(
     private val viewItsFlow = viewItRepository.getViewIts().cachedIn(viewModelScope)
     private val removedViewItsFlow = MutableStateFlow(setOf<Long>())
     private val banViewItFlow = MutableStateFlow(setOf<Long>())
+    private val likeViewItFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     init {
         fetchAuthId()
@@ -76,18 +77,26 @@ class ViewItViewModel @Inject constructor(
     }
 
     fun updateViewIts(): Flow<PagingData<ViewIt>> {
-        return combine(viewItsFlow, removedViewItsFlow, banViewItFlow) { viewItsFlow, removedViewItIds, banState ->
+        return combine(viewItsFlow, removedViewItsFlow, banViewItFlow, likeViewItFlow) { viewItsFlow, removedViewItIds, banState, likeStates ->
             viewItsFlow
                 .filter { removedViewItIds.contains(it.viewItId).not() }
                 .map { data ->
-                    if (banState.contains(data.viewItId)) data.copy(isBlind = true) else data
+                    val likeState = likeStates[data.viewItId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedBan = if (banState.contains(data.viewItId)) data.copy(isBlind = true) else data
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
                 }
         }
     }
 
     fun updateLike(viewItId: Long, likeState: LikeState) = viewModelScope.launch {
         val result = if (likeState.isLiked) viewItRepository.postViewItLike(viewItId) else viewItRepository.deleteViewItLike(viewItId)
-        result.onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+        result
+            .onSuccess { updateViewItLikeState(viewItId, likeState) }
+            .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+    }
+
+    private fun updateViewItLikeState(feedId: Long, likeState: LikeState) {
+        likeViewItFlow.update { it.toMutableMap().apply { put(feedId, likeState) } }
     }
 
     fun removeViewIt(viewId: Long) = viewModelScope.launch {
