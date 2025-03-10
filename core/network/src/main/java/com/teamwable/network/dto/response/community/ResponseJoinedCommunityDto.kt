@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseJoinedCommunityDto(
     @SerialName("community")
-    val community: String,
+    val community: String?,
 )

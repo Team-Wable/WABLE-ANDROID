@@ -122,9 +122,7 @@ class ViewItViewModel @Inject constructor(
             }
             .onFailure {
                 _event.emit(
-                    ViewItSideEffect.ShowErrorMessage(
-                        it.message ?: return@launch,
-                    ),
+                    ViewItSideEffect.ShowErrorMessage(it),
                 )
             }
     }
@@ -143,5 +141,5 @@ sealed interface ViewItSideEffect {
 
     data object DismissBottomSheet : ViewItSideEffect
 
-    data class ShowErrorMessage(val message: String) : ViewItSideEffect
+    data class ShowErrorMessage(val throwable: Throwable) : ViewItSideEffect
 }

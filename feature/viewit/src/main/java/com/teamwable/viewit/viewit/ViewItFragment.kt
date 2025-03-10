@@ -76,7 +76,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
                 when (sideEffect) {
                     is ViewItSideEffect.ShowSnackBar -> showSnackBar(sideEffect.type)
                     is ViewItSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-                    is ViewItSideEffect.ShowErrorMessage -> showSnackBar(SnackbarType.ERROR, sideEffect.message)
+                    is ViewItSideEffect.ShowErrorMessage -> showSnackBar(SnackbarType.ERROR, sideEffect.throwable)
                 }
             }
         }
@@ -199,7 +199,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
         }
     }
 
-    private fun showSnackBar(snackbarType: SnackbarType, message: String = "") {
-        Snackbar.make(binding.root, snackbarType, message).show()
+    private fun showSnackBar(snackbarType: SnackbarType, throwable: Throwable? = null) {
+        Snackbar.make(binding.root, snackbarType, throwable).show()
     }
 }

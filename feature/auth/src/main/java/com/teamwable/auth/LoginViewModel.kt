@@ -10,7 +10,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.teamwable.auth.model.LoginSideEffect
 import com.teamwable.data.repository.AuthRepository
 import com.teamwable.data.repository.UserInfoRepository
-import com.teamwable.model.network.Error
+import com.teamwable.model.network.WableError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,10 +65,10 @@ class LoginViewModel @Inject constructor(
             when {
                 error is ClientError && error.reason == ClientErrorCause.Cancelled ->
                     _loginSideEffect.emit(
-                        LoginSideEffect.ShowSnackBar(Error.ApiError("카카오 로그인이 취소되었습니다")),
+                        LoginSideEffect.ShowSnackBar(WableError.ApiError("카카오 로그인이 취소되었습니다")),
                     )
 
-                else -> _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(Error.ApiError("카카오 로그인에 실패했습니다")))
+                else -> _loginSideEffect.emit(LoginSideEffect.ShowSnackBar(WableError.ApiError("카카오 로그인에 실패했습니다")))
             }
         }
     }

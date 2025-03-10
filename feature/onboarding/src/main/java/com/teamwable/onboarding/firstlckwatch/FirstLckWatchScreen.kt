@@ -70,7 +70,7 @@ fun FirstLckWatchScreen(
 ) {
     SetStatusBarColor(color = WableTheme.colors.white)
 
-    val options = (2012..2024).toImmutableList()
+    val options = (2012..2025).toImmutableList()
 
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by rememberSaveable { mutableIntStateOf(options.lastIndex) }

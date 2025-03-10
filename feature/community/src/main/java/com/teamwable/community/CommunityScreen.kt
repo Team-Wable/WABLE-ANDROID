@@ -41,7 +41,7 @@ fun CommunityRoute(
     viewModel: CommunityViewModel = hiltViewModel(),
     navigateToGoogleForm: () -> Unit = {},
     navigateToPushAlarm: () -> Unit = {},
-    onShowErrorSnackBar: (String) -> Unit = {},
+    onShowErrorSnackBar: (Throwable) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current

@@ -19,7 +19,7 @@ internal class DefaultCommunityRepository @Inject constructor(
     }
 
     override suspend fun getJoinedCommunity(): Result<String> = runSuspendCatching {
-        communityService.getJoinedCommunity().data.community
+        communityService.getJoinedCommunity().data.community.orEmpty()
     }.onFailure {
         return it.handleThrowable()
     }

@@ -1,16 +1,10 @@
 package com.teamwable.common.util
 
-import android.content.res.Resources
-import com.teamwable.common.R
-import com.teamwable.model.network.Error
-import java.net.UnknownHostException
+import com.teamwable.model.network.WableError
 
-fun getThrowableMessage(
-    throwable: Throwable?, localContextResource: Resources,
-): String = when (throwable) {
-    is UnknownHostException -> localContextResource.getString(R.string.error_message_network)
-    is Error.NetWorkConnectError -> localContextResource.getString(R.string.error_message_network)
-    is Error.ApiError -> throwable.message.toString()
-    is Error.TimeOutError -> throwable.message.toString()
-    else -> localContextResource.getString(R.string.error_message_unknown)
+private const val UNKNOWN_ERROR_MESSAGE = "알수 없는 오류가 발생 했습니다"
+
+fun Throwable?.getThrowableMessage(): String = when (this) {
+    is WableError -> this.message ?: UNKNOWN_ERROR_MESSAGE
+    else -> UNKNOWN_ERROR_MESSAGE
 }
