@@ -3,6 +3,7 @@ package com.teamwable.network.util
 import com.teamwable.model.network.WableError
 import org.json.JSONObject
 import retrofit2.HttpException
+import timber.log.Timber
 import java.net.ConnectException
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -35,5 +36,6 @@ fun Throwable.toCustomError(): Throwable = when (this) {
 }
 
 fun <T> Throwable.handleThrowable(): Result<T> {
+    Timber.e(this)
     return Result.failure(this.toCustomError())
 }
