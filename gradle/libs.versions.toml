@@ -57,6 +57,7 @@ amplitude = "1.+"
 amplitude-ads = "18.1.0"
 activity = "1.9.1"
 jsoup = "1.18.3"
+inject = "1"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
@@ -110,6 +111,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dag
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
 hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt" }
+inject = { group = "javax.inject", name = "javax.inject", version.ref = "inject" }
 
 # google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
