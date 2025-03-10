@@ -66,4 +66,9 @@
     <string name="label_app_bar_news">소식</string>
     <string name="label_app_bar_view_it">뷰잇</string>
     <string name="label_app_bar_community">커뮤니티</string>
+
+    <!-- ban trigger type -->
+    <string name="label_ban_trigger_type_content">content</string>
+    <string name="label_ban_trigger_type_comment">comment</string>
+    <string name="label_ban_trigger_type_viewit">Viewit</string>
 </resources>

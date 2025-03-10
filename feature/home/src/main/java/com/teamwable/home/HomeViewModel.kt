@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
 import com.teamwable.data.repository.FeedRepository
+import com.teamwable.data.repository.NotificationRepository
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.model.home.Feed
@@ -34,6 +35,7 @@ class HomeViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val userInfoRepository: UserInfoRepository,
     private val profileRepository: ProfileRepository,
+    private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -196,6 +198,13 @@ class HomeViewModel @Inject constructor(
     fun updateFeedBanState(feedId: Long, isBan: Boolean) {
         banFeedsFlow.update { it.toMutableSet().apply { if (isBan) add(feedId) } }
     }
+
+    fun getNotificationNumber() {
+        viewModelScope.launch {
+            notificationRepository.getNumber()
+                .onSuccess { _uiState.value = HomeUiState.AddNotificationBadge(it) }
+        }
+    }
 }
 
 sealed interface HomeUiState {
@@ -206,6 +215,8 @@ sealed interface HomeUiState {
     data class Error(val errorMessage: String) : HomeUiState
 
     data object AddPushAlarmPermission : HomeUiState
+
+    data class AddNotificationBadge(val notiCount: Int) : HomeUiState
 }
 
 sealed interface HomeSideEffect {

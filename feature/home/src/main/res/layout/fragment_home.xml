@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                app:icon="@drawable/ic_home_noti"
+                app:icon="@drawable/ic_home_notification"
                 app:iconSize="32dp" />
         </com.google.android.material.appbar.MaterialToolbar>
 

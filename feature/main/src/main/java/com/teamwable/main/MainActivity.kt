@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -40,7 +39,6 @@ import com.teamwable.viewit.R as viewitR
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
     private lateinit var appUpdateHelper: AppUpdateHandler
     private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
@@ -143,7 +141,6 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.profile.R.id.navigation_profile_edit,
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                     com.teamwable.news.R.id.navigation_news_detail,
-                    viewitR.id.navigation_view_it_posting,
                     com.teamwable.notification.R.id.navigation_notification,
                 ),
         )

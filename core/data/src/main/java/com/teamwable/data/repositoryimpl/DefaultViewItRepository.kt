@@ -47,16 +47,13 @@ class DefaultViewItRepository @Inject constructor(
         }
     }
 
-    private fun handleJsoupFailure(link: String, viewItContent: String): LinkInfo {
-        val fallbackLinkInfo = LinkInfo(
-            linkImage = DEFAULT_VIEW_IT,
-            link = link,
-            linkTitle = INVALID_LINK_TITLE,
-            viewItText = viewItContent,
-            linkName = link,
-        )
-        return fallbackLinkInfo
-    }
+    private fun handleJsoupFailure(link: String, viewItContent: String) = LinkInfo(
+        linkImage = DEFAULT_VIEW_IT,
+        link = link,
+        linkTitle = INVALID_LINK_TITLE,
+        viewItText = viewItContent,
+        linkName = link,
+    )
 
     override suspend fun postViewItLike(viewItId: Long): Result<Unit> = runCatching {
         apiService.postViewItLike(viewItId)

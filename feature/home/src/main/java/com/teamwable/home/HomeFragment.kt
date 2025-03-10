@@ -23,6 +23,7 @@ import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.drawableOf
 import com.teamwable.ui.extensions.parcelable
 import com.teamwable.ui.extensions.setDividerWithPadding
 import com.teamwable.ui.extensions.stringOf
@@ -65,6 +66,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
     override fun initView() {
         feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
         collect()
+        viewModel.getNotificationNumber()
         setAdapter()
         initNavigatePostingFabClickListener()
         fetchFeedUploaded()
@@ -82,6 +84,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
                     is HomeUiState.Success -> handleFcmNavigation()
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
+                    is HomeUiState.AddNotificationBadge -> setNotificationBadge(uiState.notiCount)
                 }
             }
         }
@@ -96,12 +99,20 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         }
     }
 
+    private fun setNotificationBadge(notiCount: Int) {
+        binding.btnHomeNoti.icon = when {
+            notiCount > 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification_badge)
+            notiCount <= 0 -> drawableOf(com.teamwable.common.R.drawable.ic_home_notification)
+            else -> return
+        }
+    }
+
     private fun handleFcmNavigation() {
         val activity = activity ?: return
         val contentId = activity.intent.getStringExtra(RELATED_CONTENT_ID) ?: return
 
         when (contentId) {
-            NOTIFICATION_VIEWIT_LIKE -> (activity as Navigation).navigateToProfileAuthFragment()
+            NOTIFICATION_VIEWIT_LIKE -> (activity as Navigation).navigateToViewItFragment()
             else -> navigateToHomeDetailFragment(contentId.toLongOrNull() ?: return)
         }
 

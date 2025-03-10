@@ -14,6 +14,7 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.setDividerWithPadding
+import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
@@ -118,7 +119,7 @@ class ViewItFragment : BindingFragment<FragmentViewItBinding>(FragmentViewItBind
                 fetchUserType = { viewModel.fetchUserType(it) },
                 removeFeed = { viewModel.removeViewIt(viewIt.viewItId) },
                 reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
-                banUser = { trigger, _ -> viewModel.banUser(Triple(trigger.postAuthorId, BanTriggerType.VIEWIT.name.lowercase(), trigger.feedId)) },
+                banUser = { trigger, _ -> viewModel.banUser(Triple(trigger.postAuthorId, stringOf(BanTriggerType.VIEWIT.type), trigger.feedId)) },
             )
         }
     }

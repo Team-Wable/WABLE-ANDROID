@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import androidx.paging.map
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repository.ViewItRepository
@@ -43,6 +44,8 @@ class ViewItViewModel @Inject constructor(
 
     private val viewItsFlow = viewItRepository.getViewIts().cachedIn(viewModelScope)
     private val removedViewItsFlow = MutableStateFlow(setOf<Long>())
+    private val banViewItFlow = MutableStateFlow(setOf<Long>())
+    private val likeViewItFlow = MutableStateFlow(mapOf<Long, LikeState>())
 
     init {
         fetchAuthId()
@@ -62,7 +65,7 @@ class ViewItViewModel @Inject constructor(
 
     private fun fetchIsAdmin() = viewModelScope.launch {
         userInfoRepository.getIsAdmin()
-            .collectLatest { isAdmin.update { it } }
+            .collectLatest { value -> isAdmin.update { value } }
     }
 
     fun fetchUserType(userId: Long): ProfileUserType {
@@ -74,15 +77,26 @@ class ViewItViewModel @Inject constructor(
     }
 
     fun updateViewIts(): Flow<PagingData<ViewIt>> {
-        return combine(viewItsFlow, removedViewItsFlow) { viewItsFlow, removedViewItIds ->
+        return combine(viewItsFlow, removedViewItsFlow, banViewItFlow, likeViewItFlow) { viewItsFlow, removedViewItIds, banState, likeStates ->
             viewItsFlow
                 .filter { removedViewItIds.contains(it.viewItId).not() }
+                .map { data ->
+                    val likeState = likeStates[data.viewItId] ?: LikeState(data.isLiked, data.likedNumber)
+                    val transformedBan = if (banState.contains(data.viewItId)) data.copy(isBlind = true) else data
+                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
+                }
         }
     }
 
     fun updateLike(viewItId: Long, likeState: LikeState) = viewModelScope.launch {
         val result = if (likeState.isLiked) viewItRepository.postViewItLike(viewItId) else viewItRepository.deleteViewItLike(viewItId)
-        result.onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+        result
+            .onSuccess { updateViewItLikeState(viewItId, likeState) }
+            .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+    }
+
+    private fun updateViewItLikeState(feedId: Long, likeState: LikeState) {
+        likeViewItFlow.update { it.toMutableMap().apply { put(feedId, likeState) } }
     }
 
     fun removeViewIt(viewId: Long) = viewModelScope.launch {
@@ -108,8 +122,15 @@ class ViewItViewModel @Inject constructor(
 
     fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
         profileRepository.postBan(banInfo)
-            .onSuccess { _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN)) }
+            .onSuccess {
+                updateViewItBanState(viewItId = banInfo.third, isBan = true)
+                _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN))
+            }
             .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
+    }
+
+    private fun updateViewItBanState(viewItId: Long, isBan: Boolean) {
+        banViewItFlow.update { it.toMutableSet().apply { if (isBan) add(viewItId) } }
     }
 
     fun postViewIt(link: String, content: String) = viewModelScope.launch {

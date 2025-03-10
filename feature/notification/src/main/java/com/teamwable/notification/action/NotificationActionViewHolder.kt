@@ -8,7 +8,7 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.text.style.StyleSpan
+import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -169,7 +169,10 @@ class NotificationActionViewHolder(
 
         val spannablePopularText = SpannableStringBuilder(popularText)
         spannablePopularText.setSpan(
-            StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
+            TextAppearanceSpan(
+                binding.root.context,
+                com.teamwable.ui.R.style.TextAppearance_Wable_Body3,
+            ),
             0,
             name.length - 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
@@ -220,7 +223,10 @@ class NotificationActionViewHolder(
         endIndex: Int,
     ) {
         spannableText.setSpan(
-            StyleSpan(com.teamwable.ui.R.font.font_pretendard_semibold),
+            TextAppearanceSpan(
+                binding.root.context,
+                com.teamwable.ui.R.style.TextAppearance_Wable_Body3,
+            ),
             0,
             name.length + endIndex + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,

@@ -168,7 +168,7 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
                 initNavigateToPostingBtnClickListener()
             }
 
-            ProfileUserType.MEMBER -> {
+            ProfileUserType.MEMBER, ProfileUserType.ADMIN -> {
                 tvProfileFeedMemberEmpty.text = getString(R.string.label_profile_feed_member_empty, userNickname)
                 tvProfileFeedMemberEmpty.visible(isEmpty)
             }
