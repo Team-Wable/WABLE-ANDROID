@@ -42,6 +42,7 @@ import com.teamwable.ui.util.BundleKey.HOME_DETAIL_RESULT
 import com.teamwable.ui.util.BundleKey.IS_FEED_REMOVED
 import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.FcmTag.NOTIFICATION_VIEWIT_LIKE
 import com.teamwable.ui.util.FcmTag.RELATED_CONTENT_ID
 import com.teamwable.ui.util.FeedActionHandler
 import com.teamwable.ui.util.FeedTransformer
@@ -68,6 +69,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
         initNavigatePostingFabClickListener()
         fetchFeedUploaded()
         fetchFeedFromHomeDetail()
+        initNavigateToNotificationClickListener()
     }
 
     fun updateToLoadingState() = viewModel.updateLoadingState()
@@ -78,11 +80,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 when (uiState) {
                     is HomeUiState.Loading -> findNavController().navigate(HomeFragmentDirections.actionHomeToLoading())
                     is HomeUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-                    is HomeUiState.Success -> activity?.let {
-                        navigateToHomeDetailFragment(it.intent.getStringExtra(RELATED_CONTENT_ID)?.toLong() ?: return@let)
-                        it.intent.removeExtra(RELATED_CONTENT_ID)
-                    }
-
+                    is HomeUiState.Success -> handleFcmNavigation()
                     is HomeUiState.AddPushAlarmPermission -> initPushAlarmPermissionAlert()
                 }
             }
@@ -96,6 +94,18 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
                 }
             }
         }
+    }
+
+    private fun handleFcmNavigation() {
+        val activity = activity ?: return
+        val contentId = activity.intent.getStringExtra(RELATED_CONTENT_ID) ?: return
+
+        when (contentId) {
+            NOTIFICATION_VIEWIT_LIKE -> (activity as Navigation).navigateToProfileAuthFragment()
+            else -> navigateToHomeDetailFragment(contentId.toLongOrNull() ?: return)
+        }
+
+        activity.intent.removeExtra(RELATED_CONTENT_ID)
     }
 
     private fun navigateToHomeDetailFragment(feedId: Long) = findNavController().navigate(HomeFragmentDirections.actionHomeToHomeDetail(feedId))
@@ -278,4 +288,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(FragmentHomeBinding::i
 
     private fun handlePushAlarmPermissionDenied() =
         viewModel.patchUserProfileUri(MemberInfoEditModel(isPushAlarmAllowed = false))
+
+    private fun initNavigateToNotificationClickListener() {
+        binding.btnHomeNoti.setOnClickListener {
+            findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Notification)
+        }
+    }
 }

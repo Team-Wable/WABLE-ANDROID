@@ -28,15 +28,18 @@ object BundleKey {
     const val HOME_DETAIL_RESULT = "homeDetailResult"
     const val FEED_STATE = "feedState"
     const val IS_FEED_REMOVED = "isFeedRemoved"
+    const val VIEW_IT_LINK = "viewItLink"
+    const val VIEW_IT_CONTENT = "viewItContent"
 }
 
 object FcmTag {
     const val RELATED_CONTENT_ID = "relateContentId"
     const val CHANNEL_NAME = "FCM_CHANNEL"
     const val CHANNEL_ID = "FCM_CHANNEL_ID"
-    const val NOTIFICATION_ID = 1
     const val NOTIFICATION_TITLE = "gcm.notification.title"
     const val NOTIFICATION_BODY = "gcm.notification.body"
+    const val NAME = "name"
+    const val NOTIFICATION_VIEWIT_LIKE = "viewitLike"
 }
 
 object ThrottleKey {
