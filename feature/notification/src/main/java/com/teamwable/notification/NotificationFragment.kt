@@ -1,5 +1,6 @@
 package com.teamwable.notification
 
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.common.util.AmplitudeNotiTag.CLICK_ACTIVITIESNOTI
@@ -16,6 +17,7 @@ class NotificationFragment :
     override fun initView() {
         initNotificationViewPagerAdapter()
         initTabClickListener()
+        initUpBtnClickListener()
     }
 
     private fun initNotificationViewPagerAdapter() {
@@ -43,5 +45,11 @@ class NotificationFragment :
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+    }
+
+    private fun initUpBtnClickListener() {
+        binding.tbNotification.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

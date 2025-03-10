@@ -21,6 +21,7 @@
     <string name="label_notification_action_popular_content">popularContent</string>
     <string name="label_notification_action_feed_child_comment">childComment</string>
     <string name="label_notification_action_child_comment_liked">childCommentLiked</string>
+    <string name="label_notification_action_view_it_liked">viewitLiked</string>
     <string name="tv_notification_action_content_liked">님 이 %s님의 글을 좋아합니다.</string>
     <string name="tv_notification_action_feed_comment">님 이 댓글을 작성했습니다.</string>
     <string name="tv_notification_action_comment_liked">님 이 %s님의 댓글을 좋아합니다.</string>
@@ -33,6 +34,7 @@
     <string name="tv_notification_action_popular_content">어제 가장 인기있던 글이에요.</string>
     <string name="tv_notification_action_feed_child_comment">님 이 답글을 작성했습니다.</string>
     <string name="tv_notification_action_chile_comment_liked">님 이 %s님의 답글을 좋아합니다.</string>
+    <string name="tv_notification_action_view_it_liked">님 이 %s님의 추천 영상을 좋아합니다.</string>
     <string name="tv_notification_action_more">...</string>
 
     <!-- fragment_notification_information -->

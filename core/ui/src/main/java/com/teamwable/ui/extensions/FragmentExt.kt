@@ -53,7 +53,10 @@ fun Fragment.statusBarColorOf(
 }
 
 fun Fragment.openUri(uri: String) {
-    Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also { startActivity(it) }
+    Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also {
+        runCatching { startActivity(it) }
+            .onFailure { Toast.makeText(requireContext(), "URL을 열 수 없습니다.", Toast.LENGTH_SHORT).show() }
+    }
 }
 
 fun Fragment.statusBarModeOf(isLightStatusBar: Boolean = true) {

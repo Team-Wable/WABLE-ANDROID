@@ -17,9 +17,25 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="@dimen/padding_top"
-            android:paddingStart="16dp"
             android:paddingTop="4dp"
-            app:navigationIcon="@drawable/ic_share_logo" />
+            app:contentInsetStart="0dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:src="@drawable/ic_share_logo" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_home_noti"
+                style="@style/Wable.Icon.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                app:icon="@drawable/ic_home_noti"
+                app:iconSize="32dp" />
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"

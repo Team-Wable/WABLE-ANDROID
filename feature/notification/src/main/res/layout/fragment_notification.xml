@@ -13,9 +13,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_notification"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:minHeight="0dp">
+            android:minHeight="0dp"
+            app:navigationIcon="@drawable/ic_share_back_btn">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -24,9 +26,15 @@
                 android:text="@string/appbar_notification_title"
                 android:textAppearance="@style/TextAppearance.Wable.Body1"
                 android:textColor="@color/black" />
-
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="1dp"
+        app:dividerColor="@color/gray_300"
+        app:layout_constraintTop_toBottomOf="@id/appbar_notification" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_notification_tab"
@@ -47,6 +55,7 @@
         app:tabIndicatorColor="@color/purple_50"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="2dp"
+        app:tabPadding="12dp"
         app:tabSelectedTextAppearance="@style/TextAppearance.Wable.Body1"
         app:tabSelectedTextColor="@color/black"
         app:tabTextAppearance="@style/TextAppearance.Wable.Body2"

@@ -5,63 +5,24 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import com.teamwable.model.network.WableError
 import com.teamwable.ui.base.BindingBottomSheetFragment
-import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.showKeyboard
-import com.teamwable.ui.extensions.viewLifeCycle
-import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.extensions.visible
-import com.teamwable.ui.type.SnackbarType
-import com.teamwable.ui.util.BundleKey.IS_UPLOADED
 import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_CONTENT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_LINK
 import com.teamwable.viewit.databinding.BottomSheetViewItPostingBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPostingBinding>(BottomSheetViewItPostingBinding::inflate) {
-    private val viewModel: ViewItPostingViewModel by viewModels()
-
     override fun initView() {
-        val viewItSnackbar = Snackbar.make(parentFragment?.view ?: return, SnackbarType.VIEW_IT_ING)
         binding.root.context.showKeyboard(binding.etViewItLinkInput)
-        collect(viewItSnackbar)
         setupTextWatchers()
         setOnLinkInputBtnClickListener()
-        setOnViewItUploadBtnClickListener(viewItSnackbar)
-    }
-
-    private fun collect(snackbar: Snackbar) {
-        viewLifeCycleScope.launch {
-            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
-                when (uiState) {
-                    is ViewItPostingUiState.Success -> {
-                        snackbar.updateToCommentComplete(SnackbarType.VIEW_IT_COMPLETE)
-                        parentFragmentManager.setFragmentResult(
-                            POSTING_RESULT,
-                            Bundle().apply { putBoolean(IS_UPLOADED, true) },
-                        )
-                    }
-
-                    is ViewItPostingUiState.Loading -> Unit
-                }
-            }
-        }
-
-        viewLifeCycleScope.launch {
-            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
-                when (sideEffect) {
-                    is ViewItPostingSideEffect.ShowErrorMessage -> {
-                        snackbar.updateToCommentComplete(SnackbarType.ERROR, WableError.CustomError(sideEffect.message))
-                    }
-                }
-            }
-        }
+        setOnViewItUploadBtnClickListener()
     }
 
     private fun setupTextWatchers() {
@@ -105,18 +66,20 @@ class ViewItPostingBottomSheet : BindingBottomSheetFragment<BottomSheetViewItPos
         groupViewItContent.visible(isLinkCompleted)
     }
 
-    private fun setOnViewItUploadBtnClickListener(snackbar: Snackbar) = with(binding) {
+    private fun setOnViewItUploadBtnClickListener() = with(binding) {
         btnViewItContentInputUpload.setOnDuplicateBlockClick {
-            snackbar.show()
-            viewModel.postViewIt(etViewItLinkInputComplete.text.toString(), etViewItContentInput.text.toString())
-            clearEditText()
-            updateVisibilityBasedOnLinkStatus(false)
+            setUploadResult()
+            dismiss()
         }
     }
 
-    private fun clearEditText() = with(binding) {
-        etViewItContentInput.text.clear()
-        etViewItLinkInputComplete.text.clear()
-        etViewItLinkInput.text.clear()
+    private fun setUploadResult() = with(binding) {
+        parentFragmentManager.setFragmentResult(
+            POSTING_RESULT,
+            Bundle().apply {
+                putString(VIEW_IT_LINK, etViewItLinkInputComplete.text.toString())
+                putString(VIEW_IT_CONTENT, etViewItContentInput.text.toString())
+            },
+        )
     }
 }

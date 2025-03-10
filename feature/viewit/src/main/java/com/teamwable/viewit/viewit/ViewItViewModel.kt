@@ -13,6 +13,7 @@ import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,6 +111,21 @@ class ViewItViewModel @Inject constructor(
             .onSuccess { _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN)) }
             .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
     }
+
+    fun postViewIt(link: String, content: String) = viewModelScope.launch {
+        _uiState.value = ViewItUiState.Loading
+        viewItRepository.postViewIt(link, content)
+            .onSuccess {
+                _uiState.value = ViewItUiState.Success
+                delay(200)
+                _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.VIEW_IT_COMPLETE))
+            }
+            .onFailure {
+                _event.emit(
+                    ViewItSideEffect.ShowErrorMessage(it),
+                )
+            }
+    }
 }
 
 sealed interface ViewItUiState {
@@ -124,4 +140,6 @@ sealed interface ViewItSideEffect {
     data class ShowSnackBar(val type: SnackbarType) : ViewItSideEffect
 
     data object DismissBottomSheet : ViewItSideEffect
+
+    data class ShowErrorMessage(val throwable: Throwable) : ViewItSideEffect
 }
