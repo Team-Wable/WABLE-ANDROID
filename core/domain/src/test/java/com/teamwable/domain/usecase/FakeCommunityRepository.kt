@@ -5,7 +5,7 @@ import com.teamwable.model.community.CommunityModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-internal class FakeCommunityRepository(
+class FakeCommunityRepository(
     private val communities: List<CommunityModel>,
     private val joinedCommunity: String,
 ) : CommunityRepository {
