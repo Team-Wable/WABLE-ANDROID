@@ -1,5 +1,7 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 apply { from("gradle/projectDependencyGraph.gradle") }
 
 buildscript {
@@ -30,4 +32,11 @@ plugins {
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
+}
+
+tasks.withType(Test::class) {
+    useJUnitPlatform()
+    testLogging {
+        events.addAll(arrayOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED))
+    }
 }

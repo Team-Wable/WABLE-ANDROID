@@ -29,6 +29,9 @@ class AndroidTestPlugin : Plugin<Project> {
 
         dependencies {
             "testImplementation"(libs.findLibrary("junit").get())
+            "testImplementation"(libs.findLibrary("junit.jupiter.api").get())
+            "testImplementation"(libs.findLibrary("kotlinx.coroutines.test").get())
+            "testRuntimeOnly"(libs.findLibrary("junit.jupiter.engine").get())
             "androidTestImplementation"(libs.findBundle("androidx.android.test").get())
         }
     }
