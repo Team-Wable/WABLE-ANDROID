@@ -9,8 +9,8 @@ import org.gradle.kotlin.dsl.getByType
 
 class AndroidTestPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
+        configureJUnit()
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
         extensions.getByType<BaseExtension>().apply {
             defaultConfig {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
