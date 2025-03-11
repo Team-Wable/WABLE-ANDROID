@@ -14,6 +14,6 @@ class FakeCommunityRepository(
     override fun getJoinedCommunity(): Flow<String> = flowOf(joinedCommunity)
 
     override suspend fun patchPreinCommunity(communityName: String): Result<Unit> {
-        TODO("Not yet implemented")
+        return Result.success(Unit)
     }
 }

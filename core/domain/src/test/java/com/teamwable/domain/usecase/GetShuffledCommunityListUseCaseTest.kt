@@ -15,7 +15,7 @@ internal class GetShuffledCommunityListUseCaseTest : BaseCommunityUseCaseTest() 
     private lateinit var useCase: GetShuffledCommunityListUseCase
 
     @BeforeEach
-    override fun setUp() {
+    override fun setUp() { // Given : 커뮤니티 리스트가 존재하면
         fakeCommunityRepository = FakeCommunityRepository(communities, "")
         useCase = GetShuffledCommunityListUseCase(fakeCommunityRepository)
     }
