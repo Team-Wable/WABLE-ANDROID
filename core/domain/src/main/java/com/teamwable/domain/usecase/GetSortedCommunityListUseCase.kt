@@ -2,28 +2,26 @@ package com.teamwable.domain.usecase
 
 import com.teamwable.model.community.CommunityModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetSortedCommunityListUseCase @Inject constructor(
-    private val getJoinedCommunityNameUseCase: GetJoinedCommunityNameUseCase,
     private val getShuffledCommunityListUseCase: GetShuffledCommunityListUseCase,
 ) {
-    operator fun invoke(): Flow<List<CommunityModel>> {
-        return combine(
-            getShuffledCommunityListUseCase(),
-            getJoinedCommunityNameUseCase(),
-        ) { communities, joinedCommunityName ->
-            if (joinedCommunityName.isBlank()) return@combine communities
+    operator fun invoke(preRegisterTeamName: String): Flow<Pair<List<CommunityModel>, Float>> {
+        return getShuffledCommunityListUseCase().map { communities ->
+            if (preRegisterTeamName.isBlank()) return@map communities to 0f
 
             val communityList = communities.toMutableList()
-            val index = communityList.indexOfFirst { it.communityName == joinedCommunityName }
+            val index = communityList.indexOfFirst { it.communityName == preRegisterTeamName }
+            var progress = 0f
 
             if (index != NOT_FOUND) {
+                progress = communityList[index].communityNum
                 val joinedCommunity = communityList.removeAt(index)
                 communityList.add(FIRST_INDEX, joinedCommunity)
             }
-            communityList
+            communityList to progress
         }
     }
 

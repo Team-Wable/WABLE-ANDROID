@@ -16,7 +16,6 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
     override fun setUp() { // given : 커뮤니티 리스트와 가입된 커뮤니티 이름이 주어진다
         fakeCommunityRepository = FakeCommunityRepository(communities, "Community D")
         useCase = GetSortedCommunityListUseCase(
-            getJoinedCommunityNameUseCase = GetJoinedCommunityNameUseCase(fakeCommunityRepository),
             getShuffledCommunityListUseCase = GetShuffledCommunityListUseCase(fakeCommunityRepository),
         )
     }
@@ -28,7 +27,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
         @DisplayName("정렬된 리스트는 joinedCommunityName이 최상단에 위치해야 한다")
         fun `sorted list should place joined community at the top`() = runTest {
             // When: "Community D"를 최상단으로 정렬한다
-            val sortedList = useCase().single()
+            val sortedList = useCase.invoke(preRegisterTeamName = "Community D").single().first
             printOriginAndShuffledList(sortedList)
             // Then: 최상단에 "Community D"가 정렬된다
             assertEquals("Community D", sortedList.first().communityName)
@@ -47,7 +46,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
         @DisplayName("섞인 리스트는 원본 리스트와 동일한 요소를 가져야 한다")
         fun `shuffled list should contain the same elements as the original list`() = runTest {
             // When: 정렬된 커뮤니티 리스트를 조회한다
-            val sortedList = useCase().single()
+            val sortedList = useCase.invoke("").single().first
             // Then: 순서는 다르지만, 요소는 동일해야 한다
             assertEquals(communities.toSet(), sortedList.toSet())
         }
@@ -65,7 +64,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
         @DisplayName("섞인 리스트는 원본 리스트와 동일한 요소를 가져야 한다")
         fun `shuffled list should contain the same elements as the original list`() = runTest {
             // When: 정렬된 커뮤니티 리스트를 조회한다
-            val sortedList = useCase().single()
+            val sortedList = useCase.invoke("false name").single().first
             // Then: 순서는 다르지만, 요소는 동일해야 한다
             assertEquals(communities.toSet(), sortedList.toSet())
         }
