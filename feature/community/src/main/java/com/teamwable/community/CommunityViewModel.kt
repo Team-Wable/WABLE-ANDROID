@@ -136,6 +136,7 @@ class CommunityViewModel @Inject constructor(
         viewModelScope.launch {
             delay(3000L)
             dismissDialog()
+            intent { copy(buttonState = CommunityButtonType.FAN_MORE) }
         }
     }
 
