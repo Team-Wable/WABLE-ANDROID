@@ -6,16 +6,25 @@ import com.teamwable.community.component.CommunityButtonType
 import com.teamwable.community.model.CommunityIntent
 import com.teamwable.community.model.CommunitySideEffect
 import com.teamwable.community.model.CommunityState
+import com.teamwable.community.model.toLckTeamType
 import com.teamwable.data.repository.CommunityRepository
 import com.teamwable.designsystem.type.DialogType
+import com.teamwable.domain.usecase.GetJoinedCommunityNameUseCase
+import com.teamwable.domain.usecase.GetSortedCommunityListUseCase
+import com.teamwable.model.community.CommunityModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
     private val communityRepository: CommunityRepository,
+    private val getSortedCommunityListUseCase: GetSortedCommunityListUseCase,
+    private val getJoinedCommunityNameUseCase: GetJoinedCommunityNameUseCase,
 ) : BaseViewModel<CommunityIntent, CommunityState, CommunitySideEffect>(
         initialState = CommunityState(),
     ) {
@@ -40,30 +49,34 @@ class CommunityViewModel @Inject constructor(
     private fun getInitialData() {
         viewModelScope.launch {
             getJoinedCommunity()
-            getCommunityList()
+            getSortedCommunityList()
         }
     }
 
     private suspend fun getJoinedCommunity() {
-        communityRepository.getJoinedCommunity()
-            .onSuccess { joinedCommunity ->
-                intent { copy(preRegisterTeamName = joinedCommunity) }
-            }.onFailure {
+        getJoinedCommunityNameUseCase()
+            .catch {
                 postSideEffect(CommunitySideEffect.ShowSnackBar(it))
+            }
+            .collectLatest { joinedCommunity ->
+                intent { copy(preRegisterTeamName = joinedCommunity) }
             }
     }
 
-    private suspend fun getCommunityList() {
-        communityRepository.getCommunityInfo()
-            .onSuccess { communityList ->
+    private suspend fun getSortedCommunityList() {
+        getSortedCommunityListUseCase(currentState.preRegisterTeamName)
+            .catch {
+                postSideEffect(CommunitySideEffect.ShowSnackBar(it))
+            }
+            .collectLatest { (communityList, progress) ->
+                val mappedLckTeams = communityList.mapNotNull(CommunityModel::toLckTeamType)
                 intent {
                     copy(
-                        progress = communityList.find { it.communityName == preRegisterTeamName }?.communityNum ?: 0f,
+                        lckTeams = mappedLckTeams.toPersistentList(),
+                        progress = progress,
                         buttonState = if (preRegisterTeamName.isNotEmpty()) CommunityButtonType.FAN_MORE else CommunityButtonType.DEFAULT,
                     )
                 }
-            }.onFailure {
-                postSideEffect(CommunitySideEffect.ShowSnackBar(it))
             }
     }
 
@@ -80,7 +93,7 @@ class CommunityViewModel @Inject constructor(
                         )
                     }
                     showPushNotificationDialog()
-                    getCommunityList()
+                    getSortedCommunityList()
                 }.onFailure {
                     dismissDialog()
                     postSideEffect(CommunitySideEffect.ShowSnackBar(it))
