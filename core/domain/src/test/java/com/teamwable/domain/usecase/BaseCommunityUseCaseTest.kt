@@ -3,7 +3,7 @@ package com.teamwable.domain.usecase
 import com.teamwable.model.community.CommunityModel
 import org.junit.jupiter.api.BeforeEach
 
-abstract class BaseCommunityUseCaseTest {
+internal abstract class BaseCommunityUseCaseTest {
     protected lateinit var fakeCommunityRepository: FakeCommunityRepository
 
     @BeforeEach
