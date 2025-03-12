@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.LinkStorage
 import com.teamwable.community.component.CommunityButtonType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
@@ -52,7 +53,7 @@ fun CommunityRoute(
             .collectLatest { sideEffect ->
                 when (sideEffect) {
                     is CommunitySideEffect.CopyToClipBoard -> {
-                        val clipData = ClipData.newPlainText("pre link", sideEffect.link)
+                        val clipData = ClipData.newPlainText("pre link", LinkStorage.PRE_REGISTER_LINK)
                         clipboardManager.setClip(ClipEntry(clipData))
                     }
 

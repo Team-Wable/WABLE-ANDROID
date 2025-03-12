@@ -127,7 +127,7 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun copyToClipBoard() {
-        postSideEffect(CommunitySideEffect.CopyToClipBoard("https://www.naver.com"))
+        postSideEffect(CommunitySideEffect.CopyToClipBoard)
     }
 
     private fun navigateToPushAlarm() {
