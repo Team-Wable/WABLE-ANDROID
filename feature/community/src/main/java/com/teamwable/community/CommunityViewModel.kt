@@ -116,9 +116,7 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun showPushNotificationDialog() {
-        viewModelScope.launch {
-            delay(3000L)
-            dismissDialog()
+        dismissAfter3000 {
             if (!currentState.isPushPermission) {
                 intent { copy(dialogType = DialogType.PUSH_NOTIFICATION) }
             }
@@ -133,9 +131,7 @@ class CommunityViewModel @Inject constructor(
             )
         }
         copyToClipBoard()
-        viewModelScope.launch {
-            delay(3000L)
-            dismissDialog()
+        dismissAfter3000 {
             intent { copy(buttonState = CommunityButtonType.FAN_MORE) }
         }
     }
@@ -147,6 +143,16 @@ class CommunityViewModel @Inject constructor(
     private fun navigateToPushAlarm() {
         postSideEffect(CommunitySideEffect.NavigateToPushAlarm)
         dismissDialog()
+    }
+
+    private fun dismissAfter3000(
+        action: () -> Unit,
+    ) {
+        viewModelScope.launch {
+            delay(3000L)
+            dismissDialog()
+            action()
+        }
     }
 
     private fun dismissDialog() {
