@@ -24,7 +24,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
     @DisplayName("커뮤니티 리스트 정렬 테스트")
     inner class SortCommunityListTest {
         @Test
-        @DisplayName("정렬된 리스트는 joinedCommunityName이 최상단에 위치해야 한다")
+        @DisplayName("정렬된 리스트는 Community D가 최상단에 위치해야 한다")
         fun `sorted list should place joined community at the top`() = runTest {
             // When: "Community D"를 최상단으로 정렬한다
             val sortedList = useCase.invoke(preRegisterTeamName = "Community D").single().first

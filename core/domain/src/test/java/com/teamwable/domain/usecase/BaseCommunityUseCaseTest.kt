@@ -14,7 +14,7 @@ abstract class BaseCommunityUseCaseTest {
         communities.forEachIndexed { index, community ->
             println("[$index] $community")
         }
-        println("\n섞인 리스트:")
+        println("\n정렬 후 리스트:")
         shuffledList.forEachIndexed { index, community ->
             println("[$index] $community")
         }
