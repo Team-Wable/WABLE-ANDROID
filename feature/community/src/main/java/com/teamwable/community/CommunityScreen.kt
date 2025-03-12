@@ -59,7 +59,7 @@ fun CommunityRoute(
 
                     is CommunitySideEffect.NavigateToGoogleForm -> navigateToGoogleForm()
                     is CommunitySideEffect.NavigateToPushAlarm -> navigateToPushAlarm()
-                    is CommunitySideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
+                    is CommunitySideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.throwable)
                 }
             }
     }

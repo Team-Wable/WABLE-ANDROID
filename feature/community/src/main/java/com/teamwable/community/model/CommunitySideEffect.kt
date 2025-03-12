@@ -3,7 +3,7 @@ package com.teamwable.community.model
 import com.teamwable.common.base.SideEffect
 
 sealed interface CommunitySideEffect : SideEffect {
-    data class ShowSnackBar(val message: Throwable) : CommunitySideEffect
+    data class ShowSnackBar(val throwable: Throwable) : CommunitySideEffect
 
     data object CopyToClipBoard : CommunitySideEffect
 
