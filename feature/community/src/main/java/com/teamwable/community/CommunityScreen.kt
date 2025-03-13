@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -117,10 +119,10 @@ private fun CommunityScreen(
             }
             items(
                 items = state.lckTeams,
-                key = { items -> items.name },
+                key = { items -> items.communityName },
                 contentType = { ContentType.Item.name },
             ) { item ->
-                val isSelected = item.name == state.preRegisterTeamName
+                val isSelected = item.communityName == state.preRegisterTeamName
                 CommunityItem(
                     lckTeamType = item,
                     progress = state.progress,
@@ -128,7 +130,7 @@ private fun CommunityScreen(
                     enabled = state.preRegisterTeamName.isBlank() || isSelected,
                     onClick = {
                         when (state.buttonState) {
-                            CommunityButtonType.DEFAULT -> onDefaultBtnClick(item.name)
+                            CommunityButtonType.DEFAULT -> onDefaultBtnClick(item.communityName)
                             CommunityButtonType.FAN_MORE -> onMoreFanBtnClick()
                             else -> Unit
                         }
@@ -145,6 +147,7 @@ private fun CommunityPreview() {
     WableTheme {
         CommunityScreen(
             state = CommunityState(),
+            listState = rememberLazyListState(),
         )
     }
 }

@@ -24,10 +24,11 @@ import com.teamwable.designsystem.component.indicator.WableLinearProgressBar
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.SmallButtonDefaults
+import com.teamwable.model.community.CommunityModel
 
 @Composable
 fun CommunityItem(
-    lckTeamType: LckTeamType = LckTeamType.T1,
+    lckTeamType: CommunityModel,
     type: CommunityButtonType = CommunityButtonType.DEFAULT,
     enabled: Boolean = false,
     progress: Float = 0.0f,
@@ -48,7 +49,7 @@ fun CommunityItem(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Image(
-                painter = painterResource(id = lckTeamType.teamProfileImage),
+                painter = painterResource(id = lckTeamType.imageRes),
                 modifier = Modifier
                     .size(64.dp),
                 contentDescription = null,
@@ -56,7 +57,7 @@ fun CommunityItem(
             Spacer(modifier = Modifier.padding(start = 8.dp))
             Text(
                 text = buildString {
-                    append(lckTeamType.name)
+                    append(lckTeamType.communityName)
                     append(stringResource(R.string.str_community_lck_sub_title))
                 },
                 style = WableTheme.typography.head02,
@@ -118,6 +119,11 @@ fun CommunityProgressTitle() {
 @Preview(showBackground = true)
 private fun CommunityItemPreview() {
     WableTheme {
-        CommunityItem()
+        CommunityItem(
+            lckTeamType = CommunityModel(
+                communityName = "T1",
+                imageRes = LckTeamType.T1.teamProfileImage,
+            ),
+        )
     }
 }
