@@ -30,7 +30,7 @@ class CommunityViewModel @Inject constructor(
 ) : BaseViewModel<CommunityIntent, CommunityState, CommunitySideEffect>(
         initialState = CommunityState(),
     ) {
-    init {
+    override fun initialDataLoad() {
         onIntent(CommunityIntent.LoadInitialData)
     }
 
