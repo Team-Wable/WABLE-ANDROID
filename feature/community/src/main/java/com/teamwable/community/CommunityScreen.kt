@@ -35,6 +35,7 @@ import com.teamwable.community.model.CommunityState
 import com.teamwable.designsystem.component.button.BigButtonDefaults
 import com.teamwable.designsystem.component.button.WableAnnotatedTextButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
+import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 import kotlinx.coroutines.flow.collectLatest
@@ -49,19 +50,21 @@ fun CommunityRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val clipboardManager = LocalClipboardManager.current
+    val listState = rememberLazyListState()
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { sideEffect ->
                 when (sideEffect) {
-                    is CommunitySideEffect.CopyToClipBoard -> {
+                    CommunitySideEffect.CopyToClipBoard -> {
                         val clipData = ClipData.newPlainText("pre link", LinkStorage.PRE_REGISTER_LINK)
                         clipboardManager.setClip(ClipEntry(clipData))
                     }
 
-                    is CommunitySideEffect.NavigateToGoogleForm -> navigateToGoogleForm()
-                    is CommunitySideEffect.NavigateToPushAlarm -> navigateToPushAlarm()
+                    CommunitySideEffect.NavigateToGoogleForm -> navigateToGoogleForm()
+                    CommunitySideEffect.NavigateToPushAlarm -> navigateToPushAlarm()
                     is CommunitySideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.throwable)
+                    CommunitySideEffect.ScrollToTop -> listState.scrollToTop()
                 }
             }
     }
@@ -77,6 +80,7 @@ fun CommunityRoute(
 
     CommunityScreen(
         state = state,
+        listState = listState,
         onDefaultBtnClick = { team -> viewModel.onIntent(CommunityIntent.ClickDefaultItemBtn(team)) },
         onMoreFanBtnClick = { viewModel.onIntent(CommunityIntent.ClickMoreFanItemBtn) },
         onFloatingBtnClick = { viewModel.onIntent(CommunityIntent.ClickFloatingBtn) },
@@ -86,6 +90,7 @@ fun CommunityRoute(
 @Composable
 private fun CommunityScreen(
     state: CommunityState,
+    listState: LazyListState,
     onDefaultBtnClick: (String) -> Unit = {},
     onFloatingBtnClick: () -> Unit = {},
     onMoreFanBtnClick: () -> Unit = {},
@@ -104,6 +109,7 @@ private fun CommunityScreen(
         },
     ) {
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(top = 10.dp, bottom = 64.dp),
             modifier = Modifier.fillMaxWidth(),
         ) {

@@ -10,4 +10,6 @@ sealed interface CommunitySideEffect : SideEffect {
     data object NavigateToGoogleForm : CommunitySideEffect
 
     data object NavigateToPushAlarm : CommunitySideEffect
+
+    data object ScrollToTop : CommunitySideEffect
 }
