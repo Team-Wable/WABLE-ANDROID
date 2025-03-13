@@ -7,26 +7,13 @@ import javax.inject.Inject
 
 class GetSortedCommunityListUseCase @Inject constructor(
     private val getShuffledCommunityListUseCase: GetShuffledCommunityListUseCase,
+    private val moveCommunityToTopUseCase: MoveCommunityToTopUseCase,
 ) {
     operator fun invoke(preRegisterTeamName: String): Flow<Pair<List<CommunityModel>, Float>> {
         return getShuffledCommunityListUseCase().map { communities ->
             if (preRegisterTeamName.isBlank()) return@map communities to 0f
-
-            val communityList = communities.toMutableList()
-            val index = communityList.indexOfFirst { it.communityName == preRegisterTeamName }
-            var progress = 0f
-
-            if (index != NOT_FOUND) {
-                progress = communityList[index].communityNum
-                val joinedCommunity = communityList.removeAt(index)
-                communityList.add(FIRST_INDEX, joinedCommunity)
-            }
-            communityList to progress
+            val sortedList = moveCommunityToTopUseCase(communities, preRegisterTeamName)
+            sortedList to sortedList[0].communityNum
         }
-    }
-
-    companion object {
-        private const val NOT_FOUND = -1
-        private const val FIRST_INDEX = 0
     }
 }
