@@ -13,7 +13,9 @@ class GetSortedCommunityListUseCase @Inject constructor(
         return getShuffledCommunityListUseCase().map { communities ->
             if (preRegisterTeamName.isBlank()) return@map communities to 0f
             val sortedList = moveCommunityToTopUseCase(communities, preRegisterTeamName)
-            sortedList to sortedList[0].communityNum
+
+            if (sortedList.isNotEmpty()) sortedList to sortedList[0].communityNum
+            else communities to 0f
         }
     }
 }
