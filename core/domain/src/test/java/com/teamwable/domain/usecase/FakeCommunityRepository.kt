@@ -13,7 +13,7 @@ internal class FakeCommunityRepository(
 
     override fun getJoinedCommunity(): Flow<String> = flowOf(joinedCommunity)
 
-    override suspend fun patchPreinCommunity(communityName: String): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun patchPreinCommunity(communityName: String): Result<Float> {
+        return Result.success(0f)
     }
 }
