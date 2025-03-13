@@ -28,9 +28,9 @@ internal class DefaultCommunityRepository @Inject constructor(
         throw it.toCustomError()
     }
 
-    override suspend fun patchPreinCommunity(communityName: String): Result<Unit> = runSuspendCatching {
-        communityService.patchPreinCommunity(communityName.toRequestCommunityDto())
-        Unit
+    override suspend fun patchPreinCommunity(communityName: String): Result<Float> = runSuspendCatching {
+        communityService.patchPreinCommunity(communityName.toRequestCommunityDto()).data
+            .toCommunityModel().communityNum
     }.onFailure {
         return it.handleThrowable()
     }

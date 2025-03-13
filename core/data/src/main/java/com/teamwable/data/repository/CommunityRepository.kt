@@ -8,5 +8,5 @@ interface CommunityRepository {
 
     fun getJoinedCommunity(): Flow<String>
 
-    suspend fun patchPreinCommunity(communityName: String): Result<Unit>
+    suspend fun patchPreinCommunity(communityName: String): Result<Float>
 }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseCommunityInfoDto(
     @SerialName("communityName")
-    val communityName: String,
+    val communityName: String = "",
     @SerialName("communityNum")
-    val communityNum: Double,
+    val communityNum: Double = 0.0,
 )
