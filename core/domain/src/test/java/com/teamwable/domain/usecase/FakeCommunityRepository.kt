@@ -7,11 +7,10 @@ import kotlinx.coroutines.flow.flowOf
 
 internal class FakeCommunityRepository(
     private val communities: List<CommunityModel>,
-    private val joinedCommunity: String,
 ) : CommunityRepository {
     override fun getCommunities(): Flow<List<CommunityModel>> = flowOf(communities)
 
-    override fun getJoinedCommunity(): Flow<String> = flowOf(joinedCommunity)
+    override fun getJoinedCommunity(): Flow<String> = flowOf("")
 
     override suspend fun patchPreinCommunity(communityName: String): Result<Float> {
         return Result.success(0f)

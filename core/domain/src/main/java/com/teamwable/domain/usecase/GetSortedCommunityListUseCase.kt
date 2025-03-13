@@ -14,8 +14,11 @@ class GetSortedCommunityListUseCase @Inject constructor(
             if (preRegisterTeamName.isBlank()) return@map communities to 0f
             val sortedList = moveCommunityToTopUseCase(communities, preRegisterTeamName)
 
-            if (sortedList.isNotEmpty()) sortedList to sortedList[0].communityNum
-            else communities to 0f
+            val progress =
+                if (sortedList.isNotEmpty() && sortedList[0].communityName == preRegisterTeamName)
+                    sortedList[0].communityNum
+                else 0f
+            sortedList to progress
         }
     }
 }

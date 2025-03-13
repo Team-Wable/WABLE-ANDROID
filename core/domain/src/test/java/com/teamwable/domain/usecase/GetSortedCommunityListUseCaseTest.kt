@@ -14,7 +14,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
 
     @BeforeEach
     override fun setUp() { // given : 커뮤니티 리스트와 가입된 커뮤니티 이름이 주어진다
-        fakeCommunityRepository = FakeCommunityRepository(communities, "Community D")
+        fakeCommunityRepository = FakeCommunityRepository(communities)
         useCase = GetSortedCommunityListUseCase(
             getShuffledCommunityListUseCase = GetShuffledCommunityListUseCase(fakeCommunityRepository),
             moveCommunityToTopUseCase = MoveCommunityToTopUseCase(),
@@ -38,11 +38,6 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
     @Nested
     @DisplayName("가입된 커뮤니티가 없는 경우 테스트")
     inner class NoJoinedCommunityTest {
-        @BeforeEach
-        fun setUp() { // Given : 가입된 커뮤니티가 없다면
-            fakeCommunityRepository = FakeCommunityRepository(communities, "")
-        }
-
         @Test
         @DisplayName("섞인 리스트는 원본 리스트와 동일한 요소를 가져야 한다")
         fun `shuffled list should contain the same elements as the original list`() = runTest {
@@ -56,11 +51,6 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
     @Nested
     @DisplayName("입력된 커뮤니티가 목록에 없는 경우 테스트")
     inner class InvalidJoinedCommunityTest {
-        @BeforeEach
-        fun setUp() { // Given : 존재하지 않는 커뮤니티 이름을 입력받으면
-            fakeCommunityRepository = FakeCommunityRepository(communities, "존재 안함")
-        }
-
         @Test
         @DisplayName("섞인 리스트는 원본 리스트와 동일한 요소를 가져야 한다")
         fun `shuffled list should contain the same elements as the original list`() = runTest {
@@ -111,6 +101,45 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
 
             // Then: progress는 0이어야 한다
             assertEquals(0f, result.second, "Progress는 0이어야 한다.")
+        }
+
+        @Nested
+        @DisplayName("리스트가 비어 있는 경우")
+        inner class EmptyCommunityListTest {
+            @BeforeEach
+            fun setUp() { // Given : 비어있는 리스트가 주어진다
+                fakeCommunityRepository = FakeCommunityRepository(emptyList())
+                useCase = GetSortedCommunityListUseCase(
+                    getShuffledCommunityListUseCase = GetShuffledCommunityListUseCase(fakeCommunityRepository),
+                    moveCommunityToTopUseCase = MoveCommunityToTopUseCase(),
+                )
+            }
+
+            @Test
+            @DisplayName("선택한 커뮤니티가 잘못 되고 리스트가 없는 경우 progress는 0이어야 한다")
+            fun `progress should be 0 when selected community and list not exist`() = runTest {
+                // Given: 선택한 커뮤니티가 잘못 된 경우
+                val preRegisterTeamName = "non existent"
+
+                // When: 정렬된 커뮤니티 리스트를 조회
+                val result = useCase.invoke(preRegisterTeamName).single()
+
+                // Then: progress는 0이어야 한다
+                assertEquals(0f, result.second, "Progress는 0이어야 한다.")
+            }
+
+            @Test
+            @DisplayName("리스트가 없는 경우 progress는 0이어야 한다")
+            fun `progress should be 0 when list not exist`() = runTest {
+                // Given: 리스트가 없는 경우
+                val preRegisterTeamName = "Community D"
+
+                // When: 정렬된 커뮤니티 리스트를 조회
+                val result = useCase.invoke(preRegisterTeamName).single()
+
+                // Then: progress는 0이어야 한다
+                assertEquals(0f, result.second, "Progress는 0이어야 한다.")
+            }
         }
     }
 }
