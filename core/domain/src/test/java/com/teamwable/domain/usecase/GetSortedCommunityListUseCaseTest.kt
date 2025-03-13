@@ -17,6 +17,7 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
         fakeCommunityRepository = FakeCommunityRepository(communities, "Community D")
         useCase = GetSortedCommunityListUseCase(
             getShuffledCommunityListUseCase = GetShuffledCommunityListUseCase(fakeCommunityRepository),
+            moveCommunityToTopUseCase = MoveCommunityToTopUseCase(),
         )
     }
 
@@ -67,6 +68,49 @@ internal class GetSortedCommunityListUseCaseTest : BaseCommunityUseCaseTest() {
             val sortedList = useCase.invoke("false name").single().first
             // Then: 순서는 다르지만, 요소는 동일해야 한다
             assertEquals(communities.toSet(), sortedList.toSet())
+        }
+    }
+
+    @Nested
+    @DisplayName("Progress 관련 테스트")
+    inner class ProgressTest {
+        @Test
+        @DisplayName("선택한 커뮤티니가 있는 경우 해당 커뮤니티의 progress를 반환 한다")
+        fun `should return progress if selected community exists`() = runTest {
+            // Given: "Community D"를 선택한 경우
+            val preRegisterTeamName = "Community D"
+
+            // When: 정렬된 커뮤니티 리스트를 조회
+            val result = useCase.invoke(preRegisterTeamName).single()
+
+            // Then: progress는 9f 이어야 한다
+            assertEquals(9f, result.second, "Progress는 0이어야 한다.")
+        }
+
+        @Test
+        @DisplayName("선택한 커뮤니티가 없을 때 progress는 0이어야 한다")
+        fun `progress should be 0 when no selected community`() = runTest {
+            // Given: 선택한 커뮤니티가 없을 경우 (preRegisterTeamName이 빈 문자열)
+            val preRegisterTeamName = ""
+
+            // When: 정렬된 커뮤니티 리스트를 조회
+            val result = useCase.invoke(preRegisterTeamName).single()
+
+            // Then: progress는 0이어야 한다
+            assertEquals(0f, result.second, "Progress는 0이어야 한다.")
+        }
+
+        @Test
+        @DisplayName("선택한 커뮤니티가 잘못 된 경우 progress는 0이어야 한다")
+        fun `progress should be 0 when selected community not exist`() = runTest {
+            // Given: 선택한 커뮤니티가 잘못 된 경우
+            val preRegisterTeamName = "Non existent"
+
+            // When: 정렬된 커뮤니티 리스트를 조회
+            val result = useCase.invoke(preRegisterTeamName).single()
+
+            // Then: progress는 0이어야 한다
+            assertEquals(0f, result.second, "Progress는 0이어야 한다.")
         }
     }
 }
