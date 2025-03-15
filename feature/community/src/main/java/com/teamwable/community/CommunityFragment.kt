@@ -2,6 +2,7 @@ package com.teamwable.community
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.util.LinkStorage
 import com.teamwable.community.databinding.FragmentCommunityBinding
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.ui.base.BindingFragment
@@ -32,7 +33,7 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(FragmentComm
     }
 
     private fun navigateToGoogleForm() {
-        openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
+        openUri(LinkStorage.GOOGLE_FORM_LINK)
     }
 
     private fun navigateToPushAlarm() {

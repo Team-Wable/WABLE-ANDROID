@@ -3,6 +3,7 @@ package com.teamwable.news.detail
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.teamwable.common.util.LinkStorage
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsTabType
@@ -45,6 +46,6 @@ class NewsDetailFragment : BindingFragment<FragmentNewsDetailBinding>(FragmentNe
     }
 
     private fun navigateToGoogleForm() {
-        openUri("https://forms.gle/WWfbHXvGNgXMxgZr5")
+        openUri(LinkStorage.GOOGLE_FORM_LINK)
     }
 }

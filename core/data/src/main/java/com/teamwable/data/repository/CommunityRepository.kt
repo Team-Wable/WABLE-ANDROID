@@ -1,11 +1,12 @@
 package com.teamwable.data.repository
 
 import com.teamwable.model.community.CommunityModel
+import kotlinx.coroutines.flow.Flow
 
 interface CommunityRepository {
-    suspend fun getCommunityInfo(): Result<List<CommunityModel>>
+    fun getCommunities(): Flow<List<CommunityModel>>
 
-    suspend fun getJoinedCommunity(): Result<String>
+    fun getJoinedCommunity(): Flow<String>
 
-    suspend fun patchPreinCommunity(communityName: String): Result<Unit>
+    suspend fun patchPreinCommunity(communityName: String): Result<Float>
 }

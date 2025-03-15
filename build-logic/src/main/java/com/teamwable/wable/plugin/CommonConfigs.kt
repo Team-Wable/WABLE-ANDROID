@@ -3,9 +3,12 @@ package com.teamwable.wable.plugin
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 internal fun Project.configureAndroidCommonPlugin() {
@@ -65,5 +68,15 @@ internal fun Project.configureComposeAndroid() {
     extensions.getByType<ComposeCompilerGradlePluginExtension>().apply {
         enableStrongSkippingMode.set(true)
         includeSourceInformation.set(true)
+    }
+}
+
+// JUnit5
+internal fun Project.configureJUnit() {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events.addAll(arrayOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED))
+        }
     }
 }

@@ -26,16 +26,16 @@ private fun parseErrorMessage(errorBody: String): String {
     }
 }
 
-fun Throwable.toCustomError(): Throwable = when (this) {
-    is HttpException -> WableError.ApiError(this.getErrorMessage())
-    is UnknownHostException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
-    is ConnectException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
-    is SocketException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
-    is SocketTimeoutException -> WableError.TimeOutError(SERVER_TIMEOUT_ERROR_MESSAGE)
-    else -> this
+fun Throwable.toCustomError(): Throwable {
+    Timber.e(this)
+    return when (this) {
+        is HttpException -> WableError.ApiError(this.getErrorMessage())
+        is UnknownHostException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+        is ConnectException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+        is SocketException -> WableError.NetWorkConnectError(NETWORK_CONNECT_ERROR_MESSAGE)
+        is SocketTimeoutException -> WableError.TimeOutError(SERVER_TIMEOUT_ERROR_MESSAGE)
+        else -> this
+    }
 }
 
-fun <T> Throwable.handleThrowable(): Result<T> {
-    Timber.e(this)
-    return Result.failure(this.toCustomError())
-}
+fun <T> Throwable.handleThrowable(): Result<T> = Result.failure(this.toCustomError())

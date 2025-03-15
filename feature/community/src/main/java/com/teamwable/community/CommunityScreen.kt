@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.LinkStorage
 import com.teamwable.community.component.CommunityButtonType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
@@ -32,6 +35,7 @@ import com.teamwable.community.model.CommunityState
 import com.teamwable.designsystem.component.button.BigButtonDefaults
 import com.teamwable.designsystem.component.button.WableAnnotatedTextButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
+import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 import kotlinx.coroutines.flow.collectLatest
@@ -46,19 +50,21 @@ fun CommunityRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val clipboardManager = LocalClipboardManager.current
+    val listState = rememberLazyListState()
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { sideEffect ->
                 when (sideEffect) {
-                    is CommunitySideEffect.CopyToClipBoard -> {
-                        val clipData = ClipData.newPlainText("pre link", sideEffect.link)
+                    CommunitySideEffect.CopyToClipBoard -> {
+                        val clipData = ClipData.newPlainText("pre link", LinkStorage.PRE_REGISTER_LINK)
                         clipboardManager.setClip(ClipEntry(clipData))
                     }
 
-                    is CommunitySideEffect.NavigateToGoogleForm -> navigateToGoogleForm()
-                    is CommunitySideEffect.NavigateToPushAlarm -> navigateToPushAlarm()
-                    is CommunitySideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
+                    CommunitySideEffect.NavigateToGoogleForm -> navigateToGoogleForm()
+                    CommunitySideEffect.NavigateToPushAlarm -> navigateToPushAlarm()
+                    is CommunitySideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.throwable)
+                    CommunitySideEffect.ScrollToTop -> listState.scrollToTop()
                 }
             }
     }
@@ -74,6 +80,7 @@ fun CommunityRoute(
 
     CommunityScreen(
         state = state,
+        listState = listState,
         onDefaultBtnClick = { team -> viewModel.onIntent(CommunityIntent.ClickDefaultItemBtn(team)) },
         onMoreFanBtnClick = { viewModel.onIntent(CommunityIntent.ClickMoreFanItemBtn) },
         onFloatingBtnClick = { viewModel.onIntent(CommunityIntent.ClickFloatingBtn) },
@@ -83,6 +90,7 @@ fun CommunityRoute(
 @Composable
 private fun CommunityScreen(
     state: CommunityState,
+    listState: LazyListState,
     onDefaultBtnClick: (String) -> Unit = {},
     onFloatingBtnClick: () -> Unit = {},
     onMoreFanBtnClick: () -> Unit = {},
@@ -101,6 +109,7 @@ private fun CommunityScreen(
         },
     ) {
         LazyColumn(
+            state = listState,
             contentPadding = PaddingValues(top = 10.dp, bottom = 64.dp),
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -116,10 +125,10 @@ private fun CommunityScreen(
             }
             items(
                 items = state.lckTeams,
-                key = { items -> items.name },
+                key = { items -> items.communityName },
                 contentType = { ContentType.Item.name },
             ) { item ->
-                val isSelected = item.name == state.preRegisterTeamName
+                val isSelected = item.communityName == state.preRegisterTeamName
                 CommunityItem(
                     lckTeamType = item,
                     progress = state.progress,
@@ -127,7 +136,7 @@ private fun CommunityScreen(
                     enabled = state.preRegisterTeamName.isBlank() || isSelected,
                     onClick = {
                         when (state.buttonState) {
-                            CommunityButtonType.DEFAULT -> onDefaultBtnClick(item.name)
+                            CommunityButtonType.DEFAULT -> onDefaultBtnClick(item.communityName)
                             CommunityButtonType.FAN_MORE -> onMoreFanBtnClick()
                             else -> Unit
                         }
@@ -144,6 +153,7 @@ private fun CommunityPreview() {
     WableTheme {
         CommunityScreen(
             state = CommunityState(),
+            listState = rememberLazyListState(),
         )
     }
 }

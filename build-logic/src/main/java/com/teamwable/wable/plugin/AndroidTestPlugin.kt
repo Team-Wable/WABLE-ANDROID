@@ -9,8 +9,8 @@ import org.gradle.kotlin.dsl.getByType
 
 class AndroidTestPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
+        configureJUnit()
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
         extensions.getByType<BaseExtension>().apply {
             defaultConfig {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,6 +29,9 @@ class AndroidTestPlugin : Plugin<Project> {
 
         dependencies {
             "testImplementation"(libs.findLibrary("junit").get())
+            "testImplementation"(libs.findLibrary("junit.jupiter.api").get())
+            "testImplementation"(libs.findLibrary("kotlinx.coroutines.test").get())
+            "testRuntimeOnly"(libs.findLibrary("junit.jupiter.engine").get())
             "androidTestImplementation"(libs.findBundle("androidx.android.test").get())
         }
     }
