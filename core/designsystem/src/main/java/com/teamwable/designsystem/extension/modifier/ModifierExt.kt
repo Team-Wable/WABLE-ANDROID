@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +58,54 @@ fun Modifier.noRippleDebounceClickable(
         }
         true
     }
+}
+
+internal interface MultipleEventsCutter {
+    fun processEvent(event: () -> Unit)
+
+    companion object
+}
+
+internal fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
+    MultipleEventsCutterImpl()
+
+private class MultipleEventsCutterImpl : MultipleEventsCutter {
+    private val now: Long
+        get() = System.currentTimeMillis()
+
+    private var lastEventTimeMs: Long = 0
+
+    override fun processEvent(event: () -> Unit) {
+        if (now - lastEventTimeMs >= 300L) {
+            event.invoke()
+        }
+        lastEventTimeMs = now
+    }
+}
+
+fun Modifier.noRippleThrottleClickable(
+    enabled: Boolean = true,
+    onClickLabel: String? = null,
+    role: Role? = null,
+    onClick: () -> Unit,
+) = composed(
+    inspectorInfo = debugInspectorInfo {
+        name = "clickable"
+        properties["enabled"] = enabled
+        properties["onClickLabel"] = onClickLabel
+        properties["role"] = role
+        properties["onClick"] = onClick
+    },
+) {
+    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
+    Modifier.clickable(
+        enabled = enabled,
+        onClickLabel = onClickLabel,
+        onClick = { multipleEventsCutter.processEvent { onClick() } },
+        role = role,
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() },
+    )
 }
 
 @Composable
