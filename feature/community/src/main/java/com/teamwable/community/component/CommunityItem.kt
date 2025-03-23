@@ -19,11 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.common.type.LckTeamType
 import com.teamwable.community.R
+import com.teamwable.designsystem.component.button.SmallButtonDefaults
 import com.teamwable.designsystem.component.button.WableSmallButton
 import com.teamwable.designsystem.component.indicator.WableLinearProgressBar
 import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.designsystem.type.SmallButtonDefaults
 import com.teamwable.model.community.CommunityModel
 
 @Composable
