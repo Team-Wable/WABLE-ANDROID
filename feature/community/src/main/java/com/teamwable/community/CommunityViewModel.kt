@@ -15,6 +15,8 @@ import com.teamwable.domain.usecase.MoveCommunityToTopUseCase
 import com.teamwable.model.community.CommunityModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -86,7 +88,7 @@ class CommunityViewModel @Inject constructor(
             viewModelScope.launch {
                 communityRepository.patchPreinCommunity(currentState.selectedTeamName)
                     .onSuccess { progressRate ->
-                        updatePatchResponse(progressRate, currentState.selectedTeamName)
+                        updatePatchResponse(progressRate, communityModels())
                         postSideEffect(CommunitySideEffect.ScrollToTop)
                         showPushNotificationDialog()
                     }.onFailure {
@@ -96,10 +98,14 @@ class CommunityViewModel @Inject constructor(
             }
     }
 
-    private fun updatePatchResponse(progressRate: Float, teamName: String) {
+    private suspend fun communityModels(): List<CommunityModel> = viewModelScope.async(Dispatchers.Default) {
+        moveCommunityToTopUseCase(currentState.lckTeams, currentState.selectedTeamName)
+    }.await()
+
+    private fun updatePatchResponse(progressRate: Float, sortedList: List<CommunityModel>) {
         intent {
             copy(
-                lckTeams = moveCommunityToTopUseCase(currentState.lckTeams, teamName).toPersistentList(),
+                lckTeams = sortedList.toPersistentList(),
                 preRegisterTeamName = currentState.selectedTeamName,
                 buttonState = CommunityButtonType.FAN_MORE,
                 dialogType = DialogType.PRE_REGISTER_COMPLETED,
