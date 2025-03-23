@@ -16,15 +16,13 @@ abstract class BaseViewModel<UI_INTENT : BaseIntent, UI_STATE : BaseState, SIDE_
     initialState: UI_STATE,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<UI_STATE> by lazy {
-        _uiState
-            .onStart { initialDataLoad() }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = initialState,
-            )
-    }
+    val uiState: StateFlow<UI_STATE> = _uiState
+        .onStart { initialDataLoad() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = initialState,
+        )
 
     private val _sideEffect: Channel<SIDE_EFFECT> = Channel(Channel.BUFFERED)
     val sideEffect = _sideEffect.receiveAsFlow()
