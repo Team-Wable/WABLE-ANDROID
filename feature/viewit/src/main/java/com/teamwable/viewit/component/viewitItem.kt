@@ -2,8 +2,8 @@ package com.teamwable.viewit.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,15 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.viewit.ViewIt
 
 @Composable
-fun ViewitItem() {
+fun ViewitItem(viewIt: ViewIt) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,7 +38,7 @@ fun ViewitItem() {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             ProfileImage(
-                imageUrl = "GEN",
+                imageUrl = viewIt.postAuthorProfile,
                 modifier = Modifier
                     .width(28.dp)
                     .aspectRatio(1f),
@@ -47,7 +47,7 @@ fun ViewitItem() {
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = stringResource(id = com.teamwable.common.R.string.dummy),
+                text = viewIt.postAuthorNickname,
                 style = WableTheme.typography.body03,
                 color = WableTheme.colors.black,
                 modifier = Modifier.weight(1f),
@@ -57,6 +57,7 @@ fun ViewitItem() {
                 Icon(
                     painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_more),
                     contentDescription = null,
+                    tint = WableTheme.colors.gray500,
                 )
             }
         }
@@ -64,7 +65,7 @@ fun ViewitItem() {
         Spacer(modifier = Modifier.height(9.dp))
 
         Text(
-            text = stringResource(id = com.teamwable.common.R.string.dummy),
+            text = viewIt.viewItContent,
             style = WableTheme.typography.body04,
             color = WableTheme.colors.dk50,
             modifier = Modifier
@@ -85,22 +86,22 @@ fun ViewitItem() {
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        LinkItem()
+        LinkItem(viewIt)
     }
 }
 
 @Composable
-fun LinkItem() {
+fun LinkItem(viewIt: ViewIt) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max),
+            .height(78.dp),
     ) {
         GlideImage(
-            imageModel = { "" },
+            imageModel = { viewIt.linkImage },
             previewPlaceholder = painterResource(id = com.teamwable.common.R.drawable.img_empty),
             modifier = Modifier
-                .width(128.dp)
+                .fillMaxHeight()
                 .clip(
                     RoundedCornerShape(
                         topStart = 8.dp,
@@ -131,7 +132,7 @@ fun LinkItem() {
                 .padding(8.dp),
         ) {
             Text(
-                text = stringResource(id = com.teamwable.common.R.string.dummy),
+                text = viewIt.linkTitle,
                 style = WableTheme.typography.body03,
                 color = WableTheme.colors.black,
                 maxLines = 1,
@@ -139,16 +140,18 @@ fun LinkItem() {
             )
 
             Text(
-                text = stringResource(id = com.teamwable.common.R.string.dummy),
+                text = viewIt.linkName,
                 style = WableTheme.typography.caption04,
                 color = WableTheme.colors.gray600,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.weight(1f))
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Icon(
                     painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_heart_btn_inactive),
                     contentDescription = null,
@@ -159,7 +162,7 @@ fun LinkItem() {
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = "00",
+                    text = viewIt.likedNumber,
                     style = WableTheme.typography.caption03,
                     color = WableTheme.colors.black,
                 )
@@ -170,8 +173,23 @@ fun LinkItem() {
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
+private fun ViewItItemPreview() {
     WableTheme {
-        ViewitItem()
+        ViewitItem(
+            ViewIt(
+                postAuthorId = 1,
+                postAuthorProfile = "PURPLE",
+                postAuthorNickname = "프리뷰유저",
+                viewItId = 102,
+                linkImage = "",
+                link = "https://example.com",
+                linkTitle = "프리뷰 링크 제목",
+                linkName = "프리뷰 링크",
+                viewItContent = "프리뷰용 테스트 콘텐츠입니다.",
+                isLiked = false,
+                likedNumber = "45",
+                isBlind = false,
+            ),
+        )
     }
 }
