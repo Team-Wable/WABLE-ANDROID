@@ -2,7 +2,9 @@ package com.teamwable.viewit.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,11 +29,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
+import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.viewit.ViewIt
 
 @Composable
-fun ViewitItem(viewIt: ViewIt) {
+fun ViewitItem(
+    viewIt: ViewIt,
+    onClickProfile: (ViewIt) -> Unit,
+    onClickKebab: (ViewIt) -> Unit,
+    onClickLink: (ViewIt) -> Unit,
+    onClickLike: (ViewIt) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,19 +51,30 @@ fun ViewitItem(viewIt: ViewIt) {
                 imageUrl = viewIt.postAuthorProfile,
                 modifier = Modifier
                     .width(28.dp)
-                    .aspectRatio(1f),
+                    .aspectRatio(1f)
+                    .clickable { onClickProfile(viewIt) },
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
-                text = viewIt.postAuthorNickname,
-                style = WableTheme.typography.body03,
-                color = WableTheme.colors.black,
+            Box(
                 modifier = Modifier.weight(1f),
-            )
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Text(
+                    text = viewIt.postAuthorNickname,
+                    style = WableTheme.typography.body03,
+                    color = WableTheme.colors.black,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .clickable { onClickProfile(viewIt) },
+                )
+            }
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(
+                onClick = { onClickKebab(viewIt) },
+                modifier = Modifier.noRippleClickable(),
+            ) {
                 Icon(
                     painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_more),
                     contentDescription = null,
@@ -86,16 +107,21 @@ fun ViewitItem(viewIt: ViewIt) {
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        LinkItem(viewIt)
+        LinkItem(viewIt, onClickLink, onClickLike)
     }
 }
 
 @Composable
-fun LinkItem(viewIt: ViewIt) {
+fun LinkItem(
+    viewIt: ViewIt,
+    onClickLink: (ViewIt) -> Unit,
+    onClickLike: (ViewIt) -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(78.dp),
+            .height(78.dp)
+            .clickable { onClickLink(viewIt) },
     ) {
         GlideImage(
             imageModel = { viewIt.linkImage },
@@ -156,7 +182,9 @@ fun LinkItem(viewIt: ViewIt) {
                     painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_heart_btn_inactive),
                     contentDescription = null,
                     tint = WableTheme.colors.gray600,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { onClickLike(viewIt) },
                 )
 
                 Spacer(modifier = Modifier.width(4.dp))
@@ -190,6 +218,10 @@ private fun ViewItItemPreview() {
                 likedNumber = "45",
                 isBlind = false,
             ),
+            onClickProfile = {},
+            onClickKebab = {},
+            onClickLike = {},
+            onClickLink = {},
         )
     }
 }
