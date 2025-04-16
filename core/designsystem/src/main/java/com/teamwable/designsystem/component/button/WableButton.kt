@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.R
-import com.teamwable.designsystem.extension.modifier.noRippleClickable
+import com.teamwable.designsystem.extension.modifier.noRippleThrottleClickable
 import com.teamwable.designsystem.theme.WableTheme
 import java.util.Locale
 
@@ -78,7 +78,7 @@ fun WableButtonBase(
             .fillMaxWidth()
             .aspectRatio(buttonStyle.aspectRatio)
             .run {
-                if (enabled) noRippleClickable(onClick = onClick)
+                if (enabled) noRippleThrottleClickable(onClick = onClick)
                 else this
             }
             .clip(RoundedCornerShape(buttonStyle.radius))
