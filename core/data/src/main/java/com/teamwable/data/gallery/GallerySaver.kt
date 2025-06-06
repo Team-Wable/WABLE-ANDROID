@@ -34,6 +34,6 @@ class GallerySaver @Inject constructor(
     }
 
     companion object {
-        private const val FOLDER_NAME = "PokemonApp"
+        private const val FOLDER_NAME = "Wable"
     }
 }
