@@ -18,6 +18,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Retrofit
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -30,6 +31,8 @@ internal object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(tokenInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
