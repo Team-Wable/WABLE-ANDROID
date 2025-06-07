@@ -24,6 +24,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
+    @Provides
+    @Singleton
+    fun providesJson(): Json = Json {
+        prettyPrint = true
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
+
     @Singleton
     @Provides
     fun provideOkHttpClient(
@@ -60,12 +68,12 @@ internal object NetworkModule {
     @Singleton
     @Provides
     @WableRetrofit
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         val build =
             Retrofit.Builder()
                 .baseUrl(WABLE_BASE_URL)
                 .client(okHttpClient)
-                .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+                .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
                 .build()
         return build
     }
@@ -81,10 +89,10 @@ internal object NetworkModule {
     @Provides
     @Singleton
     @WithoutTokenInterceptor
-    fun provideRetrofitWithoutTokenInterceptor(@WithoutTokenInterceptor okHttpClient: OkHttpClient): Retrofit =
+    fun provideRetrofitWithoutTokenInterceptor(@WithoutTokenInterceptor okHttpClient: OkHttpClient, json: Json): Retrofit =
         Retrofit.Builder()
             .baseUrl(WABLE_BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 }
