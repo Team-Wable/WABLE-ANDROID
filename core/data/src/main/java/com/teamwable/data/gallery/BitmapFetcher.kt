@@ -10,7 +10,7 @@ import okhttp3.Request
 import java.io.IOException
 import javax.inject.Inject
 
-class BitmapFetcher @Inject constructor(
+internal class BitmapFetcher @Inject constructor(
     @WithoutTokenInterceptor private val okHttpClient: OkHttpClient,
 ) {
     suspend fun fetchBitmapFromUrl(url: String): Bitmap = withContext(Dispatchers.IO) {

@@ -7,7 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import javax.inject.Inject
 
-class GallerySaver @Inject constructor(
+internal class GallerySaver @Inject constructor(
     private val contentResolver: ContentResolver,
 ) {
     // Todo : 버전별 분기처리
