@@ -14,7 +14,7 @@ class GallerySaver @Inject constructor(
     fun saveBitmapToGallery(bitmap: Bitmap, filename: String) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/$FILE_EXTENSION")
             put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/$FOLDER_NAME")
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
@@ -34,6 +34,7 @@ class GallerySaver @Inject constructor(
     }
 
     companion object {
+        const val FILE_EXTENSION = ".jpeg"
         private const val FOLDER_NAME = "Wable"
     }
 }
