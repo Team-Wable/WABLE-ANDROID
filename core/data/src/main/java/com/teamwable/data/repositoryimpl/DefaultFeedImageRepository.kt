@@ -14,7 +14,7 @@ internal class DefaultFeedImageRepository @Inject constructor(
 ) : FeedImageRepository {
     override suspend fun saveToGallery(imageUrl: String): Result<Unit> = runSuspendCatching {
         val bitmap = bitmapFetcher.fetchBitmapFromUrl(imageUrl)
-        gallerySaver.saveBitmapToGallery(bitmap, "wable_${System.currentTimeMillis()}$FILE_EXTENSION")
+        gallerySaver.saveBitmapToGallery(bitmap, "wable_${System.currentTimeMillis()}.$FILE_EXTENSION")
     }.onFailure {
         return it.handleThrowable()
     }

@@ -34,7 +34,7 @@ class GallerySaver @Inject constructor(
     }
 
     companion object {
-        const val FILE_EXTENSION = ".jpeg"
+        const val FILE_EXTENSION = "jpeg"
         private const val FOLDER_NAME = "Wable"
     }
 }
