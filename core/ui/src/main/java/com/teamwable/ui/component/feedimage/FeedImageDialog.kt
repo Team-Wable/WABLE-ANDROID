@@ -13,6 +13,7 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.dialogFragmentResize
 import com.teamwable.ui.extensions.load
+import com.teamwable.ui.extensions.setOnDuplicateBlockClick
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.util.Arg.FEED_IMAGE_URL
@@ -49,7 +50,7 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
     }
 
     private fun initSaveBtnClickListener() {
-        binding.tvFeedSave.setOnClickListener { viewModel.saveImage(imgUrl) }
+        binding.tvFeedSave.setOnDuplicateBlockClick { viewModel.saveImage(imgUrl) }
     }
 
     private fun collect() {
