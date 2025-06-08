@@ -1,4 +1,4 @@
-package com.teamwable.ui.component
+package com.teamwable.ui.component.feedimage
 
 import android.content.Context
 import android.os.Bundle
@@ -7,8 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.teamwable.ui.base.BindingDialogFragment
-import com.teamwable.ui.component.feedimage.FeedImageSideEffect
-import com.teamwable.ui.component.feedimage.FeedImageViewModel
+import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.databinding.DialogFeedImageBinding
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
