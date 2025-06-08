@@ -24,6 +24,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
+    /**
+     * Provides a singleton instance of Json configured for pretty printing, lenient parsing, and ignoring unknown keys.
+     *
+     * @return A configured Json instance for serialization and deserialization.
+     */
     @Provides
     @Singleton
     fun providesJson(): Json = Json {
@@ -32,7 +37,12 @@ internal object NetworkModule {
         ignoreUnknownKeys = true
     }
 
-    @Singleton
+    /**
+             * Provides a singleton OkHttpClient configured with token and logging interceptors, and 5-second connection and read timeouts.
+             *
+             * @return An OkHttpClient instance for network requests requiring authentication and logging.
+             */
+            @Singleton
     @Provides
     fun provideOkHttpClient(
         @AccessToken tokenInterceptor: Interceptor,
@@ -65,6 +75,11 @@ internal object NetworkModule {
         return loggingInterceptor
     }
 
+    /**
+     * Provides a singleton Retrofit instance configured with the base URL, the given OkHttpClient, and a JSON converter using the provided Json instance.
+     *
+     * @return A Retrofit instance for network API calls.
+     */
     @Singleton
     @Provides
     @WableRetrofit
@@ -86,7 +101,14 @@ internal object NetworkModule {
             .addInterceptor(loggingInterceptor)
             .build()
 
-    @Provides
+    /**
+             * Provides a singleton Retrofit instance without a token interceptor, using the specified OkHttpClient and Json converter.
+             *
+             * The returned Retrofit is annotated with @WithoutTokenInterceptor and uses the base URL defined by WABLE_BASE_URL.
+             *
+             * @return A Retrofit instance configured for requests that do not require token authentication.
+             */
+            @Provides
     @Singleton
     @WithoutTokenInterceptor
     fun provideRetrofitWithoutTokenInterceptor(@WithoutTokenInterceptor okHttpClient: OkHttpClient, json: Json): Retrofit =

@@ -89,12 +89,22 @@ internal abstract class RepositoryModule {
         repositoryImpl: DefaultViewItRepository,
     ): ViewItRepository
 
+    /**
+     * Binds the default implementation of the community repository to its interface for dependency injection.
+     *
+     * Ensures that a singleton instance of [DefaultCommunityRepository] is provided wherever [CommunityRepository] is required.
+     */
     @Binds
     @Singleton
     abstract fun bindsCommunityRepository(
         repositoryImpl: DefaultCommunityRepository,
     ): CommunityRepository
 
+    /**
+     * Binds the default implementation of the feed image repository to its interface for dependency injection.
+     *
+     * Ensures that `DefaultFeedImageRepository` is used wherever `FeedImageRepository` is injected, with a singleton scope.
+     */
     @Binds
     @Singleton
     abstract fun bindsFeedImageRepository(

@@ -10,7 +10,14 @@ import javax.inject.Inject
 class GallerySaver @Inject constructor(
     private val contentResolver: ContentResolver,
 ) {
-    // Todo : 버전별 분기처리
+    /**
+     * Saves a bitmap image to the device's gallery under the "Wable" folder in the Pictures directory.
+     *
+     * The image is saved in JPEG format with the specified filename. The method uses the MediaStore API to insert the image and mark it as complete once writing is finished.
+     *
+     * @param bitmap The bitmap image to be saved.
+     * @param filename The name to assign to the saved image file.
+     */
     fun saveBitmapToGallery(bitmap: Bitmap, filename: String) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
