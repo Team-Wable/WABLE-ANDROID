@@ -26,6 +26,11 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
     private lateinit var imgUrl: String
     private val viewModel: FeedImageViewModel by viewModels()
 
+    /**
+     * Initializes the dialog and retrieves the image URL from the fragment arguments.
+     *
+     * @param savedInstanceState The previously saved state of the fragment, if any.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         imgUrl = arguments?.getString(FEED_IMAGE_URL).orEmpty()
@@ -36,6 +41,11 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
         context?.dialogFragmentResize(this, 0f, 0f)
     }
 
+    /**
+     * Initializes the dialog's UI components and sets up event listeners.
+     *
+     * Loads the feed image, configures cancel and save button actions, and starts collecting ViewModel side effects.
+     */
     override fun initView() {
         binding.ivFeedImg.load(imgUrl)
         initCancelBtnClickListener()
@@ -43,16 +53,27 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
         collect()
     }
 
+    /**
+     * Sets up the cancel button to close the dialog and return to the previous screen when clicked.
+     */
     private fun initCancelBtnClickListener() {
         binding.btnFeedImgCancel.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
+    /**
+     * Sets up the save button to trigger image saving when clicked, preventing duplicate clicks.
+     */
     private fun initSaveBtnClickListener() {
         binding.tvFeedSave.setOnDuplicateBlockClick { viewModel.saveImage(imgUrl) }
     }
 
+    /**
+     * Collects side effects from the ViewModel and displays a Snackbar when instructed.
+     *
+     * Launches a coroutine to observe the ViewModel's sideEffect flow and shows a Snackbar on the dialog's root view when a ShowSnackBar event is received.
+     */
     private fun collect() {
         viewLifeCycleScope.launch {
             viewModel.sideEffect.flowWithLifecycle(viewLifeCycle).collectLatest { sideEffect ->
@@ -64,6 +85,14 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
     }
 
     companion object {
+        /**
+         * Displays the FeedImageDialog for the specified image URL using navigation.
+         *
+         * @param context The context used for navigation.
+         * @param navController The NavController to perform navigation.
+         * @param url The image URL to display in the dialog.
+         * @return The FeedImageDialog instance that was shown.
+         */
         fun show(
             context: Context,
             navController: NavController,

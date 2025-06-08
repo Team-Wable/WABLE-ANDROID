@@ -188,6 +188,14 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
     }
 
+    /**
+     * Sets up a listener for reselection events on the bottom navigation bar.
+     *
+     * When the home tab is reselected, triggers a refresh of the HomeFragment after a short delay.
+     * Navigates to the selected destination regardless of which tab is reselected.
+     *
+     * @param navController The NavController used for navigation actions.
+     */
     private fun initBottomNaviReSelectedListener(navController: NavController) {
         binding.bnvMain.setOnItemReselectedListener {
             if (it.itemId == R.id.graph_home) {
@@ -200,6 +208,13 @@ class MainActivity : AppCompatActivity(), Navigation {
         }
     }
 
+    /**
+     * Updates the status bar color and mode based on the current navigation destination.
+     *
+     * Sets the status bar to dark mode with a black background for specific destinations, and to light mode with a white background for all others.
+     *
+     * @param navController The navigation controller used to listen for destination changes.
+     */
     private fun updateStatusBarColor(navController: NavController) {
         // TODO : dark status bar 부분을 set에 넣어 주시면 됩니다!
         val darkStatusBarDestinations = setOf(

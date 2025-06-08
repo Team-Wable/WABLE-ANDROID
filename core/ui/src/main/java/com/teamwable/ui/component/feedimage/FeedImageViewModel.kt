@@ -17,6 +17,13 @@ class FeedImageViewModel @Inject constructor(
     private val _sideEffect: Channel<FeedImageSideEffect> = Channel(Channel.BUFFERED)
     val sideEffect = _sideEffect.receiveAsFlow()
 
+    /**
+     * Initiates saving an image from the provided URL and emits UI side effects to indicate progress, completion, or error.
+     *
+     * Emits a snackbar side effect to notify the user when the save operation starts, completes successfully, or fails.
+     *
+     * @param imageUrl The URL of the image to be saved.
+     */
     fun saveImage(imageUrl: String) {
         viewModelScope.launch {
             _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.VIEW_IT_ING))

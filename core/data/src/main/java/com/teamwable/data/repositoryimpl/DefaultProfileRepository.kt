@@ -36,6 +36,12 @@ internal class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
+    /**
+     * Submits a withdrawal request with the specified reasons for account deletion.
+     *
+     * @param deletedReason List of reasons provided for account withdrawal.
+     * @return A [Result] indicating success or containing an error if the request fails.
+     */
     override suspend fun patchWithdrawal(deletedReason: List<String>): Result<Unit> {
         return runCatching {
             apiService.patchWithdrawal(RequestWithdrawalDto(deletedReason))
@@ -43,6 +49,13 @@ internal class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
+    /****
+     * Updates the user's profile information and optionally uploads a profile image.
+     *
+     * @param info The updated profile information.
+     * @param imgUrl The URI of the profile image to upload, or null if no image is provided.
+     * @return A [Result] indicating success or containing an error if the update fails.
+     */
     override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runHandledCatching {
         val infoRequestBody = createContentRequestBody(info)
         val filePart = contentResolver.createImagePart(imgUrl, FILE_NAME)
@@ -51,11 +64,26 @@ internal class DefaultProfileRepository @Inject constructor(
         Unit
     }
 
+    /**
+     * Checks if the given nickname is already in use.
+     *
+     * @param nickname The nickname to check for duplication.
+     * @return A [Result] indicating success if the nickname is available, or failure if it is already taken or an error occurs.
+     */
     override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runHandledCatching {
         apiService.getNickNameDoubleCheck(nickname)
         Unit
     }
 
+    /**
+     * Creates a JSON request body from the provided member profile information.
+     *
+     * Converts the fields of [info] into a JSON object and returns it as an OkHttp `RequestBody`
+     * with media type `application/json`.
+     *
+     * @param info The member profile information to serialize.
+     * @return A JSON-formatted request body representing the member profile.
+     */
     private fun createContentRequestBody(info: MemberInfoEditModel): RequestBody {
         val contentJson = JSONObject().apply {
             put("nickname", info.nickname)

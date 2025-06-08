@@ -46,6 +46,14 @@ class TokenInterceptor @Inject constructor(
         return response
     }
 
+    /**
+     * Attempts to refresh the access token using the stored refresh token if needed.
+     *
+     * Acquires a mutex lock to ensure only one refresh operation occurs at a time.
+     * Updates the stored access token on successful refresh.
+     *
+     * @return `true` if the token was refreshed successfully, `false` otherwise.
+     */
     private suspend fun refreshTokenIfNeeded(): Boolean {
         mutex.withLock {
             val accessToken = wablePreferencesDataSource.accessToken.first()
@@ -72,6 +80,9 @@ class TokenInterceptor @Inject constructor(
         }
     }
 
+    /**
+     * Handles actions required when token reissue fails by notifying the user, clearing stored tokens, and restarting the application.
+     */
     private fun handleFailedTokenReissue() = CoroutineScope(Dispatchers.Main).launch {
         showToast()
         withContext(Dispatchers.IO) {
@@ -96,7 +107,13 @@ class TokenInterceptor @Inject constructor(
         }
     }
 
-    private fun Request.newAuthBuilder() = newBuilder()
+    /**
+         * Creates a new HTTP request with the current access token added to the Authorization header.
+         *
+         * Retrieves the access token synchronously and attaches it as a Bearer token.
+         * @return A new [Request] instance with the Authorization header set.
+         */
+        private fun Request.newAuthBuilder() = newBuilder()
         .addHeader(
             name = AUTHORIZATION,
             value = runBlocking {

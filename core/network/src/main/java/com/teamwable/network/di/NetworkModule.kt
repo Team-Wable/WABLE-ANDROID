@@ -24,6 +24,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
+    /**
+     * Provides a singleton instance of Json configured for pretty printing, lenient parsing, and ignoring unknown keys.
+     *
+     * @return A configured Json instance for serialization and deserialization.
+     */
     @Provides
     @Singleton
     fun providesJson(): Json = Json {
@@ -32,7 +37,14 @@ internal object NetworkModule {
         ignoreUnknownKeys = true
     }
 
-    @Singleton
+    /**
+             * Provides a singleton OkHttpClient configured with a token interceptor, logging interceptor, and 5-second connection and read timeouts.
+             *
+             * The client is suitable for authenticated network requests requiring access tokens.
+             *
+             * @return A configured OkHttpClient instance.
+             */
+            @Singleton
     @Provides
     fun provideOkHttpClient(
         @AccessToken tokenInterceptor: Interceptor,
@@ -65,6 +77,13 @@ internal object NetworkModule {
         return loggingInterceptor
     }
 
+    /**
+     * Provides a singleton Retrofit instance configured with the specified OkHttpClient and JSON converter.
+     *
+     * The Retrofit instance uses the application's base URL and serializes JSON using the provided Json configuration.
+     *
+     * @return A configured Retrofit instance for network API calls.
+     */
     @Singleton
     @Provides
     @WableRetrofit
@@ -86,7 +105,14 @@ internal object NetworkModule {
             .addInterceptor(loggingInterceptor)
             .build()
 
-    @Provides
+    /**
+             * Provides a singleton Retrofit instance without a token interceptor, using the specified OkHttpClient and Json converter.
+             *
+             * The returned Retrofit is annotated with @WithoutTokenInterceptor and uses the provided OkHttpClient (which does not include a token interceptor) and a JSON converter factory created from the given Json instance.
+             *
+             * @return A Retrofit instance configured for requests without token interception.
+             */
+            @Provides
     @Singleton
     @WithoutTokenInterceptor
     fun provideRetrofitWithoutTokenInterceptor(@WithoutTokenInterceptor okHttpClient: OkHttpClient, json: Json): Retrofit =

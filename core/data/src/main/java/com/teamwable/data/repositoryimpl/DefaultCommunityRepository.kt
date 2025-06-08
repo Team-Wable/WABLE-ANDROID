@@ -21,12 +21,25 @@ internal class DefaultCommunityRepository @Inject constructor(
         throw it.toCustomError()
     }
 
+    /**
+     * Returns a flow emitting the name of the joined community.
+     *
+     * Emits an empty string if no community is joined. Errors are rethrown as custom errors.
+     *
+     * @return A [Flow] emitting the joined community name as a [String].
+     */
     override fun getJoinedCommunity(): Flow<String> = flow {
         emit(communityService.getJoinedCommunity().data.community.orEmpty())
     }.catch {
         throw it.toCustomError()
     }
 
+    /**
+     * Updates the prein community with the specified name and returns the associated community number.
+     *
+     * @param communityName The name of the community to update.
+     * @return A [Result] containing the community number as a [Float] if successful, or an error if the operation fails.
+     */
     override suspend fun patchPreinCommunity(communityName: String): Result<Float> = runHandledCatching {
         communityService.patchPreinCommunity(communityName.toRequestCommunityDto()).data
             .toCommunityModel().communityNum
