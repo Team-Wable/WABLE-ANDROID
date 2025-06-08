@@ -14,7 +14,7 @@ class GallerySaver @Inject constructor(
     fun saveBitmapToGallery(bitmap: Bitmap, filename: String) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/$FOLDER_NAME")
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
@@ -23,7 +23,7 @@ class GallerySaver @Inject constructor(
         if (uri != null) {
             contentResolver.openOutputStream(uri).use { output ->
                 if (output != null) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
                 }
             }
 
