@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.theme.WableTheme
 
 /**
@@ -71,21 +72,6 @@ object FloatingButtonDefaults {
         ),
         backgroundColor = Color.Transparent,
         iconTint = WableTheme.colors.white,
-    )
-
-    /**
-     * 회색 단색 배경이 적용된 중립적인 스타일입니다.
-     *
-     * 보통 '닫기(X)', '취소'와 같은 보조적 FAB에 사용됩니다.
-     *
-     * @return [FloatingButtonStyle] 회색 배경, 어두운 아이콘 색상
-     */
-    @Composable
-    @ReadOnlyComposable
-    fun grayStyle(): FloatingButtonStyle = FloatingButtonStyle(
-        backgroundBrush = null,
-        backgroundColor = WableTheme.colors.gray200,
-        iconTint = WableTheme.colors.gray800,
     )
 }
 
@@ -147,16 +133,15 @@ fun WableFloatingButton(
                     brush = style.backgroundBrush ?: Brush.verticalGradient(
                         listOf(style.backgroundColor, style.backgroundColor),
                     ),
-                ),
+                )
+                .noRippleClickable { onClick() },
             contentAlignment = Alignment.Center,
         ) {
-            IconButton(onClick = onClick) {
-                Icon(
-                    painter = icon,
-                    contentDescription = contentDescription,
-                    tint = style.iconTint,
-                )
-            }
+            Icon(
+                painter = icon,
+                contentDescription = contentDescription,
+                tint = style.iconTint,
+            )
         }
     }
 }
@@ -173,12 +158,6 @@ private fun WableFloatingButtonPreview() {
                 onClick = { },
                 icon = painterResource(id = com.teamwable.common.R.drawable.ic_home_posting),
                 style = FloatingButtonDefaults.gradientStyle(),
-            )
-
-            WableFloatingButton(
-                onClick = { },
-                icon = painterResource(id = com.teamwable.common.R.drawable.ic_share_cancel_btn),
-                style = FloatingButtonDefaults.grayStyle(),
             )
         }
     }
