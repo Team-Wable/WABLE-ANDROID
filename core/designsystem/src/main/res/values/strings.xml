@@ -53,4 +53,7 @@
     <string name="dialog_copy_completed_title">링크가 복사되었어요</string>
     <string name="dialog_copy_completed_description">복사된 링크를 널리널리 퍼뜨려\n함께 응원할 팬을 더 많이 데려와주세요! </string>
     <string name="dialog_copy_completed_btn_text">좋아요!</string>
+
+    <!--블라인드 -->
+    <string name="feed_blind_description">블라인드 처리된 게시글이에요.</string>
 </resources>
