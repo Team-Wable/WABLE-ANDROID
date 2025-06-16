@@ -1,75 +1,138 @@
 package com.teamwable.viewit.ui
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.paging.PagingData
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.teamwable.designsystem.component.button.FloatingButtonDefaults
 import com.teamwable.designsystem.component.button.WableFloatingButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
+import com.teamwable.designsystem.component.paging.WableCustomRefreshIndicator
+import com.teamwable.designsystem.component.paging.WablePagingSpinner
+import com.teamwable.designsystem.component.screen.LoadingScreen
+import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
+import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.ContentType
 import com.teamwable.model.viewit.ViewIt
+import com.teamwable.ui.type.BottomSheetType
+import com.teamwable.ui.type.SnackbarType
+import com.teamwable.viewit.R
 import com.teamwable.viewit.component.ViewitItem
 import com.teamwable.viewit.viewit.ViewItViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.timeout
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ViewItRoute(
     viewModel: ViewItViewModel = hiltViewModel(),
+    onShowBottomSheet: (BottomSheetType, Any) -> Unit = { _, _ -> },
+    onDismissBottomSheet: () -> Unit = {},
+    onNavigateToError: () -> Unit = {},
+    onNavigateToMemberProfile: (Long) -> Unit = {},
+    onNavigateToMyProfile: () -> Unit = {},
+    onShowSnackBar: (SnackbarType, Throwable?) -> Unit = { _, _ -> },
+    onOpenUrl: (String) -> Unit = {},
+    onNavigateToPosting: () -> Unit = {},
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val viewIts = viewModel.viewItPagingFlow.collectAsLazyPagingItems()
+    val actions = rememberViewItScreen(viewModel)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val listState = rememberLazyListState()
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { sideEffect ->
                 when (sideEffect) {
-                    ViewItSideEffect.NavigateToProfile -> TODO()
-                    is ViewItSideEffect.ShowSnackBar -> TODO()
+                    is ViewItSideEffect.Navigation.ToMemberProfile -> onNavigateToMemberProfile(sideEffect.id)
+                    is ViewItSideEffect.Navigation.ToUrl -> onOpenUrl(sideEffect.url)
+                    ViewItSideEffect.Navigation.ToMyProfile -> onNavigateToMyProfile()
+                    ViewItSideEffect.Navigation.ToError -> onNavigateToError()
+                    ViewItSideEffect.Navigation.ToPosting -> onNavigateToPosting()
+
+                    is ViewItSideEffect.UI.ShowSnackBar -> onShowSnackBar(sideEffect.type, sideEffect.throwable)
+                    is ViewItSideEffect.UI.ShowBottomSheet -> onShowBottomSheet(sideEffect.type, sideEffect.info)
+                    ViewItSideEffect.UI.DismissBottomSheet -> onDismissBottomSheet()
+                    ViewItSideEffect.UI.Refresh -> {
+                        viewIts.refresh()
+                        snapshotFlow { viewIts.loadState.refresh }
+                            .distinctUntilChanged()
+                            .dropWhile { it !is LoadState.Loading }
+                            .dropWhile { it is LoadState.Loading }
+                            .filter { it is LoadState.NotLoading }
+                            .timeout(5.seconds)
+                            .first()
+
+                        listState.scrollToTop()
+                    }
                 }
             }
     }
 
-    ViewItScreen(
-        uiState = uiState,
-        viewIts,
-        onClickProfile = {},
-        onClickKebab = {},
-        onClickLink = {},
-        onClickLike = {},
-    )
+    ViewItScreen(actions, viewIts, listState)
 }
 
 @Composable
+fun rememberViewItScreen(
+    viewModel: ViewItViewModel = hiltViewModel(),
+): ViewItActions {
+    return remember(viewModel) {
+        ViewItActions(
+            onClickProfile = { viewModel.onIntent(ViewItIntent.ClickProfile(it)) },
+            onClickKebab = { viewModel.onIntent(ViewItIntent.ClickKebabBtn(it)) },
+            onClickLink = { viewModel.onIntent(ViewItIntent.ClickLink(it)) },
+            onClickLike = { viewModel.onIntent(ViewItIntent.ClickLikeBtn(it)) },
+            onClickPosting = { viewModel.onIntent(ViewItIntent.ClickPosting) },
+            onRefresh = { viewModel.onIntent(ViewItIntent.PullToRefresh) },
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun ViewItScreen(
-    uiState: ViewItUiState,
+    actions: ViewItActions,
     viewIts: LazyPagingItems<ViewIt>,
-    onClickProfile: (ViewIt) -> Unit = {},
-    onClickKebab: (ViewIt) -> Unit = {},
-    onClickLink: (ViewIt) -> Unit = {},
-    onClickLike: (ViewIt) -> Unit = {},
+    listState: LazyListState,
 ) {
+    val refreshState = rememberPullToRefreshState()
+    val isLoading = viewIts.loadState.refresh is LoadState.Loading
+    val isEmpty = viewIts.itemCount == 0 && !isLoading
+    val isRefreshing = viewIts.itemCount != 0 && isLoading
+
     WableFloatingButtonLayout(
         buttonContent = { modifier ->
             WableFloatingButton(
                 modifier = modifier.padding(20.dp),
-                onClick = { },
+                onClick = actions.onClickPosting,
                 icon = painterResource(id = com.teamwable.common.R.drawable.ic_home_posting),
                 contentDescription = "추가",
                 style = FloatingButtonDefaults.gradientStyle(),
@@ -77,34 +140,63 @@ private fun ViewItScreen(
         },
         buttonAlignment = Alignment.BottomEnd,
     ) {
-        LazyColumn {
-            items(
-                count = viewIts.itemCount,
-                key = viewIts.itemKey { it.viewItId },
-            ) { index ->
-                ViewitItem(
-                    viewIts[index] ?: return@items,
-                    onClickProfile,
-                    onClickKebab,
-                    onClickLink,
-                    onClickLike,
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = actions.onRefresh,
+            state = refreshState,
+            indicator = {
+                WableCustomRefreshIndicator(
+                    state = refreshState,
+                    isRefreshing = isRefreshing,
+                    modifier = Modifier.align(Alignment.TopCenter),
                 )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = WableTheme.colors.gray200,
-                )
+            },
+        ) {
+            when {
+                isLoading && !isRefreshing -> LoadingScreen()
+                isEmpty -> NewsNoticeEmptyScreen(emptyTxt = R.string.label_view_it_empty)
+                else -> ViewItListContent(viewIts, listState, actions)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun ViewItScreenPreview() {
-    WableTheme {
-        ViewItScreen(
-            uiState = ViewItUiState(),
-            viewIts = flowOf(PagingData.from(emptyList<ViewIt>())).collectAsLazyPagingItems(),
-        )
+fun ViewItListContent(
+    viewIts: LazyPagingItems<ViewIt>,
+    listState: LazyListState,
+    actions: ViewItActions,
+) {
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(bottom = 108.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        items(
+            count = viewIts.itemCount,
+            key = viewIts.itemKey { it.viewItId },
+        ) { index ->
+            ViewitItem(
+                viewIts[index] ?: return@items,
+                actions,
+            )
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = WableTheme.colors.gray200,
+            )
+        }
+
+        if (viewIts.loadState.append is LoadState.Loading) {
+            item(
+                key = ContentType.Spinner.name,
+                contentType = viewIts.itemContentType { ContentType.Spinner.name },
+            ) {
+                WablePagingSpinner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                )
+            }
+        }
     }
 }

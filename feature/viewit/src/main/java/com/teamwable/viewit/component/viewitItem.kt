@@ -1,5 +1,6 @@
 package com.teamwable.viewit.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,28 +19,29 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
+import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.viewit.ViewIt
+import com.teamwable.viewit.ui.ViewItActions
 
 @Composable
 fun ViewitItem(
     viewIt: ViewIt,
-    onClickProfile: (ViewIt) -> Unit,
-    onClickKebab: (ViewIt) -> Unit,
-    onClickLink: (ViewIt) -> Unit,
-    onClickLike: (ViewIt) -> Unit,
+    actions: ViewItActions,
 ) {
     Column(
         modifier = Modifier
@@ -52,7 +54,7 @@ fun ViewitItem(
                 modifier = Modifier
                     .width(28.dp)
                     .aspectRatio(1f)
-                    .clickable { onClickProfile(viewIt) },
+                    .noRippleClickable { actions.onClickProfile(viewIt.postAuthorId) },
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -67,20 +69,17 @@ fun ViewitItem(
                     color = WableTheme.colors.black,
                     modifier = Modifier
                         .wrapContentWidth()
-                        .clickable { onClickProfile(viewIt) },
+                        .clickable { actions.onClickProfile(viewIt.postAuthorId) },
                 )
             }
 
-            IconButton(
-                onClick = { onClickKebab(viewIt) },
-                modifier = Modifier.noRippleClickable(),
-            ) {
-                Icon(
-                    painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_more),
-                    contentDescription = null,
-                    tint = WableTheme.colors.gray500,
-                )
-            }
+            Icon(
+                painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_more),
+                contentDescription = "케밥 메뉴",
+                tint = WableTheme.colors.gray500,
+                modifier = Modifier
+                    .noRippleClickable { actions.onClickKebab(viewIt) },
+            )
         }
 
         Spacer(modifier = Modifier.height(9.dp))
@@ -107,25 +106,37 @@ fun ViewitItem(
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        LinkItem(viewIt, onClickLink, onClickLike)
+        LinkItem(viewIt, actions)
     }
 }
 
 @Composable
 fun LinkItem(
     viewIt: ViewIt,
-    onClickLink: (ViewIt) -> Unit,
-    onClickLike: (ViewIt) -> Unit,
+    actions: ViewItActions,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(78.dp)
-            .clickable { onClickLink(viewIt) },
+            .noRippleClickable { actions.onClickLink(viewIt.link) },
     ) {
         GlideImage(
             imageModel = { viewIt.linkImage },
             previewPlaceholder = painterResource(id = com.teamwable.common.R.drawable.img_empty),
+            loading = {
+                Box(
+                    modifier = Modifier
+                        .background(WableTheme.colors.gray200),
+                )
+            },
+            failure = {
+                Image(
+                    painter = painterResource(id = com.teamwable.common.R.drawable.img_view_it_empty),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                )
+            },
             modifier = Modifier
                 .fillMaxHeight()
                 .clip(
@@ -178,13 +189,21 @@ fun LinkItem(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val likeIcon = remember(viewIt.isLiked) {
+                    if (viewIt.isLiked) {
+                        com.teamwable.common.R.drawable.ic_home_heart_btn_active
+                    } else {
+                        com.teamwable.common.R.drawable.ic_home_heart_btn_inactive
+                    }
+                }
+
                 Icon(
-                    painter = painterResource(id = com.teamwable.common.R.drawable.ic_home_heart_btn_inactive),
-                    contentDescription = null,
-                    tint = WableTheme.colors.gray600,
+                    painter = painterResource(id = likeIcon),
+                    contentDescription = "좋아요",
+                    tint = Color.Unspecified,
                     modifier = Modifier
                         .size(20.dp)
-                        .clickable { onClickLike(viewIt) },
+                        .noRippleDebounceClickable { actions.onClickLike(viewIt) },
                 )
 
                 Spacer(modifier = Modifier.width(4.dp))
@@ -218,10 +237,7 @@ private fun ViewItItemPreview() {
                 likedNumber = "45",
                 isBlind = false,
             ),
-            onClickProfile = {},
-            onClickKebab = {},
-            onClickLike = {},
-            onClickLink = {},
+            ViewItActions(),
         )
     }
 }
