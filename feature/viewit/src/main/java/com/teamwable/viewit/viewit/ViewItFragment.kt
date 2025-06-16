@@ -1,19 +1,41 @@
 package com.teamwable.viewit.viewit
 
+import android.os.Bundle
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.component.BottomSheet
+import com.teamwable.ui.component.Snackbar
+import com.teamwable.ui.component.TwoButtonDialog
+import com.teamwable.ui.extensions.DeepLinkDestination
+import com.teamwable.ui.extensions.deepLinkNavigateTo
+import com.teamwable.ui.extensions.openUri
+import com.teamwable.ui.extensions.setupEnumResultListener
+import com.teamwable.ui.type.BanTriggerType
+import com.teamwable.ui.type.BottomSheetType
+import com.teamwable.ui.type.DialogType
+import com.teamwable.ui.type.SnackbarType
+import com.teamwable.ui.type.toDialogType
+import com.teamwable.ui.util.Arg.BOTTOM_SHEET_RESULT
+import com.teamwable.ui.util.Arg.BOTTOM_SHEET_TYPE
+import com.teamwable.ui.util.Arg.DIALOG_RESULT
+import com.teamwable.ui.util.Arg.DIALOG_TYPE
+import com.teamwable.ui.util.Arg.PROFILE_USER_ID
+import com.teamwable.ui.util.BundleKey.POSTING_RESULT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_CONTENT
+import com.teamwable.ui.util.BundleKey.VIEW_IT_LINK
+import com.teamwable.ui.util.Navigation
 import com.teamwable.viewit.databinding.FragmentViewItComposeBinding
+import com.teamwable.viewit.ui.ViewItIntent
 import com.teamwable.viewit.ui.ViewItRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewItFragment : BindingFragment<FragmentViewItComposeBinding>(FragmentViewItComposeBinding::inflate) {
     private val viewModel: ViewItViewModel by viewModels()
-//    private lateinit var viewItAdapter: ViewItAdapter
-//    private lateinit var feedActionHandler: FeedActionHandler
-//    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun initView() {
         initComposeView()
@@ -24,165 +46,76 @@ class ViewItFragment : BindingFragment<FragmentViewItComposeBinding>(FragmentVie
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
-                    ViewItRoute()
+                    ViewItRoute(
+                        onShowBottomSheet = ::showBottomSheet,
+                        onShowSnackBar = ::showSnackBar,
+                        onNavigateToMemberProfile = ::navigateToMemberProfile,
+                        onNavigateToMyProfile = ::navigateToMyProfile,
+                        onNavigateToError = ::navigateToError,
+                        onDismissBottomSheet = ::dismissBottomSheet,
+                        onOpenUrl = { openUri(it) },
+                        onNavigateToPosting = ::navigateToPosting,
+                    )
                 }
             }
         }
     }
-//    override fun initView() {
-//        feedActionHandler = FeedActionHandler(requireContext(), findNavController(), parentFragmentManager, viewLifecycleOwner)
-//        collect()
-//        setAdapter()
-//        setOnPostingBtnClickListener()
-//        fetchViewItUploaded()
-//        scrollToTopOnRefresh()
-//    }
 
-//    override fun onDestroyView() {
-//        binding.rvViewIt.adapter = null
-//        super.onDestroyView()
-//    }
-//
-//    private fun collect() {
-//        viewLifeCycleScope.launch {
-//            viewModel.uiState.flowWithLifecycle(viewLifeCycle).collect { uiState ->
-//                when (uiState) {
-//                    is ViewItUiState.Error -> (activity as Navigation).navigateToErrorFragment()
-//                    is ViewItUiState.Success -> viewItAdapter.refresh()
-//                    else -> Unit
-//                }
-//            }
-//        }
-//
-//        viewLifeCycleScope.launch {
-//            viewModel.event.flowWithLifecycle(viewLifeCycle).collect { sideEffect ->
-//                when (sideEffect) {
-//                    is ViewItSideEffect.ShowSnackBar -> showSnackBar(sideEffect.type)
-//                    is ViewItSideEffect.DismissBottomSheet -> findNavController().popBackStack()
-//                    is ViewItSideEffect.ShowErrorMessage -> showSnackBar(SnackbarType.ERROR, sideEffect.throwable)
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun setAdapter() {
-//        viewItAdapter = ViewItAdapter(onClickViewItItem())
-//        binding.rvViewIt.apply {
-//            adapter = viewItAdapter.withLoadStateFooter(PagingLoadingAdapter())
-//            if (itemDecorationCount == 0) setDividerWithPadding(com.teamwable.ui.R.drawable.recyclerview_item_1_divider)
-//        }
-//        if (this::viewItAdapter.isInitialized) submitList()
-//        setSwipeLayout()
-//        setEmptyView()
-//    }
-//
-//    private fun onClickViewItItem() = object : ViewItClickListener {
-//        override fun onItemClick(link: String) {
-//            openUri(link)
-//        }
-//
-//        override fun onLikeBtnClick(viewHolder: ViewItViewHolder, id: Long, isLiked: Boolean) {
-//            feedActionHandler.onLikeBtnClick(
-//                LikeInfo(viewHolder.likeBtn, viewHolder.likeCountTv, id) { feedId, likeState ->
-//                    if (singleEventHandler.canProceed(FEED_LIKE)) {
-//                        if (isLiked != viewHolder.likeBtn.isChecked) viewModel.updateLike(feedId, likeState)
-//                    }
-//                },
-//            )
-//        }
-//
-//        override fun onPostAuthorProfileClick(id: Long) {
-//            handleProfileNavigation(id)
-//        }
-//
-//        override fun onKebabBtnClick(viewIt: ViewIt) {
-//            feedActionHandler.onKebabBtnClick(
-//                viewIt.toFeed(),
-//                fetchUserType = { viewModel.fetchUserType(it) },
-//                removeFeed = { viewModel.removeViewIt(viewIt.viewItId) },
-//                reportUser = { nickname, content -> viewModel.reportUser(nickname, content) },
-//                banUser = { trigger, _ -> viewModel.banUser(Triple(trigger.postAuthorId, stringOf(BanTriggerType.VIEWIT.type), trigger.feedId)) },
-//            )
-//        }
-//    }
-//
-//    private fun handleProfileNavigation(id: Long) {
-//        when (viewModel.fetchUserType(id)) {
-//            ProfileUserType.AUTH -> (activity as Navigation).navigateToProfileAuthFragment()
-//            in setOf(ProfileUserType.MEMBER, ProfileUserType.ADMIN) -> findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
-//            else -> return
-//        }
-//    }
-//
-//    private fun submitList() {
-//        viewLifeCycleScope.launch {
-//            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.updateViewIts().collectLatest {
-//                    viewItAdapter.submitData(it)
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun setOnPostingBtnClickListener() {
-//        binding.fabViewItPosting.setOnClickListener {
-//            findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
-//        }
-//    }
-//
-//    private fun setSwipeLayout() {
-//        binding.layoutViewItSwipe.setOnRefreshListener {
-//            binding.layoutViewItSwipe.isRefreshing = false
-//            viewItAdapter.refresh()
-//        }
-//    }
-//
-//    private fun setEmptyView() {
-//        viewLifeCycleScope.launch {
-//            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewItAdapter.loadStateFlow.collectLatest { loadStates ->
-//                    val isEmptyList = loadStates.refresh is LoadState.NotLoading && viewItAdapter.itemCount == 0
-//                    binding.tvEmpty.visible(isEmptyList)
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun fetchViewItUploaded() {
-//        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
-//            val (link, content) = result.extractViewItData()
-//
-//            if (link.isNotBlank() && content.isNotBlank()) {
-//                showSnackBar(SnackbarType.VIEW_IT_ING)
-//                viewModel.postViewIt(link, content)
-//            }
-//        }
-//    }
-//
-//    private fun Bundle.extractViewItData(): Pair<String, String> {
-//        val link = getString(VIEW_IT_LINK).orEmpty()
-//        val content = getString(VIEW_IT_CONTENT).orEmpty()
-//        return link to content
-//    }
-//
-//    private fun scrollToTopOnRefresh() {
-//        var isFirstLoad = true
-//
-//        viewLifeCycleScope.launch {
-//            viewLifeCycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewItAdapter.loadStateFlow.collectLatest { loadStates ->
-//                    if (loadStates.source.refresh is LoadState.Loading) isFirstLoad = false
-//
-//                    if (loadStates.source.refresh is LoadState.NotLoading && !isFirstLoad) {
-//                        binding.rvViewIt.scrollToPosition(0)
-//                        isFirstLoad = true
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun showSnackBar(snackbarType: SnackbarType, throwable: Throwable? = null) {
-//        Snackbar.make(binding.root, snackbarType, throwable).show()
-//    }
+    private fun showSnackBar(type: SnackbarType, throwable: Throwable? = null) = Snackbar.make(binding.root, type, throwable).show()
+
+    private fun navigateToMyProfile() = (activity as Navigation).navigateToProfileAuthFragment()
+
+    private fun navigateToMemberProfile(id: Long) = findNavController().deepLinkNavigateTo(requireContext(), DeepLinkDestination.Profile, mapOf(PROFILE_USER_ID to id))
+
+    private fun dismissBottomSheet() = findNavController().popBackStack()
+
+    private fun navigateToError() = (activity as Navigation).navigateToErrorFragment()
+
+    private fun showBottomSheet(type: BottomSheetType, info: ViewIt) {
+        BottomSheet.show(binding.root.context, findNavController(), type)
+        handleBottomSheetResult(info)
+    }
+
+    private fun handleBottomSheetResult(info: ViewIt) {
+        setupEnumResultListener<BottomSheetType>(BOTTOM_SHEET_RESULT, BOTTOM_SHEET_TYPE) {
+            showDialog(it.toDialogType(), info)
+        }
+    }
+
+    private fun showDialog(type: DialogType, info: ViewIt) {
+        TwoButtonDialog.show(binding.root.context, findNavController(), type)
+        handleDialogResult(info)
+    }
+
+    private fun handleDialogResult(info: ViewIt) {
+        setupEnumResultListener<DialogType>(DIALOG_RESULT, DIALOG_TYPE) {
+            when (it) {
+                DialogType.DELETE_FEED -> viewModel.onIntent(ViewItIntent.RemoveViewIt(info.viewItId))
+                DialogType.REPORT -> viewModel.onIntent(ViewItIntent.ReportViewIt(info.postAuthorNickname, info.viewItContent))
+                DialogType.BAN -> viewModel.onIntent(ViewItIntent.BanViewIt(Triple(info.postAuthorId, BanTriggerType.CONTENT.name.lowercase(), info.viewItId)))
+                else -> Unit
+            }
+        }
+    }
+
+    private fun navigateToPosting() {
+        findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
+        handlePostingResult()
+    }
+
+    private fun handlePostingResult() {
+        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
+            val (link, content) = result.extractViewItData()
+
+            if (link.isNotBlank() && content.isNotBlank()) {
+                viewModel.onIntent(ViewItIntent.PostViewIt(link, content))
+            }
+        }
+    }
+
+    private fun Bundle.extractViewItData(): Pair<String, String> {
+        val link = getString(VIEW_IT_LINK).orEmpty()
+        val content = getString(VIEW_IT_CONTENT).orEmpty()
+        return link to content
+    }
 }
