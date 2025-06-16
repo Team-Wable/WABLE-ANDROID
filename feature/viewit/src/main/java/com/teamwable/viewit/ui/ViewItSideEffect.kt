@@ -1,6 +1,7 @@
 package com.teamwable.viewit.ui
 
 import com.teamwable.common.base.SideEffect
+import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.SnackbarType
 
@@ -20,7 +21,7 @@ sealed interface ViewItSideEffect : SideEffect {
     sealed interface UI : ViewItSideEffect {
         data class ShowSnackBar(val type: SnackbarType, val throwable: Throwable? = null) : UI
 
-        data class ShowBottomSheet(val type: BottomSheetType, val info: Any) : UI
+        data class ShowBottomSheet(val type: BottomSheetType, val info: ViewIt) : UI
 
         data object DismissBottomSheet : UI
 

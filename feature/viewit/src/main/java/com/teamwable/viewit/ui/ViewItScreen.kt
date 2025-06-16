@@ -34,7 +34,6 @@ import com.teamwable.designsystem.component.paging.WableCustomRefreshIndicator
 import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.LoadingScreen
 import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
-import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 import com.teamwable.model.viewit.ViewIt
@@ -45,16 +44,16 @@ import com.teamwable.viewit.component.ViewitItem
 import com.teamwable.viewit.viewit.ViewItViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.timeout
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ViewItRoute(
     viewModel: ViewItViewModel = hiltViewModel(),
-    onShowBottomSheet: (BottomSheetType, Any) -> Unit = { _, _ -> },
+    onShowBottomSheet: (BottomSheetType, ViewIt) -> Unit = { _, _ -> },
     onDismissBottomSheet: () -> Unit = {},
     onNavigateToError: () -> Unit = {},
     onNavigateToMemberProfile: (Long) -> Unit = {},
@@ -83,21 +82,23 @@ fun ViewItRoute(
                     ViewItSideEffect.UI.DismissBottomSheet -> onDismissBottomSheet()
                     ViewItSideEffect.UI.Refresh -> {
                         viewIts.refresh()
-                        snapshotFlow { viewIts.loadState.refresh }
-                            .distinctUntilChanged()
-                            .dropWhile { it !is LoadState.Loading }
-                            .dropWhile { it is LoadState.Loading }
-                            .filter { it is LoadState.NotLoading }
-                            .timeout(5.seconds)
-                            .first()
-
-                        listState.scrollToTop()
+                        awaitRefreshComplete(viewIts)
+                        listState.animateScrollToItem(0, -100)
                     }
                 }
             }
     }
 
     ViewItScreen(actions, viewIts, listState)
+}
+
+suspend fun awaitRefreshComplete(viewIts: LazyPagingItems<*>) {
+    snapshotFlow { viewIts.loadState.refresh }
+        .map { it is LoadState.NotLoading }
+        .distinctUntilChanged()
+        .filter { it }
+        .timeout(5.seconds)
+        .first()
 }
 
 @Composable

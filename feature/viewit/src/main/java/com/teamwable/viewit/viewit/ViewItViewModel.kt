@@ -66,8 +66,8 @@ class ViewItViewModel @Inject constructor(
             is ViewItIntent.BanViewIt -> onBanUser(intent.banInfo)
             is ViewItIntent.RemoveViewIt -> onRemoveViewIt(intent.id)
             is ViewItIntent.ReportViewIt -> onReportViewIt(intent.nickname, intent.relateText)
-            ViewItIntent.ClickPosting -> onPostingClick()
             is ViewItIntent.PostViewIt -> onPostViewIt(intent.link, intent.content)
+            ViewItIntent.ClickPosting -> onPostingClick()
             ViewItIntent.PullToRefresh -> onRefreshViewIt()
         }
     }
