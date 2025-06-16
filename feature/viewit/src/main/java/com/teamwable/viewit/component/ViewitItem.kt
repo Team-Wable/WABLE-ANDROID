@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
+import com.teamwable.designsystem.component.screen.FeedBlindScreen
 import com.teamwable.designsystem.extension.modifier.noRippleClickable
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
@@ -84,30 +84,38 @@ fun ViewitItem(
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        Text(
-            text = viewIt.viewItContent,
-            style = WableTheme.typography.body04,
-            color = WableTheme.colors.dk50,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = WableTheme.colors.purple10,
-                    shape = RoundedCornerShape(
-                        topEnd = 8.dp,
-                        bottomStart = 8.dp,
-                        bottomEnd = 8.dp,
-                    ),
-                )
-                .padding(
-                    horizontal = 7.dp,
-                    vertical = 10.dp,
-                ),
-        )
-
-        Spacer(modifier = Modifier.height(9.dp))
-
-        LinkItem(viewIt, actions)
+        if (viewIt.isBlind) {
+            FeedBlindScreen()
+        } else {
+            ViewItContent(content = viewIt.viewItContent)
+            LinkItem(viewIt, actions)
+        }
     }
+}
+
+@Composable
+fun ViewItContent(content: String) {
+    Text(
+        text = content,
+        style = WableTheme.typography.body04,
+        color = WableTheme.colors.dk50,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = WableTheme.colors.purple10,
+                shape = RoundedCornerShape(
+                    topEnd = 8.dp,
+                    bottomStart = 8.dp,
+                    bottomEnd = 8.dp,
+                ),
+            )
+            .padding(
+                horizontal = 7.dp,
+                vertical = 10.dp,
+            ),
+    )
+
+    Spacer(modifier = Modifier.height(9.dp))
 }
 
 @Composable
@@ -189,12 +197,10 @@ fun LinkItem(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val likeIcon = remember(viewIt.isLiked) {
-                    if (viewIt.isLiked) {
-                        com.teamwable.common.R.drawable.ic_home_heart_btn_active
-                    } else {
-                        com.teamwable.common.R.drawable.ic_home_heart_btn_inactive
-                    }
+                val likeIcon = if (viewIt.isLiked) {
+                    com.teamwable.common.R.drawable.ic_home_heart_btn_active
+                } else {
+                    com.teamwable.common.R.drawable.ic_home_heart_btn_inactive
                 }
 
                 Icon(
@@ -218,26 +224,60 @@ fun LinkItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    group = "ViewIt",
+)
 @Composable
-private fun ViewItItemPreview() {
+private fun ViewItItemBlindPreview() {
     WableTheme {
-        ViewitItem(
-            ViewIt(
-                postAuthorId = 1,
-                postAuthorProfile = "PURPLE",
-                postAuthorNickname = "프리뷰유저",
-                viewItId = 102,
-                linkImage = "",
-                link = "https://example.com",
-                linkTitle = "프리뷰 링크 제목",
-                linkName = "프리뷰 링크",
-                viewItContent = "프리뷰용 테스트 콘텐츠입니다.",
-                isLiked = false,
-                likedNumber = "45",
-                isBlind = false,
-            ),
-            ViewItActions(),
-        )
+        Column {
+            ViewitItem(
+                viewIt = ViewIt(
+                    postAuthorId = 1,
+                    postAuthorProfile = "PURPLE",
+                    postAuthorNickname = "프리뷰유저",
+                    viewItId = 102,
+                    linkImage = "",
+                    link = "https://example.com",
+                    linkTitle = "프리뷰 링크 제목",
+                    linkName = "프리뷰 링크",
+                    viewItContent = "프리뷰용 테스트 콘텐츠입니다.",
+                    isLiked = false,
+                    likedNumber = "45",
+                    isBlind = true,
+                ),
+                actions = ViewItActions(),
+            )
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    group = "ViewIt",
+)
+@Composable
+private fun ViewItItemNormalPreview() {
+    WableTheme {
+        Column {
+            ViewitItem(
+                viewIt = ViewIt(
+                    postAuthorId = 1,
+                    postAuthorProfile = "PURPLE",
+                    postAuthorNickname = "프리뷰유저",
+                    viewItId = 102,
+                    linkImage = "",
+                    link = "https://example.com",
+                    linkTitle = "프리뷰 링크 제목",
+                    linkName = "프리뷰 링크",
+                    viewItContent = "프리뷰용 테스트 콘텐츠입니다.",
+                    isLiked = false,
+                    likedNumber = "45",
+                    isBlind = false,
+                ),
+                actions = ViewItActions(),
+            )
+        }
     }
 }
