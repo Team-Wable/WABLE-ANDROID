@@ -24,10 +24,20 @@ class ViewItBenchmarkTest : PerformanceBenchmark() {
     )
 
     @Test
-    fun viewItXmlVsComposeComparison() {
+    fun viewItXmlTest() {
         runPerformanceTest(
             targets = listOf(
                 BenchmarkTargets.xmlViewItScreen,
+            ),
+            scenario = CommonScenarios.BasicInteraction(),
+            customConfig = config,
+        )
+    }
+
+    @Test
+    fun viewItComposeTest() {
+        runPerformanceTest(
+            targets = listOf(
                 BenchmarkTargets.composeViewItScreen,
             ),
             scenario = CommonScenarios.BasicInteraction(),
@@ -36,16 +46,29 @@ class ViewItBenchmarkTest : PerformanceBenchmark() {
     }
 
     @Test
-    fun scrollPerformanceComparison() {
+    fun viewItComposeScrollPerformance() {
         runPerformanceTest(
             targets = listOf(
-                BenchmarkTargets.xmlViewItScreen,
                 BenchmarkTargets.composeViewItScreen,
             ),
             scenario = CommonScenarios.ScrollTest(),
             customConfig = config.copy(
                 metrics = PerformanceMetrics.FRAME_ONLY,
-                iterations = 5,
+                iterations = 3,
+            ),
+        )
+    }
+
+    @Test
+    fun viewItXmlScrollPerformance() {
+        runPerformanceTest(
+            targets = listOf(
+                BenchmarkTargets.xmlViewItScreen,
+            ),
+            scenario = CommonScenarios.ScrollTest(),
+            customConfig = config.copy(
+                metrics = PerformanceMetrics.FRAME_ONLY,
+                iterations = 3,
             ),
         )
     }
