@@ -14,7 +14,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -37,18 +36,13 @@ import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
 import com.teamwable.model.viewit.ViewIt
+import com.teamwable.ui.extensions.awaitRefreshComplete
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.viewit.R
 import com.teamwable.viewit.component.ViewitItem
 import com.teamwable.viewit.viewit.ViewItViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.timeout
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ViewItRoute(
@@ -63,7 +57,7 @@ fun ViewItRoute(
     onNavigateToPosting: () -> Unit = {},
 ) {
     val viewIts = viewModel.viewItPagingFlow.collectAsLazyPagingItems()
-    val actions = rememberViewItScreen(viewModel)
+    val actions = rememberViewItActions(viewModel)
     val lifecycleOwner = LocalLifecycleOwner.current
     val listState = rememberLazyListState()
 
@@ -92,17 +86,8 @@ fun ViewItRoute(
     ViewItScreen(actions, viewIts, listState)
 }
 
-suspend fun awaitRefreshComplete(viewIts: LazyPagingItems<*>) {
-    snapshotFlow { viewIts.loadState.refresh }
-        .map { it is LoadState.NotLoading }
-        .distinctUntilChanged()
-        .filter { it }
-        .timeout(5.seconds)
-        .first()
-}
-
 @Composable
-fun rememberViewItScreen(
+fun rememberViewItActions(
     viewModel: ViewItViewModel = hiltViewModel(),
 ): ViewItActions {
     return remember(viewModel) {
