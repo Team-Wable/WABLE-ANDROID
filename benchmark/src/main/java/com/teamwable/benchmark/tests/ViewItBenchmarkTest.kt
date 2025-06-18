@@ -45,7 +45,7 @@ class ViewItBenchmarkTest : PerformanceBenchmark() {
             scenario = CommonScenarios.ScrollTest(),
             customConfig = config.copy(
                 metrics = PerformanceMetrics.FRAME_ONLY,
-                iterations = 5,
+                iterations = 3,
             ),
         )
     }

@@ -20,6 +20,10 @@ android {
         minSdk = 24
         targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments += mapOf(
+            "androidx.benchmark.output.enable" to "true",
+            "androidx.benchmark.output.format" to "json",
+        )
     }
 
     buildTypes {
