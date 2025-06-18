@@ -119,7 +119,7 @@ fun rememberViewItScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ViewItScreen(
+fun ViewItScreen(
     actions: ViewItActions,
     viewIts: LazyPagingItems<ViewIt>,
     listState: LazyListState,
