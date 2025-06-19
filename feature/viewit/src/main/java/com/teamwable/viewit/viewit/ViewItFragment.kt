@@ -5,7 +5,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.component.BottomSheet
 import com.teamwable.ui.component.Snackbar
@@ -14,7 +13,6 @@ import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.setupEnumResultListener
-import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.type.SnackbarType
@@ -39,6 +37,7 @@ class ViewItFragment : BindingFragment<FragmentViewItComposeBinding>(FragmentVie
 
     override fun initView() {
         initComposeView()
+        initFragmentResultListener()
     }
 
     private fun initComposeView() {
@@ -61,6 +60,28 @@ class ViewItFragment : BindingFragment<FragmentViewItComposeBinding>(FragmentVie
         }
     }
 
+    private fun initFragmentResultListener() {
+        setupEnumResultListener<BottomSheetType>(BOTTOM_SHEET_RESULT, BOTTOM_SHEET_TYPE) {
+            showDialog(it.toDialogType())
+            setupEnumResultListener<DialogType>(DIALOG_RESULT, DIALOG_TYPE) { type ->
+                when (type) {
+                    DialogType.DELETE_FEED -> viewModel.onIntent(ViewItIntent.RemoveViewIt)
+                    DialogType.REPORT -> viewModel.onIntent(ViewItIntent.ReportViewIt)
+                    DialogType.BAN -> viewModel.onIntent(ViewItIntent.BanViewIt)
+                    else -> Unit
+                }
+            }
+        }
+
+        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
+            val (link, content) = result.extractViewItData()
+
+            if (link.isNotBlank() && content.isNotBlank()) {
+                viewModel.onIntent(ViewItIntent.PostViewIt(link, content))
+            }
+        }
+    }
+
     private fun showSnackBar(type: SnackbarType, throwable: Throwable? = null) = Snackbar.make(binding.root, type, throwable).show()
 
     private fun navigateToMyProfile() = (activity as Navigation).navigateToProfileAuthFragment()
@@ -71,47 +92,11 @@ class ViewItFragment : BindingFragment<FragmentViewItComposeBinding>(FragmentVie
 
     private fun navigateToError() = (activity as Navigation).navigateToErrorFragment()
 
-    private fun showBottomSheet(type: BottomSheetType, info: ViewIt) {
-        BottomSheet.show(binding.root.context, findNavController(), type)
-        handleBottomSheetResult(info)
-    }
+    private fun showBottomSheet(type: BottomSheetType) = BottomSheet.show(binding.root.context, findNavController(), type)
 
-    private fun handleBottomSheetResult(info: ViewIt) {
-        setupEnumResultListener<BottomSheetType>(BOTTOM_SHEET_RESULT, BOTTOM_SHEET_TYPE) {
-            showDialog(it.toDialogType(), info)
-        }
-    }
+    private fun showDialog(type: DialogType) = TwoButtonDialog.show(binding.root.context, findNavController(), type)
 
-    private fun showDialog(type: DialogType, info: ViewIt) {
-        TwoButtonDialog.show(binding.root.context, findNavController(), type)
-        handleDialogResult(info)
-    }
-
-    private fun handleDialogResult(info: ViewIt) {
-        setupEnumResultListener<DialogType>(DIALOG_RESULT, DIALOG_TYPE) {
-            when (it) {
-                DialogType.DELETE_FEED -> viewModel.onIntent(ViewItIntent.RemoveViewIt(info.viewItId))
-                DialogType.REPORT -> viewModel.onIntent(ViewItIntent.ReportViewIt(info.postAuthorNickname, info.viewItContent))
-                DialogType.BAN -> viewModel.onIntent(ViewItIntent.BanViewIt(Triple(info.postAuthorId, BanTriggerType.CONTENT.name.lowercase(), info.viewItId)))
-                else -> Unit
-            }
-        }
-    }
-
-    private fun navigateToPosting() {
-        findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
-        handlePostingResult()
-    }
-
-    private fun handlePostingResult() {
-        parentFragmentManager.setFragmentResultListener(POSTING_RESULT, viewLifecycleOwner) { _, result ->
-            val (link, content) = result.extractViewItData()
-
-            if (link.isNotBlank() && content.isNotBlank()) {
-                viewModel.onIntent(ViewItIntent.PostViewIt(link, content))
-            }
-        }
-    }
+    private fun navigateToPosting() = findNavController().navigate(ViewItFragmentDirections.actionViewItToPosting())
 
     private fun Bundle.extractViewItData(): Pair<String, String> {
         val link = getString(VIEW_IT_LINK).orEmpty()

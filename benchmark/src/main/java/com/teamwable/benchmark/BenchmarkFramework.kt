@@ -142,12 +142,10 @@ object CommonScenarios {
      *
      * @param scrollCount 일반 스크롤 횟수 (기본값: 10)
      * @param scrollRatio 스크롤 이동 비율 0.0~1.0 (기본값: 0.6)
-     * @param flingCount Fling 스크롤 횟수 (기본값: 3)
      */
     class ScrollTest(
         private val scrollCount: Int = 10,
         private val scrollRatio: Float = 0.6f,
-        private val flingCount: Int = 3,
     ) : BenchmarkScenario {
         override val name = "ScrollTest"
 
@@ -160,7 +158,7 @@ object CommonScenarios {
                 val displayWidth = device.displayWidth
                 val centerX = displayWidth / 2
 
-                repeat(10) {
+                repeat(scrollCount) {
                     device.swipe(
                         centerX, displayHeight * 2 / 3,
                         centerX, displayHeight / 3,
@@ -170,8 +168,8 @@ object CommonScenarios {
                     Thread.sleep(300)
 
                     device.swipe(
-                        centerX, displayHeight / 3,
-                        centerX, displayHeight * 2 / 3,
+                        centerX, (displayHeight * (1 - scrollRatio / 2)).toInt(),
+                        centerX, (displayHeight * (scrollRatio / 2)).toInt(),
                         50,
                     )
                     device.waitForIdle()

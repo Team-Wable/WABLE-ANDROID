@@ -74,8 +74,9 @@ inline fun <reified T : Enum<T>> Fragment.setupEnumResultListener(
         key,
         viewLifecycleOwner,
     ) { _, bundle ->
-        bundle.getString(typeKey)?.let {
-            onResult(enumValueOf<T>(it))
+        bundle.getString(typeKey)?.let { raw ->
+            runCatching { enumValueOf<T>(raw) }
+                .onSuccess(onResult)
         }
     }
 }

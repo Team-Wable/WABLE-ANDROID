@@ -24,9 +24,6 @@
         android:theme="@style/Theme.Wable"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <profileable
-            android:shell="true"
-            tools:targetApi="29" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

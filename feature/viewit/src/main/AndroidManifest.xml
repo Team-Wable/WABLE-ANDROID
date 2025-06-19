@@ -5,20 +5,10 @@
         <activity
             android:name="com.teamwable.viewit.benchmark.BenchmarkComposeEntryActivity"
             android:exported="true"
-            android:theme="@style/Theme.Wable">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Wable" />
         <activity
             android:name="com.teamwable.viewit.benchmark.BenchmarkXmlEntryActivity"
             android:exported="true"
-            android:theme="@style/Theme.Wable">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Wable" />
     </application>
 </manifest>

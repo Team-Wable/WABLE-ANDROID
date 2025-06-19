@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,7 +55,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun ViewItRoute(
     viewModel: ViewItViewModel = hiltViewModel(),
-    onShowBottomSheet: (BottomSheetType, ViewIt) -> Unit = { _, _ -> },
+    onShowBottomSheet: (BottomSheetType) -> Unit = {},
     onDismissBottomSheet: () -> Unit = {},
     onNavigateToError: () -> Unit = {},
     onNavigateToMemberProfile: (Long) -> Unit = {},
@@ -79,7 +80,7 @@ fun ViewItRoute(
                     ViewItSideEffect.Navigation.ToPosting -> onNavigateToPosting()
 
                     is ViewItSideEffect.UI.ShowSnackBar -> onShowSnackBar(sideEffect.type, sideEffect.throwable)
-                    is ViewItSideEffect.UI.ShowBottomSheet -> onShowBottomSheet(sideEffect.type, sideEffect.info)
+                    is ViewItSideEffect.UI.ShowBottomSheet -> onShowBottomSheet(sideEffect.type)
                     ViewItSideEffect.UI.DismissBottomSheet -> onDismissBottomSheet()
                     ViewItSideEffect.UI.Refresh -> {
                         viewIts.refresh()
@@ -109,7 +110,7 @@ fun rememberViewItActions(
     }
 }
 
-suspend fun awaitRefreshComplete(data: LazyPagingItems<*>) {
+suspend fun awaitRefreshComplete(data: LazyPagingItems<*>) = runCatching {
     snapshotFlow { data.loadState.refresh }
         .map { it is LoadState.NotLoading }
         .distinctUntilChanged()
@@ -172,7 +173,9 @@ fun ViewItListContent(
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(bottom = 108.dp),
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("viewit_list"),
     ) {
         items(
             count = viewIts.itemCount,

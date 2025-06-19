@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.remember
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.teamwable.designsystem.theme.WableTheme
@@ -17,9 +18,10 @@ class BenchmarkComposeEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WableTheme {
+                val mockPagingData = remember { flowOf(generateMockViewItData()) }
                 ViewItScreen(
                     listState = rememberLazyListState(),
-                    viewIts = flowOf(generateMockViewItData()).collectAsLazyPagingItems(),
+                    viewIts = mockPagingData.collectAsLazyPagingItems(),
                     actions = ViewItActions(),
                 )
             }

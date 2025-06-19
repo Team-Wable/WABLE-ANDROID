@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
 import com.teamwable.common.base.BaseViewModel
-import com.teamwable.common.base.EmptyState
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.repository.ViewItRepository
 import com.teamwable.domain.usecase.GetAuthTypeUseCase
@@ -14,11 +13,13 @@ import com.teamwable.model.home.LikeState
 import com.teamwable.model.viewit.ViewIt
 import com.teamwable.ui.extensions.addItem
 import com.teamwable.ui.extensions.putItem
+import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
 import com.teamwable.viewit.ui.ViewItIntent
 import com.teamwable.viewit.ui.ViewItSideEffect
+import com.teamwable.viewit.ui.ViewItUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +32,8 @@ class ViewItViewModel @Inject constructor(
     private val viewItRepository: ViewItRepository,
     private val profileRepository: ProfileRepository,
     private val getAuthTypeUseCase: GetAuthTypeUseCase,
-) : BaseViewModel<ViewItIntent, EmptyState, ViewItSideEffect>(
-        initialState = EmptyState,
+) : BaseViewModel<ViewItIntent, ViewItUiState, ViewItSideEffect>(
+        initialState = ViewItUiState(),
     ) {
     private val removedViewItsFlow = MutableStateFlow(setOf<Long>())
     private val banViewItFlow = MutableStateFlow(setOf<Long>())
@@ -63,9 +64,9 @@ class ViewItViewModel @Inject constructor(
             is ViewItIntent.ClickLikeBtn -> onLikeClick(intent.viewIt)
             is ViewItIntent.ClickLink -> onLinkClick(intent.url)
             is ViewItIntent.ClickProfile -> onProfileClick(intent.id)
-            is ViewItIntent.BanViewIt -> onBanUser(intent.banInfo)
-            is ViewItIntent.RemoveViewIt -> onRemoveViewIt(intent.id)
-            is ViewItIntent.ReportViewIt -> onReportViewIt(intent.nickname, intent.relateText)
+            is ViewItIntent.BanViewIt -> onBanUser()
+            is ViewItIntent.RemoveViewIt -> onRemoveViewIt()
+            is ViewItIntent.ReportViewIt -> onReportViewIt()
             is ViewItIntent.PostViewIt -> onPostViewIt(intent.link, intent.content)
             ViewItIntent.ClickPosting -> onPostingClick()
             ViewItIntent.PullToRefresh -> onRefreshViewIt()
@@ -94,6 +95,9 @@ class ViewItViewModel @Inject constructor(
             ProfileUserType.ADMIN.name -> BottomSheetType.BAN
             else -> BottomSheetType.REPORT
         }
+        intent {
+            copy(pendingViewIt = viewIt, isBottomSheetVisible = true, bottomSheetType = type)
+        }
         postSideEffect(ViewItSideEffect.UI.ShowBottomSheet(type, viewIt))
     }
 
@@ -101,28 +105,39 @@ class ViewItViewModel @Inject constructor(
         postSideEffect(ViewItSideEffect.Navigation.ToUrl(url))
     }
 
-    private fun onRemoveViewIt(id: Long) = viewModelScope.launch {
-        postSideEffect(ViewItSideEffect.UI.DismissBottomSheet)
+    private fun onRemoveViewIt() = viewModelScope.launch {
+        val id = currentState.pendingViewIt?.viewItId ?: return@launch
+
+        dismissBottomSheet()
         viewItRepository.deleteViewIt(id)
             .onSuccess { removedViewItsFlow.addItem(id) }
-            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR)) }
+            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it)) }
     }
 
-    private fun onReportViewIt(nickname: String, relateText: String) = viewModelScope.launch {
-        postSideEffect(ViewItSideEffect.UI.DismissBottomSheet)
-        profileRepository.postReport(nickname, relateText)
+    private fun onReportViewIt() = viewModelScope.launch {
+        val viewit = currentState.pendingViewIt ?: return@launch
+
+        dismissBottomSheet()
+        profileRepository.postReport(viewit.postAuthorNickname, viewit.viewItContent)
             .onSuccess { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.REPORT)) }
             .onFailure { postSideEffect(ViewItSideEffect.Navigation.ToError) }
     }
 
-    private fun onBanUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
-        postSideEffect(ViewItSideEffect.UI.DismissBottomSheet)
-        profileRepository.postBan(banInfo)
+    private fun onBanUser() = viewModelScope.launch {
+        val viewit = currentState.pendingViewIt ?: return@launch
+
+        dismissBottomSheet()
+        profileRepository.postBan(Triple(viewit.postAuthorId, BanTriggerType.CONTENT.name.lowercase(), viewit.viewItId))
             .onSuccess {
-                banViewItFlow.addItem(banInfo.third)
+                banViewItFlow.addItem(viewit.viewItId)
                 postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.BAN))
             }
-            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR)) }
+            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it)) }
+    }
+
+    private fun dismissBottomSheet() {
+        intent { copy(pendingViewIt = null, isBottomSheetVisible = false, bottomSheetType = BottomSheetType.EMPTY) }
+        postSideEffect(ViewItSideEffect.UI.DismissBottomSheet)
     }
 
     private fun onPostViewIt(link: String, content: String) = viewModelScope.launch {

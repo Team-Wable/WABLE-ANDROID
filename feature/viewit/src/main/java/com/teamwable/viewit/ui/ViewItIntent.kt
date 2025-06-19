@@ -14,11 +14,11 @@ sealed interface ViewItIntent : BaseIntent {
 
     data object ClickPosting : ViewItIntent
 
-    data class RemoveViewIt(val id: Long) : ViewItIntent
+    data object RemoveViewIt : ViewItIntent
 
-    data class ReportViewIt(val nickname: String, val relateText: String) : ViewItIntent
+    data object ReportViewIt : ViewItIntent
 
-    data class BanViewIt(val banInfo: Triple<Long, String, Long>) : ViewItIntent
+    data object BanViewIt : ViewItIntent
 
     data class PostViewIt(val link: String, val content: String) : ViewItIntent
 
