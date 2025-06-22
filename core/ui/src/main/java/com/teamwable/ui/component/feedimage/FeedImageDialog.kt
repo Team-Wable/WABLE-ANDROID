@@ -50,7 +50,7 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
     }
 
     private fun initSaveBtnClickListener() {
-        binding.tvFeedSave.setOnDuplicateBlockClick { viewModel.saveImage(imgUrl) }
+        binding.btnFeedImgDownload.setOnDuplicateBlockClick { viewModel.saveImage(imgUrl) }
     }
 
     private fun collect() {

@@ -19,10 +19,10 @@ class FeedImageViewModel @Inject constructor(
 
     fun saveImage(imageUrl: String) {
         viewModelScope.launch {
-            _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.VIEW_IT_ING))
+            _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.IMAGE_DOWNLOAD_ING))
             saveImageUseCase(imageUrl)
                 .onSuccess {
-                    _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.VIEW_IT_COMPLETE))
+                    _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.IMAGE_DOWNLOAD_COMPLETE))
                 }
                 .onFailure {
                     _sideEffect.send(FeedImageSideEffect.ShowSnackBar(SnackbarType.ERROR, it))
