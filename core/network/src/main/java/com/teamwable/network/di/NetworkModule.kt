@@ -1,7 +1,7 @@
 package com.teamwable.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.teamwable.network.BuildConfig.WABLE_BASE_URL
+import com.teamwable.network.BuildConfig
 import com.teamwable.network.TokenInterceptor
 import com.teamwable.network.util.isJsonArray
 import com.teamwable.network.util.isJsonObject
@@ -71,7 +71,7 @@ internal object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         val build =
             Retrofit.Builder()
-                .baseUrl(WABLE_BASE_URL)
+                .baseUrl(BuildConfig.WABLE_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
                 .build()
@@ -91,7 +91,7 @@ internal object NetworkModule {
     @WithoutTokenInterceptor
     fun provideRetrofitWithoutTokenInterceptor(@WithoutTokenInterceptor okHttpClient: OkHttpClient, json: Json): Retrofit =
         Retrofit.Builder()
-            .baseUrl(WABLE_BASE_URL)
+            .baseUrl(BuildConfig.WABLE_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
