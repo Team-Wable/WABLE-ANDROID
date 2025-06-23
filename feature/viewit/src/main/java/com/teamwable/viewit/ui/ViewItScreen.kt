@@ -9,8 +9,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -31,10 +29,9 @@ import androidx.paging.compose.itemKey
 import com.teamwable.designsystem.component.button.FloatingButtonDefaults
 import com.teamwable.designsystem.component.button.WableFloatingButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
-import com.teamwable.designsystem.component.paging.WableCustomRefreshIndicator
 import com.teamwable.designsystem.component.paging.WablePagingSpinner
-import com.teamwable.designsystem.component.screen.LoadingScreen
 import com.teamwable.designsystem.component.screen.NewsNoticeEmptyScreen
+import com.teamwable.designsystem.component.screen.WablePagingScreen
 import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.ContentType
@@ -126,11 +123,6 @@ fun ViewItScreen(
     viewIts: LazyPagingItems<ViewIt>,
     listState: LazyListState,
 ) {
-    val refreshState = rememberPullToRefreshState()
-    val isLoading = viewIts.loadState.refresh is LoadState.Loading
-    val isEmpty = viewIts.itemCount == 0 && !isLoading
-    val isRefreshing = viewIts.itemCount != 0 && isLoading
-
     WableFloatingButtonLayout(
         buttonContent = { modifier ->
             WableFloatingButton(
@@ -143,24 +135,12 @@ fun ViewItScreen(
         },
         buttonAlignment = Alignment.BottomEnd,
     ) {
-        PullToRefreshBox(
-            isRefreshing = isRefreshing,
+        WablePagingScreen(
+            lazyPagingItems = viewIts,
             onRefresh = actions.onRefresh,
-            state = refreshState,
-            indicator = {
-                WableCustomRefreshIndicator(
-                    state = refreshState,
-                    isRefreshing = isRefreshing,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                )
-            },
-        ) {
-            when {
-                isLoading && !isRefreshing -> LoadingScreen()
-                isEmpty -> NewsNoticeEmptyScreen(emptyTxt = R.string.label_view_it_empty)
-                else -> ViewItListContent(viewIts, listState, actions)
-            }
-        }
+            emptyContent = { NewsNoticeEmptyScreen(emptyTxt = R.string.label_view_it_empty) },
+            content = { ViewItListContent(viewIts = viewIts, listState = listState, actions = actions) },
+        )
     }
 }
 
