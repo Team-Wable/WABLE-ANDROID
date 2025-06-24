@@ -9,7 +9,7 @@ import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.news.NewsTabType
 import com.teamwable.news.databinding.FragmentNewsDetailBinding
 import com.teamwable.ui.base.BindingFragment
-import com.teamwable.ui.component.FeedImageDialog
+import com.teamwable.ui.component.feedimage.FeedImageDialog
 import com.teamwable.ui.extensions.openUri
 import java.net.URLEncoder
 
