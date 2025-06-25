@@ -6,11 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
+import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.Profile
 import com.teamwable.profile.R
+import com.teamwable.profile.component.GhostInfoTooltip
 import com.teamwable.profile.databinding.FragmentProfileBinding
 import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.load
@@ -50,6 +56,22 @@ abstract class BindingProfileFragment : Fragment() {
         tvProfileLevel.text = getString(R.string.label_profile_level, data.level)
         setSwipeLayout()
         setGhostProgress(data.ghost)
+        initComposeView()
+    }
+
+    private fun initComposeView() {
+        binding.cvProfileGhostLabel.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WableTheme {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        GhostInfoTooltip()
+                    }
+                }
+            }
+        }
     }
 
     private fun setSwipeLayout() {

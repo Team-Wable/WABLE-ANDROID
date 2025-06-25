@@ -132,16 +132,6 @@
                             app:layout_constraintTop_toBottomOf="@id/iv_profile_info_triangle"
                             tools:text="@string/label_profile_info" />
 
-                        <TextView
-                            android:id="@+id/tv_profile_ghost_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/label_profile_ghost"
-                            android:textAppearance="@style/TextAppearance.Wable.Caption1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_profile_info" />
-
                         <ImageView
                             android:id="@+id/iv_profile_ghost_icon"
                             android:layout_width="wrap_content"
@@ -167,13 +157,12 @@
                             android:id="@+id/progress_profile_ghost"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
                             android:progress="0"
                             app:indicatorColor="@color/purple_50"
                             app:indicatorTrackGapSize="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_profile_ghost_label"
+                            app:layout_constraintTop_toBottomOf="@id/cv_profile_ghost_label"
                             app:trackColor="@color/gray_200"
                             app:trackCornerRadius="8dp"
                             app:trackStopIndicatorSize="0dp"
@@ -198,6 +187,16 @@
                             android:src="@drawable/ic_profile_badge"
                             app:layout_constraintStart_toStartOf="@id/tv_profile_badge_label"
                             app:layout_constraintTop_toBottomOf="@id/tv_profile_badge_label" />
+
+                        <androidx.compose.ui.platform.ComposeView
+                            android:id="@+id/cv_profile_ghost_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_profile_info" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.appbar.MaterialToolbar>
 
