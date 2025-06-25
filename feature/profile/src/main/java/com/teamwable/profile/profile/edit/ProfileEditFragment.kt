@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.profile.MemberInfoEditModel
-import com.teamwable.profile.R
 import com.teamwable.profile.databinding.FragmentProfileEditBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.util.Arg.PROFILE_EDIT_RESULT
@@ -19,15 +18,7 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
     }
 
     override fun initView() {
-        initProfileEditAppBar()
         initComposeView()
-    }
-
-    private fun initProfileEditAppBar() {
-        binding.viewProfileEditAppbar.apply {
-            btnProfileAppbarBack.setOnClickListener { findNavController().popBackStack() }
-            tvProfileAppbarTitle.text = getString(R.string.profile_edit_app_bar)
-        }
     }
 
     private fun initComposeView() {
@@ -37,6 +28,7 @@ class ProfileEditFragment : BindingFragment<FragmentProfileEditBinding>(Fragment
                 WableTheme {
                     ProfileEditRoute(
                         profile = profile,
+                        navigateUp = { findNavController().popBackStack() },
                         navigateToProfile = { updatedProfile -> saveAndNavigateBack(updatedProfile) },
                     )
                 }
