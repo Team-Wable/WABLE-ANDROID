@@ -124,15 +124,17 @@ internal fun ProfileEditRoute(
     ProfileEditScreen(
         profileState = profileState,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            viewModel.patchUserProfile(
-                memberInfoEditModel = profile.copy(
-                    nickname = nickname,
-                    memberDefaultProfileImage = defaultImage,
-                    memberFanTeam = profileState.selectedTeam.name,
-                ),
-                imgUrl = imageUri,
-            )
-            viewModel.onImageSelected(imageUri ?: defaultImage)
+            if (profileState.textFieldType == NicknameType.CORRECT || profileState.textFieldType == NicknameType.DEFAULT) {
+                viewModel.patchUserProfile(
+                    memberInfoEditModel = profile.copy(
+                        nickname = nickname,
+                        memberDefaultProfileImage = defaultImage,
+                        memberFanTeam = profileState.selectedTeam.name,
+                    ),
+                    imgUrl = imageUri,
+                )
+                viewModel.onImageSelected(imageUri ?: defaultImage)
+            }
         },
         onProfilePlusBtnClick = viewModel::requestImagePicker,
         onDuplicateBtnClick = viewModel::getNickNameValidation,
