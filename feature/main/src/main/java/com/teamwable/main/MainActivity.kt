@@ -211,13 +211,25 @@ class MainActivity : AppCompatActivity(), Navigation {
             com.teamwable.ui.R.id.navigation_feed_image_dialog,
         )
 
+        val noStatusBarChangeDestinations = setOf(
+            com.teamwable.ui.R.id.navigation_two_button_dialog,
+            com.teamwable.ui.R.id.navigation_bottomSheet,
+            com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
+        )
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in darkStatusBarDestinations) {
-                statusBarColorOf(com.teamwable.ui.R.color.black)
-                statusBarModeOf(false)
-            } else {
-                statusBarColorOf(com.teamwable.ui.R.color.white)
-                statusBarModeOf()
+            when (destination.id) {
+                in darkStatusBarDestinations -> {
+                    statusBarColorOf(com.teamwable.ui.R.color.black)
+                    statusBarModeOf(false)
+                }
+
+                in noStatusBarChangeDestinations -> Unit
+
+                else -> {
+                    statusBarColorOf(com.teamwable.ui.R.color.white)
+                    statusBarModeOf()
+                }
             }
         }
     }
