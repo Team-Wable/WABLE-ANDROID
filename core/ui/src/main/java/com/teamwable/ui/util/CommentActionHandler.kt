@@ -41,12 +41,12 @@ class CommentActionHandler(
             ProfileUserType.ADMIN -> navigateToTwoLabelBottomSheet(BottomSheetType.REPORT, BottomSheetType.BAN)
             ProfileUserType.EMPTY -> return
         }
-        handleDialogResult { dialogType ->
+        handleDialogResult { dialogType, reason ->
             when (dialogType) {
                 DialogType.DELETE_COMMENT -> removeComment(comment.commentId)
                 DialogType.REPORT -> {
                     navController.popBackStack()
-                    reportUser(comment.postAuthorNickname, comment.content)
+                    reportUser(comment.postAuthorNickname, reason)
                 }
 
                 DialogType.BAN -> {
@@ -59,12 +59,12 @@ class CommentActionHandler(
         }
     }
 
-    fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+    fun onGhostBtnClick(type: DialogType, updateGhost: (String) -> Unit) {
         trackEvent(CLICK_GHOST_COMMENT)
         navigateToDialog(type)
-        handleDialogResult { dialogType ->
+        handleDialogResult { dialogType, reason ->
             when (dialogType) {
-                DialogType.TRANSPARENCY -> updateGhost()
+                DialogType.TRANSPARENCY -> updateGhost(reason)
                 else -> Unit
             }
         }
@@ -107,10 +107,10 @@ class CommentActionHandler(
         TwoButtonDialog.show(context, navController, type)
     }
 
-    private fun handleDialogResult(onResult: (DialogType) -> Unit) {
+    private fun handleDialogResult(onResult: (DialogType, String) -> Unit) {
         fragmentManager.setFragmentResultListener(DIALOG_RESULT, lifecycleOwner) { _, bundle ->
             val dialogType = DialogType.valueOf(bundle.getString(DIALOG_TYPE) ?: return@setFragmentResultListener)
-            onResult(dialogType)
+            onResult(dialogType, bundle.getString(DIALOG_RESULT).orEmpty())
         }
     }
 }

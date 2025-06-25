@@ -94,8 +94,8 @@ class ProfileFeedListFragment : BindingFragment<FragmentProfileFeedBinding>(Frag
         }
 
         override fun onGhostBtnClick(postAuthorId: Long, feedId: Long) {
-            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId))
+            feedActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) { reason ->
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.CONTENT.type), postAuthorId, feedId, reason))
             }
         }
 

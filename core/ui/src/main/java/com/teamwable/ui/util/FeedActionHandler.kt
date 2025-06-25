@@ -45,7 +45,7 @@ class FeedActionHandler(
             ProfileUserType.ADMIN -> navigateToTwoLabelBottomSheet(BottomSheetType.REPORT, BottomSheetType.BAN)
             ProfileUserType.EMPTY -> return
         }
-        handleDialogResult { dialogType ->
+        handleDialogResult { dialogType, reason ->
             when (dialogType) {
                 DialogType.DELETE_FEED -> {
                     trackEvent(CLICK_DELETE_POST)
@@ -54,7 +54,7 @@ class FeedActionHandler(
 
                 DialogType.REPORT -> {
                     navController.popBackStack()
-                    reportUser(feed.postAuthorNickname, "${feed.title}\n${feed.content}")
+                    reportUser(feed.postAuthorNickname, reason)
                 }
 
                 DialogType.BAN -> {
@@ -67,12 +67,12 @@ class FeedActionHandler(
         }
     }
 
-    fun onGhostBtnClick(type: DialogType, updateGhost: () -> Unit) {
+    fun onGhostBtnClick(type: DialogType, updateGhost: (String) -> Unit) {
         trackEvent(CLICK_GHOST_POST)
         navigateToDialog(type)
-        handleDialogResult { dialogType ->
+        handleDialogResult { dialogType, reason ->
             when (dialogType) {
-                DialogType.TRANSPARENCY -> updateGhost()
+                DialogType.TRANSPARENCY -> updateGhost(reason)
                 else -> Unit
             }
         }
@@ -120,10 +120,10 @@ class FeedActionHandler(
         TwoButtonDialog.show(context, navController, type)
     }
 
-    private fun handleDialogResult(onResult: (DialogType) -> Unit) {
+    private fun handleDialogResult(onResult: (DialogType, String) -> Unit) {
         fragmentManager.setFragmentResultListener(DIALOG_RESULT, lifecycleOwner) { _, bundle ->
             val dialogType = DialogType.valueOf(bundle.getString(DIALOG_TYPE) ?: return@setFragmentResultListener)
-            onResult(dialogType)
+            onResult(dialogType, bundle.getString(DIALOG_RESULT).orEmpty())
         }
     }
 }

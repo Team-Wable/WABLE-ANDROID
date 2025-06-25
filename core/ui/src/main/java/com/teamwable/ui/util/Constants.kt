@@ -17,6 +17,7 @@ object Arg {
     const val PROFILE_EDIT_RESULT = "profile_edit_result"
     const val BOTTOM_SHEET_FIRST_TYPE = "bottom_sheet_first_type"
     const val BOTTOM_SHEET_SECOND_TYPE = "bottom_sheet_second_type"
+    const val DIALOG_REASON = "dialog_reason"
 }
 
 object BundleKey {
