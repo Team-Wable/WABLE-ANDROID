@@ -3,10 +3,9 @@ package com.teamwable.data.repositoryimpl
 import com.teamwable.data.mapper.toModel.toCommunityModel
 import com.teamwable.data.mapper.toModel.toRequestCommunityDto
 import com.teamwable.data.repository.CommunityRepository
-import com.teamwable.data.util.runSuspendCatching
+import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.community.CommunityModel
 import com.teamwable.network.datasource.CommunityService
-import com.teamwable.network.util.handleThrowable
 import com.teamwable.network.util.toCustomError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -28,10 +27,8 @@ internal class DefaultCommunityRepository @Inject constructor(
         throw it.toCustomError()
     }
 
-    override suspend fun patchPreinCommunity(communityName: String): Result<Float> = runSuspendCatching {
+    override suspend fun patchPreinCommunity(communityName: String): Result<Float> = runHandledCatching {
         communityService.patchPreinCommunity(communityName.toRequestCommunityDto()).data
             .toCommunityModel().communityNum
-    }.onFailure {
-        return it.handleThrowable()
     }
 }

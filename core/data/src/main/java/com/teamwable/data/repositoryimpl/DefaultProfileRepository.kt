@@ -7,6 +7,7 @@ import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.util.createImagePart
+import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.model.profile.MemberInfoEditModel
@@ -42,18 +43,18 @@ internal class DefaultProfileRepository @Inject constructor(
         }.onFailure { return it.handleThrowable() }
     }
 
-    override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runCatching {
+    override suspend fun patchUserProfile(info: MemberInfoEditModel, imgUrl: String?): Result<Unit> = runHandledCatching {
         val infoRequestBody = createContentRequestBody(info)
         val filePart = contentResolver.createImagePart(imgUrl, FILE_NAME)
 
         apiService.patchUserProfile(infoRequestBody, filePart)
         Unit
-    }.onFailure { return it.handleThrowable() }
+    }
 
-    override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runCatching {
+    override suspend fun getNickNameDoubleCheck(nickname: String): Result<Unit> = runHandledCatching {
         apiService.getNickNameDoubleCheck(nickname)
         Unit
-    }.onFailure { return it.handleThrowable() }
+    }
 
     private fun createContentRequestBody(info: MemberInfoEditModel): RequestBody {
         val contentJson = JSONObject().apply {
