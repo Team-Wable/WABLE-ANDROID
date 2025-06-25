@@ -2,13 +2,14 @@ package com.teamwable.profile.profile.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwable.common.type.LckTeamType
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.designsystem.type.NicknameType
 import com.teamwable.designsystem.type.ProfileImageType
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.profile.model.ProfileSideEffect
-import com.teamwable.onboarding.profile.model.ProfileState
 import com.teamwable.onboarding.profile.regex.NicknameValidationUseCase
+import com.teamwable.profile.profile.edit.model.ProfileEditState
 import com.teamwable.profile.profile.edit.model.ProfilePatchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,8 +29,8 @@ internal class ProfileEditViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<ProfileSideEffect>()
     val sideEffect: SharedFlow<ProfileSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _profileState = MutableStateFlow(ProfileState())
-    val profileState: StateFlow<ProfileState> = _profileState
+    private val _profileState = MutableStateFlow(ProfileEditState())
+    val profileState: StateFlow<ProfileEditState> = _profileState
 
     private val _profilePatchState = MutableStateFlow<ProfilePatchState>(ProfilePatchState.Idle)
     val profileLoadingState: StateFlow<ProfilePatchState> get() = _profilePatchState
@@ -53,6 +54,13 @@ internal class ProfileEditViewModel @Inject constructor(
 
     fun onRandomImageChange(newImage: ProfileImageType) {
         _profileState.update { it.copy(currentImage = newImage) }
+    }
+
+    fun onSelectTeamChange(selectedTeam: String?) {
+        val team = LckTeamType.entries.find { it.name == selectedTeam }
+        if (team != null) {
+            _profileState.update { it.copy(selectedTeam = team) }
+        }
     }
 
     private fun validateNickname(nickname: String) {
