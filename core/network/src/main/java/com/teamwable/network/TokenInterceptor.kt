@@ -3,7 +3,7 @@ package com.teamwable.network
 import android.app.Application
 import android.content.Intent
 import android.widget.Toast
-import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
+import com.teamwable.datastore.datasource.WablePreferencesDataSource
 import com.teamwable.network.datasource.AuthService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TokenInterceptor @Inject constructor(
-    private val defaultWablePreferenceDatasource: DefaultWablePreferenceDatasource,
+    private val wablePreferencesDataSource: WablePreferencesDataSource,
     private val context: Application,
     private val authService: AuthService,
 ) : Interceptor {
@@ -48,8 +48,8 @@ class TokenInterceptor @Inject constructor(
 
     private suspend fun refreshTokenIfNeeded(): Boolean {
         mutex.withLock {
-            val accessToken = defaultWablePreferenceDatasource.accessToken.first()
-            val refreshToken = defaultWablePreferenceDatasource.refreshToken.first()
+            val accessToken = wablePreferencesDataSource.accessToken.first()
+            val refreshToken = wablePreferencesDataSource.refreshToken.first()
 
             return try {
                 val tokenResult = runBlocking(Dispatchers.IO) {
@@ -58,7 +58,7 @@ class TokenInterceptor @Inject constructor(
 
                 when (tokenResult.success) {
                     true -> {
-                        defaultWablePreferenceDatasource.updateAccessToken(
+                        wablePreferencesDataSource.updateAccessToken(
                             BEARER + tokenResult.data.accessToken,
                         )
                         true
@@ -75,7 +75,7 @@ class TokenInterceptor @Inject constructor(
     private fun handleFailedTokenReissue() = CoroutineScope(Dispatchers.Main).launch {
         showToast()
         withContext(Dispatchers.IO) {
-            defaultWablePreferenceDatasource.clear()
+            wablePreferencesDataSource.clear()
         }
         restartActivity()
     }
@@ -100,7 +100,7 @@ class TokenInterceptor @Inject constructor(
         .addHeader(
             name = AUTHORIZATION,
             value = runBlocking {
-                defaultWablePreferenceDatasource.accessToken.first()
+                wablePreferencesDataSource.accessToken.first()
             },
         ).build()
 

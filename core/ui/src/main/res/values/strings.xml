@@ -54,6 +54,8 @@
     <string name="label_snack_bar_link_error">잘못된 링크입니다.</string>
     <string name="label_snack_bar_view_it_ing">뷰잇 남기는 중</string>
     <string name="label_snack_bar_view_it_complete">뷰잇을 남겼어요</string>
+    <string name="label_snack_bar_image_download_ing">이미지 다운로드 하는 중</string>
+    <string name="label_snack_bar_image_download_complete">이미지 다운로드가 완료됬어요</string>
 
     <!-- ghost -->
     <string name="label_ghost_comment_type">commentGhost</string>

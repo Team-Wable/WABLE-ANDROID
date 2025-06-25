@@ -13,9 +13,9 @@ import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.model.home.Feed
 import com.teamwable.model.home.LikeState
 import com.teamwable.ui.component.BottomSheet
-import com.teamwable.ui.component.FeedImageDialog
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.component.TwoLabelBottomSheet
+import com.teamwable.ui.component.feedimage.FeedImageDialog
 import com.teamwable.ui.type.BanTriggerType
 import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.DialogType
