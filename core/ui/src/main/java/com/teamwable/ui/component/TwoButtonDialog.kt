@@ -15,6 +15,7 @@ import com.teamwable.ui.databinding.DialogTwoButtonBinding
 import com.teamwable.ui.extensions.DeepLinkDestination
 import com.teamwable.ui.extensions.deepLinkNavigateTo
 import com.teamwable.ui.extensions.dialogFragmentResize
+import com.teamwable.ui.extensions.hideKeyboard
 import com.teamwable.ui.extensions.stringOf
 import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.type.DialogType
@@ -26,6 +27,7 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val dialogTypeString = requireArguments().getString(DIALOG_TYPE)
         if (dialogTypeString != null)
             type = DialogType.valueOf(dialogTypeString)
@@ -50,6 +52,9 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
         tvDialogTwoButtonTitle.setTextAppearance(type.titleTypo)
         btnDialogTwoButtonYes.text = stringOf(type.yesLabel)
         btnDialogTwoButtonNo.text = stringOf(type.noLabel)
+        layoutDialogTwoButtonReason.visible(stringOf(type.reason).isNotEmpty())
+        etDialogTwoButtonReason.hint = stringOf(type.reason)
+        binding.root.apply { setOnClickListener { context.hideKeyboard(it) } }
     }
 
     private fun initNoBtnClickListener() {
@@ -72,7 +77,10 @@ class TwoButtonDialog() : BindingDialogFragment<DialogTwoButtonBinding>(DialogTw
                 else -> Unit
             }
 
-            val result = Bundle().apply { putString(DIALOG_TYPE, type.name) }
+            val result = Bundle().apply {
+                putString(DIALOG_TYPE, type.name)
+                putString(DIALOG_RESULT, binding.etDialogTwoButtonReason.text.toString())
+            }
             setFragmentResult(DIALOG_RESULT, result)
             findNavController().popBackStack()
         }

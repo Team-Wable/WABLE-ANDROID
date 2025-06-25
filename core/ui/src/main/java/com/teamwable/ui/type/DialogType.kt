@@ -10,12 +10,14 @@ enum class DialogType(
     @StringRes val noLabel: Int = R.string.label_dialog_share_no,
     @StringRes val yesLabel: Int = R.string.label_dialog_delete_yes,
     @StyleRes val titleTypo: Int = R.style.TextAppearance_Wable_Head2,
+    @StringRes val reason: Int = R.string.label_dialog_blank,
 ) {
     REPORT(
         title = R.string.label_dialog_report_title,
-        description = R.string.label_dialog_report_description,
+        noLabel = R.string.label_dialog_transparency_no,
         yesLabel = R.string.label_dialog_report_yes,
         titleTypo = R.style.TextAppearance_Wable_Head1,
+        reason = R.string.hint_dialog_report_reason,
     ),
     BAN(
         title = R.string.label_dialog_ban_title,
@@ -44,6 +46,7 @@ enum class DialogType(
         title = R.string.label_dialog_transparency_title,
         noLabel = R.string.label_dialog_transparency_no,
         yesLabel = R.string.label_dialog_transparency_yes,
+        reason = R.string.hint_dialog_transparency_reason,
     ),
     CANCEL_POSTING(
         title = R.string.label_dialog_cancel_posting_title,

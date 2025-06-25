@@ -10,8 +10,7 @@
     <string name="tv_calculate_time_year">년 전</string>
 
     <!-- dialog -->
-    <string name="label_dialog_report_title">신고하시겠어요?</string>
-    <string name="label_dialog_report_description">해당 유저 혹은 게시글을 신고하시려면 신고하기 버튼을 눌러주세요.</string>
+    <string name="label_dialog_report_title">신고하기</string>
     <string name="label_dialog_report_yes">신고하기</string>
     <string name="label_dialog_delete_feed_title">게시글을 삭제하시겠어요?</string>
     <string name="label_dialog_delete_feed_description">게시글이 영구히 삭제됩니다.</string>
@@ -21,8 +20,8 @@
     <string name="label_dialog_delete_account_title">계정을 삭제하시겠어요?</string>
     <string name="label_dialog_logout_title">로그아웃하시겠어요?</string>
     <string name="label_dialog_logout_yes">로그아웃하기</string>
-    <string name="label_dialog_transparency_title">와블의 온화한 문화를 해치는\n누군가를 발견하신 건가요?</string>
-    <string name="label_dialog_transparency_yes">네 맞아요</string>
+    <string name="label_dialog_transparency_title">와블의 온화함을 해치는\n누군가를 발견하신건가요?</string>
+    <string name="label_dialog_transparency_yes">투명도 내리기</string>
     <string name="label_dialog_transparency_no">고민할게요</string>
     <string name="label_dialog_cancel_posting_title">작성중인 글에서 나가실건가요?\n작성하셨던 내용은 삭제돼요</string>
     <string name="label_dialog_cancel_posting__yes">나가기</string>
@@ -31,6 +30,8 @@
     <string name="label_dialog_ban_title">밴하시겠어요?</string>
     <string name="label_dialog_ban_description">1회 누적 - 해당 글(게시글 or 댓글 or 답글)만 블라인드 처리\n2회 누적 - 해당 사용자 글 전체 블라인드 처리</string>
     <string name="label_dialog_ban_yes">밴하기</string>
+    <string name="hint_dialog_transparency_reason">투명도를 내리려는 이유가 무엇인가요?\nex. 선수를 비하했어요</string>
+    <string name="hint_dialog_report_reason">신고하시려는 사유를 알려주시면 더 건강한 문화를 만드는 것에 도움돼요.\n사유는 생략 가능해요.</string>
 
     <!-- feed -->
     <string name="content_description_feed_image">피드 이미지입니다.</string>
