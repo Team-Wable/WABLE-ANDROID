@@ -5,7 +5,7 @@
     <dimen name="margin_bottom">24dp</dimen>
     <dimen name="padding_top">56dp</dimen>
     <dimen name="padding_bottom">76dp</dimen>
-    <dimen name="padding_dialog_top">32dp</dimen>
+    <dimen name="padding_dialog_top">24dp</dimen>
     <dimen name="padding_dialog_bottom">18dp</dimen>
     <dimen name="padding_touch_36">6dp</dimen>
     <dimen name="padding_touch_30">9dp</dimen>
