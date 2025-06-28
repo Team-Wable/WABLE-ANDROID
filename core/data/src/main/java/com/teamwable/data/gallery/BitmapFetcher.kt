@@ -28,33 +28,33 @@ internal class BitmapFetcher @Inject constructor(
                 val inputStream = response.body?.byteStream()
                     ?: throw IOException("Empty body while downloading image")
 
-                val bufferedStream = BufferedInputStream(inputStream).apply {
-                    mark(Int.MAX_VALUE)
-                }
+                BufferedInputStream(inputStream).use { bufferedStream ->
+                    bufferedStream.mark(Int.MAX_VALUE)
 
-                val exif = ExifInterface(bufferedStream)
-                bufferedStream.reset()
+                    val exif = ExifInterface(bufferedStream)
+                    bufferedStream.reset()
 
-                val boundsOptions = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                BitmapFactory.decodeStream(bufferedStream, null, boundsOptions)
-                bufferedStream.reset()
+                    val boundsOptions = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    BitmapFactory.decodeStream(bufferedStream, null, boundsOptions)
+                    bufferedStream.reset()
 
-                val decodeOptions = BitmapFactory.Options().apply {
-                    inSampleSize = calculateInSampleSize(boundsOptions, 1024, 1024)
-                }
-                val originalBitmap = BitmapFactory.decodeStream(bufferedStream, null, decodeOptions)
-                    ?: throw IOException("Failed to decode bitmap")
+                    val decodeOptions = BitmapFactory.Options().apply {
+                        inSampleSize = calculateInSampleSize(boundsOptions, 1024, 1024)
+                    }
+                    val originalBitmap = BitmapFactory.decodeStream(bufferedStream, null, decodeOptions)
+                        ?: throw IOException("Failed to decode bitmap")
 
-                val orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL,
-                )
+                    val orientation = exif.getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL,
+                    )
 
-                return@use when (orientation) {
-                    ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(originalBitmap, 90f)
-                    ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(originalBitmap, 180f)
-                    ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(originalBitmap, 270f)
-                    else -> originalBitmap
+                    return@use when (orientation) {
+                        ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(originalBitmap, 90f)
+                        ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(originalBitmap, 180f)
+                        ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(originalBitmap, 270f)
+                        else -> originalBitmap
+                    }
                 }
             }
     }
