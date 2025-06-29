@@ -124,17 +124,15 @@ internal fun ProfileEditRoute(
     ProfileEditScreen(
         profileState = profileState,
         onNextBtnClick = { nickname, imageUri, defaultImage ->
-            if (profileState.textFieldType == NicknameType.CORRECT || profileState.textFieldType == NicknameType.DEFAULT) {
-                viewModel.patchUserProfile(
-                    memberInfoEditModel = profile.copy(
-                        nickname = nickname,
-                        memberDefaultProfileImage = defaultImage,
-                        memberFanTeam = profileState.selectedTeam.name,
-                    ),
-                    imgUrl = imageUri,
-                )
-                viewModel.onImageSelected(imageUri ?: defaultImage)
-            }
+            viewModel.patchUserProfile(
+                memberInfoEditModel = profile.copy(
+                    nickname = nickname,
+                    memberDefaultProfileImage = defaultImage,
+                    memberFanTeam = profileState.selectedTeam?.name,
+                ),
+                imgUrl = imageUri,
+            )
+            viewModel.onImageSelected(imageUri ?: defaultImage)
         },
         onProfilePlusBtnClick = viewModel::requestImagePicker,
         onDuplicateBtnClick = viewModel::getNickNameValidation,
@@ -194,7 +192,7 @@ private fun ProfileEditScreen(
                     modifier = Modifier
                         .pointerInput(Unit) {
                             detectTapGestures(onTap = {
-                                focusManager.clearFocus() // 빈 화면을 터치하면 포커스를 해제합니다.
+                                focusManager.clearFocus()
                             })
                         },
                 ) {
@@ -209,7 +207,7 @@ private fun ProfileEditScreen(
                             .align(Alignment.CenterHorizontally),
                     )
                     Text(
-                        text = "닉네임",
+                        text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_nickname),
                         style = WableTheme.typography.body03,
                         color = WableTheme.colors.black,
                     )
@@ -234,7 +232,7 @@ private fun ProfileEditScreen(
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
-                        text = "응원팀",
+                        text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_cheering_team),
                         style = WableTheme.typography.body03,
                         color = WableTheme.colors.black,
                     )

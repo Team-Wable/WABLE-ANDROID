@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,10 +31,10 @@ internal class ProfileEditViewModel @Inject constructor(
     val sideEffect: SharedFlow<ProfileSideEffect> = _sideEffect.asSharedFlow()
 
     private val _profileState = MutableStateFlow(ProfileEditState())
-    val profileState: StateFlow<ProfileEditState> = _profileState
+    val profileState: StateFlow<ProfileEditState> = _profileState.asStateFlow()
 
     private val _profilePatchState = MutableStateFlow<ProfilePatchState>(ProfilePatchState.Idle)
-    val profileLoadingState: StateFlow<ProfilePatchState> get() = _profilePatchState
+    val profileLoadingState: StateFlow<ProfilePatchState> = _profilePatchState.asStateFlow()
 
     fun requestImagePicker() {
         viewModelScope.launch {
@@ -58,14 +59,18 @@ internal class ProfileEditViewModel @Inject constructor(
 
     fun onSelectTeamChange(selectedTeam: String?) {
         val team = LckTeamType.entries.find { it.name == selectedTeam }
-        if (team != null) {
-            _profileState.update { it.copy(selectedTeam = team) }
-        }
+        _profileState.update { it.copy(selectedTeam = team) }
     }
 
     private fun validateNickname(nickname: String) {
         viewModelScope.launch {
-            _profileState.update { it.copy(textFieldType = nicknameValidationUseCase(nickname)) }
+            val nicknameValidation = nicknameValidationUseCase.invoke(nickname)
+            _profileState.update {
+                it.copy(
+                    textFieldType = nicknameValidation,
+                    isButtonEnabled = nicknameValidation == NicknameType.DEFAULT && nickname.isNotEmpty(),
+                )
+            }
         }
     }
 
@@ -73,16 +78,18 @@ internal class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             profileRepository.getNickNameDoubleCheck(_profileState.value.nickname)
                 .onSuccess {
-                    _profileState.update { it.copy(textFieldType = NicknameType.CORRECT) }
+                    _profileState.update { it.copy(textFieldType = NicknameType.CORRECT, isButtonEnabled = true) }
                 }
                 .onFailure {
-                    _profileState.update { it.copy(textFieldType = NicknameType.DUPLICATE) }
+                    _profileState.update { it.copy(textFieldType = NicknameType.DUPLICATE, isButtonEnabled = false) }
                 }
         }
     }
 
     fun patchUserProfile(memberInfoEditModel: MemberInfoEditModel, imgUrl: String?) {
         viewModelScope.launch {
+            if (!_profileState.value.isButtonEnabled) return@launch
+
             _profilePatchState.update { ProfilePatchState.Loading }
             profileRepository.patchUserProfile(memberInfoEditModel, imgUrl)
                 .onSuccess {
