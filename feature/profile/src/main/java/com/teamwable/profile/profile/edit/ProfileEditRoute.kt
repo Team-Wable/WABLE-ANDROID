@@ -27,6 +27,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -236,7 +239,13 @@ private fun ProfileEditScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_cheering_team),
+                    text = buildAnnotatedString {
+                        append(stringResource(com.teamwable.profile.R.string.tv_profile_edit_cheering_team))
+                        append(" ")
+                        withStyle(style = SpanStyle(color = WableTheme.colors.purple50)) {
+                            append(profileState.selectedTeam?.name ?: "LCK")
+                        }
+                    },
                     style = WableTheme.typography.body03,
                     color = WableTheme.colors.black,
                 )
