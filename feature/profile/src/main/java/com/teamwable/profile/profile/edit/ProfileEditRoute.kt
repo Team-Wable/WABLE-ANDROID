@@ -187,62 +187,61 @@ private fun ProfileEditScreen(
         )
 
         WableSelectLckTeamGrid(
-            content = {
-                Column(
-                    modifier = Modifier
-                        .pointerInput(Unit) {
-                            detectTapGestures(onTap = {
-                                focusManager.clearFocus()
-                            })
-                        },
-                ) {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    ProfileImagePicker(
-                        selectedImageUri = profileState.selectedImageUri,
-                        currentImage = profileState.currentImage,
-                        onRandomImageChange = onRandomImageChange,
-                        onProfilePlusBtnClick = onProfilePlusBtnClick,
-                        modifier = Modifier
-                            .size(172.dp)
-                            .align(Alignment.CenterHorizontally),
-                    )
-                    Text(
-                        text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_nickname),
-                        style = WableTheme.typography.body03,
-                        color = WableTheme.colors.black,
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    WableBasicTextField(
-                        placeholder = stringResource(R.string.profile_edit_nickname_placeholder),
-                        textFieldType = profileState.textFieldType,
-                        value = profileState.nickname,
-                        onValueChange = onNicknameChange,
-                    ) {
-                        WableSmallButton(
-                            text = stringResource(R.string.profile_edit_btn_duplicate),
-                            onClick = {
-                                focusManager.clearFocus()
-                                onDuplicateBtnClick()
-                            },
-                            enabled = profileState.textFieldType != NicknameType.INVALID && profileState.nickname.isNotEmpty(),
-                            modifier = Modifier.padding(start = 8.dp),
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_cheering_team),
-                        style = WableTheme.typography.body03,
-                        color = WableTheme.colors.black,
-                    )
-                }
-            },
             modifier = Modifier.padding(horizontal = 16.dp),
             shuffledTeams = profileState.shuffledTeams,
             selectedTeam = profileState.selectedTeam,
             onTeamSelected = { onSelectTeamChange(it?.name) },
-        )
+        ) {
+            Column(
+                modifier = Modifier
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            focusManager.clearFocus()
+                        })
+                    },
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+                ProfileImagePicker(
+                    selectedImageUri = profileState.selectedImageUri,
+                    currentImage = profileState.currentImage,
+                    onRandomImageChange = onRandomImageChange,
+                    onProfilePlusBtnClick = onProfilePlusBtnClick,
+                    modifier = Modifier
+                        .size(172.dp)
+                        .align(Alignment.CenterHorizontally),
+                )
+                Text(
+                    text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_nickname),
+                    style = WableTheme.typography.body03,
+                    color = WableTheme.colors.black,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                WableBasicTextField(
+                    placeholder = stringResource(R.string.profile_edit_nickname_placeholder),
+                    textFieldType = profileState.textFieldType,
+                    value = profileState.nickname,
+                    onValueChange = onNicknameChange,
+                ) {
+                    WableSmallButton(
+                        text = stringResource(R.string.profile_edit_btn_duplicate),
+                        onClick = {
+                            focusManager.clearFocus()
+                            onDuplicateBtnClick()
+                        },
+                        enabled = profileState.textFieldType != NicknameType.INVALID && profileState.nickname.isNotEmpty(),
+                        modifier = Modifier.padding(start = 8.dp),
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = stringResource(com.teamwable.profile.R.string.tv_profile_edit_cheering_team),
+                    style = WableTheme.typography.body03,
+                    color = WableTheme.colors.black,
+                )
+            }
+        }
     }
 }
 
