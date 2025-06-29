@@ -182,51 +182,11 @@ private fun ProfileEditScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .align(Alignment.CenterStart),
-            ) {
-                IconButton(
-                    onClick = navigateUp,
-                    modifier = Modifier.padding(start = 4.dp),
-                ) {
-                    Icon(
-                        painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_back_btn),
-                        contentDescription = "",
-                    )
-                }
-            }
-
-            Text(
-                text = "프로필 편집",
-                style = WableTheme.typography.body01,
-                color = WableTheme.colors.black,
-                modifier = Modifier.align(Alignment.Center),
-            )
-
-            WableSmallButton(
-                text = "완료",
-                buttonStyle = SmallButtonDefaults.miniButtonStyle().copy(
-                    backgroundColor = { WableTheme.colors.purple50 },
-                ),
-                onClick = {
-                    onNextBtnClick(
-                        profileState.nickname,
-                        profileState.selectedImageUri,
-                        if (profileState.selectedImageUri != null) null else profileState.currentImage.name,
-                    )
-                },
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 12.dp),
-            )
-        }
+        ProfileEditTopBar(
+            navigateUp = navigateUp,
+            onNextBtnClick = onNextBtnClick,
+            state = profileState,
+        )
 
         WableSelectLckTeamGrid(
             content = {
@@ -283,11 +243,61 @@ private fun ProfileEditScreen(
             modifier = Modifier.padding(horizontal = 16.dp),
             shuffledTeams = profileState.shuffledTeams,
             selectedTeam = profileState.selectedTeam,
-            onTeamSelected = {
-                if (it != null) onSelectTeamChange(it.name)
-                else null
             onTeamSelected = { onSelectTeamChange(it?.name) },
+        )
+    }
+}
+
+@Composable
+private fun ProfileEditTopBar(
+    navigateUp: () -> Unit,
+    onNextBtnClick: (String, String?, String?) -> Unit,
+    state: ProfileEditState,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .align(Alignment.CenterStart),
+        ) {
+            IconButton(
+                onClick = navigateUp,
+                modifier = Modifier.padding(start = 4.dp),
+            ) {
+                Icon(
+                    painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_back_btn),
+                    contentDescription = "",
+                )
+            }
+        }
+
+        Text(
+            text = stringResource(id = com.teamwable.profile.R.string.profile_edit_app_bar),
+            style = WableTheme.typography.body01,
+            color = WableTheme.colors.black,
+            modifier = Modifier.align(Alignment.Center),
+        )
+
+        WableSmallButton(
+            text = stringResource(com.teamwable.profile.R.string.btn_profile_edit_completed),
+            buttonStyle = SmallButtonDefaults.miniButtonStyle().copy(
+                backgroundColor = { if (state.isButtonEnabled) WableTheme.colors.purple50 else WableTheme.colors.gray200 },
+                textColor = { if (state.isButtonEnabled) WableTheme.colors.white else WableTheme.colors.gray600 },
+            ),
+            onClick = {
+                onNextBtnClick(
+                    state.nickname,
+                    state.selectedImageUri,
+                    if (state.selectedImageUri != null) null else state.currentImage.name,
+                )
             },
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 12.dp),
         )
     }
 }
