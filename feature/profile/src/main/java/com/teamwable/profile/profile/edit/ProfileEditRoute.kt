@@ -109,7 +109,7 @@ internal fun ProfileEditRoute(
                         profile.copy(
                             nickname = profileState.nickname,
                             memberDefaultProfileImage = profileState.selectedImageUri,
-                            memberFanTeam = profileState.selectedTeam.name,
+                            memberFanTeam = profileState.selectedTeam?.name,
                         ),
                     )
 
@@ -286,6 +286,7 @@ private fun ProfileEditScreen(
             onTeamSelected = {
                 if (it != null) onSelectTeamChange(it.name)
                 else null
+            onTeamSelected = { onSelectTeamChange(it?.name) },
             },
         )
     }
