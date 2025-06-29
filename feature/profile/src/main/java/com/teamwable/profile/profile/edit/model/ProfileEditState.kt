@@ -17,6 +17,6 @@ data class ProfileEditState(
     val isPermissionGranted: Boolean = false,
     val openDialog: Boolean = false,
     val selectedTeam: LckTeamType? = null,
-    val shuffledTeams: PersistentList<LckTeamType> = LckTeamType.entries.toPersistentList(),
+    val shuffledTeams: PersistentList<LckTeamType> = LckTeamType.entries.shuffled().toPersistentList(),
     val isButtonEnabled: Boolean = true,
 ) : BaseState
