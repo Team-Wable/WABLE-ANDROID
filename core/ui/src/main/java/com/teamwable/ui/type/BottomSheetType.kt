@@ -11,3 +11,10 @@ enum class BottomSheetType(
     BAN(R.string.label_dialog_ban_yes),
     EMPTY(),
 }
+
+fun BottomSheetType.toDialogType(): DialogType = when (this) {
+    BottomSheetType.DELETE_FEED -> DialogType.DELETE_FEED
+    BottomSheetType.REPORT -> DialogType.REPORT
+    BottomSheetType.BAN -> DialogType.BAN
+    BottomSheetType.EMPTY -> DialogType.EMPTY
+}

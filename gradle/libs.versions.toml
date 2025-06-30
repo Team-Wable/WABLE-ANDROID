@@ -27,6 +27,8 @@ androidx-datastore = "1.1.1"
 swipe-refresh-layout = "1.1.0"
 exifinterface = "1.3.7"
 recyclerview = "1.3.2"
+uiautomator = "2.2.0"
+benchmarkMacroJunit4 = "1.4.0-beta02"
 
 # material + google
 material = "1.12.0"
@@ -108,6 +110,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
 
 # dagger-hilt
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
@@ -197,6 +201,7 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 
 [bundles]
 lifecycle = ["lifecycle", "lifecycle-viewmodel", "lifecycle-livedata"]
