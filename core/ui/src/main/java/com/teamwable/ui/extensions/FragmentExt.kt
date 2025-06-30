@@ -64,3 +64,19 @@ fun Fragment.statusBarModeOf(isLightStatusBar: Boolean = true) {
         WindowInsetsControllerCompat(this, decorView).isAppearanceLightStatusBars = isLightStatusBar
     }
 }
+
+inline fun <reified T : Enum<T>> Fragment.setupEnumResultListener(
+    key: String,
+    typeKey: String,
+    crossinline onResult: (T) -> Unit,
+) {
+    parentFragmentManager.setFragmentResultListener(
+        key,
+        viewLifecycleOwner,
+    ) { _, bundle ->
+        bundle.getString(typeKey)?.let { raw ->
+            runCatching { enumValueOf<T>(raw) }
+                .onSuccess(onResult)
+        }
+    }
+}

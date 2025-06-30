@@ -48,6 +48,11 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 -d > ./app/src/release/google-services.json
 
+      - name: Setup Google Services for benchmark
+        run: |
+          mkdir -p ./app/src/benchmark
+          cp ./app/src/release/google-services.json ./app/src/benchmark/google-services.json
+
       - name: Verify google-services.json files
         run: |
           ls -l ./app/src/debug/google-services.json

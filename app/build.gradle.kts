@@ -5,7 +5,10 @@ import java.util.Properties
 plugins {
     id("com.teamwable.wable.application")
     id("com.teamwable.wable.test")
-    alias(libs.plugins.google.services)
+}
+
+if (!gradle.startParameter.taskNames.any { it.contains("benchmark") || it.contains("Benchmark") }) {
+    apply(plugin = "com.google.gms.google-services")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -54,6 +57,15 @@ android {
             manifestPlaceholders["appName"] = "@string/dev_app_name"
             manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_dev_round"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+        }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+            signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["appName"] = "@string/rel_app_name"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_launcher_round"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
         }
         release {
             signingConfig = signingConfigs.getByName("release")

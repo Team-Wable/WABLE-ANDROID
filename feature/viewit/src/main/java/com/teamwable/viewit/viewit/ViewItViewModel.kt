@@ -1,166 +1,167 @@
 package com.teamwable.viewit.viewit
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import androidx.paging.map
+import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.ProfileRepository
-import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repository.ViewItRepository
+import com.teamwable.domain.usecase.GetAuthTypeUseCase
 import com.teamwable.model.home.LikeState
 import com.teamwable.model.viewit.ViewIt
+import com.teamwable.ui.extensions.addItem
+import com.teamwable.ui.extensions.putItem
+import com.teamwable.ui.type.BanTriggerType
+import com.teamwable.ui.type.BottomSheetType
 import com.teamwable.ui.type.ProfileUserType
 import com.teamwable.ui.type.SnackbarType
+import com.teamwable.viewit.ui.ViewItIntent
+import com.teamwable.viewit.ui.ViewItSideEffect
+import com.teamwable.viewit.ui.ViewItUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ViewItViewModel @Inject constructor(
-    private val userInfoRepository: UserInfoRepository,
     private val viewItRepository: ViewItRepository,
     private val profileRepository: ProfileRepository,
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<ViewItUiState>(ViewItUiState.Loading)
-    val uiState = _uiState.asStateFlow()
-
-    private val _event = MutableSharedFlow<ViewItSideEffect>()
-    val event = _event.asSharedFlow()
-
-    private val authId = MutableStateFlow(-1L)
-    private val isAdmin = MutableStateFlow(false)
-
-    private val viewItsFlow = viewItRepository.getViewIts().cachedIn(viewModelScope)
+    private val getAuthTypeUseCase: GetAuthTypeUseCase,
+) : BaseViewModel<ViewItIntent, ViewItUiState, ViewItSideEffect>(
+        initialState = ViewItUiState(),
+    ) {
     private val removedViewItsFlow = MutableStateFlow(setOf<Long>())
     private val banViewItFlow = MutableStateFlow(setOf<Long>())
     private val likeViewItFlow = MutableStateFlow(mapOf<Long, LikeState>())
+    val viewItPagingFlow: Flow<PagingData<ViewIt>> = combine(
+        viewItRepository.getViewIts().cachedIn(viewModelScope),
+        removedViewItsFlow,
+        banViewItFlow,
+        likeViewItFlow,
+    ) { pagingData, removed, banned, likeStates ->
+        pagingData
+            .filter { it.viewItId !in removed }
+            .map { viewIt ->
+                val isBanned = banned.contains(viewIt.viewItId)
+                val likeState = likeStates[viewIt.viewItId] ?: LikeState(viewIt.isLiked, viewIt.likedNumber)
 
-    init {
-        fetchAuthId()
-        fetchIsAdmin()
-    }
-
-    private fun fetchAuthId() {
-        viewModelScope.launch {
-            userInfoRepository.getMemberId()
-                .map { it.toLong() }
-                .collectLatest { id ->
-                    authId.update { id }
-                    if (id == -1L) _uiState.value = ViewItUiState.Error("auth id is empty")
-                }
-        }
-    }
-
-    private fun fetchIsAdmin() = viewModelScope.launch {
-        userInfoRepository.getIsAdmin()
-            .collectLatest { value -> isAdmin.update { value } }
-    }
-
-    fun fetchUserType(userId: Long): ProfileUserType {
-        return when {
-            userId == authId.value -> ProfileUserType.AUTH
-            isAdmin.value -> ProfileUserType.ADMIN
-            else -> ProfileUserType.MEMBER
-        }
-    }
-
-    fun updateViewIts(): Flow<PagingData<ViewIt>> {
-        return combine(viewItsFlow, removedViewItsFlow, banViewItFlow, likeViewItFlow) { viewItsFlow, removedViewItIds, banState, likeStates ->
-            viewItsFlow
-                .filter { removedViewItIds.contains(it.viewItId).not() }
-                .map { data ->
-                    val likeState = likeStates[data.viewItId] ?: LikeState(data.isLiked, data.likedNumber)
-                    val transformedBan = if (banState.contains(data.viewItId)) data.copy(isBlind = true) else data
-                    transformedBan.copy(likedNumber = likeState.count, isLiked = likeState.isLiked)
-                }
-        }
-    }
-
-    fun updateLike(viewItId: Long, likeState: LikeState) = viewModelScope.launch {
-        val result = if (likeState.isLiked) viewItRepository.postViewItLike(viewItId) else viewItRepository.deleteViewItLike(viewItId)
-        result
-            .onSuccess { updateViewItLikeState(viewItId, likeState) }
-            .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
-    }
-
-    private fun updateViewItLikeState(feedId: Long, likeState: LikeState) {
-        likeViewItFlow.update { it.toMutableMap().apply { put(feedId, likeState) } }
-    }
-
-    fun removeViewIt(viewId: Long) = viewModelScope.launch {
-        viewItRepository.deleteViewIt(viewId)
-            .onSuccess {
-                updateViewItRemoveState(viewId)
-                _event.emit(ViewItSideEffect.DismissBottomSheet)
-            }
-            .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
-    }
-
-    private fun updateViewItRemoveState(viewItId: Long) {
-        removedViewItsFlow.update { it.toMutableSet().apply { add(viewItId) } }
-    }
-
-    fun reportUser(nickname: String, relateText: String) {
-        viewModelScope.launch {
-            profileRepository.postReport(nickname, relateText)
-                .onSuccess { _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.REPORT)) }
-                .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
-        }
-    }
-
-    fun banUser(banInfo: Triple<Long, String, Long>) = viewModelScope.launch {
-        profileRepository.postBan(banInfo)
-            .onSuccess {
-                updateViewItBanState(viewItId = banInfo.third, isBan = true)
-                _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.BAN))
-            }
-            .onFailure { _uiState.value = ViewItUiState.Error(it.message.toString()) }
-    }
-
-    private fun updateViewItBanState(viewItId: Long, isBan: Boolean) {
-        banViewItFlow.update { it.toMutableSet().apply { if (isBan) add(viewItId) } }
-    }
-
-    fun postViewIt(link: String, content: String) = viewModelScope.launch {
-        _uiState.value = ViewItUiState.Loading
-        viewItRepository.postViewIt(link, content)
-            .onSuccess {
-                _uiState.value = ViewItUiState.Success
-                delay(200)
-                _event.emit(ViewItSideEffect.ShowSnackBar(SnackbarType.VIEW_IT_COMPLETE))
-            }
-            .onFailure {
-                _event.emit(
-                    ViewItSideEffect.ShowErrorMessage(it),
+                viewIt.copy(
+                    isBlind = isBanned,
+                    isLiked = likeState.isLiked,
+                    likedNumber = likeState.count,
                 )
             }
     }
-}
 
-sealed interface ViewItUiState {
-    data object Loading : ViewItUiState
+    override fun onIntent(intent: ViewItIntent) {
+        when (intent) {
+            is ViewItIntent.ClickKebabBtn -> onKebabBtnClick(intent.viewIt)
+            is ViewItIntent.ClickLikeBtn -> onLikeClick(intent.viewIt)
+            is ViewItIntent.ClickLink -> onLinkClick(intent.url)
+            is ViewItIntent.ClickProfile -> onProfileClick(intent.id)
+            is ViewItIntent.BanViewIt -> onBanUser()
+            is ViewItIntent.RemoveViewIt -> onRemoveViewIt()
+            is ViewItIntent.ReportViewIt -> onReportViewIt()
+            is ViewItIntent.PostViewIt -> onPostViewIt(intent.link, intent.content)
+            ViewItIntent.ClickPosting -> onPostingClick()
+            ViewItIntent.PullToRefresh -> onRefreshViewIt()
+        }
+    }
 
-    data object Success : ViewItUiState
+    private fun onRefreshViewIt() {
+        postSideEffect(ViewItSideEffect.UI.Refresh)
+    }
 
-    data class Error(val errorMessage: String) : ViewItUiState
-}
+    private fun onPostingClick() {
+        postSideEffect(ViewItSideEffect.Navigation.ToPosting)
+    }
 
-sealed interface ViewItSideEffect {
-    data class ShowSnackBar(val type: SnackbarType) : ViewItSideEffect
+    private fun onProfileClick(id: Long) = viewModelScope.launch {
+        when (getAuthTypeUseCase.invoke(id)) {
+            ProfileUserType.AUTH.name -> postSideEffect(ViewItSideEffect.Navigation.ToMyProfile)
+            ProfileUserType.MEMBER.name -> postSideEffect(ViewItSideEffect.Navigation.ToMemberProfile(id))
+            else -> Unit
+        }
+    }
 
-    data object DismissBottomSheet : ViewItSideEffect
+    private fun onKebabBtnClick(viewIt: ViewIt) = viewModelScope.launch {
+        val type = when (getAuthTypeUseCase.invoke(viewIt.postAuthorId)) {
+            ProfileUserType.AUTH.name -> BottomSheetType.DELETE_FEED
+            ProfileUserType.ADMIN.name -> BottomSheetType.BAN
+            else -> BottomSheetType.REPORT
+        }
+        intent {
+            copy(pendingViewIt = viewIt, isBottomSheetVisible = true, bottomSheetType = type)
+        }
+        postSideEffect(ViewItSideEffect.UI.ShowBottomSheet(type, viewIt))
+    }
 
-    data class ShowErrorMessage(val throwable: Throwable) : ViewItSideEffect
+    private fun onLinkClick(url: String) {
+        postSideEffect(ViewItSideEffect.Navigation.ToUrl(url))
+    }
+
+    private fun onRemoveViewIt() = viewModelScope.launch {
+        val id = currentState.pendingViewIt?.viewItId ?: return@launch
+
+        dismissBottomSheet()
+        viewItRepository.deleteViewIt(id)
+            .onSuccess { removedViewItsFlow.addItem(id) }
+            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it)) }
+    }
+
+    private fun onReportViewIt() = viewModelScope.launch {
+        val viewit = currentState.pendingViewIt ?: return@launch
+
+        dismissBottomSheet()
+        profileRepository.postReport(viewit.postAuthorNickname, viewit.viewItContent)
+            .onSuccess { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.REPORT)) }
+            .onFailure { postSideEffect(ViewItSideEffect.Navigation.ToError) }
+    }
+
+    private fun onBanUser() = viewModelScope.launch {
+        val viewit = currentState.pendingViewIt ?: return@launch
+
+        dismissBottomSheet()
+        profileRepository.postBan(Triple(viewit.postAuthorId, BanTriggerType.CONTENT.name.lowercase(), viewit.viewItId))
+            .onSuccess {
+                banViewItFlow.addItem(viewit.viewItId)
+                postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.BAN))
+            }
+            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it)) }
+    }
+
+    private fun dismissBottomSheet() {
+        intent { copy(pendingViewIt = null, isBottomSheetVisible = false, bottomSheetType = BottomSheetType.EMPTY) }
+        postSideEffect(ViewItSideEffect.UI.DismissBottomSheet)
+    }
+
+    private fun onPostViewIt(link: String, content: String) = viewModelScope.launch {
+        postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.VIEW_IT_ING))
+        viewItRepository.postViewIt(link, content)
+            .onSuccess {
+                postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.VIEW_IT_COMPLETE))
+                onRefreshViewIt()
+            }
+            .onFailure { postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it)) }
+    }
+
+    private fun onLikeClick(viewIt: ViewIt) {
+        val id = viewIt.viewItId
+        val likeState = LikeState(viewIt.isLiked, viewIt.likedNumber)
+
+        likeViewItFlow.putItem(id, likeState.toggle())
+
+        viewModelScope.launch {
+            val result = if (likeState.toggle().isLiked) viewItRepository.postViewItLike(id) else viewItRepository.deleteViewItLike(id)
+            result.onFailure {
+                likeViewItFlow.putItem(id, likeState)
+                postSideEffect(ViewItSideEffect.UI.ShowSnackBar(SnackbarType.ERROR, it))
+            }
+        }
+    }
 }
