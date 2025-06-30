@@ -63,3 +63,7 @@ object AmplitudeAuthTag {
     const val CLICK_NEXT_DELETEACCOUNT = "click_done_deleteaccount"
     const val CLICK_COMPLETE_LOGOUT = "click_complete_logout"
 }
+
+object AmplitudeFeedImageTag {
+    const val CLICK_DOWNLOAD_PHOTO = "click_download_photo"
+}

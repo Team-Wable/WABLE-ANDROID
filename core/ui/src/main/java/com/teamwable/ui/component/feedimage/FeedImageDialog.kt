@@ -6,6 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.util.AmplitudeFeedImageTag
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.ui.base.BindingDialogFragment
 import com.teamwable.ui.component.Snackbar
 import com.teamwable.ui.databinding.DialogFeedImageBinding
@@ -50,7 +52,10 @@ class FeedImageDialog : BindingDialogFragment<DialogFeedImageBinding>(DialogFeed
     }
 
     private fun initSaveBtnClickListener() {
-        binding.btnFeedImgDownload.setOnDuplicateBlockClick { viewModel.saveImage(imgUrl) }
+        binding.btnFeedImgDownload.setOnDuplicateBlockClick {
+            viewModel.saveImage(imgUrl)
+            trackEvent(AmplitudeFeedImageTag.CLICK_DOWNLOAD_PHOTO)
+        }
     }
 
     private fun collect() {
