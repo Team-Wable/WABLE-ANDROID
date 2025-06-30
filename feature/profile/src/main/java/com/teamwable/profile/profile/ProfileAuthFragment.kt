@@ -57,6 +57,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
                 MemberInfoEditModel(
                     nickname = profile.nickName,
                     memberDefaultProfileImage = profile.profileImg,
+                    memberFanTeam = profile.teamTag,
                 ),
             )
 
@@ -94,6 +95,7 @@ class ProfileAuthFragment : BindingProfileFragment() {
                 viewModel.updateProfile(
                     nickname = updatedProfile.nickname.orEmpty(),
                     imageUrl = updatedProfile.memberDefaultProfileImage.orEmpty(),
+                    teamTag = updatedProfile.memberFanTeam.orEmpty(),
                 )
             }
         }

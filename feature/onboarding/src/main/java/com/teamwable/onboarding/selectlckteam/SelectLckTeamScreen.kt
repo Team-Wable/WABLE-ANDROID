@@ -3,10 +3,14 @@ package com.teamwable.onboarding.selectlckteam
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -27,13 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.type.LckTeamType
 import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_DETOUR_TEAM_SIGNUP
 import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_NEXT_TEAM_SIGNUP
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.common.type.LckTeamType
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.navigation.Route
 import com.teamwable.onboarding.R
@@ -119,27 +123,13 @@ fun SelectLckTeamScreen(
                 modifier = Modifier.padding(top = 6.dp),
             )
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(top = 18.dp),
-            ) {
-                items(
-                    items = shuffledTeams,
-                    key = { team -> team.teamName },
-                ) { team ->
-                    // 팀이 선택된 상태인지 확인
-                    val isSelected = team == selectedTeam
-                    LckTeamItem(
-                        lckTeamType = team,
-                        enabled = isSelected,
-                        onClick = {
-                            selectedTeam = if (isSelected) null else team // 팀을 선택하거나 선택 해제
-                        },
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(18.dp))
+
+            WableSelectLckTeamGrid(
+                shuffledTeams = shuffledTeams,
+                selectedTeam = selectedTeam,
+                onTeamSelected = { selectedTeam = it },
+            )
         }
 
         Box(
@@ -170,6 +160,41 @@ fun SelectLckTeamScreen(
             enabled = selectedTeam != null,
             modifier = Modifier.padding(bottom = 24.dp),
         )
+    }
+}
+
+@Composable
+fun WableSelectLckTeamGrid(
+    modifier: Modifier = Modifier,
+    shuffledTeams: List<LckTeamType>,
+    selectedTeam: LckTeamType?,
+    onTeamSelected: (LckTeamType?) -> Unit,
+    content: @Composable () -> Unit = { },
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        contentPadding = PaddingValues(bottom = 24.dp),
+        modifier = modifier,
+    ) {
+        item(span = { GridItemSpan(2) }) { // 전체 너비 차지
+            content()
+        }
+        items(
+            items = shuffledTeams,
+            key = { team -> team.teamName },
+        ) { team ->
+            // 팀이 선택된 상태인지 확인
+            val isSelected = team == selectedTeam
+            LckTeamItem(
+                lckTeamType = team,
+                enabled = isSelected,
+                onClick = {
+                    onTeamSelected(if (isSelected) null else team) // 팀을 선택하거나 선택 해제
+                },
+            )
+        }
     }
 }
 
