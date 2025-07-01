@@ -63,4 +63,7 @@
 
     <!-- profile edit -->
     <string name="profile_edit_app_bar">프로필 편집</string>
+    <string name="btn_profile_edit_completed">완료</string>
+    <string name="tv_profile_edit_cheering_team">응원팀</string>
+    <string name="tv_profile_edit_nickname">닉네임</string>
 </resources>

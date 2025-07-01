@@ -44,7 +44,7 @@ class ProfileAuthViewModel @Inject constructor(
         }
     }
 
-    fun updateProfile(nickname: String, imageUrl: String) {
+    fun updateProfile(nickname: String, imageUrl: String, teamTag: String) {
         viewModelScope.launch {
             _uiState.update { currentState ->
                 when (currentState) {
@@ -52,6 +52,7 @@ class ProfileAuthViewModel @Inject constructor(
                         val updatedProfile = currentState.profile.copy(
                             nickName = nickname,
                             profileImg = imageUrl,
+                            teamTag = teamTag,
                         )
                         currentState.copy(profile = updatedProfile)
                     }
