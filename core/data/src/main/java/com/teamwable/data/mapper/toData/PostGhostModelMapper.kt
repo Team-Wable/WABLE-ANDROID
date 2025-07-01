@@ -10,5 +10,5 @@ internal fun Ghost.toPostGhostDto(): RequestGhostDto =
         this.alarmTriggerType,
         this.postAuthorId,
         this.postId,
-        "null",
+        this.reason,
     )

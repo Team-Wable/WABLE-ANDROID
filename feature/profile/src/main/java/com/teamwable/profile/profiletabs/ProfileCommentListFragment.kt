@@ -87,8 +87,8 @@ class ProfileCommentListFragment : BindingFragment<FragmentProfileCommentBinding
 
     private fun onClickCommentItem() = object : CommentClickListener {
         override fun onGhostBtnClick(postAuthorId: Long, commentId: Long) {
-            commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) {
-                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId))
+            commentActionHandler.onGhostBtnClick(DialogType.TRANSPARENCY) { reason ->
+                viewModel.updateGhost(Ghost(stringOf(AlarmTriggerType.COMMENT.type), postAuthorId, commentId, reason))
             }
         }
 

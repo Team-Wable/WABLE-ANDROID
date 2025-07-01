@@ -32,20 +32,52 @@
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_two_button_title"
         tools:text="description" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_dialog_two_button_reason"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/gray_100"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="100"
+        app:counterTextAppearance="@style/TextAppearance.Wable.Caption4"
+        app:counterTextColor="@color/gray_600"
+        app:layout_constraintDimensionRatio="267:177"
+        app:layout_constraintEnd_toEndOf="@id/tv_dialog_two_button_title"
+        app:layout_constraintStart_toStartOf="@id/tv_dialog_two_button_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_two_button_description"
+        app:shapeAppearance="@style/WableRounded12">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_dialog_two_button_reason"
+            style="@style/TextAppearance.Wable.Body4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:maxLength="100"
+            android:minLines="6"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:textColorHint="@color/gray_600" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_dialog_two_button_no"
         style="@style/Wable.Button.M.S"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:backgroundTint="@color/gray_200"
         android:textColor="@color/gray_600"
         app:layout_constraintDimensionRatio="2.6"
         app:layout_constraintEnd_toStartOf="@id/btn_dialog_two_button_yes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_dialog_two_button_description"
+        app:layout_constraintTop_toBottomOf="@id/layout_dialog_two_button_reason"
         tools:text="no" />
 
     <com.google.android.material.button.MaterialButton
