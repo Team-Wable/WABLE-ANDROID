@@ -8,12 +8,9 @@ import com.teamwable.profile.databinding.BottomsheetProfileHamburgerBinding
 import com.teamwable.ui.base.BindingBottomSheetFragment
 import com.teamwable.ui.component.TwoButtonDialog
 import com.teamwable.ui.extensions.openUri
-import com.teamwable.ui.extensions.viewLifeCycleScope
 import com.teamwable.ui.type.DialogType
 import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,10 +61,8 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
 
     private fun initDialogDeleteBtnClickListener() {
         parentFragment?.parentFragmentManager?.setFragmentResultListener(DIALOG_RESULT, viewLifecycleOwner) { key, bundle ->
-            viewLifeCycleScope.launch(Dispatchers.Main) {
-                viewModel.saveIsAutoLogin(false)
-                navigateToSplashScreen()
-            }
+            viewModel.saveIsAutoLogin(false)
+            navigateToSplashScreen()
         }
     }
 
