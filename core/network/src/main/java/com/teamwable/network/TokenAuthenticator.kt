@@ -25,11 +25,14 @@ class TokenAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code != 401) return null
 
+        if (response.request.header("Authorization-Retry") != null) return null
+
         return runBlocking {
             val newAccessToken = refreshToken() ?: return@runBlocking null
             response.request
                 .newBuilder()
                 .header("Authorization", newAccessToken)
+                .header("Authorization-Retry", "true")
                 .build()
         }
     }
@@ -50,7 +53,8 @@ class TokenAuthenticator @Inject constructor(
                 Timber.e(it)
                 dataStore.clear()
                 notifyReLoginRequired()
-            }.getOrNull()?.let { "Bearer ${it.data.accessToken}" }
+            }
+            null
         }
     }
 
