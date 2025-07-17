@@ -3,9 +3,9 @@ package com.teamwable.data.repositoryimpl
 import com.teamwable.data.mapper.toModel.toCommunityModel
 import com.teamwable.data.mapper.toModel.toRequestCommunityDto
 import com.teamwable.data.repository.CommunityRepository
-import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.community.CommunityModel
 import com.teamwable.network.datasource.CommunityService
+import com.teamwable.network.util.runHandledCatching
 import com.teamwable.network.util.toCustomError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

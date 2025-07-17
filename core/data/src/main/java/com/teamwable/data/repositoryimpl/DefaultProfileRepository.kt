@@ -7,13 +7,13 @@ import com.teamwable.data.mapper.toModel.toMemberDataModel
 import com.teamwable.data.mapper.toModel.toProfile
 import com.teamwable.data.repository.ProfileRepository
 import com.teamwable.data.util.createImagePart
-import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.Profile
 import com.teamwable.model.profile.MemberDataModel
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.network.datasource.ProfileService
 import com.teamwable.network.dto.request.RequestWithdrawalDto
 import com.teamwable.network.util.handleThrowable
+import com.teamwable.network.util.runHandledCatching
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody

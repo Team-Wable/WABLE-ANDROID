@@ -2,10 +2,10 @@ package com.teamwable.data.repositoryimpl
 
 import com.teamwable.data.mapper.toModel.toUserModel
 import com.teamwable.data.repository.AuthRepository
-import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.auth.UserModel
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.dto.request.RequestSocialLoginDto
+import com.teamwable.network.util.runHandledCatching
 import javax.inject.Inject
 
 internal class DefaultAuthRepository @Inject constructor(

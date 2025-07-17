@@ -1,6 +1,5 @@
-package com.teamwable.data.util
+package com.teamwable.network.util
 
-import com.teamwable.network.util.toCustomError
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlin.coroutines.cancellation.CancellationException
 

@@ -4,7 +4,7 @@ import com.teamwable.data.gallery.BitmapFetcher
 import com.teamwable.data.gallery.GallerySaver
 import com.teamwable.data.gallery.GallerySaver.Companion.FILE_EXTENSION
 import com.teamwable.data.repository.FeedImageRepository
-import com.teamwable.data.util.runHandledCatching
+import com.teamwable.network.util.runHandledCatching
 import javax.inject.Inject
 
 internal class DefaultFeedImageRepository @Inject constructor(
