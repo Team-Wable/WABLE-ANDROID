@@ -2,6 +2,7 @@ package com.teamwable.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.teamwable.network.BuildConfig
+import com.teamwable.network.TokenAuthenticator
 import com.teamwable.network.TokenInterceptor
 import com.teamwable.network.util.isJsonArray
 import com.teamwable.network.util.isJsonObject
@@ -37,12 +38,14 @@ internal object NetworkModule {
     fun provideOkHttpClient(
         tokenInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor,
+        tokenAuthenticator: TokenAuthenticator,
     ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(tokenInterceptor)
             .addInterceptor(loggingInterceptor)
+            .authenticator(tokenAuthenticator)
             .build()
 
     @Provides
