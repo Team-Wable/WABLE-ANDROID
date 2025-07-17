@@ -1,16 +1,10 @@
 package com.teamwable.network
 
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
+import com.teamwable.common.restarter.AppReStarter
 import com.teamwable.datastore.datasource.WablePreferencesDataSource
 import com.teamwable.network.datasource.AuthService
 import com.teamwable.network.util.runSuspendCatching
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -24,10 +18,9 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(
     private val dataStore: WablePreferencesDataSource,
     private val authService: AuthService,
-    @ApplicationContext private val context: Context,
+    private val appRestarter: AppReStarter,
 ) : Authenticator {
     private val mutex = Mutex()
-    private var currentToast: Toast? = null
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code != 401) return null
@@ -62,24 +55,7 @@ class TokenAuthenticator @Inject constructor(
     }
 
     private fun notifyReLoginRequired() {
-        CoroutineScope(Dispatchers.Main).launch {
-            showToast("재 로그인이 필요해요")
-            restartApp()
-        }
-    }
-
-    private fun showToast(message: String) {
-        currentToast?.cancel()
-        currentToast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
-        currentToast?.show()
-    }
-
-    private fun restartApp() {
-        val restartIntent = context.packageManager
-            .getLaunchIntentForPackage(context.packageName)
-            ?.component
-            ?.let(Intent::makeRestartActivityTask)
-
-        context.startActivity(restartIntent)
+        appRestarter.makeToast("재 로그인이 필요해요")
+        appRestarter.restartApp()
     }
 }

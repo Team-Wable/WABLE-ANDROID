@@ -1,10 +1,10 @@
 package com.teamwable.profile.hamburger
 
-import android.content.Intent
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.teamwable.common.restarter.AppReStarter
 import com.teamwable.common.uistate.UiState
 import com.teamwable.common.util.AmplitudeAuthTag.CLICK_NEXT_DELETEGUIDE
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfirmBinding>(FragmentProfileDeleteConfirmBinding::inflate) {
@@ -30,6 +31,9 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
 
     private val args: ProfileDeleteConfirmFragmentArgs by navArgs()
     private var reasons = emptyList<String>()
+
+    @Inject
+    lateinit var appRestarter: AppReStarter
 
     override fun initView() {
         reasons = args.reasons.toList()
@@ -62,11 +66,7 @@ class ProfileDeleteConfirmFragment : BindingFragment<FragmentProfileDeleteConfir
     }
 
     private fun navigateToSplashScreen() {
-        startActivity(
-            Intent.makeRestartActivityTask(
-                requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)?.component,
-            ),
-        )
+        appRestarter.restartApp()
     }
 
     private fun initCheckBoxClickListener() {

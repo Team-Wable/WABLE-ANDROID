@@ -1,9 +1,8 @@
 package com.teamwable.profile.hamburger
 
-import android.content.Intent
-import android.net.Uri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.restarter.AppReStarter
 import com.teamwable.profile.R
 import com.teamwable.profile.databinding.BottomsheetProfileHamburgerBinding
 import com.teamwable.ui.base.BindingBottomSheetFragment
@@ -15,10 +14,14 @@ import com.teamwable.ui.util.Arg.DIALOG_RESULT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfileHamburgerBinding>(BottomsheetProfileHamburgerBinding::inflate) {
     private val viewModel: ProfileHamburgerViewModel by viewModels()
+
+    @Inject
+    lateinit var appRestarter: AppReStarter
 
     override fun initView() {
         initAccountInformationBtnClickListener()
@@ -69,10 +72,6 @@ class ProfileHamburgerBottomSheet : BindingBottomSheetFragment<BottomsheetProfil
     }
 
     private fun navigateToSplashScreen() {
-        startActivity(
-            Intent.makeRestartActivityTask(
-                requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)?.component,
-            )
-        )
+        appRestarter.restartApp()
     }
 }
