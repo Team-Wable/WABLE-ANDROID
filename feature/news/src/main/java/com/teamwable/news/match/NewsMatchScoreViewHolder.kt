@@ -60,6 +60,19 @@ class NewsMatchScoreViewHolder(
             "NS" -> com.teamwable.common.R.drawable.ic_news_team_profile_ns
             "DNF" -> com.teamwable.common.R.drawable.ic_news_team_profile_dnf
             "HLE" -> com.teamwable.common.R.drawable.ic_news_team_profile_hle
+            "BLG" -> com.teamwable.common.R.drawable.ic_news_team_profile_blg
+            "AL" -> com.teamwable.common.R.drawable.ic_news_team_profile_al
+            "TES" -> com.teamwable.common.R.drawable.ic_news_team_profile_tes
+            "IG" -> com.teamwable.common.R.drawable.ic_news_team_profile_ig
+            "FLY" -> com.teamwable.common.R.drawable.ic_news_team_profile_fly
+            "VKS" -> com.teamwable.common.R.drawable.ic_news_team_profile_vks
+            "100T" -> com.teamwable.common.R.drawable.ic_news_team_profile_100t
+            "CFO" -> com.teamwable.common.R.drawable.ic_news_team_profile_cfo
+            "TSW" -> com.teamwable.common.R.drawable.ic_news_team_profile_tsw
+            "PSG" -> com.teamwable.common.R.drawable.ic_news_team_profile_psg
+            "G2" -> com.teamwable.common.R.drawable.ic_news_team_profile_g2
+            "MKOI" -> com.teamwable.common.R.drawable.ic_news_team_profile_mkoi
+            "FNC" -> com.teamwable.common.R.drawable.ic_news_team_profile_fnc
             else -> com.teamwable.common.R.drawable.ic_news_match_team_profile
         }
         imageView.setImageResource(resourceId)
