@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity(), Navigation {
             supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         val navController = navHostFragment.navController
 
+        navController.setGraph(R.navigation.graph_main)
+
         binding.bnvMain.apply {
             itemIconTintList = null
             setupWithNavController(navController)
