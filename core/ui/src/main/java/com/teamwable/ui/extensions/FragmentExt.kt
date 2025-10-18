@@ -46,12 +46,6 @@ val Fragment.viewLifeCycle
 val Fragment.viewLifeCycleScope
     get() = viewLifecycleOwner.lifecycleScope
 
-fun Fragment.statusBarColorOf(
-    @ColorRes resId: Int,
-) {
-    requireActivity().statusBarColorOf(resId)
-}
-
 fun Fragment.openUri(uri: String) {
     Intent(Intent.ACTION_VIEW, Uri.parse(uri)).also {
         runCatching { startActivity(it) }
