@@ -13,9 +13,9 @@ fun View.visible(isVisible: Boolean) {
 fun View.setStatusBarColor(@ColorRes resId: Int) {
     setBackgroundResource(resId)
 
-    ViewCompat.setOnApplyWindowInsetsListener(this.rootView) { _, windowInsets ->
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
-        updateLayoutParams {
+        view.updateLayoutParams {
             height = insets.top
         }
         windowInsets
