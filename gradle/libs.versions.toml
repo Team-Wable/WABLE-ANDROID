@@ -1,6 +1,6 @@
 [versions]
-compileSdk = "35"
-minSdk = "24"
+compileSdk = "36"
+minSdk = "28"
 targetSdk = "35"
 appVersion = "1.4.1"
 versionCode = "10401"
@@ -13,8 +13,8 @@ kotlinx-coroutines = "1.7.3"
 kotlinxCollectionsImmutable = "0.3.4"
 
 # android
-coreKtx = "1.13.1"
-appcompat = "1.7.0"
+coreKtx = "1.17.0"
+appcompat = "1.7.1"
 lifecycle = "2.8.4"
 dagger-hilt = "2.51.1"
 fragment-ktx = "1.8.2"
@@ -43,7 +43,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 
 # gradle
-agp = "8.5.1"
+agp = "8.13.0"
 kspplugin = "2.0.0-1.0.24"
 
 # third party
