@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -56,6 +57,7 @@ internal fun MainScreen(
     Scaffold(
         topBar = {
             WableAppBar(
+                modifier = Modifier.statusBarsPadding(),
                 visibility = navigator.shouldShowTopBar(),
                 canNavigateBack = navigator.isBackStackNotEmpty(),
                 navigateUp = { navigator.navigateUp() },
@@ -64,9 +66,11 @@ internal fun MainScreen(
         },
         content = { innerPadding ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier =
+                    if (!navigator.shouldShowTopBar()) Modifier.fillMaxSize()
+                    else Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
             ) {
                 NavHost(
                     navController = navigator.navController,

@@ -28,7 +28,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.common.util.AmplitudeSignUpTag.CLICK_NEXT_YEAR_SIGNUP
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
-import com.teamwable.designsystem.extension.system.SetStatusBarColor
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.model.profile.MemberInfoEditModel
 import com.teamwable.onboarding.R
@@ -68,8 +67,6 @@ fun FirstLckWatchRoute(
 fun FirstLckWatchScreen(
     onNextBtnClick: (Int) -> Unit,
 ) {
-    SetStatusBarColor(color = WableTheme.colors.white)
-
     val options = (2012..2025).toImmutableList()
 
     var expanded by remember { mutableStateOf(false) }
