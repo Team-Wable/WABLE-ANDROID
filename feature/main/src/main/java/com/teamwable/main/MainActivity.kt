@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -24,8 +25,8 @@ import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NEWS_BOTNAVI
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
+import com.teamwable.ui.extensions.setStatusBarColor
 import com.teamwable.ui.extensions.showAlertDialog
-import com.teamwable.ui.extensions.statusBarColorOf
 import com.teamwable.ui.extensions.statusBarModeOf
 import com.teamwable.ui.extensions.toast
 import com.teamwable.ui.extensions.visible
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -220,14 +222,14 @@ class MainActivity : AppCompatActivity(), Navigation {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 in darkStatusBarDestinations -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.black)
+                    binding.statusBarBackground.setStatusBarColor(com.teamwable.ui.R.color.black)
                     statusBarModeOf(false)
                 }
 
                 in noStatusBarChangeDestinations -> Unit
 
                 else -> {
-                    statusBarColorOf(com.teamwable.ui.R.color.white)
+                    binding.statusBarBackground.setStatusBarColor(com.teamwable.ui.R.color.white)
                     statusBarModeOf()
                 }
             }
