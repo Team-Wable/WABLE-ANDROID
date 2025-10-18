@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
@@ -88,11 +87,11 @@ internal fun MainScreen(
                                 navOptions = navOptions,
                             )
                         },
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                     )
                     loginNavGraph(
                         navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     firstLckWatchNavGraph(
@@ -108,7 +107,7 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     agreeTermsNavGraph(
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }
