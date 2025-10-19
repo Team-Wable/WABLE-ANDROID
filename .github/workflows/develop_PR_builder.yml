@@ -79,7 +79,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        run: ./gradlew build -PcompileSdkVersion=34 --stacktrace --parallel
+        run: ./gradlew build -PcompileSdkVersion=36 --stacktrace --parallel
 
       - name: On Success, Notify in Slack
         if: ${{ success() }}

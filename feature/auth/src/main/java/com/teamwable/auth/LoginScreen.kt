@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,8 +39,6 @@ import com.teamwable.common.util.AmplitudeSignInTag.CLICK_SIGNIN_KAKAO
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.dialog.WableOneButtonDialog
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
-import com.teamwable.designsystem.extension.system.SetStatusBarColor
-import com.teamwable.designsystem.theme.SystemLoginSystemAppBar
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
@@ -88,8 +88,6 @@ fun LoginRoute(
 fun LoginScreen(
     onLoginBtnClick: () -> Unit,
 ) {
-    SetStatusBarColor(color = SystemLoginSystemAppBar)
-
     val configuration = LocalConfiguration.current
     val screenHeightPx = with(LocalDensity.current) { configuration.screenHeightDp.dp.toPx() }
     val halfScreenHeightPx = screenHeightPx * 0.514f
@@ -114,6 +112,8 @@ fun LoginScreen(
                 ),
             ),
     ) {
+        Spacer(modifier = Modifier.statusBarsPadding())
+
         Image(
             painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_logo),
             contentDescription = "",
@@ -156,6 +156,8 @@ fun LoginScreen(
                 .aspectRatio(6.56f)
                 .noRippleDebounceClickable { onLoginBtnClick() },
         )
+
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 

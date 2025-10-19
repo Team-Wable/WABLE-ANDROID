@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -14,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
@@ -56,6 +56,7 @@ internal fun MainScreen(
     Scaffold(
         topBar = {
             WableAppBar(
+                modifier = Modifier.statusBarsPadding(),
                 visibility = navigator.shouldShowTopBar(),
                 canNavigateBack = navigator.isBackStackNotEmpty(),
                 navigateUp = { navigator.navigateUp() },
@@ -64,9 +65,11 @@ internal fun MainScreen(
         },
         content = { innerPadding ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier =
+                    if (!navigator.shouldShowTopBar()) Modifier.fillMaxSize()
+                    else Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
             ) {
                 NavHost(
                     navController = navigator.navController,
@@ -84,11 +87,11 @@ internal fun MainScreen(
                                 navOptions = navOptions,
                             )
                         },
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                     )
                     loginNavGraph(
                         navigateToFirstLckWatch = { navigator.navigateToFirstLckWatch() },
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     firstLckWatchNavGraph(
@@ -104,7 +107,7 @@ internal fun MainScreen(
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                     agreeTermsNavGraph(
-                        navigateToHome = { startActivity(localContext, intent, null) },
+                        navigateToHome = { localContext.startActivity(intent) },
                         onShowErrorSnackBar = onShowErrorSnackBar,
                     )
                 }

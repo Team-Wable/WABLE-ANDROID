@@ -98,14 +98,6 @@ fun Context.pxToDp(px: Int): Int {
     ).toInt()
 }
 
-fun Context.statusBarColorOf(
-    @ColorRes resId: Int,
-) {
-    if (this is Activity) {
-        window?.statusBarColor = colorOf(resId)
-    }
-}
-
 fun Context.statusBarModeOf(isLightStatusBar: Boolean = true) {
     if (this is Activity) {
         window.apply {

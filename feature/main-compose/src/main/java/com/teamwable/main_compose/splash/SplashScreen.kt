@@ -29,7 +29,7 @@ fun SplashRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.wable_splash))
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(lifecycleOwner) {
         delay(2000)
         viewModel.observeAutoLogin()
     }

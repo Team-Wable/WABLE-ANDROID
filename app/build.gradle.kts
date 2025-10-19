@@ -25,7 +25,7 @@ fun String.removeQuotes(): String {
 
 android {
     namespace = "com.teamwable.wable"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.teamwable.wable"
