@@ -24,4 +24,9 @@ enum class AppBarType(
         icon = com.teamwable.common.R.drawable.ic_community_appbar,
         isBeta = true,
     ),
+    QUIZ(
+        title = R.string.label_app_bar_quiz,
+        icon = com.teamwable.common.R.drawable.ic_quiz_appbar,
+        isBeta = true,
+    ),
 }
