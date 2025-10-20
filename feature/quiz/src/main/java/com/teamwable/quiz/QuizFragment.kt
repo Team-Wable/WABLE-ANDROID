@@ -17,6 +17,7 @@ class QuizFragment : BindingFragment<FragmentQuizBinding>(FragmentQuizBinding::i
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
+                    QuizMainScreen()
                 }
             }
         }
