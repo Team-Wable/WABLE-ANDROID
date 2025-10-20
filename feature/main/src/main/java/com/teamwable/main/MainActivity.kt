@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity(), Navigation {
             viewitR.id.navigation_view_it,
             viewitR.id.navigation_view_it_posting,
             com.teamwable.ui.R.id.navigation_feed_image_dialog,
+            com.teamwable.quiz.R.id.navigation_quiz,
         )
 
         val noStatusBarChangeDestinations = setOf(
