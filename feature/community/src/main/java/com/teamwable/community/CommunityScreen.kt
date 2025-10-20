@@ -96,7 +96,7 @@ private fun CommunityScreen(
     WableFloatingButtonLayout(
         buttonContent = { modifier ->
             BoardRequestButton(
-                modifier = modifier,
+                modifier = modifier.padding(vertical = 14.dp, horizontal = 16.dp),
                 onClick = onFloatingBtnClick,
             )
         },

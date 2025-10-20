@@ -1,15 +1,12 @@
 package com.teamwable.designsystem.component.button
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.R
 import com.teamwable.designsystem.theme.WableTheme
 
@@ -21,10 +18,7 @@ fun BoardRequestButton(
     WableAnnotatedTextButton(
         text = getAnnotatedString(),
         onClick = onClick,
-        modifier = modifier.padding(
-            horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
-            vertical = 14.dp,
-        ),
+        modifier = modifier,
         buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
     )
 }
