@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     override fun navigateToViewItFragment() {
-        binding.bnvMain.selectedItemId = R.id.graph_view_it
+        binding.bnvMain.selectedItemId = viewitR.id.graph_view_it
     }
 
     private fun initBottomNaviSelectedListener(navController: NavController) {
