@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     }
 
     override fun navigateToViewItFragment() {
-        binding.bnvMain.selectedItemId = R.id.graph_view_it
+        binding.bnvMain.selectedItemId = viewitR.id.graph_view_it
     }
 
     private fun initBottomNaviSelectedListener(navController: NavController) {
@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity(), Navigation {
             viewitR.id.navigation_view_it,
             viewitR.id.navigation_view_it_posting,
             com.teamwable.ui.R.id.navigation_feed_image_dialog,
+            com.teamwable.quiz.R.id.navigation_quiz,
         )
 
         val noStatusBarChangeDestinations = setOf(

@@ -28,12 +28,10 @@ import com.teamwable.community.component.CommunityButtonType
 import com.teamwable.community.component.CommunityHeader
 import com.teamwable.community.component.CommunityItem
 import com.teamwable.community.component.HandleDialog
-import com.teamwable.community.component.getAnnotatedString
 import com.teamwable.community.model.CommunityIntent
 import com.teamwable.community.model.CommunitySideEffect
 import com.teamwable.community.model.CommunityState
-import com.teamwable.designsystem.component.button.BigButtonDefaults
-import com.teamwable.designsystem.component.button.WableAnnotatedTextButton
+import com.teamwable.designsystem.component.button.BoardRequestButton
 import com.teamwable.designsystem.component.layout.WableFloatingButtonLayout
 import com.teamwable.designsystem.extension.composable.scrollToTop
 import com.teamwable.designsystem.theme.WableTheme
@@ -97,14 +95,9 @@ private fun CommunityScreen(
 ) {
     WableFloatingButtonLayout(
         buttonContent = { modifier ->
-            WableAnnotatedTextButton(
-                text = getAnnotatedString(),
+            BoardRequestButton(
+                modifier = modifier.padding(vertical = 14.dp, horizontal = 16.dp),
                 onClick = onFloatingBtnClick,
-                modifier = modifier.padding(
-                    horizontal = dimensionResource(id = com.teamwable.common.R.dimen.padding_horizontal),
-                    vertical = 14.dp,
-                ),
-                buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
             )
         },
     ) {

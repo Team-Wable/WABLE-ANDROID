@@ -6,6 +6,4 @@
     <string name="str_community_progress_title">진행도</string>
     <string name="str_community_btn_fan_more">팬 더 데려오기</string>
     <string name="str_community_btn_copy_completed">링크 복사 완료</string>
-    <string name="str_community_floating_main">"더 추가하고 싶은 게시판이 있다면? "</string>
-    <string name="str_community_floating_sub">요청하기</string>
 </resources>

@@ -8,6 +8,7 @@
     <string name="label_bnv_profile">마이</string>
     <string name="label_bnv_community">커뮤니티</string>
     <string name="label_bnv_view_it">뷰잇</string>
+    <string name="label_bnv_quiz">퀴즈</string>
 
     <!-- error -->
     <string name="label_error_title">이런!</string>

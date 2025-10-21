@@ -13,6 +13,8 @@
     <include app:graph="@navigation/graph_ui" />
     <include app:graph="@navigation/graph_view_it" />
     <include app:graph="@navigation/graph_community" />
+    <include app:graph="@navigation/graph_quiz" />
+
     <fragment
         android:id="@+id/navigation_error"
         android:name="com.teamwable.main.ErrorFragment"

@@ -56,4 +56,8 @@
 
     <!--블라인드 -->
     <string name="feed_blind_description">This post is blinded.</string>
+
+    <!--    게시판 추가하기-->
+    <string name="str_community_floating_main">"더 추가하고 싶은 게시판이 있다면? "</string>
+    <string name="str_community_floating_sub">요청하기</string>
 </resources>

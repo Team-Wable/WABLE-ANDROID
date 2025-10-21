@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":feature:profile"))
     implementation(project(":feature:community"))
     implementation(project(":feature:viewit"))
+    implementation(project(":feature:quiz"))
 
     // AndroidX
     implementation(libs.androidx.navigation.fragment.ktx)
