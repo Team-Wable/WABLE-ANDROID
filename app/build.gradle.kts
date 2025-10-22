@@ -33,9 +33,13 @@ android {
         versionName = libs.versions.appVersion.get()
 
         val kakaoAppKey = properties["kakao.app.key"].toString().removeQuotes()
+        val facebookAppId = properties["facebook.app.id"].toString().removeQuotes()
+        val facebookClientToken = properties["facebook.client.token"].toString().removeQuotes()
 
         buildConfigField("String", "KAKAO_APP_KEY", "\"$kakaoAppKey\"")
         manifestPlaceholders["kakaoAppkey"] = kakaoAppKey
+        manifestPlaceholders["facebookAppId"] = facebookAppId
+        manifestPlaceholders["facebookClientToken"] = facebookClientToken
     }
 
     signingConfigs {
@@ -96,4 +100,6 @@ dependencies {
 
     // kakao
     implementation(libs.kakao.login)
+
+    implementation(libs.facebook)
 }

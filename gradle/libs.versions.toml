@@ -60,6 +60,7 @@ amplitude-ads = "18.1.0"
 activity = "1.9.1"
 jsoup = "1.18.3"
 inject = "1"
+facebook = "18.0.3"
 
 # test
 junitJupiterEngine = "5.11.3"
@@ -162,6 +163,8 @@ amplitude-ads = { module = "com.google.android.gms:play-services-ads-identifier"
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+
+facebook = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebook" }
 
 ## Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
