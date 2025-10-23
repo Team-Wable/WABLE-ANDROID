@@ -60,6 +60,15 @@ fun singleSharpStyle() = defaultShapeStyle().copy(
 )
 
 @Composable
+@ReadOnlyComposable
+fun radius16Style() = defaultShapeStyle().copy(
+    topStart = 16.dp,
+    topEnd = 16.dp,
+    bottomStart = 16.dp,
+    bottomEnd = 16.dp,
+)
+
+@Composable
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 private fun ShapeBoxPreview() {
     WableTheme {
