@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_quiz"
-    app:startDestination="@id/navigation_quiz_start">
+    app:startDestination="@id/navigation_quiz_main">
 
     <fragment
         android:id="@+id/navigation_quiz_main"
         android:name="com.teamwable.quiz.QuizMainFragment"
-        android:label="Fragment"
-        tools:layout="@layout/fragment_quiz_main" />
+        android:label="QuizMainFragment"
+        tools:layout="@layout/fragment_quiz_main"/>
     <fragment
         android:id="@+id/navigation_quiz_start"
         android:name="com.teamwable.quiz.start.QuizStartFragment"
         android:label="QuizStartFragment">
         <action
             android:id="@+id/action_quizStartFragment_to_quizResultFragment"
-            app:destination="@id/navigation_quiz_result" />
+            app:destination="@id/navigation_quiz_result"
+            app:popUpTo="@id/navigation_quiz_start"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_quiz_result"
