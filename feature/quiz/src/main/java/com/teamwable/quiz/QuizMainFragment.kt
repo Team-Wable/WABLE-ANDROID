@@ -2,12 +2,12 @@ package com.teamwable.quiz
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.teamwable.designsystem.theme.WableTheme
-import com.teamwable.quiz.databinding.FragmentQuizBinding
+import com.teamwable.quiz.databinding.FragmentQuizMainBinding
 import com.teamwable.ui.base.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class QuizFragment : BindingFragment<FragmentQuizBinding>(FragmentQuizBinding::inflate) {
+class QuizMainFragment : BindingFragment<FragmentQuizMainBinding>(FragmentQuizMainBinding::inflate) {
     override fun initView() {
         initComposeView()
     }

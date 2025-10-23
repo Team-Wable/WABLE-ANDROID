@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/navigation_quiz"
-        android:name="com.teamwable.quiz.QuizFragment"
+        android:name="com.teamwable.quiz.QuizMainFragment"
         android:label="Fragment"
-        tools:layout="@layout/fragment_quiz">
+        tools:layout="@layout/fragment_quiz_main">
     </fragment>
 </navigation>
