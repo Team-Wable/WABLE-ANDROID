@@ -1,4 +1,4 @@
-package com.teamwable.quiz
+package com.teamwable.quiz.result
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,13 +21,14 @@ import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
 import com.teamwable.designsystem.extension.preview.DevicePreviews
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.quiz.R
 import com.teamwable.quiz.component.QuizResultType
 import com.teamwable.quiz.component.QuizStatBox
 import com.teamwable.quiz.component.QuizStatType
 
 @Composable
 fun QuizResultScreen(
-    type: QuizResultType,
+    type: QuizResultType = QuizResultType.SUCCESS,
 ) {
     Column(
         modifier = Modifier

@@ -1,4 +1,4 @@
-package com.teamwable.quiz
+package com.teamwable.quiz.start
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,7 @@ import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.image.WableGlideImage
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.quiz.R
 import com.teamwable.quiz.component.OXType
 import com.teamwable.quiz.component.QuizOXButton
 

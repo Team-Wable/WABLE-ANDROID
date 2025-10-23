@@ -146,6 +146,8 @@ class MainActivity : AppCompatActivity(), Navigation {
                     com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
                     com.teamwable.news.R.id.navigation_news_detail,
                     com.teamwable.notification.R.id.navigation_notification,
+                    com.teamwable.quiz.R.id.navigation_quiz_start,
+                    com.teamwable.quiz.R.id.navigation_quiz_result,
                 ),
         )
     }
@@ -213,7 +215,7 @@ class MainActivity : AppCompatActivity(), Navigation {
             viewitR.id.navigation_view_it,
             viewitR.id.navigation_view_it_posting,
             com.teamwable.ui.R.id.navigation_feed_image_dialog,
-            com.teamwable.quiz.R.id.navigation_quiz,
+            com.teamwable.quiz.R.id.navigation_quiz_main,
         )
 
         val noStatusBarChangeDestinations = setOf(
