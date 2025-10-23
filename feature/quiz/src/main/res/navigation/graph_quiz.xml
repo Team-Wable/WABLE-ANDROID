@@ -24,6 +24,8 @@
         android:label="QuizResultFragment">
         <action
             android:id="@+id/action_quizResultFragment_to_navigation_quiz_main"
-            app:destination="@id/navigation_quiz_main" />
+            app:destination="@id/navigation_quiz_main"
+            app:popUpTo="@id/graph_quiz"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
