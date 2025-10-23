@@ -14,4 +14,5 @@
     <string name="str_quiz_stat_xp">획득 XP</string>
     <string name="str_quiz_stat_rank">상위</string>
     <string name="str_quiz_stat_speed">스피드</string>
+    <string name="str_quiz_result_xp">XP 받기</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.teamwable.quiz.start
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.navigation.fragment.findNavController
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.quiz.databinding.FragmentQuizStartBinding
 import com.teamwable.ui.base.BindingFragment
@@ -18,9 +19,17 @@ class QuizStartFragment :
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
-                    QuizStartScreen()
+                    QuizStartRoute(
+                        navigateUp = { findNavController().popBackStack() },
+                        navigateToResult = ::navigateToResult,
+                    )
                 }
             }
         }
+    }
+
+    private fun navigateToResult() {
+        val action = QuizStartFragmentDirections.actionQuizStartFragmentToQuizResultFragment()
+        findNavController().navigate(action)
     }
 }

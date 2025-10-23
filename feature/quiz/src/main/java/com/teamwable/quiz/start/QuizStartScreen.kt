@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,9 +30,23 @@ import com.teamwable.quiz.component.OXType
 import com.teamwable.quiz.component.QuizOXButton
 
 @Composable
-fun QuizStartScreen(
-    type: OXType? = null,
+fun QuizStartRoute(
+    navigateUp: () -> Unit,
+    navigateToResult: () -> Unit,
 ) {
+    QuizStartScreen(
+        navigateUp = navigateUp,
+        onSubmitClick = navigateToResult,
+    )
+}
+
+@Composable
+fun QuizStartScreen(
+    navigateUp: () -> Unit,
+    onSubmitClick: () -> Unit = {},
+) {
+    var type by remember { mutableStateOf<OXType?>(null) }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -38,6 +56,7 @@ fun QuizStartScreen(
             visibility = true,
             canNavigateBack = true,
             canClose = false,
+            navigateUp = navigateUp,
         )
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -78,13 +97,13 @@ fun QuizStartScreen(
             QuizOXButton(
                 isSelected = type == OXType.O,
                 type = OXType.O,
-                onClick = { if (type == OXType.O) null else OXType.O },
+                onClick = { type = OXType.O },
                 modifier = Modifier.weight(1f),
             )
             QuizOXButton(
                 isSelected = type == OXType.X,
                 type = OXType.X,
-                onClick = { if (type == OXType.X) null else OXType.X },
+                onClick = { type = OXType.X },
                 modifier = Modifier.weight(1f),
             )
         }
@@ -94,7 +113,8 @@ fun QuizStartScreen(
         WableButton(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(R.string.btn_quiz_start_submit),
-            onClick = {},
+            enabled = type != null,
+            onClick = onSubmitClick,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -105,6 +125,8 @@ fun QuizStartScreen(
 @Preview(showBackground = true, heightDp = 780)
 private fun QuizMainScreenPreview() {
     WableTheme {
-        QuizStartScreen()
+        QuizStartScreen(
+            navigateUp = {},
+        )
     }
 }

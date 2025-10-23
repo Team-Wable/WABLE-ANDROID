@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
-import com.teamwable.designsystem.extension.preview.DevicePreviews
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.quiz.R
 import com.teamwable.quiz.component.QuizResultType
@@ -27,8 +27,18 @@ import com.teamwable.quiz.component.QuizStatBox
 import com.teamwable.quiz.component.QuizStatType
 
 @Composable
+fun QuizResultRoute(
+    navigateToMain: () -> Unit,
+) {
+    QuizResultScreen(
+        onXpClick = navigateToMain,
+    )
+}
+
+@Composable
 fun QuizResultScreen(
-    type: QuizResultType = QuizResultType.SUCCESS,
+    type: QuizResultType = QuizResultType.FAIL,
+    onXpClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -36,7 +46,7 @@ fun QuizResultScreen(
             .wableVerticalGradientBackground(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Image(
             painter = painterResource(id = type.image),
@@ -89,17 +99,27 @@ fun QuizResultScreen(
 
         WableButton(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.btn_quiz_start_submit),
-            onClick = {},
+            text = stringResource(R.string.str_quiz_result_xp),
+            onClick = onXpClick,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-@DevicePreviews
-private fun QuizResultScreenPreview() {
+private fun QuizResultScreenSuccessPreview() {
+    WableTheme {
+        QuizResultScreen(
+            type = QuizResultType.SUCCESS,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun QuizResultScreenFailPreview() {
     WableTheme {
         QuizResultScreen(
             type = QuizResultType.FAIL,
