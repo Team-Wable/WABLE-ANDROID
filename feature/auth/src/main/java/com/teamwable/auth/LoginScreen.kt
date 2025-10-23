@@ -1,7 +1,6 @@
 package com.teamwable.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,13 +16,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -39,6 +33,7 @@ import com.teamwable.common.util.AmplitudeSignInTag.CLICK_SIGNIN_KAKAO
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.dialog.WableOneButtonDialog
 import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
+import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.designsystem.type.DialogType
 
@@ -88,29 +83,11 @@ fun LoginRoute(
 fun LoginScreen(
     onLoginBtnClick: () -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
-    val screenHeightPx = with(LocalDensity.current) { configuration.screenHeightDp.dp.toPx() }
-    val halfScreenHeightPx = screenHeightPx * 0.514f
-
-    val colorStops = arrayOf(
-        0.0f to Color(0xFFEBE2FD),
-        0.37f to Color(0xFFF0F6FE),
-        0.69f to Color(0xFFF7FEFD),
-        1f to WableTheme.colors.white,
-    )
-
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colorStops = colorStops,
-                    tileMode = TileMode.Decal,
-                    startY = 0f,
-                    endY = halfScreenHeightPx,
-                ),
-            ),
+            .wableVerticalGradientBackground(),
     ) {
         Spacer(modifier = Modifier.statusBarsPadding())
 
