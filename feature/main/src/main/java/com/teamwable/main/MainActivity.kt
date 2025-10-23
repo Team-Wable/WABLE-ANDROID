@@ -224,6 +224,8 @@ class MainActivity : AppCompatActivity(), Navigation {
             com.teamwable.ui.R.id.navigation_two_label_bottomsheet,
         )
 
+        val gradientStatusBarDestination = setOf(com.teamwable.quiz.R.id.navigation_quiz_result)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 in darkStatusBarDestinations -> {
@@ -232,6 +234,11 @@ class MainActivity : AppCompatActivity(), Navigation {
                 }
 
                 in noStatusBarChangeDestinations -> Unit
+
+                in gradientStatusBarDestination -> {
+                    binding.statusBarBackground.setStatusBarColor(com.teamwable.ui.R.color.app_bar_purple)
+                    statusBarModeOf()
+                }
 
                 else -> {
                     binding.statusBarBackground.setStatusBarColor(com.teamwable.ui.R.color.white)
