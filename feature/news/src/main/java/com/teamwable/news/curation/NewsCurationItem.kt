@@ -40,7 +40,11 @@ fun NewsCurationItem(
     data: CurationModel,
     onItemClick: (String) -> Unit,
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+    ) {
         CurationProfile(data)
         Spacer(modifier = Modifier.height(8.dp))
         CurationContent(data, onItemClick)

@@ -9,5 +9,7 @@ sealed interface NewsCurationSideEffect : SideEffect {
 
     sealed interface UI : NewsCurationSideEffect {
         data object Refresh : UI
+
+        data class ShowSnackBar(val throwable: Throwable?) : UI
     }
 }
