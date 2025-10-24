@@ -5,9 +5,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.teamwable.common.util.LinkStorage
 import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.quiz.databinding.FragmentQuizMainBinding
 import com.teamwable.ui.base.BindingFragment
+import com.teamwable.ui.extensions.openUri
 import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +34,9 @@ class QuizMainFragment : BindingFragment<FragmentQuizMainBinding>(FragmentQuizMa
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WableTheme {
-                    QuizMainScreen()
+                    QuizMainRoute(
+                        onBtnClick = ::navigateToGoogleForm,
+                    )
                 }
             }
         }
@@ -44,5 +48,9 @@ class QuizMainFragment : BindingFragment<FragmentQuizMainBinding>(FragmentQuizMa
             .build()
 
         findNavController().navigate(R.id.navigation_quiz_start, null, navOptions)
+    }
+
+    private fun navigateToGoogleForm() {
+        openUri(LinkStorage.GOOGLE_FORM_LINK)
     }
 }
