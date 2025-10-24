@@ -27,40 +27,48 @@ import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.quiz.QuizResultModel
 import com.teamwable.quiz.R
-import com.teamwable.quiz.component.QuizResultType
 import com.teamwable.quiz.component.QuizStatBox
 import com.teamwable.quiz.component.QuizStatType
 import com.teamwable.quiz.result.model.QuizResultIntent
 import com.teamwable.quiz.result.model.QuizResultSideEffect
+import com.teamwable.quiz.result.model.QuizResultState
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuizResultRoute(
     viewModel: QuizResultViewModel = hiltViewModel(),
+    resultModel: QuizResultModel = QuizResultModel(),
     navigateToMain: () -> Unit,
+    onShowErrorSnackBar: (Throwable) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        viewModel.onIntent(QuizResultIntent.LoadInitialData(model = resultModel))
+    }
 
     LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { sideEffect ->
                 when (sideEffect) {
                     QuizResultSideEffect.NavigateToMain -> navigateToMain()
-                    is QuizResultSideEffect.ShowSnackBar -> {}
+                    is QuizResultSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
             }
     }
 
     QuizResultScreen(
-        onXpClick = { viewModel.onIntent(QuizResultIntent.ClickBottomBtn) },
+        state = state,
+        onXpClick = { viewModel.onIntent(QuizResultIntent.ClickXPBtn) },
     )
 }
 
 @Composable
 fun QuizResultScreen(
-    type: QuizResultType = QuizResultType.FAIL,
+    state: QuizResultState = QuizResultState(),
     onXpClick: () -> Unit = {},
 ) {
     Column(
@@ -72,14 +80,14 @@ fun QuizResultScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = painterResource(id = type.image),
+            painter = painterResource(id = state.resultType.image),
             contentDescription = null,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(id = type.title),
+            text = stringResource(id = state.resultType.title),
             style = WableTheme.typography.head00,
             textAlign = TextAlign.Center,
         )
@@ -87,7 +95,7 @@ fun QuizResultScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(id = type.description),
+            text = stringResource(id = state.resultType.description),
             style = WableTheme.typography.head01,
             color = WableTheme.colors.gray800,
             textAlign = TextAlign.Center,
@@ -104,17 +112,17 @@ fun QuizResultScreen(
             QuizStatBox(
                 title = stringResource(id = QuizStatType.XP.title),
                 titleColor = QuizStatType.XP.titleColor,
-                value = "8",
+                value = state.xp.toString(),
             )
             QuizStatBox(
                 title = stringResource(id = QuizStatType.RANK.title),
                 titleColor = QuizStatType.RANK.titleColor,
-                value = "16",
+                value = "${state.userPercent}%",
             )
             QuizStatBox(
                 title = stringResource(id = QuizStatType.SPEED.title),
                 titleColor = QuizStatType.SPEED.titleColor,
-                value = "20",
+                value = state.scoreTime,
             )
         }
 
@@ -134,9 +142,7 @@ fun QuizResultScreen(
 @Composable
 private fun QuizResultScreenSuccessPreview() {
     WableTheme {
-        QuizResultScreen(
-            type = QuizResultType.SUCCESS,
-        )
+        QuizResultScreen()
     }
 }
 
@@ -144,8 +150,6 @@ private fun QuizResultScreenSuccessPreview() {
 @Composable
 private fun QuizResultScreenFailPreview() {
     WableTheme {
-        QuizResultScreen(
-            type = QuizResultType.FAIL,
-        )
+        QuizResultScreen()
     }
 }
