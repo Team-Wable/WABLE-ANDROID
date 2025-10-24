@@ -23,6 +23,8 @@ interface UserInfoRepository {
 
     fun getNoticeNumber(): Flow<Int>
 
+    fun getQuizCompleted(): Flow<Boolean>
+
     suspend fun saveAccessToken(accessToken: String)
 
     suspend fun saveRefreshToken(refreshToken: String)
@@ -46,4 +48,6 @@ interface UserInfoRepository {
     suspend fun clearAll()
 
     suspend fun clearForRefreshToken()
+
+    suspend fun saveQuizCompleted(isCompleted: Boolean)
 }

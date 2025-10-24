@@ -38,6 +38,9 @@ internal class DefaultUserInfoRepository @Inject constructor(
     override fun getNoticeNumber(): Flow<Int> =
         wablePreferencesDataSource.noticeNumber
 
+    override fun getQuizCompleted(): Flow<Boolean> =
+        wablePreferencesDataSource.isQuizCompleted
+
     override suspend fun saveAccessToken(accessToken: String) {
         wablePreferencesDataSource.updateAccessToken(accessToken)
     }
@@ -84,5 +87,9 @@ internal class DefaultUserInfoRepository @Inject constructor(
 
     override suspend fun clearForRefreshToken() {
         wablePreferencesDataSource.clearForRefreshToken()
+    }
+
+    override suspend fun saveQuizCompleted(isCompleted: Boolean) {
+        wablePreferencesDataSource.updateIsQuizCompleted(isCompleted)
     }
 }
