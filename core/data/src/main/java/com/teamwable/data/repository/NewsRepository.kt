@@ -1,6 +1,7 @@
 package com.teamwable.data.repository
 
 import androidx.paging.PagingData
+import com.teamwable.model.news.CurationModel
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.model.news.NewsRankModel
@@ -18,4 +19,6 @@ interface NewsRepository {
     fun getNoticeInfo(): Flow<PagingData<NewsInfoModel>>
 
     suspend fun getNumber(): Result<Map<String, Int>>
+
+    fun getCurationInfo(): Flow<PagingData<CurationModel>>
 }
