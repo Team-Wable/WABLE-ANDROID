@@ -1,6 +1,7 @@
 package com.teamwable.designsystem.extension.modifier
 
 import android.graphics.BlurMaskFilter
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
@@ -14,12 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
@@ -142,3 +147,31 @@ fun Modifier.dropShadow(
 
 fun Modifier.showIf(condition: Boolean): Modifier =
     if (condition) this else Modifier.size(0.dp)
+
+val WableGradientColorStops = arrayOf(
+    0.0f to Color(0xFFEBE2FD),
+    0.37f to Color(0xFFF0F6FE),
+    0.69f to Color(0xFFF7FEFD),
+    1f to Color(0xFFFDFDFD),
+)
+
+// ✅ 2. Modifier 확장 함수로 그라데이션 적용
+@Composable
+fun Modifier.wableVerticalGradientBackground(
+    ratio: Float = 0.514f,
+    colorStops: Array<Pair<Float, Color>> = WableGradientColorStops,
+): Modifier {
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
+    val gradientEndY = screenHeightPx * ratio
+
+    return this.background(
+        brush = Brush.verticalGradient(
+            colorStops = colorStops,
+            tileMode = TileMode.Decal,
+            startY = 0f,
+            endY = gradientEndY,
+        ),
+    )
+}

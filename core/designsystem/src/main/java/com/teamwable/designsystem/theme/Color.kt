@@ -14,13 +14,15 @@ val Purple10 = Color(0xFFF4EDFF)
 // Secondary
 val Sky50 = Color(0xFF05E8D1)
 val Sky10 = Color(0xFFE4FAF8)
+val Blue10 = Color(0xFFEFF5FD)
+val Blue50 = Color(0xFF4699FF)
+val Red10 = Color(0xFFFCE7E7)
 
 // System
 val Success = Color(0xFF0DBE61)
 val Info = Color(0xFF127CF4)
 val Warning = Color(0xFFEE9209)
 val Error = Color(0xFFF01F1F)
-val SystemNavigationBar = Color(0xFFF5F5F5)
 val SystemLoginSystemAppBar = Color(0xFFEBE2FD)
 val ProgressBackground = Color(0xFFCADFF7)
 
@@ -102,6 +104,9 @@ class WableColors(
     hle50: Color,
     hle10: Color,
     progressBackground: Color,
+    blue10: Color,
+    blue50: Color,
+    red10: Color,
 ) {
     var purple50 by mutableStateOf(purple50)
         private set
@@ -185,6 +190,12 @@ class WableColors(
         private set
     var progressBackground by mutableStateOf(progressBackground)
         private set
+    var blue10 by mutableStateOf(blue10)
+        private set
+    var blue50 by mutableStateOf(blue50)
+        private set
+    var red10 by mutableStateOf(red10)
+        private set
 
     fun copy(): WableColors = WableColors(
         purple50,
@@ -228,6 +239,9 @@ class WableColors(
         hle50,
         hle10,
         progressBackground,
+        blue10,
+        blue50,
+        red10,
     )
 
     fun update(other: WableColors) {
@@ -272,6 +286,9 @@ class WableColors(
         hle50 = other.hle50
         hle10 = other.hle10
         progressBackground = other.progressBackground
+        blue10 = other.blue10
+        blue50 = other.blue50
+        red10 = other.red10
     }
 }
 
@@ -317,6 +334,9 @@ fun wableLightColors(
     hle50: Color = Hle50,
     hle10: Color = Hle10,
     progressBackground: Color = ProgressBackground,
+    blue10: Color = Blue10,
+    blue50: Color = Blue50,
+    red10: Color = Red10,
 ) = WableColors(
     purple50,
     purple100,
@@ -359,4 +379,7 @@ fun wableLightColors(
     hle50,
     hle10,
     progressBackground,
+    blue10,
+    blue50,
+    red10,
 )

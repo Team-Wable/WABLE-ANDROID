@@ -26,4 +26,6 @@
     <color name="gray_200">#FFEDEDED</color>
     <color name="gray_100">#FFF7F7F7</color>
     <color name="white">#FFFDFDFD</color>
+    <!-- app bar -->
+    <color name="app_bar_purple">#FFEBE2FD</color>
 </resources>
