@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,7 +93,10 @@ fun QuizStartScreen(
 
         WableGlideImage(
             imageUrl = state.quizModel.quizImage,
-            modifier = Modifier.heightIn(168.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(168.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
