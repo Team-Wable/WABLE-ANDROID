@@ -58,7 +58,7 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
 
         if (serverNewsNumber > localNewsNumber)
-            setBadgeOnNews(NewsTabType.NEWS.ordinal, true)
+            setBadgeOnNews(NewsTabType.CURATION.ordinal, true)
 
         if (serverNoticeNumber > localNoticeNumber)
             setBadgeOnNews(NewsTabType.NOTICE.ordinal, true)
@@ -79,7 +79,7 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                 when (position) {
                     NewsTabType.MATCH.ordinal -> tab.text = stringOf(R.string.tv_news_tab_match)
                     NewsTabType.RANK.ordinal -> tab.text = stringOf(R.string.tv_news_tab_rank)
-                    NewsTabType.NEWS.ordinal -> tab.text = stringOf(R.string.tv_news_tab_news)
+                    NewsTabType.CURATION.ordinal -> tab.text = stringOf(R.string.tv_news_tab_curation)
                     NewsTabType.NOTICE.ordinal -> tab.text = stringOf(R.string.tv_news_tab_notice)
                 }
             }.attach()
@@ -92,9 +92,9 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                 when (tab?.position) {
                     NewsTabType.MATCH.ordinal -> trackEvent(CLICK_GAMESCHEDULE)
                     NewsTabType.RANK.ordinal -> trackEvent(CLICK_RANKING)
-                    NewsTabType.NEWS.ordinal -> {
+                    NewsTabType.CURATION.ordinal -> {
                         trackEvent(CLICK_NEWS)
-                        setBadgeOnNews(NewsTabType.NEWS.ordinal, false)
+                        setBadgeOnNews(NewsTabType.CURATION.ordinal, false)
                         viewModel.saveNewsNumber(serverNewsNumber)
                     }
 
