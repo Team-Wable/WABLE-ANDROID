@@ -29,5 +29,8 @@
             app:destination="@id/navigation_quiz_main"
             app:popUpTo="@id/graph_quiz"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="quizResultModel"
+            app:argType="com.teamwable.model.quiz.QuizResultModel" />
     </fragment>
 </navigation>

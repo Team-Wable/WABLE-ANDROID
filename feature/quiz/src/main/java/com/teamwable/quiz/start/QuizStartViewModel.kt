@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.QuizRepository
 import com.teamwable.data.repository.UserInfoRepository
+import com.teamwable.model.quiz.QuizResultModel
 import com.teamwable.model.quiz.QuizScoreModel
 import com.teamwable.quiz.start.model.QuizStartIntent
 import com.teamwable.quiz.start.model.QuizStartSideEffect
@@ -53,15 +54,15 @@ class QuizStartViewModel @Inject constructor(
                     quizTime = time,
                 ),
             )
-                .onSuccess { setQuizCompleted(time) }
+                .onSuccess { model -> setQuizCompleted(model.copy(time = time)) }
                 .onFailure { postSideEffect(QuizStartSideEffect.ShowSnackBar(it)) }
         }
     }
 
-    private fun setQuizCompleted(time: Int) {
+    private fun setQuizCompleted(model: QuizResultModel) {
         viewModelScope.launch {
             userInfoRepository.saveQuizCompleted(true)
-            postSideEffect(QuizStartSideEffect.NavigateToResult(time))
+            postSideEffect(QuizStartSideEffect.NavigateToResult(model))
         }
     }
 

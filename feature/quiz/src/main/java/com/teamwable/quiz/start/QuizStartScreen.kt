@@ -26,6 +26,7 @@ import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.image.WableGlideImage
 import com.teamwable.designsystem.component.topbar.WableAppBar
 import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.model.quiz.QuizResultModel
 import com.teamwable.quiz.R
 import com.teamwable.quiz.component.OXType
 import com.teamwable.quiz.component.QuizOXButton
@@ -38,7 +39,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun QuizStartRoute(
     viewModel: QuizStartViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
-    navigateToResult: (Int) -> Unit,
+    navigateToResult: (QuizResultModel) -> Unit,
     onShowErrorSnackBar: (Throwable) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -48,7 +49,7 @@ fun QuizStartRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { sideEffect ->
                 when (sideEffect) {
-                    is QuizStartSideEffect.NavigateToResult -> navigateToResult(sideEffect.elapsedTime)
+                    is QuizStartSideEffect.NavigateToResult -> navigateToResult(sideEffect.model)
                     QuizStartSideEffect.NavigateUp -> navigateUp()
                     is QuizStartSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
                 }
