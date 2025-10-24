@@ -210,8 +210,6 @@ class MainActivity : AppCompatActivity(), Navigation {
             com.teamwable.news.R.id.navigation_news_detail,
             com.teamwable.news.R.id.navigation_news,
             com.teamwable.community.R.id.navigation_community,
-            viewitR.id.navigation_view_it,
-            viewitR.id.navigation_view_it_posting,
             com.teamwable.ui.R.id.navigation_feed_image_dialog,
             com.teamwable.quiz.R.id.navigation_quiz,
         )
