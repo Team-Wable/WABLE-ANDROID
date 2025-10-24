@@ -83,4 +83,10 @@ internal class DefaultNewsRepository @Inject constructor(
             pagingData.map { it.toCuration() }
         }
     }
+
+    override suspend fun getCurationNumber(): Result<Long> {
+        return runCatching {
+            newsService.getCurationNumber().data.curationId
+        }.onFailure { return it.handleThrowable() }
+    }
 }

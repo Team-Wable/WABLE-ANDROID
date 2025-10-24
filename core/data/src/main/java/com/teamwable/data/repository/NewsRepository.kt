@@ -21,4 +21,6 @@ interface NewsRepository {
     suspend fun getNumber(): Result<Map<String, Int>>
 
     fun getCurationInfo(): Flow<PagingData<CurationModel>>
+
+    suspend fun getCurationNumber(): Result<Long>
 }
