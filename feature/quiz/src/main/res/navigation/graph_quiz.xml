@@ -9,7 +9,7 @@
         android:id="@+id/navigation_quiz_main"
         android:name="com.teamwable.quiz.QuizMainFragment"
         android:label="QuizMainFragment"
-        tools:layout="@layout/fragment_quiz_main"/>
+        tools:layout="@layout/fragment_quiz_main" />
     <fragment
         android:id="@+id/navigation_quiz_start"
         android:name="com.teamwable.quiz.start.QuizStartFragment"

@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,6 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
 import com.teamwable.designsystem.theme.WableTheme
@@ -25,13 +31,30 @@ import com.teamwable.quiz.R
 import com.teamwable.quiz.component.QuizResultType
 import com.teamwable.quiz.component.QuizStatBox
 import com.teamwable.quiz.component.QuizStatType
+import com.teamwable.quiz.result.model.QuizResultIntent
+import com.teamwable.quiz.result.model.QuizResultSideEffect
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuizResultRoute(
+    viewModel: QuizResultViewModel = hiltViewModel(),
     navigateToMain: () -> Unit,
 ) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest { sideEffect ->
+                when (sideEffect) {
+                    QuizResultSideEffect.NavigateToMain -> navigateToMain()
+                    is QuizResultSideEffect.ShowSnackBar -> {}
+                }
+            }
+    }
+
     QuizResultScreen(
-        onXpClick = navigateToMain,
+        onXpClick = { viewModel.onIntent(QuizResultIntent.ClickBottomBtn) },
     )
 }
 
