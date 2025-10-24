@@ -32,9 +32,13 @@ class NewsViewModel
     private val _newsNumberUiState = MutableStateFlow<UiState<Map<String, Int>>>(UiState.Loading)
     val newsNumberUiState = _newsNumberUiState.asStateFlow()
 
+    private val _curationIdUiState = MutableStateFlow<UiState<Long>>(UiState.Loading)
+    val curationIdUiState = _curationIdUiState.asStateFlow()
+
     init {
         getGameType()
         getNewsNumber()
+        getCurationId()
     }
 
     private fun getGameType() {
@@ -69,19 +73,27 @@ class NewsViewModel
         }
     }
 
-    suspend fun getNewsNumberFromLocal() = userInfoRepository.getNewsNumber().first()
-
-    fun saveNewsNumber(newsNumber: Int) {
-        viewModelScope.launch {
-            userInfoRepository.saveNewsNumber(newsNumber)
-        }
-    }
-
     suspend fun getNoticeNumberFromLocal() = userInfoRepository.getNoticeNumber().first()
 
     fun saveNoticeNumber(noticeNumber: Int) {
         viewModelScope.launch {
             userInfoRepository.saveNoticeNumber(noticeNumber)
+        }
+    }
+
+    private fun getCurationId() {
+        viewModelScope.launch {
+            newsRepository.getCurationNumber()
+                .onSuccess { _curationIdUiState.value = UiState.Success(it) }
+                .onFailure { _curationIdUiState.value = UiState.Failure(it.message.toString()) }
+        }
+    }
+    
+    suspend fun getCurationIdFromLocal() = userInfoRepository.getCurationNumber().first()
+
+    fun saveCurationId(curationId: Long) {
+        viewModelScope.launch {
+            userInfoRepository.saveCurationId(curationId)
         }
     }
 }

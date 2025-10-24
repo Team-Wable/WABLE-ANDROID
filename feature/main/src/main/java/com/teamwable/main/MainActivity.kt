@@ -7,7 +7,10 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -19,12 +22,14 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.InstallStatus
+import com.teamwable.common.uistate.UiState
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_HOME_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_MYPROFILE_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NEWS_BOTNAVI
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
+import com.teamwable.ui.extensions.colorOf
 import com.teamwable.ui.extensions.setStatusBarColor
 import com.teamwable.ui.extensions.showAlertDialog
 import com.teamwable.ui.extensions.statusBarModeOf
@@ -33,6 +38,8 @@ import com.teamwable.ui.extensions.visible
 import com.teamwable.ui.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import com.teamwable.viewit.R as viewitR
@@ -42,6 +49,7 @@ class MainActivity : AppCompatActivity(), Navigation {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appUpdateHelper: AppUpdateHandler
     private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
+    private val viewModel: MainViewModel by viewModels()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -100,6 +108,7 @@ class MainActivity : AppCompatActivity(), Navigation {
 
     private fun initView() {
         setBottomNavigation()
+        setupNewsRedDoteObserve()
     }
 
     private fun setBottomNavigation() {
@@ -201,6 +210,23 @@ class MainActivity : AppCompatActivity(), Navigation {
                 }
             }
             it.onNavDestinationSelected(navController)
+        }
+    }
+
+    private fun setupNewsRedDoteObserve() {
+        viewModel.redDotUiState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).onEach { state ->
+            when (state) {
+                is UiState.Success -> setRedDotOnNews(state.data)
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun setRedDotOnNews(isVisible: Boolean) {
+        binding.bnvMain.getOrCreateBadge(com.teamwable.news.R.id.graph_news).apply {
+            this.isVisible = isVisible
+            horizontalOffset = 1
+            if (isVisible) backgroundColor = colorOf(com.teamwable.ui.R.color.error) else clearNumber()
         }
     }
 
