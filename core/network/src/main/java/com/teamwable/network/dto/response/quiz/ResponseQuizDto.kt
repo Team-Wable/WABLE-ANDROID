@@ -7,10 +7,12 @@ import kotlinx.serialization.Serializable
 @OptIn(InternalSerializationApi::class)
 @Serializable
 data class ResponseQuizDto(
-    @SerialName("quizResult")
-    val quizResult: Boolean = false,
-    @SerialName("userPercent")
-    val userPercent: Int = 0,
-    @SerialName("continueNumber")
-    val continueNumber: Int = 0,
+    @SerialName("quizId")
+    val quizId: Int = -1,
+    @SerialName("quizImage")
+    val quizImage: String = "",
+    @SerialName("quizText")
+    val quizText: String = "",
+    @SerialName("quizAnswer")
+    val quizAnswer: Boolean = false,
 )
