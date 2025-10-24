@@ -14,10 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teamwable.designsystem.component.card.WableCustomCardWithStroke
-import com.teamwable.designsystem.extension.modifier.noRippleClickable
-import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.common.type.LckTeamType
+import com.teamwable.designsystem.component.card.WableCustomCardWithStroke
+import com.teamwable.designsystem.theme.WableTheme
 
 @Composable
 fun LckTeamItem(
@@ -29,6 +28,7 @@ fun LckTeamItem(
     WableCustomCardWithStroke(
         connerRadius = 32.dp,
         enabled = enabled,
+        onClick = onClick,
     ) {
         Row(
             modifier = modifier
@@ -36,8 +36,7 @@ fun LckTeamItem(
                 .padding(
                     horizontal = 12.dp,
                     vertical = 10.dp,
-                )
-                .noRippleClickable { onClick() },
+                ),
             verticalAlignment = Alignment.CenterVertically, // 수직 중앙 정렬 설정
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {

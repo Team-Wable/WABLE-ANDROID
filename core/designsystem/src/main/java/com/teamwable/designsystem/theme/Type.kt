@@ -17,6 +17,7 @@ import com.teamwable.designsystem.R
 
 val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
 val PretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold, FontWeight.SemiBold))
+val PriceDownBlack = FontFamily(Font(R.font.price_down_black, FontWeight.Black))
 
 @Stable
 class WableTypography internal constructor(
@@ -31,6 +32,7 @@ class WableTypography internal constructor(
     caption02: TextStyle,
     caption03: TextStyle,
     caption04: TextStyle,
+    priceDown: TextStyle,
 ) {
     var head00: TextStyle by mutableStateOf(head00)
         private set
@@ -54,6 +56,8 @@ class WableTypography internal constructor(
         private set
     var caption04: TextStyle by mutableStateOf(caption04)
         private set
+    var priceDown: TextStyle by mutableStateOf(priceDown)
+        private set
 
     fun copy(
         head00: TextStyle = this.head00,
@@ -67,6 +71,7 @@ class WableTypography internal constructor(
         caption02: TextStyle = this.caption02,
         caption03: TextStyle = this.caption03,
         caption04: TextStyle = this.caption04,
+        priceDown: TextStyle = this.priceDown,
     ): WableTypography = WableTypography(
         head00,
         head01,
@@ -79,6 +84,7 @@ class WableTypography internal constructor(
         caption02,
         caption03,
         caption04,
+        priceDown,
     )
 
     fun update(other: WableTypography) {
@@ -93,6 +99,7 @@ class WableTypography internal constructor(
         caption02 = other.caption02
         caption03 = other.caption03
         caption04 = other.caption04
+        priceDown = other.priceDown
     }
 }
 
@@ -191,6 +198,13 @@ fun wableTypography(): WableTypography {
             fontFamily = PretendardRegular,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
+            lineHeight = 1.6.em,
+            letterSpacing = (-0.01).em,
+        ),
+        priceDown = wableTextStyle(
+            fontFamily = PriceDownBlack,
+            fontWeight = FontWeight.Black,
+            fontSize = 88.sp,
             lineHeight = 1.6.em,
             letterSpacing = (-0.01).em,
         ),

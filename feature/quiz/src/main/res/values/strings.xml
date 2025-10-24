@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--    quiz main 화면-->
     <string name="str_quiz_main_title">다음 퀴즈 참여까지\n남은 시간</string>
+    <!--    quiz start 화면-->
+    <string name="str_quiz_start_title">정답을 골라주세요!</string>
+    <string name="btn_quiz_start_submit">제출하기</string>
+    <!--    quiz result  화면-->
+    <string name="str_quiz_result_success_title">걸어다니는 LCK 백과사전</string>
+    <string name="str_quiz_result_success_description">정답을 맞추셨어요. 대단해요!</string>
+    <string name="str_quiz_result_fail_title">LCK의 평범한 시청자!</string>
+    <string name="str_quiz_result_fail_description">정답은 틀렸지만, 좋은 시도였어요!\n다음 기회를 노려봐요</string>
+    <!--    quiz stat type-->
+    <string name="str_quiz_stat_xp">획득 XP</string>
+    <string name="str_quiz_stat_rank">상위</string>
+    <string name="str_quiz_stat_speed">스피드</string>
+    <string name="str_quiz_result_xp">XP 받기</string>
 </resources>
