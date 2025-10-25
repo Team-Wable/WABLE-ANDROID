@@ -1,6 +1,7 @@
 package com.teamwable.data.worker
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -25,6 +26,7 @@ class DailyTaskSchedulerImpl @Inject constructor(
             repeatIntervalTimeUnit = TimeUnit.HOURS,
         )
             .setInitialDelay(initialDelay)
+            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
             .build()
 
         WorkManager.Companion.getInstance(context).enqueueUniquePeriodicWork(
