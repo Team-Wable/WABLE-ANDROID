@@ -1,7 +1,9 @@
 package com.teamwable.network.datasource
 
 import com.teamwable.network.dto.response.main.ResponseNewsNumberDto
+import com.teamwable.network.dto.response.news.ResponseCurationInfoDto
 import com.teamwable.network.dto.response.news.ResponseGameTypeDto
+import com.teamwable.network.dto.response.news.ResponseNewsCurationNumberDto
 import com.teamwable.network.dto.response.news.ResponseNewsInfoDto
 import com.teamwable.network.dto.response.news.ResponseNoticeInfoDto
 import com.teamwable.network.dto.response.news.ResponseRankDto
@@ -32,4 +34,12 @@ interface NewsService {
 
     @GET("api/v1/information/number")
     suspend fun getNumber(): BaseResponse<ResponseNewsNumberDto>
+
+    @GET("api/v1/curation")
+    suspend fun getCurationInfo(
+        @Query(value = "cursor") contentId: Long = -1,
+    ): BaseResponse<List<ResponseCurationInfoDto>>
+
+    @GET("api/v1/curation/number")
+    suspend fun getCurationNumber(): BaseResponse<ResponseNewsCurationNumberDto>
 }

@@ -1,6 +1,7 @@
 package com.teamwable.news
 
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,7 +25,7 @@ import kotlinx.coroutines.flow.onEach
 class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::inflate) {
     private val viewModel: NewsViewModel by viewModels()
 
-    private var serverNewsNumber = -1
+    private var serverCurationId = -1L
     private var serverNoticeNumber = -1
 
     override fun initView() {
@@ -38,7 +39,6 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
         viewModel.newsNumberUiState.flowWithLifecycle(viewLifeCycle).onEach { state ->
             when (state) {
                 is UiState.Success -> {
-                    serverNewsNumber = getServerNumber(state, "news")
                     serverNoticeNumber = getServerNumber(state, "notice")
 
                     saveNumberFromServerToLocal()
@@ -47,18 +47,24 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                 else -> Unit
             }
         }.launchIn(viewLifeCycleScope)
+
+        viewModel.curationIdUiState.flowWithLifecycle(viewLifeCycle, Lifecycle.State.STARTED).onEach { state ->
+            when (state) {
+                is UiState.Success -> serverCurationId = state.data
+                else -> Unit
+            }
+        }.launchIn(viewLifeCycleScope)
     }
 
     private fun getServerNumber(state: UiState.Success<Map<String, Int>>, idx: String) =
         state.data[idx]?.takeIf { it >= 0 } ?: 0
 
-
     private suspend fun saveNumberFromServerToLocal() {
-        val localNewsNumber = viewModel.getNewsNumberFromLocal()
+        val localCurationId = viewModel.getCurationIdFromLocal()
         val localNoticeNumber = viewModel.getNoticeNumberFromLocal()
 
-        if (serverNewsNumber > localNewsNumber)
-            setBadgeOnNews(NewsTabType.NEWS.ordinal, true)
+        if (serverCurationId != localCurationId)
+            setBadgeOnNews(NewsTabType.CURATION.ordinal, true)
 
         if (serverNoticeNumber > localNoticeNumber)
             setBadgeOnNews(NewsTabType.NOTICE.ordinal, true)
@@ -79,7 +85,7 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                 when (position) {
                     NewsTabType.MATCH.ordinal -> tab.text = stringOf(R.string.tv_news_tab_match)
                     NewsTabType.RANK.ordinal -> tab.text = stringOf(R.string.tv_news_tab_rank)
-                    NewsTabType.NEWS.ordinal -> tab.text = stringOf(R.string.tv_news_tab_news)
+                    NewsTabType.CURATION.ordinal -> tab.text = stringOf(R.string.tv_news_tab_curation)
                     NewsTabType.NOTICE.ordinal -> tab.text = stringOf(R.string.tv_news_tab_notice)
                 }
             }.attach()
@@ -92,10 +98,10 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                 when (tab?.position) {
                     NewsTabType.MATCH.ordinal -> trackEvent(CLICK_GAMESCHEDULE)
                     NewsTabType.RANK.ordinal -> trackEvent(CLICK_RANKING)
-                    NewsTabType.NEWS.ordinal -> {
+                    NewsTabType.CURATION.ordinal -> {
                         trackEvent(CLICK_NEWS)
-                        setBadgeOnNews(NewsTabType.NEWS.ordinal, false)
-                        viewModel.saveNewsNumber(serverNewsNumber)
+                        setBadgeOnNews(NewsTabType.CURATION.ordinal, false)
+                        viewModel.saveCurationId(serverCurationId)
                     }
 
                     NewsTabType.NOTICE.ordinal -> {

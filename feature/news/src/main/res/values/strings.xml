@@ -44,4 +44,8 @@
     <string name="tv_news_info_banner_description">그동안 어떤 일들이 있었을까요?</string>
     <string name="tv_notice_detail_button">와블에 대한 의견 남기러 가기</string>
 
+    <!-- fragment_curation_info -->
+    <string name="tv_news_tab_curation">큐레이션</string>
+    <string name="tv_news_curation_empty">아직 추천된 콘텐츠가 없어요.</string>
+
 </resources>

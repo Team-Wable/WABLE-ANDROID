@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -26,8 +27,8 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         val MemberProfileUrl = stringPreferencesKey("memberProfileUrl")
         val IsPushAlarmAllowed = booleanPreferencesKey("isPushAlarmAllowed")
         val IsAdmin = booleanPreferencesKey("isAdmin")
-        val NewsNumber = intPreferencesKey("newsNumber")
         val NoticeNumber = intPreferencesKey("noticeNumber")
+        val CurationId = longPreferencesKey("curationId")
         val IsQuizCompleted = booleanPreferencesKey("isQuizCompleted")
     }
 
@@ -79,12 +80,6 @@ class DefaultWablePreferenceDatasource @Inject constructor(
             preferences[PreferencesKeys.IsAdmin] ?: false
         }
 
-    override val newsNumber: Flow<Int> = dataStore.data
-        .catch { handleError(it) }
-        .map { preferences ->
-            preferences[PreferencesKeys.NewsNumber] ?: -1
-        }
-
     override val noticeNumber: Flow<Int> = dataStore.data
         .catch { handleError(it) }
         .map { preferences ->
@@ -94,6 +89,12 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         .catch { handleError(it) }
         .map { preferences ->
             preferences[PreferencesKeys.IsQuizCompleted] ?: false
+        }
+
+    override val curationId: Flow<Long> = dataStore.data
+        .catch { handleError(it) }
+        .map { preferences ->
+            preferences[PreferencesKeys.CurationId] ?: -1
         }
 
     override suspend fun updateAccessToken(accessToken: String) {
@@ -144,15 +145,15 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         }
     }
 
-    override suspend fun updateNewsNumber(newsNumber: Int) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.NewsNumber] = newsNumber
-        }
-    }
-
     override suspend fun updateNoticeNumber(noticeNumber: Int) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.NoticeNumber] = noticeNumber
+        }
+    }
+
+    override suspend fun updateCurationId(curationId: Long) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CurationId] = curationId
         }
     }
 
