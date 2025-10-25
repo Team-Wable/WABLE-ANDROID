@@ -10,6 +10,7 @@ import com.teamwable.data.mapper.toModel.toNewsMatchModel
 import com.teamwable.data.mapper.toModel.toNewsRankModel
 import com.teamwable.data.mapper.toModel.toNoticeInfoModel
 import com.teamwable.data.repository.NewsRepository
+import com.teamwable.data.util.runHandledCatching
 import com.teamwable.model.news.CurationModel
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
@@ -85,8 +86,8 @@ internal class DefaultNewsRepository @Inject constructor(
     }
 
     override suspend fun getCurationNumber(): Result<Long> {
-        return runCatching {
+        return runHandledCatching {
             newsService.getCurationNumber().data.curationId
-        }.onFailure { return it.handleThrowable() }
+        }
     }
 }

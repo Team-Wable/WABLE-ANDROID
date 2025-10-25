@@ -19,7 +19,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.WablePagingScreen
@@ -88,7 +87,7 @@ fun CurationScreen(
         if (curations.loadState.append is LoadState.Loading) {
             item(
                 key = ContentType.Spinner.name,
-                contentType = curations.itemContentType { ContentType.Spinner.name },
+                contentType = ContentType.Spinner.name,
             ) {
                 WablePagingSpinner(
                     modifier = Modifier

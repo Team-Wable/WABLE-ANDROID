@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
     fun validateNewsRedDot() {
         viewModelScope.launch {
             val serverNoticeNumber = newsRepository.getNumber().getOrNull()?.get("notice") ?: -1
-            val serverCurationId = newsRepository.getCurationNumber().getOrNull() ?: -1
+            val serverCurationId = newsRepository.getCurationNumber().getOrNull() ?: -1L
 
             combine(
                 userInfoRepository.getNoticeNumber(),
