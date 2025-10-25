@@ -23,7 +23,6 @@ class QuizStartViewModel @Inject constructor(
     private var startTimeMillis: Long = 0L
 
     override fun initialDataLoad() {
-        startTimeMillis = System.currentTimeMillis()
         onIntent(QuizStartIntent.LoadInitialData)
     }
 
@@ -39,7 +38,10 @@ class QuizStartViewModel @Inject constructor(
     private fun getQuiz() {
         viewModelScope.launch {
             quizRepository.getQuiz()
-                .onSuccess { quizModel -> intent { copy(quizModel = quizModel) } }
+                .onSuccess { quizModel ->
+                    startTimeMillis = System.currentTimeMillis()
+                    intent { copy(quizModel = quizModel) }
+                }
                 .onFailure { postSideEffect(QuizStartSideEffect.ShowSnackBar(it)) }
         }
     }
