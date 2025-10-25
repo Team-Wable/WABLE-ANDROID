@@ -1,6 +1,8 @@
 package com.teamwable.designsystem.component.image
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import com.teamwable.designsystem.extension.composable.toImageVector
 import com.teamwable.designsystem.extension.modifier.noRippleThrottleClickable
+import com.teamwable.designsystem.theme.WableTheme
 
 @Composable
 fun WableGlideImage(
@@ -31,10 +33,10 @@ fun WableGlideImage(
         previewPlaceholder = painterResource(id = com.teamwable.common.R.drawable.img_empty),
         modifier = modifier.noRippleThrottleClickable(onClick = onClick),
         failure = {
-            Image(
-                imageVector = toImageVector(id = com.teamwable.common.R.drawable.img_error_404),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.Center),
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(WableTheme.colors.gray100),
             )
         },
     )
