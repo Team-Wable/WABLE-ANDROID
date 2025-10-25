@@ -1,4 +1,5 @@
 [versions]
+annotationExperimental = "1.5.1"
 compileSdk = "36"
 minSdk = "28"
 targetSdk = "35"
@@ -87,6 +88,7 @@ landscapist = "2.3.6"
 [libraries]
 # kotlin
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+androidx-annotation-experimental = { module = "androidx.annotation:annotation-experimental", version.ref = "annotationExperimental" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }

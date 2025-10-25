@@ -4,11 +4,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.teamwable.data.mapper.toModel.toCuration
 import com.teamwable.data.mapper.toModel.toNewsInfoModel
 import com.teamwable.data.mapper.toModel.toNewsMatchModel
 import com.teamwable.data.mapper.toModel.toNewsRankModel
 import com.teamwable.data.mapper.toModel.toNoticeInfoModel
 import com.teamwable.data.repository.NewsRepository
+import com.teamwable.data.util.runHandledCatching
+import com.teamwable.model.news.CurationModel
 import com.teamwable.model.news.NewsInfoModel
 import com.teamwable.model.news.NewsMatchModel
 import com.teamwable.model.news.NewsRankModel
@@ -66,8 +69,25 @@ internal class DefaultNewsRepository @Inject constructor(
         return runCatching {
             mapOf(
                 "news" to newsService.getNumber().data.newsNumber,
-                "notice" to newsService.getNumber().data.noticeNumber
+                "notice" to newsService.getNumber().data.noticeNumber,
             )
         }.onFailure { return it.handleThrowable() }
+    }
+
+    override fun getCurationInfo(): Flow<PagingData<CurationModel>> {
+        return Pager(PagingConfig(pageSize = 15, prefetchDistance = 1)) {
+            GenericPagingSource(
+                apiCall = { cursor -> newsService.getCurationInfo(cursor).data },
+                getNextCursor = { curations -> curations.lastOrNull()?.curationId },
+            )
+        }.flow.map { pagingData ->
+            pagingData.map { it.toCuration() }
+        }
+    }
+
+    override suspend fun getCurationNumber(): Result<Long> {
+        return runHandledCatching {
+            newsService.getCurationNumber().data.curationId
+        }
     }
 }

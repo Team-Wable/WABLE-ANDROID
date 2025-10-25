@@ -26,7 +26,7 @@ class NewsNewsFragment : BindingFragment<FragmentNewsNewsBinding>(FragmentNewsNe
     }
 
     private fun navigateToDetail(notice: NewsInfoModel) {
-        val action = NewsFragmentDirections.actionNavigationNewsToNavigationNewsDetail(notice, NewsTabType.NEWS)
+        val action = NewsFragmentDirections.actionNavigationNewsToNavigationNewsDetail(notice, NewsTabType.CURATION)
         requireParentFragment().findNavController().navigate(action)
     }
 }
