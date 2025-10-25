@@ -15,8 +15,8 @@ class GetRemainingTimeUseCase @Inject constructor() {
 
     private fun minuteTickerFlow(): Flow<Pair<Long, Long>> = flow {
         val now = LocalDateTime.now()
+        val initialDelay = 60_000L - (now.second * 1000L + now.nano / 1_000_000L)
 
-        val initialDelay = 60_000L - (now.second * 1000L)
         delay(initialDelay)
 
         while (true) {
