@@ -2,7 +2,8 @@ package com.teamwable.quiz
 
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.teamwable.common.util.LinkStorage
@@ -10,23 +11,25 @@ import com.teamwable.designsystem.theme.WableTheme
 import com.teamwable.quiz.databinding.FragmentQuizMainBinding
 import com.teamwable.ui.base.BindingFragment
 import com.teamwable.ui.extensions.openUri
-import com.teamwable.ui.extensions.viewLifeCycle
 import com.teamwable.ui.extensions.viewLifeCycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class QuizMainFragment : BindingFragment<FragmentQuizMainBinding>(FragmentQuizMainBinding::inflate) {
     private val viewModel: QuizMainViewModel by viewModels()
 
     override fun initView() {
-        viewModel.isQuizCompleted.flowWithLifecycle(viewLifeCycle).onEach { completed ->
-            val isCompleted = viewModel.isQuizCompleted.first { it != null }
-            if (isCompleted == true) initComposeView()
-            else navigateToStart()
-        }.launchIn(viewLifeCycleScope)
+        viewLifeCycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isQuizCompleted
+                    .filterNotNull()
+                    .collect { isCompleted ->
+                        if (isCompleted) initComposeView() else navigateToStart()
+                    }
+            }
+        }
     }
 
     private fun initComposeView() {
