@@ -7,7 +7,11 @@ import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.kakao.sdk.common.KakaoSdk
+import com.teamwable.common.intentprovider.DailyTaskScheduler
 import com.teamwable.common.util.AmplitudeUtil.initAmplitude
 import com.teamwable.ui.util.FcmTag.CHANNEL_ID
 import com.teamwable.ui.util.FcmTag.CHANNEL_NAME
@@ -23,13 +27,30 @@ class WableApp : Application() {
     @ApplicationContext
     lateinit var context: Context
 
+    @Inject
+    lateinit var dailyTaskScheduler: DailyTaskScheduler
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
+        initWorkManager()
         setTimber()
         setDarkMode()
         setKaKaoSdk()
         createNotificationChannel()
         initAmplitude(context)
+        setDailyTaskScheduler()
+    }
+
+    private fun initWorkManager() {
+        WorkManager.initialize(
+            this,
+            Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build(),
+        )
     }
 
     private fun setTimber() {
@@ -56,5 +77,9 @@ class WableApp : Application() {
             )
             notificationManager?.createNotificationChannel(channel)
         }
+    }
+
+    private fun setDailyTaskScheduler() {
+        dailyTaskScheduler.scheduleDailyReset()
     }
 }

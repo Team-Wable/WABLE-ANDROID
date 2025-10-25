@@ -63,6 +63,11 @@
             android:authorities="com.facebook.app.FacebookContentProvider${facebookAppId}"
             android:exported="true" />
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove" />
+
         <activity
             android:name="com.teamwable.main_compose.MainComposeActivity"
             android:exported="true">
