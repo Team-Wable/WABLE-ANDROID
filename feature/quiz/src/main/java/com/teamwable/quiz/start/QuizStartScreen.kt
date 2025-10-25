@@ -100,7 +100,7 @@ fun QuizStartScreen(
                 .height(168.dp),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Text(
             text = state.quizModel.quizText,
