@@ -13,6 +13,7 @@ interface WablePreferencesDataSource {
     val isAdmin: Flow<Boolean>
     val noticeNumber: Flow<Int>
     val curationId: Flow<Long>
+    val isQuizCompleted: Flow<Boolean>
 
     suspend fun updateAccessToken(accessToken: String)
 
@@ -33,6 +34,8 @@ interface WablePreferencesDataSource {
     suspend fun updateNoticeNumber(noticeNumber: Int)
 
     suspend fun updateCurationId(curationId: Long)
+
+    suspend fun updateIsQuizCompleted(isCompleted: Boolean)
 
     suspend fun clear()
 

@@ -102,4 +102,7 @@ dependencies {
     implementation(libs.kakao.login)
 
     implementation(libs.facebook)
+
+    // work manager
+    implementation(libs.androidx.hilt.work)
 }

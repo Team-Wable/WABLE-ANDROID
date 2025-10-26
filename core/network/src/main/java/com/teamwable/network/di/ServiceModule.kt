@@ -8,6 +8,7 @@ import com.teamwable.network.datasource.NewsService
 import com.teamwable.network.datasource.NotificationService
 import com.teamwable.network.datasource.PostingService
 import com.teamwable.network.datasource.ProfileService
+import com.teamwable.network.datasource.QuizService
 import com.teamwable.network.datasource.ViewItService
 import dagger.Module
 import dagger.Provides
@@ -72,4 +73,10 @@ internal object ServiceModule {
     fun provideCommunityService(
         @WableRetrofit retrofit: Retrofit,
     ): CommunityService = retrofit.create(CommunityService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideQuizService(
+        @WableRetrofit retrofit: Retrofit,
+    ): QuizService = retrofit.create(QuizService::class.java)
 }

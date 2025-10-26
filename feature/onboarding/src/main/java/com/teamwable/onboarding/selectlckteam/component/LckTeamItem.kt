@@ -26,7 +26,7 @@ fun LckTeamItem(
     modifier: Modifier = Modifier,
 ) {
     WableCustomCardWithStroke(
-        connerRadius = 32.dp,
+        cornerRadius = 32.dp,
         enabled = enabled,
         onClick = onClick,
     ) {

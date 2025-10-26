@@ -29,6 +29,7 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         val IsAdmin = booleanPreferencesKey("isAdmin")
         val NoticeNumber = intPreferencesKey("noticeNumber")
         val CurationId = longPreferencesKey("curationId")
+        val IsQuizCompleted = booleanPreferencesKey("isQuizCompleted")
     }
 
     override val accessToken: Flow<String> = dataStore.data
@@ -83,6 +84,11 @@ class DefaultWablePreferenceDatasource @Inject constructor(
         .catch { handleError(it) }
         .map { preferences ->
             preferences[PreferencesKeys.NoticeNumber] ?: -1
+        }
+    override val isQuizCompleted: Flow<Boolean> = dataStore.data
+        .catch { handleError(it) }
+        .map { preferences ->
+            preferences[PreferencesKeys.IsQuizCompleted] ?: false
         }
 
     override val curationId: Flow<Long> = dataStore.data
@@ -148,6 +154,12 @@ class DefaultWablePreferenceDatasource @Inject constructor(
     override suspend fun updateCurationId(curationId: Long) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.CurationId] = curationId
+        }
+    }
+
+    override suspend fun updateIsQuizCompleted(isCompleted: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IsQuizCompleted] = isCompleted
         }
     }
 

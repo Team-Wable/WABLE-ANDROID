@@ -9,7 +9,7 @@
         android:id="@+id/navigation_quiz_main"
         android:name="com.teamwable.quiz.QuizMainFragment"
         android:label="QuizMainFragment"
-        tools:layout="@layout/fragment_quiz_main"/>
+        tools:layout="@layout/fragment_quiz_main" />
     <fragment
         android:id="@+id/navigation_quiz_start"
         android:name="com.teamwable.quiz.start.QuizStartFragment"
@@ -29,5 +29,8 @@
             app:destination="@id/navigation_quiz_main"
             app:popUpTo="@id/graph_quiz"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="quizResultModel"
+            app:argType="com.teamwable.model.quiz.QuizResultModel" />
     </fragment>
 </navigation>

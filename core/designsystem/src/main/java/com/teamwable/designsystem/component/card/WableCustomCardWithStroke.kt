@@ -15,20 +15,20 @@ import com.teamwable.designsystem.theme.WableTheme
 @Composable
 fun WableCustomCardWithStroke(
     modifier: Modifier = Modifier,
-    connerRadius: Dp = 8.dp,
+    cornerRadius: Dp = 8.dp,
     strokeWidth: Dp = 1.dp,
     strokeColor: @Composable (Boolean) -> Color = { enabled ->
         if (enabled) WableTheme.colors.purple50 else WableTheme.colors.gray300
     },
-    backGroundColor: Color = WableTheme.colors.white,
+    backgroundColor: Color = WableTheme.colors.white,
     enabled: Boolean = false,
     onClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     Card(
-        shape = RoundedCornerShape(connerRadius),
+        shape = RoundedCornerShape(cornerRadius),
         colors = CardDefaults.cardColors(
-            containerColor = backGroundColor,
+            containerColor = backgroundColor,
         ),
         border = BorderStroke(
             width = strokeWidth,

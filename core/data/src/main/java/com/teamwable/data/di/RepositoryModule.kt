@@ -9,6 +9,7 @@ import com.teamwable.data.repository.NewsRepository
 import com.teamwable.data.repository.NotificationRepository
 import com.teamwable.data.repository.PostingRepository
 import com.teamwable.data.repository.ProfileRepository
+import com.teamwable.data.repository.QuizRepository
 import com.teamwable.data.repository.UserInfoRepository
 import com.teamwable.data.repository.ViewItRepository
 import com.teamwable.data.repositoryimpl.DefaultAuthRepository
@@ -20,6 +21,7 @@ import com.teamwable.data.repositoryimpl.DefaultNewsRepository
 import com.teamwable.data.repositoryimpl.DefaultNotificationRepository
 import com.teamwable.data.repositoryimpl.DefaultPostingRepository
 import com.teamwable.data.repositoryimpl.DefaultProfileRepository
+import com.teamwable.data.repositoryimpl.DefaultQuizRepository
 import com.teamwable.data.repositoryimpl.DefaultUserInfoRepository
 import com.teamwable.data.repositoryimpl.DefaultViewItRepository
 import com.teamwable.datastore.datasource.DefaultWablePreferenceDatasource
@@ -100,4 +102,10 @@ internal abstract class RepositoryModule {
     abstract fun bindsFeedImageRepository(
         repositoryImpl: DefaultFeedImageRepository,
     ): FeedImageRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsQuizRepository(
+        repositoryImpl: DefaultQuizRepository,
+    ): QuizRepository
 }

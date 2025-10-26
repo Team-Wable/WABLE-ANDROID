@@ -33,9 +33,9 @@ fun QuizOXButton(
 ) {
     WableCustomCardWithStroke(
         modifier = modifier,
-        connerRadius = 16.dp,
+        cornerRadius = 16.dp,
         strokeColor = { if (isSelected) type.strokeColor else type.backGroundColor },
-        backGroundColor = type.backGroundColor,
+        backgroundColor = type.backGroundColor,
         enabled = isSelected,
         onClick = onClick,
     ) {
