@@ -110,6 +110,7 @@ fun QuizStartScreen(
             textAlign = TextAlign.Center,
             color = WableTheme.colors.gray800,
             maxLines = 4,
+            modifier = Modifier.padding(horizontal = 20.dp),
         )
 
         Spacer(modifier = Modifier.weight(1f))
