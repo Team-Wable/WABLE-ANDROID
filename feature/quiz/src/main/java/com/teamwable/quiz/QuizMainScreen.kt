@@ -106,6 +106,8 @@ fun QuizMainScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 16.dp, vertical = 20.dp),
+                    textWhite = stringResource(R.string.str_quiz_main_btn_white),
+                    textSky = stringResource(R.string.str_quiz_main_btn_sky),
                     onClick = onBtnClick,
                 )
             }
