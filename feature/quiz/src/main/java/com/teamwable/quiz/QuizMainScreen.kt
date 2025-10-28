@@ -43,7 +43,7 @@ fun QuizMainRoute(
 
 @Composable
 fun QuizMainScreen(
-    time: String = "00:00",
+    time: String,
     onBtnClick: () -> Unit = {},
 ) {
     Column(
@@ -119,6 +119,6 @@ fun QuizMainScreen(
 @DevicePreviews
 private fun QuizMainScreenPreview() {
     WableTheme {
-        QuizMainScreen()
+        QuizMainScreen(time = "00 : 00")
     }
 }
