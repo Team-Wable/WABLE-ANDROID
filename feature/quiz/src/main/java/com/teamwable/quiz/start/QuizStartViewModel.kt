@@ -1,5 +1,7 @@
 package com.teamwable.quiz.start
 
+import android.os.SystemClock
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.teamwable.common.base.BaseViewModel
 import com.teamwable.data.repository.QuizRepository
@@ -17,10 +19,15 @@ import javax.inject.Inject
 class QuizStartViewModel @Inject constructor(
     private val quizRepository: QuizRepository,
     private val userInfoRepository: UserInfoRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<QuizStartIntent, QuizStartState, QuizStartSideEffect>(
         initialState = QuizStartState(),
     ) {
-    private var startTimeMillis: Long = 0L
+    private var startTimeMillis: Long
+        get() = savedStateHandle[KEY_START_TIME] ?: 0L
+        set(value) {
+            savedStateHandle[KEY_START_TIME] = value
+        }
 
     override fun initialDataLoad() {
         onIntent(QuizStartIntent.LoadInitialData)
@@ -39,7 +46,7 @@ class QuizStartViewModel @Inject constructor(
         viewModelScope.launch {
             quizRepository.getQuiz()
                 .onSuccess { quizModel ->
-                    startTimeMillis = System.currentTimeMillis()
+                    if (startTimeMillis == 0L) startTimeMillis = SystemClock.elapsedRealtime()
                     intent { copy(quizModel = quizModel) }
                 }
                 .onFailure { postSideEffect(QuizStartSideEffect.ShowSnackBar(it)) }
@@ -69,8 +76,11 @@ class QuizStartViewModel @Inject constructor(
     }
 
     private fun getElapsedTime(): Int {
-        val endTimeMillis = System.currentTimeMillis()
-        val elapsedSeconds = (endTimeMillis - startTimeMillis) / 1000
-        return elapsedSeconds.toInt()
+        val elapsedMillis = SystemClock.elapsedRealtime() - startTimeMillis
+        return (elapsedMillis / 1000).toInt()
+    }
+
+    companion object {
+        private const val KEY_START_TIME = "start_time_millis"
     }
 }
