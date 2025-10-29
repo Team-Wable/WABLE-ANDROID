@@ -24,10 +24,10 @@ class QuizMainViewModel @Inject constructor(
         )
 
     val remainingTime: StateFlow<String> = getRemainingTimeUseCase.invoke()
-        .map { (hours, minutes) -> "%d:%02d".format(hours, minutes) }
+        .map { (hours, minutes) -> "%02d : %02d".format(hours, minutes) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = "00:00",
+            initialValue = "00 : 00",
         )
 }

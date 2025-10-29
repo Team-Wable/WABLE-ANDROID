@@ -2,6 +2,8 @@
 <resources>
     <!--    quiz main 화면-->
     <string name="str_quiz_main_title">다음 퀴즈 참여까지\n남은 시간</string>
+    <string name="str_quiz_main_btn_white">"와블에 대한 새로운 의견이 있다면? "</string>
+    <string name="str_quiz_main_btn_sky">→</string>
     <!--    quiz start 화면-->
     <string name="str_quiz_start_title">정답을 골라주세요!</string>
     <string name="btn_quiz_start_submit">제출하기</string>

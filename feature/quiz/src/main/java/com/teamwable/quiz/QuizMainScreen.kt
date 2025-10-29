@@ -43,7 +43,7 @@ fun QuizMainRoute(
 
 @Composable
 fun QuizMainScreen(
-    time: String = "00:00",
+    time: String,
     onBtnClick: () -> Unit = {},
 ) {
     Column(
@@ -106,6 +106,8 @@ fun QuizMainScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 16.dp, vertical = 20.dp),
+                    textWhite = stringResource(R.string.str_quiz_main_btn_white),
+                    textSky = stringResource(R.string.str_quiz_main_btn_sky),
                     onClick = onBtnClick,
                 )
             }
@@ -117,6 +119,6 @@ fun QuizMainScreen(
 @DevicePreviews
 private fun QuizMainScreenPreview() {
     WableTheme {
-        QuizMainScreen()
+        QuizMainScreen(time = "00 : 00")
     }
 }

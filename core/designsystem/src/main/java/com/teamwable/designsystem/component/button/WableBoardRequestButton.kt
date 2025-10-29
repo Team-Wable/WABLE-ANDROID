@@ -13,10 +13,12 @@ import com.teamwable.designsystem.theme.WableTheme
 @Composable
 fun BoardRequestButton(
     modifier: Modifier = Modifier,
+    textWhite: String = stringResource(R.string.str_community_floating_main),
+    textSky: String = stringResource(R.string.str_community_floating_sub),
     onClick: () -> Unit,
 ) {
     WableAnnotatedTextButton(
-        text = getAnnotatedString(),
+        text = getRequestBoardString(textWhite, textSky),
         onClick = onClick,
         modifier = modifier,
         buttonStyle = BigButtonDefaults.blackBigButtonStyle(),
@@ -24,11 +26,13 @@ fun BoardRequestButton(
 }
 
 @Composable
-private fun getAnnotatedString(): AnnotatedString {
+private fun getRequestBoardString(
+    textWhite: String, textSky: String,
+): AnnotatedString {
     val annotatedText = buildAnnotatedString {
-        append(stringResource(R.string.str_community_floating_main))
+        append(textWhite)
         withStyle(style = SpanStyle(color = WableTheme.colors.sky50)) {
-            append(stringResource(R.string.str_community_floating_sub))
+            append(textSky)
         }
     }
     return annotatedText
