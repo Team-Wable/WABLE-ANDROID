@@ -6,8 +6,8 @@ import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudeNewsTag.CLICK_CURATION
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_GAMESCHEDULE
-import com.teamwable.common.util.AmplitudeNewsTag.CLICK_NEWS
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_NOTICE
 import com.teamwable.common.util.AmplitudeNewsTag.CLICK_RANKING
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
@@ -99,7 +99,7 @@ class NewsFragment : BindingFragment<FragmentNewsBinding>(FragmentNewsBinding::i
                     NewsTabType.MATCH.ordinal -> trackEvent(CLICK_GAMESCHEDULE)
                     NewsTabType.RANK.ordinal -> trackEvent(CLICK_RANKING)
                     NewsTabType.CURATION.ordinal -> {
-                        trackEvent(CLICK_NEWS)
+                        trackEvent(CLICK_CURATION)
                         setBadgeOnNews(NewsTabType.CURATION.ordinal, false)
                         viewModel.saveCurationId(serverCurationId)
                     }

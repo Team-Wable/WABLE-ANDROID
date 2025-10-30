@@ -45,6 +45,8 @@ object AmplitudeNewsTag {
     const val CLICK_RANKING = "click_ranking"
     const val CLICK_NEWS = "click_news"
     const val CLICK_NOTICE = "click_announcement"
+    const val CLICK_CURATION = "click_curation"
+    const val CLICK_CONTENT_CURATION = "click_content_curation"
 }
 
 object AmplitudeNotiTag {
@@ -66,4 +68,14 @@ object AmplitudeAuthTag {
 
 object AmplitudeFeedImageTag {
     const val CLICK_DOWNLOAD_PHOTO = "click_download_photo"
+}
+
+object AmplitudeQuizTag {
+    const val CLICK_QUIZ_BOTNAVI = "click_quiz_botnavi"
+    const val CLICK_QUIZ_SUBMIT = "click_quiz_submit"
+    const val CLICK_GET_XP = "click_get_xp"
+}
+
+object AmplitudeCommunityTag {
+    const val CLICK_COMMUNITY_BOTNAVI = "click_community_botnavi"
 }

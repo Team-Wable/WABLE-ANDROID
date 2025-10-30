@@ -20,6 +20,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.teamwable.common.util.AmplitudeNewsTag.CLICK_CONTENT_CURATION
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.paging.WablePagingSpinner
 import com.teamwable.designsystem.component.screen.WablePagingScreen
 import com.teamwable.designsystem.type.ContentType
@@ -55,7 +57,10 @@ fun NewsCurationRoute(
             CurationScreen(
                 curations,
                 listState,
-                onItemClick = { viewModel.onIntent(NewsCurationIntent.ClickLink(it)) },
+                onItemClick = {
+                    viewModel.onIntent(NewsCurationIntent.ClickLink(it))
+                    trackEvent(CLICK_CONTENT_CURATION)
+                },
             )
         },
     )

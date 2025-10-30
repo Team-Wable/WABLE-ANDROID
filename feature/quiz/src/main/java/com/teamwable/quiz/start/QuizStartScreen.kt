@@ -23,6 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.AmplitudeQuizTag.CLICK_QUIZ_SUBMIT
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.component.image.WableGlideImage
 import com.teamwable.designsystem.component.topbar.WableAppBar
@@ -60,7 +62,10 @@ fun QuizStartRoute(
     QuizStartScreen(
         state = state,
         onAppBarClick = { viewModel.onIntent(QuizStartIntent.ClickAppBarBack) },
-        onSubmitClick = { viewModel.onIntent(QuizStartIntent.ClickSubmitBtn) },
+        onSubmitClick = {
+            viewModel.onIntent(QuizStartIntent.ClickSubmitBtn)
+            trackEvent(CLICK_QUIZ_SUBMIT)
+        },
         onOxBtnClick = { type -> viewModel.onIntent(QuizStartIntent.ClickOXButton(type)) },
     )
 }
