@@ -24,6 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.common.util.AmplitudeQuizTag.CLICK_GET_XP
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.designsystem.component.button.WableButton
 import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
 import com.teamwable.designsystem.theme.WableTheme
@@ -62,7 +64,10 @@ fun QuizResultRoute(
 
     QuizResultScreen(
         state = state,
-        onXpClick = { viewModel.onIntent(QuizResultIntent.ClickXPBtn) },
+        onXpClick = {
+            viewModel.onIntent(QuizResultIntent.ClickXPBtn)
+            trackEvent(CLICK_GET_XP)
+        },
     )
 }
 

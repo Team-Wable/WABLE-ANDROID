@@ -23,9 +23,11 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.InstallStatus
 import com.teamwable.common.uistate.UiState
+import com.teamwable.common.util.AmplitudeCommunityTag.CLICK_COMMUNITY_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_HOME_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_MYPROFILE_BOTNAVI
 import com.teamwable.common.util.AmplitudeHomeTag.CLICK_NEWS_BOTNAVI
+import com.teamwable.common.util.AmplitudeQuizTag.CLICK_QUIZ_BOTNAVI
 import com.teamwable.common.util.AmplitudeUtil.trackEvent
 import com.teamwable.home.HomeFragment
 import com.teamwable.main.databinding.ActivityMainBinding
@@ -194,6 +196,8 @@ class MainActivity : AppCompatActivity(), Navigation {
 
                 R.id.graph_news -> trackEvent(CLICK_NEWS_BOTNAVI)
                 R.id.graph_profile -> trackEvent(CLICK_MYPROFILE_BOTNAVI)
+                R.id.graph_community -> trackEvent(CLICK_COMMUNITY_BOTNAVI)
+                R.id.graph_quiz -> trackEvent(CLICK_QUIZ_BOTNAVI)
             }
             lifecycleScope.launch {
                 delay(200)
