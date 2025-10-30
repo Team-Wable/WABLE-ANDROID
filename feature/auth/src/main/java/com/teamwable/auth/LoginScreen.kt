@@ -1,0 +1,149 @@
+package com.teamwable.auth
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign.Companion.Center
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
+import com.teamwable.auth.model.LoginSideEffect
+import com.teamwable.common.util.AmplitudeSignInTag.CLICK_AGREE_POPUP_SIGNUP
+import com.teamwable.common.util.AmplitudeSignInTag.CLICK_SIGNIN_KAKAO
+import com.teamwable.common.util.AmplitudeUtil.trackEvent
+import com.teamwable.designsystem.component.dialog.WableOneButtonDialog
+import com.teamwable.designsystem.extension.modifier.noRippleDebounceClickable
+import com.teamwable.designsystem.extension.modifier.wableVerticalGradientBackground
+import com.teamwable.designsystem.theme.WableTheme
+import com.teamwable.designsystem.type.DialogType
+
+@Composable
+fun LoginRoute(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigateToFirstLckWatch: () -> Unit,
+    navigateToHome: () -> Unit,
+    onShowErrorSnackBar: (throwable: Throwable?) -> Unit,
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
+    val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.loginSideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is LoginSideEffect.NavigateToMain -> navigateToHome()
+                    is LoginSideEffect.NavigateToFirstLckWatch -> navigateToFirstLckWatch()
+                    is LoginSideEffect.ShowSnackBar -> onShowErrorSnackBar(sideEffect.message)
+                }
+            }
+    }
+
+    if (showDialog) {
+        WableOneButtonDialog(
+            dialogType = DialogType.LOGIN,
+            onDismissRequest = { viewModel.showLoginDialog(false) },
+            onClick = {
+                viewModel.startKaKaoLogin(context)
+                trackEvent(CLICK_AGREE_POPUP_SIGNUP)
+            },
+        )
+    }
+
+    LoginScreen(
+        onLoginBtnClick = {
+            viewModel.showLoginDialog(true)
+            trackEvent(CLICK_SIGNIN_KAKAO)
+        },
+    )
+}
+
+@Composable
+fun LoginScreen(
+    onLoginBtnClick: () -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .wableVerticalGradientBackground(),
+    ) {
+        Spacer(modifier = Modifier.statusBarsPadding())
+
+        Image(
+            painter = painterResource(id = com.teamwable.common.R.drawable.ic_share_logo),
+            contentDescription = "",
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .align(alignment = Alignment.CenterHorizontally),
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(top = 26.dp)
+                .align(alignment = Alignment.CenterHorizontally),
+            text = stringResource(R.string.login_descrption),
+            style = WableTheme.typography.head00,
+            color = WableTheme.colors.black,
+            textAlign = Center,
+        )
+
+        // Spacer로 텍스트와 이미지 사이 공간 조정
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            painter = painterResource(id = R.drawable.img_login_background),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.2815f)
+                .align(alignment = Alignment.CenterHorizontally),
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            painter = painterResource(id = com.teamwable.common.R.drawable.ic_login_kakao_btn),
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, bottom = 54.dp)
+                .aspectRatio(6.56f)
+                .noRippleDebounceClickable { onLoginBtnClick() },
+        )
+
+        Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    WableTheme {
+        LoginScreen(
+            onLoginBtnClick = {},
+        )
+    }
+}

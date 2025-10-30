@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/view_profile_delete_reason_appbar"
+        layout="@layout/view_profile_appbar" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_profile_delete_reason_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/padding_horizontal" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_horizontal"
+        android:text="@string/tv_profile_delete_reason_title"
+        android:textAppearance="@style/TextAppearance.Wable.Head0"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/view_profile_delete_reason_appbar" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/tv_profile_delete_reason_subtitle"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintStart_toStartOf="@id/tv_profile_delete_reason_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_delete_reason_title" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_1"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_1"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_1"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_delete_reason_subtitle" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_1"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_1"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_1" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_2"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_2"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_1"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_1" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_2"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_2"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_2" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_3"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_3"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_2"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_2" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_3"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_3"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_3" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_4"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_4"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_3"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_3" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_4"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_4"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_4" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_5"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_5"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_4"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_4" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_5"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_5"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_5" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_6"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_6"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_5"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_5" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_6"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_6"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_6" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_profile_delete_reason_check_7"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/sel_profile_delete_checkbox"
+        android:button="@null"
+        android:text="@string/tv_profile_delete_reason_content_7"
+        android:textColor="@android:color/transparent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_profile_delete_reason_content_6"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guide_profile_delete_reason_start"
+        app:layout_constraintTop_toBottomOf="@id/cb_profile_delete_reason_check_6" />
+
+    <TextView
+        android:id="@+id/tv_profile_delete_reason_content_7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/tv_profile_delete_reason_content_7"
+        android:textAppearance="@style/TextAppearance.Wable.Body2"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/cb_profile_delete_reason_check_7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_profile_delete_reason_check_7"
+        app:layout_constraintTop_toTopOf="@id/cb_profile_delete_reason_check_7" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_profile_delete_reason_next"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/padding_horizontal"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:background="@drawable/shape_fill_12_rect"
+        android:backgroundTint="@color/sel_bottom_btn_color"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="@string/btn_profile_delete_next"
+        android:textAppearance="@style/TextAppearance.Wable.Head2"
+        android:textColor="@color/gray_600"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="328:56"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

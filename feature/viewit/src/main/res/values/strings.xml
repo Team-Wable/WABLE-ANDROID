@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- view it -->
+    <string name="content_description_view_it_link_img">링크 썸네일입니다.</string>
+    <string name="content_description_view_it_posting_link">링크 추가하기 버튼입니다.</string>
+    <string name="label_view_it_link_hint">공유하고 싶은 동영상 링크를 입력해주세요.</string>
+    <string name="label_view_it_content_hint">어떤 내용의 링크인가요?</string>
+    <string name="label_view_it_empty">아직 작성된 글이 없어요.</string>
+</resources>

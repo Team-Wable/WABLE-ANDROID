@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    공통-->
+    <string name="btn_next_text">다음으로</string>
+    <string name="btn_completed">완료</string>
+    <!--    언제 부터 lck를 시청하셨나요? 화면-->
+    <string name="first_lck_watch_title">언제부터 LCK를 시청하셨나요?</string>
+    <string name="first_lck_watch_description">꼭 LCK가 아닌 LOL경기여도 좋아요</string>
+    <string name="first_lck_watch_year_text">시청 시작 연도</string>
+    <!--    가장 응원하는 팀을 골라주세요-->
+    <string name="select_lck_team_title">가장 응원하는 팀을 골라주세요</string>
+    <string name="select_lck_team_description">선택하신 팀은 프로필에 응원중인 팀으로 소개돼요\n팀 순서는 랜덤으로 표시됩니다</string>
+    <string name="select_lck_team_not_yet">아직 응원하는 팀이 없어요</string>
+    <!--    프로필 수정 화면-->
+    <string name="profile_edit_title">와블에서 활동할\n프로필을 등록해 주세요</string>
+    <string name="profile_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
+    <string name="profile_edit_btn_duplicate">중복확인</string>
+    <string name="profile_edit_nickname_placeholder">예) 중꺾마</string>
+    <!--    약관동의 화면-->
+    <string name="agree_term_terms_of_service">[필수] 이용약관 동의</string>
+    <string name="agree_term_privacy_policy">[필수] 개인정보 수집 및 이용동의</string>
+    <string name="agree_term_age_confirmation">[필수] 만 14세 이상입니다</string>
+    <string name="agree_term_marketing_consent">마케팅 활용/광고성 정보 수신동의</string>
+    <string name="agree_terms_title">와블 이용을 위해\n동의가 필요해요</string>
+</resources>

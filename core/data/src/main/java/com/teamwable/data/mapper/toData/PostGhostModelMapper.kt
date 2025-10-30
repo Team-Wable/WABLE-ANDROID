@@ -1,0 +1,14 @@
+package com.teamwable.data.mapper.toData
+
+import com.teamwable.model.home.Ghost
+import com.teamwable.network.dto.request.RequestGhostDto
+
+class PostGhostModelMapper
+
+internal fun Ghost.toPostGhostDto(): RequestGhostDto =
+    RequestGhostDto(
+        this.alarmTriggerType,
+        this.postAuthorId,
+        this.postId,
+        this.reason,
+    )

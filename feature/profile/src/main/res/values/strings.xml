@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- bottomsheet_profile_hamburger -->
+    <string name="tv_profile_hamburger_account_information">계정 정보</string>
+    <string name="tv_profile_hamburger_notification_setting">알림 설정</string>
+    <string name="tv_profile_hamburger_feedback">피드백 남기기</string>
+    <string name="tv_profile_hamburger_customer_service">고객센터</string>
+    <string name="tv_profile_hamburger_logout">로그아웃</string>
+
+    <!-- fragment_profile_delete_confirm -->
+    <string name="tv_profile_delete_confirm_title">계정을 삭제하기 전,\n아래 내용을 꼭 확인해 주세요</string>
+    <string name="tv_profile_delete_confirm_dot">•</string>
+    <string name="tv_profile_delete_confirm_content_1">계정 삭제 처리된 이메일 아이디는 재가입 방지를 위해 30일간 보존된 후 삭제 처리됩니다.</string>
+    <string name="tv_profile_delete_confirm_content_2">탈퇴와 재가입을 통해 아이디를 교체하며 선량한 이용자들께 피해를 끼치는 행위를 방지하려는 조치 오니 넓은 양해 부탁드립니다.</string>
+    <string name="tv_profile_delete_confirm">안내사항을 모두 확인하였으며, 이에 동의합니다.</string>
+
+    <!-- fragment_profile_delete_reason -->
+    <string name="tv_profile_delete_reason_title">정말 떠나시는 건가요?</string>
+    <string name="tv_profile_delete_reason_subtitle">계정을 삭제하시려는 이유를 말씀해 주세요\n서비스 개선에 중요한 자료로 활용하겠습니다</string>
+    <string name="tv_profile_delete_reason_content_1">온화하지 못한 내용이 많이 보여요.</string>
+    <string name="tv_profile_delete_reason_content_2">원하는 콘텐츠가 없어요.</string>
+    <string name="tv_profile_delete_reason_content_3">필요한 커뮤니티 기능이 없어요.</string>
+    <string name="tv_profile_delete_reason_content_4">자주 사용하지 않아요.</string>
+    <string name="tv_profile_delete_reason_content_5">앱 오류가 있어 사용하기 불편해요.</string>
+    <string name="tv_profile_delete_reason_content_6">가입할 때 사용한 소셜 계정이 바뀔 예정이에요.</string>
+    <string name="tv_profile_delete_reason_content_7">기타</string>
+
+    <!-- fragment_profile_delete_confirm & fragment_profile_delete_reason -->
+    <string name="btn_profile_delete_next">계속</string>
+    <string name="appbar_profile_delete_title">계정 삭제</string>
+
+    <!-- fragment_profile_information -->
+    <string name="tv_profile_information_social_title">소셜 로그인</string>
+    <string name="tv_profile_information_version_title">버전 정보</string>
+    <string name="tv_profile_information_id_title">아이디</string>
+    <string name="tv_profile_information_registration_date_title">가입일</string>
+    <string name="tv_profile_information_terms_of_service_title">이용약관</string>
+    <string name="tv_profile_information_terms_of_service_content">자세히 보기</string>
+    <string name="tv_profile_information_delete">계정 삭제하기</string>
+    <string name="appbar_profile_information_title">계정 정보</string>
+
+    <!-- fragment_push_alarm -->
+    <string name="tv_push_alarm_title">푸시 알림</string>
+    <string name="tv_push_alarm_content_on">on</string>
+    <string name="tv_push_alarm_content_off">off</string>
+    <string name="appbar_push_alarm_title">알림 설정</string>
+
+    <!-- profile -->
+    <string name="content_description_profile_level_tag">레벨입니다.</string>
+    <string name="label_profile_info">%s을(를) 응원하고 있어요.\n%d년부터 LCK를 보기 시작했어요.</string>
+    <string name="label_profile_ghost">투명도</string>
+    <string name="label_ghost_percentage">%d%%</string>
+    <string name="label_profile_badge">뱃지</string>
+    <string name="content_description_profile_badge">뱃지입니다.</string>
+    <string name="label_profile_feed_auth_empty">%s님, 아직 글을 작성하지 않았네요!\n왠지 텅 빈 게시글이 허전하게 느껴져요.</string>
+    <string name="label_profile_feed_auth_navigate_posting">글 작성하러 가기</string>
+    <string name="label_profile_feed_member_empty">아직 %s님이\n글을 작성하지 않았어요.</string>
+    <string name="label_profile_tab_feed">게시글</string>
+    <string name="label_profile_tab_comment">댓글</string>
+    <string name="label_profile_comment_auth_empty">아직 작성한 댓글이 없어요.</string>
+    <string name="label_profile_comment_member_empty">아직 %s님이\n댓글을 작성하지 않았어요.</string>
+    <string name="label_profile_level">LV. %d</string>
+
+    <!-- profile edit -->
+    <string name="profile_edit_app_bar">프로필 편집</string>
+    <string name="btn_profile_edit_completed">완료</string>
+    <string name="tv_profile_edit_cheering_team">응원팀</string>
+    <string name="tv_profile_edit_nickname">닉네임</string>
+</resources>

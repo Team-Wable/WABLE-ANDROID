@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="18dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_feed_profile_img"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:padding="@dimen/padding_touch_36"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/WableCircleImage"
+        tools:src="@color/gray_700" />
+
+    <TextView
+        android:id="@+id/tv_feed_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="1dp"
+        android:maxLength="10"
+        android:textAppearance="@style/TextAppearance.Wable.Body3"
+        app:layout_constraintBottom_toTopOf="@id/tv_feed_ghost_level"
+        app:layout_constraintStart_toEndOf="@id/iv_feed_profile_img"
+        app:layout_constraintTop_toTopOf="@id/iv_feed_profile_img"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/dummy" />
+
+    <TextView
+        android:id="@+id/tv_feed_ghost_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:textAppearance="@style/TextAppearance.Wable.Caption4"
+        android:textColor="@color/gray_700"
+        app:layout_constraintBottom_toBottomOf="@id/iv_feed_profile_img"
+        app:layout_constraintStart_toStartOf="@id/tv_feed_nickname"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_nickname"
+        tools:text="@string/label_feed_ghost_level" />
+
+    <TextView
+        android:id="@+id/tv_feed_upload_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="@string/label_feed_upload_time"
+        android:textAppearance="@style/TextAppearance.Wable.Caption4"
+        android:textColor="@color/gray_500"
+        app:layout_constraintBottom_toBottomOf="@id/tv_feed_ghost_level"
+        app:layout_constraintStart_toEndOf="@id/tv_feed_ghost_level"
+        app:layout_constraintTop_toTopOf="@id/tv_feed_ghost_level" />
+
+    <TextView
+        android:id="@+id/tv_feed_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:autoLink="web"
+        android:textAppearance="@style/TextAppearance.Wable.Head2"
+        android:textColorLink="@color/info"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/view_feed_blind_bg"
+        tools:text="@string/dummy" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_feed_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/content_description_feed_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1.7"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_title"
+        app:shapeAppearanceOverlay="@style/WableRoundedImage8"
+        tools:src="@drawable/img_empty" />
+
+    <TextView
+        android:id="@+id/tv_feed_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:autoLink="web"
+        android:textAppearance="@style/TextAppearance.Wable.Body4"
+        android:textColor="@color/gray_800"
+        android:textColorLink="@color/info"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/iv_feed_img"
+        tools:text="@string/dummy" />
+
+    <View
+        android:id="@+id/view_feed_transparent_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:backgroundTint="#0FFCFCFD" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_feed_more"
+        style="@style/Wable.Icon.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_home_more"
+        app:iconSize="32dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_feed_ghost"
+        android:layout_width="0dp"
+        android:layout_height="31dp"
+        android:background="@drawable/sel_feed_ghost"
+        android:enabled="true"
+        android:minHeight="0dp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2.2"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:rippleColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_feed_comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Wable.Caption1"
+        app:layout_constraintBottom_toBottomOf="@id/btn_feed_comment"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="@id/btn_feed_comment"
+        tools:text="00" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_feed_comment"
+        style="@style/Wable.Icon.Button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="4dp"
+        app:icon="@drawable/ic_home_comment_btn"
+        app:iconSize="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_feed_like"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_feed_comment_count"
+        app:layout_constraintTop_toTopOf="@id/btn_feed_like" />
+
+    <TextView
+        android:id="@+id/tv_feed_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.Wable.Caption1"
+        app:layout_constraintBottom_toBottomOf="@id/btn_feed_like"
+        app:layout_constraintEnd_toStartOf="@id/btn_feed_comment"
+        app:layout_constraintTop_toTopOf="@id/btn_feed_like"
+        tools:text="00" />
+
+    <CheckBox
+        android:id="@+id/btn_feed_like"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/sel_feed_heart"
+        android:button="@null"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@id/tv_feed_like_count"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_feed_blind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="view_feed_blind_bg,tv_feed_blind_label, iv_feed_blind" />
+
+    <View
+        android:id="@+id/view_feed_blind_bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/shape_white_fill_8_rect"
+        android:backgroundTint="@color/gray_200"
+        app:layout_constraintDimensionRatio="328:98"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_ghost_level" />
+
+    <ImageView
+        android:id="@+id/iv_feed_blind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_share_blind"
+        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
+
+    <TextView
+        android:id="@+id/tv_feed_blind_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_200"
+        android:text="@string/label_feed_blind"
+        android:textAppearance="@style/TextAppearance.Wable.Body1"
+        android:textColor="@color/gray_600"
+        app:layout_constraintBottom_toBottomOf="@id/view_feed_blind_bg"
+        app:layout_constraintEnd_toEndOf="@id/view_feed_blind_bg"
+        app:layout_constraintStart_toStartOf="@id/view_feed_blind_bg"
+        app:layout_constraintTop_toTopOf="@id/view_feed_blind_bg" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fragment_news -->
+    <string name="tv_news_appbar_title">소식</string>
+    <string name="tv_news_tab_match">경기</string>
+
+    <!-- fragment_news_match -->
+    <string name="tv_news_match_empty">아직 진행 예정인 경기가 없어요.</string>
+
+    <!-- fragment_news & fragment_news_rank -->
+    <string name="tv_news_tab_rank">순위</string>
+
+    <!-- fragment_news_rank -->
+    <string name="tv_news_rank_table_team_name">팀</string>
+    <string name="tv_news_rank_table_win">승</string>
+    <string name="tv_news_rank_table_loss">패</string>
+    <string name="tv_news_rank_table_win_percentage">승률</string>
+    <string name="tv_news_rank_table_point_difference">득점차</string>
+    <string name="btn_news_rank_opinion">더 알고싶은 정보가 있다면? 의견 남기러 가기</string>
+
+    <!-- item_news_match -->
+    <string name="tv_news_match_today">TODAY</string>
+
+    <!-- item_news_math_score -->
+    <string name="tv_news_match_score_state_finished">종료</string>
+    <string name="tv_news_match_score_state_ongoing">진행중</string>
+    <string name="tv_news_match_score_state_planned">예정</string>
+
+    <!-- item_news_math_score & item_news_rank -->
+    <string name="tv_news_tbd">TBD</string>
+
+    <!-- fragment_news & fragment_news_news -->
+    <string name="tv_news_tab_news">뉴스</string>
+
+    <!-- fragment_news & fragment_news_notice -->
+    <string name="tv_news_tab_notice">공지사항</string>
+
+    <!-- fragment_news_notice -->
+    <string name="tv_news_notice_empty">아직 작성된 공지사항이 없어요.</string>
+
+    <!-- fragment_news_info -->
+    <string name="tv_news_info_empty">아직 작성된 뉴스가 없어요.</string>
+    <string name="tv_news_info_banner_title">와블이 추천드려요!</string>
+    <string name="tv_news_info_banner_description">그동안 어떤 일들이 있었을까요?</string>
+    <string name="tv_notice_detail_button">와블에 대한 의견 남기러 가기</string>
+
+    <!-- fragment_curation_info -->
+    <string name="tv_news_tab_curation">큐레이션</string>
+    <string name="tv_news_curation_empty">아직 추천된 콘텐츠가 없어요.</string>
+
+</resources>

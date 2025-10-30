@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_ui"
+    app:startDestination="@id/navigation_two_button_dialog">
+
+    <dialog
+        android:id="@+id/navigation_two_button_dialog"
+        android:name="com.teamwable.ui.component.TwoButtonDialog"
+        android:label="TwoButtonDialog"
+        tools:layout="@layout/dialog_two_button">
+        <argument
+            android:name="${DIALOG_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_two_button_dialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/navigation_bottomSheet"
+        android:name="com.teamwable.ui.component.BottomSheet"
+        android:label="BottomSheet"
+        tools:layout="@layout/bottomsheet">
+        <argument
+            android:name="${BOTTOM_SHEET_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_bottomsheet" />
+    </dialog>
+    <dialog
+        android:id="@+id/navigation_feed_image_dialog"
+        android:name="com.teamwable.ui.component.feedimage.FeedImageDialog"
+        android:label="FeedImageDialog"
+        tools:layout="@layout/dialog_feed_image">
+        <argument
+            android:name="${FEED_IMAGE_URL}"
+            android:defaultValue=""
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_image_dialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/navigation_two_label_bottomsheet"
+        android:name="com.teamwable.ui.component.TwoLabelBottomSheet"
+        android:label="TwoLabelBottomSheet"
+        tools:layout="@layout/bottomsheet_two_label">
+        <argument
+            android:name="${BOTTOM_SHEET_FIRST_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <argument
+            android:name="${BOTTOM_SHEET_SECOND_TYPE}"
+            android:defaultValue="EMPTY"
+            app:argType="string" />
+        <deepLink app:uri="@string/deeplink_url_two_label_bottomsheet" />
+    </dialog>
+</navigation>

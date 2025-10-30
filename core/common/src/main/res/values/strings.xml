@@ -1,0 +1,23 @@
+<resources>
+    <string name="rel_app_name">와블</string>
+    <string name="dev_app_name">블와</string>
+
+    <!-- team tag -->
+    <string name="label_team_t1">T1</string>
+    <string name="label_team_gen">GEN</string>
+    <string name="label_team_bro">BRO</string>
+    <string name="label_team_drx">DRX</string>
+    <string name="label_team_dk">DK</string>
+    <string name="label_team_kt">KT</string>
+    <string name="label_team_bfx">BFX</string>
+    <string name="label_team_ns">NS</string>
+    <string name="label_team_dnf">DNF</string>
+    <string name="label_team_hle">HLE</string>
+    <string name="label_team_lck">LCK</string>
+
+    <string name="dummy">testtesttesttesttesttesttesttesttesttesttesttesttesttest</string>
+
+    <!-- error message -->
+    <string name="error_message_network">네트워크 연결이 원활하지 않습니다</string>
+    <string name="error_message_unknown">알 수 없는 오류가 발생하였습니다</string>
+</resources>

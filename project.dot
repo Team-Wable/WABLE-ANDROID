@@ -1,0 +1,28 @@
+digraph {
+  graph [label="Wable\n ",labelloc=t,fontsize=30,ranksep=1.4];
+  node [style=filled, fillcolor="#bbbbbb"];
+  rankdir=TB;
+
+  # Projects
+
+  ":app" [shape=box, fillcolor="#baffc9"];
+  ":core:data" [shape=box, fillcolor="#baffc9"];
+  ":core:designsystem:xml" [fillcolor="#baffc9"];
+  ":core:model" [fillcolor="#baffc9"];
+  ":core:network" [fillcolor="#baffc9"];
+  ":core:ui" [fillcolor="#baffc9"];
+  ":feature:main" [fillcolor="#baffc9"];
+
+  {rank = same; ":app"; ":core:data";}
+
+  # Dependencies
+
+  ":app" -> ":feature:main" [style=dotted]
+  ":app" -> ":core:ui" [style=dotted]
+  ":app" -> ":core:designsystem:xml" [style=dotted]
+  ":core:data" -> ":core:network" [style=dotted]
+  ":core:data" -> ":core:model" [style=dotted]
+  ":core:network" -> ":core:model" [style=dotted]
+  ":feature:main" -> ":core:ui" [style=dotted]
+  ":feature:main" -> ":core:model" [style=dotted]
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_kakao_btn_text">카카오로 빠르게 시작하기</string>
+    <string name="login_descrption">클린 LCK 팬 커뮤니티\n와블에서 함께 해요</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    최초 로그인-->
+    <string name="dialog_login_title">앗 잠깐!</string>
+    <string name="dialog_login_description">와블은 온화하면서도 유쾌한 LCK 팬들이 모여 함께 즐기는 공간이에요.\n더 건강하고 즐거운 커뮤니티를 만들어 나가는데 함께 노력해주실거죠?</string>
+    <string name="dialog_login_btn_text">확인</string>
+    <!--    환영 로그인-->
+    <string name="dialog_wellcome_title">와블과 함께 해 주셔서 감사합니다!</string>
+    <string name="dialog_wellcome_description">%1$s님,\n와블의 일원이 되신 것을 환영해요!\nLCK 함께 보며 같이 즐겨요 :)</string>
+    <string name="dialog_wellcome_btn_text">와블 즐기러 가기</string>
+    <string name="permission_app_setting_dialog_title">권한이 필요해요</string>
+    <string name="permission_app_setting_dialog_description">이 앱은 파일 및 미디어 접근 권한이 필요해요. 앱 세팅으로 이동해서 권한을 부여 할 수 있어요.</string>
+    <string name="permission_app_setting_dialog_moving">이동하기</string>
+    <string name="permission_app_setting_dialog_cancel">취소하기</string>
+
+    <!--    닉네임-->
+    <string name="profile_edit_nickname_text">10자리 이내, 문자/숫자로 입력 가능해요</string>
+    <string name="profile_edit_nickname_false">닉네임에 사용할 수 없는 문자가 포함되어 있어요.</string>
+    <string name="profile_edit_nickname_success">사용 가능한 닉네임입니다.</string>
+    <string name="profile_edit_nickname_duplicate">이미 사용 중인 닉네임입니다.</string>
+
+    <!--    프로필 편집-->
+    <string name="onboarding_edit_title">와블에서 활동할 \n프로필을 등록해 주세요</string>
+    <string name="onboarding_edit_description">프로필 사진은 나중에도 등록 가능해요.</string>
+    <string name="onboarding_edit_button">다음으로</string>
+    <string name="profile_edit_xml_title">와블에서 멋진 모습으로\n활동해 보세요!</string>
+    <string name="profile_edit_button">수정완료</string>
+
+    <!--    공통-->
+    <string name="empty"> </string>
+
+    <!--    스낵바-->
+    <string name="snackbar_text_loading">회원가입이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
+    <string name="snackbar_text_profile_loading">프로필 수정이 거의 마무리 되었어요.\n잠시만 기다려주세요!</string>
+
+    <!--    사전 신청-->
+    <string name="dialog_pre_register_title">사전 신청하시겠어요?</string>
+    <string name="dialog_pre_register_description">1개의 팀별 공간에만 참여가 가능하다는\n점 꼭 기억해주세요!</string>
+    <string name="dialog_pre_register_btn_text">신청하기</string>
+    <string name="dialog_pre_register_cancel_btn_text">취소</string>
+
+    <!--    신청 완료-->
+    <string name="dialog_register_completed_title">신청을 완료했어요</string>
+    <string name="dialog_register_completed_description">%1$s팀을 응원하는 팬분들이 더 모여야\n%1$s 라운지가 오픈돼요!\n팬 더 데려오기를 통해 링크를 복사하여\n함께 응원할 팬을 데려와주세요! </string>
+
+    <!--    푸시 알림 안내-->
+    <string name="dialog_push_notification_title">푸시 알림 안내</string>
+    <string name="dialog_push_notification_description">푸시 알림을 켜두면 팀별 커뮤니티가\n오픈됐을 때 알림으로 안내드려요!</string>
+    <string name="dialog_push_notification_btn_text">푸시알림 설정</string>
+    <string name="dialog_push_notification_cancel_btn_text">나중에</string>
+
+    <!--    링크 복사 완료-->
+    <string name="dialog_copy_completed_title">링크가 복사되었어요</string>
+    <string name="dialog_copy_completed_description">복사된 링크를 널리널리 퍼뜨려\n함께 응원할 팬을 더 많이 데려와주세요! </string>
+    <string name="dialog_copy_completed_btn_text">좋아요!</string>
+
+    <!--블라인드 -->
+    <string name="feed_blind_description">블라인드 처리된 게시글이에요.</string>
+
+    <!--    게시판 추가하기-->
+    <string name="str_community_floating_main">"더 추가하고 싶은 게시판이 있다면? "</string>
+    <string name="str_community_floating_sub">요청하기</string>
+</resources>

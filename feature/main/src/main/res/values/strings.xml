@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- bottom navigation -->
+    <string name="label_bnv_home">홈</string>
+    <string name="label_bnv_news">소식</string>
+    <string name="label_bnv_notification">알림</string>
+    <string name="label_bnv_profile">마이</string>
+    <string name="label_bnv_community">커뮤니티</string>
+    <string name="label_bnv_view_it">뷰잇</string>
+    <string name="label_bnv_quiz">퀴즈</string>
+
+    <!-- error -->
+    <string name="label_error_title">이런!</string>
+    <string name="label_error_content">현재 요청하신 페이지를 찾을 수 없어요!</string>
+    <string name="label_error_btn">홈으로 가기</string>
+
+    <!-- in app update -->
+    <string name="label_in_app_update_fail">업데이트가 실패했습니다.</string>
+    <string name="label_in_app_update_title">업데이트 안내</string>
+    <string name="label_in_app_update_content">와블이 새롭게 업그레이드 되었어요. 업데이트를 통해 최신 버전으로 즐겨보세요.</string>
+    <string name="label_in_app_update_yes">업데이트 하기</string>
+    <string name="label_in_app_update_next">다음에</string>
+    <string name="label_in_app_update_success">업데이트 진행 중 : 화면 이탈 시 업데이트가 취소 될 수 있습니다.</string>
+</resources>

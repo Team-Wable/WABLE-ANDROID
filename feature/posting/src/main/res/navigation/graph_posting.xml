@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_posting"
+    app:startDestination="@id/navigation_posting">
+
+    <fragment
+        android:id="@+id/navigation_posting"
+        android:name="com.teamwable.posting.PostingFragment"
+        android:label="PostingFragment"
+        tools:layout="@layout/fragment_posting">
+        <deepLink app:uri="@string/deeplink_url_posting" />
+    </fragment>
+</navigation>

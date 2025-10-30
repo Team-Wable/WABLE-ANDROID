@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_home"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.teamwable.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_loading"
+            app:destination="@id/navigation_loading" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_home_detail"
+        android:name="com.teamwable.homedetail.HomeDetailFragment"
+        android:label="HomeDetailFragment"
+        tools:layout="@layout/fragment_home_detail">
+        <argument
+            android:name="feed_id"
+            app:argType="long" />
+        <deepLink app:uri="@string/deeplink_url_home_detail" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_home_to_home_detail"
+        app:destination="@id/navigation_home_detail" />
+    <fragment
+        android:id="@+id/navigation_loading"
+        android:name="com.teamwable.LoadingFragment"
+        android:label="LoadingFragment"
+        tools:layout="@layout/fragment_loading" />
+</navigation>

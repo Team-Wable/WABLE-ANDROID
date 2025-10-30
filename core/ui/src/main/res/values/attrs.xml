@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppBarBlack">
+        <attr name="type" format="enum">
+            <enum name="소식" value="0" />
+            <enum name="뷰잇" value="1" />
+            <enum name="커뮤니티" value="2" />
+            <enum name="퀴즈" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

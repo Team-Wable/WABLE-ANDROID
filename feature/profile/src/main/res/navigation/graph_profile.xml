@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_profile"
+    app:startDestination="@id/navigation_profile_auth">
+    <fragment
+        android:id="@+id/navigation_profile_auth"
+        android:name="com.teamwable.profile.profile.ProfileAuthFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_profile_information"
+            app:destination="@id/navigation_profile_information" />
+        <action
+            android:id="@+id/action_profile_to_push_notification"
+            app:destination="@id/navigation_push_notification" />
+        <action
+            android:id="@+id/action_profile_auth_to_profile_edit"
+            app:destination="@id/navigation_profile_edit" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_member"
+        android:name="com.teamwable.profile.profile.ProfileMemberFragment"
+        android:label="ProfileMemberFragment"
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="user_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <deepLink app:uri="@string/deeplink_url_profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_information"
+        android:name="com.teamwable.profile.hamburger.ProfileInformationFragment"
+        android:label="ProfileInformationFragment"
+        tools:layout="@layout/fragment_profile_information">
+        <action
+            android:id="@+id/action_navigation_profile_information_to_navigation_profile_delete_reason"
+            app:destination="@id/navigation_profile_delete_reason" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_delete_reason"
+        android:name="com.teamwable.profile.hamburger.ProfileDeleteReasonFragment"
+        android:label="ProfileDeleteReasonFragment"
+        tools:layout="@layout/fragment_profile_delete_reason">
+        <action
+            android:id="@+id/action_navigation_profile_delete_reason_to_navigation_profile_delete_confirm"
+            app:destination="@id/navigation_profile_delete_confirm" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_delete_confirm"
+        android:name="com.teamwable.profile.hamburger.ProfileDeleteConfirmFragment"
+        android:label="ProfileDeleteConfirmFragment"
+        tools:layout="@layout/fragment_profile_delete_confirm">
+        <argument
+            android:name="reasons"
+            app:argType="string[]"
+            app:nullable="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_push_notification"
+        android:name="com.teamwable.profile.hamburger.PushAlarmFragment"
+        android:label="PushNotificationFragment"
+        tools:layout="@layout/fragment_push_alarm">
+        <deepLink app:uri="@string/deeplink_url_push_alarm" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_edit"
+        android:name="com.teamwable.profile.profile.edit.ProfileEditFragment"
+        android:label="ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit">
+        <argument
+            android:name="memberProfileModel"
+            app:argType="com.teamwable.model.profile.MemberInfoEditModel" />
+    </fragment>
+</navigation>

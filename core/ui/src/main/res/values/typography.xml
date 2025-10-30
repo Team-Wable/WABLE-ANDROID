@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.Wable" parent="">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <!-- Head -->
+    <style name="TextAppearance.Wable.Head0">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="lineHeight">38dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Head1">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="lineHeight">32dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Head2">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="lineHeight">29dp</item>
+    </style>
+
+    <!-- Body -->
+    <style name="TextAppearance.Wable.Body1">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">26dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Body2">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">26dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Body3">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">22dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Body4">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">22dp</item>
+    </style>
+
+    <!-- Caption -->
+    <style name="TextAppearance.Wable.Caption1">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="lineHeight">21dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Caption2">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="lineHeight">21dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Caption3">
+        <item name="android:fontFamily">@font/font_pretendard_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">19dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Caption4">
+        <item name="android:fontFamily">@font/font_pretendard_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">19dp</item>
+    </style>
+
+    <style name="TextAppearance.Wable.Caption5">
+        <item name="android:fontFamily">@font/font_pretendard_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="lineHeight">15dp</item>
+    </style>
+</resources>
